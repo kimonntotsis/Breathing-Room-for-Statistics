@@ -1,0 +1,87 @@
+project:
+  type: book
+  output-dir: _book
+  render:
+    - index.md
+    - chapters/*.md
+    - references.qmd
+
+filters:
+  - filters/remove_hr.lua
+
+book:
+  title: "Statistical Methods for Respiratory Research"
+  subtitle: "Foundations through High-Dimensional, Longitudinal, and Causal Analysis"
+  author: "Kimon Ntotsis"
+  date: today
+  chapters:
+    - index.md
+    - parts/part-01-foundations.md
+    - chapters/00-preface.md
+    - chapters/01-statistical-thinking.md
+    - chapters/02-respiratory-data.md
+    - parts/part-02-describe-compare.md
+    - chapters/03-descriptive-analysis.md
+    - chapters/04-comparing-groups.md
+    - parts/part-03-regression.md
+    - chapters/05-linear-models.md
+    - chapters/06-generalized-linear-models.md
+    - chapters/07-model-building.md
+    - parts/part-04-validation-prediction.md
+    - chapters/08-validation-reporting.md
+    - chapters/09-prediction-vs-inference.md
+    - parts/part-05-discovery.md
+    - chapters/10-dimensionality-reduction.md
+    - chapters/11-clustering.md
+    - chapters/12-case-studies.md
+    - parts/part-06-highdim-biology.md
+    - chapters/13-differential-analysis-fdr.md
+    - chapters/14-batch-effects.md
+    - chapters/15-flow-cytometry.md
+    - chapters/16-antibody-discovery.md
+    - parts/part-07-capstone.md
+    - chapters/17-integrated-castor-hd.md
+    - parts/part-08-longitudinal-survival.md
+    - chapters/18-longitudinal-mixed-models.md
+    - chapters/19-survival-analysis.md
+    - chapters/20-missing-data.md
+    - chapters/21-causal-inference.md
+    - references.qmd
+
+bibliography: ../references.bib
+link-citations: true
+reference-section-title: References
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    number-sections: true
+    citeproc: true
+  pdf:
+    documentclass: scrreprt
+    papersize: a4
+    geometry:
+      - margin=2.5cm
+    toc: true
+    number-sections: true
+    colorlinks: true
+    citeproc: true
+    include-in-header:
+      text: |
+        \usepackage{amsmath}
+        \usepackage{amssymb}
+        \usepackage{graphicx}
+        \usepackage{float}
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{array}
+        \usepackage{tabularx}
+        \usepackage{calc}
+    fig-pos: 'H'
+
+execute:
+  eval: false
+  echo: true
+  warning: false
+  message: false

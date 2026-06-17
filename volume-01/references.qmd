@@ -1,0 +1,22 @@
+---
+bibliography: ../references.bib
+link-citations: true
+number-sections: false
+---
+
+# References {.unnumbered}
+
+This appendix lists every source **cited** in handbook chapters (`[@key]` citations). Entries are drawn from [`references.bib`](../references.bib).
+
+For a **topic-organized reading guide** (textbooks, CONSORT/STROBE/TRIPOD, respiratory methods), see [REFERENCES.md](REFERENCES.md).
+
+::: {#refs}
+:::
+
+## How to cite this handbook
+
+Until formal publication, cite the repository version and access date:
+
+> *Statistical Methods for Respiratory Research: Foundations through High-Dimensional, Longitudinal, and Causal Analysis.* Open handbook draft. Repository: `respiratory-research-methods` (accessed YYYY-MM-DD).
+
+Register a DOI (e.g. Zenodo) when publishing an open edition.

@@ -1,0 +1,6 @@
+step,metric
+proteomics_shortlist_n,30
+batch_discoveries_with_adjustment,3
+batch_discoveries_without_adjustment,3
+flow_monocyte_p,0.00502167680897449
+aga_screen_ppv,0.517647058823529

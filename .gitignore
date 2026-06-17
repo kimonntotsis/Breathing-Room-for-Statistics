@@ -1,0 +1,16 @@
+# R
+.Rhistory
+.RData
+.Ruserdata
+Rplots.pdf
+
+# OS
+.DS_Store
+
+# Quarto
+volume-01/.quarto/
+volume-01/**/.quarto/
+**/*.quarto_ipynb
+
+# Optional: uncomment to exclude built PDF from git (still attach to GitHub Release)
+# volume-01/_book/

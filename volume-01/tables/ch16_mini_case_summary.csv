@@ -1,0 +1,5 @@
+step,teaching_output,defensible_claim
+1. Replicate QC,Rep1 vs Rep2 scatter (+ batch color),Agreement assessed before hit calling
+2. Prespecified hit rule,Hit if screen_mean > 1.4,Threshold fixed before looking at confirmation
+3. Confirmation PPV,AgA PPV among hits = 0.52 (see table by antigen),"PPV uses confirmation assay, not screen p-values"
+4. Stability tiers,AgA Tier 1 clones = 12; Tier 1 PPV = 1.00,"Report tiers, not fragile ranks 1..K"

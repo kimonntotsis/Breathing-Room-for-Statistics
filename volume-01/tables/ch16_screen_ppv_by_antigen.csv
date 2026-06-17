@@ -1,0 +1,4 @@
+antigen,threshold,n_clones,n_hits,n_confirmed_in_hits,ppv
+AgA,1.4,480,85,44,0.5176470588235295
+AgB,1.4,480,69,37,0.5362318840579711
+AgC,1.4,480,61,34,0.5573770491803278

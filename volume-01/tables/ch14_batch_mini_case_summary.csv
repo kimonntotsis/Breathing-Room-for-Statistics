@@ -1,0 +1,3 @@
+scenario,group_batch_overlap,covariate_adjustment_defensible,pc1_r2_batch,pc1_r2_group,discoveries_q05_with_batch,discoveries_q05_without_batch,group_effect_identifiable
+A: CASTOR-HD overlap,yes (both groups in both batches),yes (with sensitivity),0.003,0,3,3,NA
+B: confounded (synthetic),no (batch == group),no (not identifiable),NA,NA,NA,NA,FALSE
