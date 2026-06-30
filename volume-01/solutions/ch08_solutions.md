@@ -1,4 +1,4 @@
-# Chapter 8 — Solutions
+# Chapter 8 solutions
 
 ## E8.1
 **CI:** range of compatible parameter values. **p-value:** compatibility with null hypothesis; does not measure effect size or clinical importance.
@@ -26,4 +26,4 @@ quantile(boot, c(0.025, 0.975))
 sessionInfo()
 ```
 
-Compare bootstrap CI to Welch CI — should be similar for mean difference.
+Compare bootstrap CI to Welch CI; should be similar for mean difference.

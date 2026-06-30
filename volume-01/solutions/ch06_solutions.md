@@ -1,4 +1,4 @@
-# Chapter 6 — Solutions
+# Chapter 6 solutions
 
 ## E6.1
 Linear model predicts values outside [0,1]; error variance not constant; wrong likelihood.
@@ -22,7 +22,7 @@ source("R/examples/ch06_glm.R")
 exac <- read_csv("data/exacerbation.csv", show_col_types = FALSE)
 events <- sum(exac$exacerbation_12m)
 predictors <- 4
-events / predictors  # EPV — aim >= 10
+events / predictors  # EPV; aim >= 10
 ```
 
 ## E6.12

@@ -11,20 +11,29 @@
 | **Primary goal** | Estimate per-feature effects **and** control false discoveries |
 | **Core methods** | per-feature models, Benjamini–Hochberg FDR, volcano plot (descriptive), sensitivity checks |
 | **R** | `R/examples/ch13_differential_fdr.R` |
+| **Figures** | [volcano panel](../figures/ch13_volcano_panel.png), [missingness](../figures/ch13_proteomics_missingness_by_group.png), [RNA MA](../figures/ch13_rnaseq_ma_plot.png) |
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
+| **Exercises** | [Chapter 13 exercises](../exercises/ch13_exercises.md) |
 
+**Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md), [QUICK_REFERENCE §1b](../QUICK_REFERENCE.md)
 ## Learning objectives
 
 1. Understand why “\(p < 0.05\)” becomes meaningless when you test 1000+ features.
 2. Report **effect sizes and uncertainty**, not a list of “significant proteins”.
 3. Use FDR control (BH) and interpret what it means in plain language.
 4. Recognise when differential results are likely batch/plate artefacts.
+5. Choose per-feature models appropriate to proteomics (Gaussian) vs RNA-seq (counts).
+6. Run sensitivity analyses (with/without batch) before claiming discoveries.
 
 ## Prerequisites
 
 Chapter 8 (reporting and multiplicity) and Chapters 10–11 (high-dimensional intuition).
 
 ---
+
+## Why this chapter
+
+Omics generates thousands of p-values. Without FDR and effect sizes, you will chase false proteins and genes. This chapter is for anyone with a volcano plot in a manuscript or team readout who cannot yet explain what q = 0.11 means for follow-up budget.
 
 ## Opening question (CASTOR-HD)
 
@@ -34,6 +43,31 @@ In omics, the two most common failure modes are:
 
 1. **Overclaiming**: treating 50 nominal \(p < 0.05\) hits as biology.
 2. **Underreporting uncertainty**: listing q-values without effect sizes.
+
+CASTOR-HD includes ~**150 participants** (case/control) and **~1000 proteins** or **~1200 genes** per modality. That is classic \(p \gg n\) discovery: rankings are noisy and multiplicity control is mandatory.
+
+---
+
+## Clinical and biostatistics notes
+
+**Clinical:** Volcano plots are **triage**, not treatment decisions. Zero FDR hits after batch adjustment is a valid honest result. Follow-up budget should use **effect size + q**, not rank order alone.
+
+**Biostatistics:** BH-FDR controls a **family** of tests: state how many features were tested. Run batch sensitivity ([Ch 14](14-batch-effects.md)) before biological interpretation. CASTOR-HD RNA includes a **global shift** in the teaching data: treat large hit counts as a didactic warning, not biology.
+
+**Clinical nuance:** LOD/absent proteins are not the same as "low expression": do not code below-detection as zero without an assay rule.
+
+**Biostat nuance:** per-feature Gaussian models on proteomics and NB models on RNA counts are teaching defaults; production pipelines may use specialised packages: but FDR and effect reporting discipline stay the same.
+
+---
+
+## The differential analysis workflow
+
+1. **QC**: missingness by group, library size (RNA), batch/plate labels recorded ([Ch 14](14-batch-effects.md)).
+2. **Per-feature model**: one model per protein/gene with group + prespecified covariates (+ batch when identifiable).
+3. **Effect table**: estimate, 95% CI, *p*, *n* used (after missingness).
+4. **Multiplicity**: BH FDR across all features tested; report how many tests were run.
+5. **Sensitivity**: with vs without batch; overlap of top 50 features.
+6. **Claim discipline**: discovery list for follow-up, not mechanistic proof ([Ch 17](17-integrated-castor-hd.md)).
 
 ---
 
@@ -63,6 +97,27 @@ In omics, the two most common failure modes are:
 
 **Clinician read:** FDR protects you from a “shopping list of biomarkers” that will not replicate. It does not tell you which marker is clinically useful.
 
+### Worked example (CASTOR-HD proteomics)
+
+From `ch13_proteomics_top_table.csv` (teaching run, batch-adjusted):
+
+| Protein | Effect (control − case) | 95% CI | *p* | *q* |
+|---------|-------------------------|--------|-----|-----|
+| Prot_0127 | −0.89 | −1.33 to −0.44 | 1.3×10⁻⁴ | 0.11 |
+| Prot_0147 | −0.85 | −1.32 to −0.38 | 4.4×10⁻⁴ | 0.11 |
+
+**Read:** cases have **lower** abundance on this scale (negative effect = control − case). Nominal *p* is small, but **no protein passes BH *q* < 0.05** in this run after batch adjustment. That is a **valid scientific result**: “no FDR-controlled discoveries,” not a failed analysis.
+
+Compare to RNA-seq in the same cohort: many genes pass FDR because the synthetic data include a **global expression shift** (teaching demo). Real studies rarely show genome-wide shifts; always interpret discovery **counts** alongside MA plots and batch QC.
+
+```r
+top <- readr::read_csv("volume-01/tables/ch13_proteomics_top_table.csv")
+sum(top$q < 0.05, na.rm = TRUE)  # often 0 with batch in teaching data
+
+rna <- readr::read_csv("volume-01/tables/ch13_rnaseq_top_table.csv")
+sum(rna$q < 0.05, na.rm = TRUE)  # many in teaching global-shift demo
+```
+
 ### Caveats box
 
 | Caveat | Why it matters in respiratory research |
@@ -73,6 +128,10 @@ In omics, the two most common failure modes are:
 | Small \(n\), huge \(p\) | effect estimates are noisy; ranks are unstable without shrinkage |
 | Confounding | smoking/age/therapy correlate with both disease and omics; adjust or stratify |
 | Interpretation inflation | top q-values are not “most important” without effect size and uncertainty |
+
+### In practice
+
+A collaborator emails “we have 47 significant proteins.” Ask for effect sizes, q-values, and whether batch was in the model. Zero FDR hits after batch adjustment is a valid result worth reporting.
 
 ### Wrong analysis ⚠
 
@@ -112,6 +171,21 @@ Use Template A in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES
 
 ![Volcano plots: proteomics and RNA differential analysis (BH FDR)](../figures/ch13_volcano_panel.png)
 
+Points in the upper corners are large effects with small q-values; the grey band is the non-significant region after BH: empty corners are as informative as hits.
+
+---
+
+## Decision table: proteomics vs RNA-seq
+
+| Feature | Proteomics (Olink-like) | RNA-seq counts |
+|---------|-------------------------|----------------|
+| **Scale** | Continuous (log abundance) | Non-negative integers |
+| **Model** | `lm` per protein + covariates | `glm.nb` per gene + offset(log library) |
+| **Missingness** | LOD / NA common | Low counts, zeros |
+| **Multiplicity** | BH across proteins | BH across genes |
+| **QC first** | Missingness by group; batch PCA | Library size; batch; MA plot |
+| **Chapter link** | [Ch 14](14-batch-effects.md) | Same + NB offset |
+
 ---
 
 ## Alternatives & extensions (choose by goal)
@@ -125,7 +199,7 @@ Use Template A in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES
 
 ### Mini-lab: sparse PCA pointer (exploratory)
 
-When \(p \gg n\), dense PCA loadings are noisy. For exploratory views only, try sparse PCA (`elasticnet` / `PMA` packages) with a prespecified sparsity penalty — never treat as confirmatory DE.
+When \(p \gg n\), dense PCA loadings are noisy. For exploratory views only, try sparse PCA (`elasticnet` / `PMA` packages) with a prespecified sparsity penalty; never treat as confirmatory DE.
 
 ```r
 # Teaching pointer (not run in ch13 script):
@@ -136,7 +210,7 @@ When \(p \gg n\), dense PCA loadings are noisy. For exploratory views only, try 
 ### Mini-lab: LOD missingness check (proteomics)
 
 ```r
-# After source("R/examples/ch13_differential_fdr.R") — or inline:
+# After source("R/examples/ch13_differential_fdr.R"), or inline:
 prot <- readr::read_csv(file.path(paths$data, "proteomics_olink_like.csv"), show_col_types = FALSE)
 prot %>% mutate(miss = rowMeans(is.na(dplyr::select(., starts_with("Prot_"))))) %>%
   ggplot(aes(group, miss, fill = group)) + geom_boxplot() + theme_minimal()
@@ -144,7 +218,10 @@ prot %>% mutate(miss = rowMeans(is.na(dplyr::select(., starts_with("Prot_"))))) 
 
 ![Proteomics missingness by group (LOD-style)](../figures/ch13_proteomics_missingness_by_group.png)
 
+Unequal missingness between groups can create artificial DE before any biology is tested: fix or model LOD, do not impute silently.
+
 ---
+
 
 ## R lab: Differential analysis on CASTOR-HD
 
@@ -178,14 +255,18 @@ For RNA counts, use a **count model** (negative binomial), not a Gaussian model 
 library(MASS)
 rna <- readr::read_csv(file.path(paths$data, "rnaseq_counts.csv"), show_col_types = FALSE)
 # Per gene: glm.nb(count ~ group + batch + offset(log(library_size)))
-# Then BH FDR across genes — see R/examples/ch13_differential_fdr.R
+# Then BH FDR across genes; see R/examples/ch13_differential_fdr.R
 ```
 
 **Teaching note:** CASTOR-HD synthetic RNA includes a global expression shift, so many genes can pass FDR in this demo. In real studies, interpret discovery counts alongside MA plots and batch QC.
 
 ![RNA MA plot (NB log-fold-change teaching output)](../figures/ch13_rnaseq_ma_plot.png)
 
+Systematic curvature or a cloud of outliers at low counts signals model or normalization stress, not a list of genes to chase.
+
 ![Proteomics q-value distribution (BH)](../figures/ch13_proteomics_qvalue_hist.png)
+
+A spike near zero with a flat tail suggests real signal mixed with null features; an all-flat histogram suggests underpower or QC failure.
 
 ### Sensitivity checklist (minimum)
 
@@ -206,7 +287,7 @@ These are generated by the chapter script and saved to `volume-01/figures/`:
 - `ch13_proteomics_qvalue_hist.png`
 - `ch13_rnaseq_ma_plot.png`
 
-## Exercises · [Solutions](../solutions/ch13_solutions.md)
+## Exercises ([Solutions](../solutions/ch13_solutions.md))
 
 **E13.1** Why is testing 1000 proteins at α = 0.05 a problem even if only 50 are "significant"?
 
@@ -214,10 +295,25 @@ These are generated by the chapter script and saved to `volume-01/figures/`:
 
 **E13.3** When would you distrust a volcano plot as "proof" of biology?
 
+**E13.4** Why should RNA-seq use count models rather than a t-test on raw counts?
+
+**E13.5** What does it mean when nominal *p* < 0.05 but all *q* > 0.05?
+
 **Applied**
 
 1. Run `source("R/examples/ch13_differential_fdr.R")`.
 2. Open `volume-01/tables/ch13_proteomics_top_table.csv` and interpret the top 5 rows (effect + CI + q).
-3. Compare discovery counts with vs without batch adjustment (Ch 14 link).
+3. Compare proteomics vs RNA discovery counts at q < 0.05.
 4. Write a Results paragraph using [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) Template A.
+5. Draft one honest sentence if proteomics yields **zero** BH discoveries.
 
+---
+
+## Where this chapter leads
+
+**Next:** [Chapter 14](14-batch-effects.md) before trusting any hit list. Integrated pipeline → [Chapter 17](17-integrated-castor-hd.md).
+
+## Further reading
+
+- Benjamini & Hochberg (1995); McShane et al. biomarker reporting [@mcshane2011biomarker]
+- [Ch 14](14-batch-effects.md) before interpreting any hit list

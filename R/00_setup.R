@@ -1,4 +1,4 @@
-# Project setup — source this at the start of any session
+# Project setup: source this at the start of any session
 find_project_root <- function() {
   path <- normalizePath(getwd(), winslash = "/", mustWork = FALSE)
   for (i in 1:8) {

@@ -12,10 +12,10 @@
 | **Key methods** | t-tests, ANOVA, nonparametric, chi-square, Fisher, ANCOVA, permutation, power |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **R scripts** | `R/examples/ch04_comparing_groups.R` |
-| **Figures** | [ch04_fev1_by_group](../figures/ch04_fev1_by_group.png) · [paired BD](../figures/ch04_paired_bronchodilator.png) · [comparison panel](../figures/method_comparison_panel.png) |
-| **Navigation** | [QUICK_REFERENCE § Step 2-3](../QUICK_REFERENCE.md) · [Master table](#master-decision-table) |
+| **Figures** | [ch04_fev1_by_group](../figures/ch04_fev1_by_group.png), [paired BD](../figures/ch04_paired_bronchodilator.png), [comparison panel](../figures/method_comparison_panel.png) |
 | **Exercises** | [Chapter 4 exercises](../exercises/ch04_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE § Step 2-3](../QUICK_REFERENCE.md), [Master table](#master-decision-table)
 ---
 
 ## Learning objectives
@@ -37,6 +37,10 @@ After this chapter you should be able to:
 
 ---
 
+## Why this chapter
+
+Most respiratory papers still hinge on a comparison: means, proportions, or rates between arms or exposure groups. This is the longest reference chapter because the mistakes are repetitive; wrong pairing, wrong outcome type, p-values without effect sizes. Bookmark it.
+
 ## Opening question
 
 A COPD trial asks: *Does mean FEV1 differ between intervention and standard care at 12 weeks?*
@@ -46,6 +50,18 @@ A second study asks: *Does the proportion of patients with ≥1 exacerbation dif
 These are both **comparison** questions, but they require **different methods** [@stoltzfus2019biostatistics]. This chapter is the reference for that choice.
 
 We use the **[CASTOR cohort](RECURRING_COHORT.md)** throughout - same patients you described in Chapters 3 and will model in Chapters 5-9.
+
+---
+
+## Clinical and biostatistics notes
+
+**Clinical:** Pre- vs post-bronchodilator timing must match across arms. FEV1 comparisons should reference **MCID** where relevant. Classify exacerbation endpoints as **proportion vs count** before choosing a test (route to Ch 6).
+
+**Biostatistics:** **Welch *t*** is the default for two independent groups. Always report **mean difference + 95% CI**, not *p* alone. Secondary lung-function endpoints need a **multiplicity** plan. Do not use comparison methods from this chapter on **paired** or **clustered** designs without the paired/cluster rows.
+
+**Clinical nuance:** a non-significant week-12 FEV1 difference does not prove equivalence; equivalence needs a prespecified margin and power (not covered in depth here).
+
+**Biostat nuance:** Wilcoxon compares **ranks**; if mean and median differences disagree, report both and discuss skew/outliers.
 
 ---
 
@@ -100,10 +116,22 @@ t.test(fev1 ~ group, data = spirometry, var.equal = FALSE)
 |--------|----------------------------------------|
 | Compares **means**, not medians | Skewed FEV1 in severe COPD → consider Mann-Whitney or report median |
 | **Independence** assumed | ICU patients in same ward, or repeated FEV1 → wrong test |
-| **One time point** | Does not model FEV1 decline over time (Vol II) |
+| **One time point** | Does not model FEV1 decline over time ([Ch 18](18-longitudinal-mixed-models.md)) |
 | **Not causal** in observational data | Group differences may reflect confounding |
 | **MCID ≠ p-value** | Non-significant p with CI including MCID is inconclusive, not "no effect" |
 | **Spirometry protocol** | Pre- vs post-bronchodilator must match between groups [@graham2019spirometry] |
+
+### In practice
+
+The protocol says “compare FEV1 at week 12.” The data have baseline visits, dropouts, and one site that measured post-bronchodilator values only. Map protocol → estimand → test before opening `t.test()`, and document deviations in the SAP.
+
+### In practice (multiplicity)
+
+The steering committee wants FEV1, FVC, symptom score, and exacerbation rate on one slide. Unless the protocol prespecified a hierarchy, label secondary endpoints as exploratory and report CIs; not five primary *p*-values.
+
+### In practice (non-inferiority)
+
+A device trial protocol says “non-inferior to standard inhaler on FEV1.” That is **not** a superiority *t*-test with *p* > 0.05 interpreted as “similar.” Prespecify a margin (e.g. −0.10 L), power for NI, and a TOST or CI-against-margin analysis ([reporting template below](#technique-non-inferiority-and-equivalence-trials)).
 
 #### Wrong analysis ⚠
 
@@ -630,21 +658,39 @@ Testing FEV1, FVC, symptoms, and exacerbations without adjustment inflates false
 
 ## Master decision table
 
-| Outcome | Groups | Pairing | Primary method | Alternative |
-|---------|--------|---------|----------------|-------------|
-| Continuous | 1 vs reference | - | One-sample t | Wilcoxon signed-rank vs median |
-| Continuous | 2 | Independent | Welch t | Mann-Whitney |
-| Continuous | 2 | Paired | Paired t | Wilcoxon signed-rank |
-| Continuous | 3+ | Independent | ANOVA + contrasts | Kruskal-Wallis |
-| Binary | 2 | Independent | Chi-square / Fisher | Logistic regression |
-| Binary | 2 | Paired | McNemar | - |
-| Count | 2+ | Independent | Poisson/NB GLM | - |
+**Primary test by outcome and design**
 
-Full map: [METHOD_MAP.md](../METHOD_MAP.md) · Visual: [method_decision_tree.png](../figures/method_decision_tree.png)
+| Outcome | Design | Primary method |
+|---------|--------|----------------|
+| Continuous | 1 vs reference | One-sample *t* |
+| Continuous | 2 independent groups | Welch *t* |
+| Continuous | 2 paired measurements | Paired *t* |
+| Continuous | 3+ independent groups | ANOVA + contrasts |
+| Binary | 2 independent groups | Chi-square / Fisher |
+| Binary | 2 paired measurements | McNemar |
+| Count | 2+ independent groups | Poisson / NB GLM |
+
+**Alternative or adjusted analysis**
+
+| Outcome | Design | Alternative / next step |
+|---------|--------|------------------------|
+| Continuous | 1 vs reference | Wilcoxon signed-rank vs median |
+| Continuous | 2 independent groups | Mann-Whitney |
+| Continuous | 2 paired measurements | Wilcoxon signed-rank |
+| Continuous | 3+ independent groups | Kruskal-Wallis |
+| Binary | 2 independent groups | Logistic regression (adjusted) |
+| Binary | 2 paired measurements |, |
+| Count | 2+ independent groups |, |
+
+Full map: [METHOD_MAP.md](../METHOD_MAP.md); Visual: [method_decision_tree.png](../figures/method_decision_tree.png)
 
 ![FEV1 by group](../figures/ch04_fev1_by_group.png)
 
+Overlapping distributions warn against reading a small mean difference as clinically certain without the CI and sample size.
+
 ![Method comparison panel](../figures/method_comparison_panel.png)
+
+Side-by-side panels show how the same CASTOR subset looks under different comparison choices; use this to sanity-check pairing and outcome type before picking a test.
 
 ---
 
@@ -662,6 +708,7 @@ Full map: [METHOD_MAP.md](../METHOD_MAP.md) · Visual: [method_decision_tree.png
 **Statistician read:** non-significant p does not prove no effect - interval estimation preferred [@harrell2015rms].
 
 ---
+
 
 ## R lab
 
@@ -713,17 +760,94 @@ Chapter 4 covers the default comparisons. Use these alternatives when the **assu
 | Different follow-up time | **Poisson/NB + offset(log person-time)** | Ch 6 |
 | Many zeros | **Zero-inflated / hurdle models** | Ch 6 (ZIP/ZINB) |
 
-### Design extensions (Ch 18–19)
+### Design extensions: clustered and crossover data
+
+Standard Ch 4 tests assume **independent** observations. Respiratory studies often violate that.
+
+### Technique: Clustered units (wards, centres, GP practices)
+
+| | |
+|---|---|
+| **Answers** | Is the outcome different between arms when patients are nested in clusters? |
+| **Outcome** | Continuous, binary, or count (same as unadjusted comparison) |
+| **Design** | Cluster randomised trial, or patients nested in ICU wards / hospitals |
+| **Assumptions** | Clusters are independent; enough clusters (not just patients) for inference |
+| **Effect measure** | Same estimand as unadjusted comparison, with **cluster-appropriate SE** |
+| **R (continuous)** | Mixed model: `lmer(outcome ~ arm + (1 \| cluster_id))` ([Ch 18](18-longitudinal-mixed-models.md)) |
+| **R (binary/count)** | GEE with `cluster = cluster_id` or mixed GLMM |
+| **Report** | Number of **clusters** and patients; ICC if reported; CI from cluster-aware model |
+| **Avoid when** | Only 2–3 clusters (unstable); treating cluster members as independent (SE too small) |
+
+**Plain language:** patients in the same ICU ward correlate; analyse at ward level or use a model that respects nesting.
+
+**Precise language:** ignore clustering → anti-conservative SEs and inflated significance [@harrell2015rms].
+
+**Clinician read:** “n = 400 patients” may hide “8 wards”; ask how many **units** were randomised.
+
+#### Wrong analysis ⚠
+
+| Mistake | Why it fails | Do instead |
+|---------|--------------|------------|
+| Welch *t* on all ICU patients | Ward-level exposure shared | Mixed model or GEE with ward random effect |
+| Cluster RCT analysed as individual RCT | Wrong denominator for inference | Cluster-level or mixed model with `(1 \| cluster)` |
+
+### Technique: Crossover and paired bronchodilator designs
+
+| | |
+|---|---|
+| **Answers** | Is post-BD FEV1 higher than pre-BD **within the same patient**? |
+| **Outcome** | Continuous (FEV1, FVC) |
+| **Design** | Paired measurements same visit (CASTOR: `bronchodilator_paired.csv`) |
+| **Assumptions** | Pairs independent; difference approximately normal or large *n* |
+| **Effect measure** | Mean change (post − pre) |
+| **R** | `t.test(post, pre, paired = TRUE)` or mixed model if multiple crossover periods |
+| **Report** | Mean change + 95% CI; *n* pairs; BD protocol (dose, wait time) |
+| **Avoid when** | Carryover between periods in multi-period crossover without washout |
+
+**Plain language:** same patient, two manoeuvres; use a **paired** test, not two independent groups.
+
+**Clinician read:** ATS/ERS BD reversibility uses within-patient change; do not split pre and post into fictional “groups.”
+
+CASTOR paired example: `R/examples/ch04_comparing_groups.R` and [Figure](../figures/ch04_paired_bronchodilator.png).
+
+### Technique: Non-inferiority and equivalence trials {#technique-non-inferiority-and-equivalence-trials}
+
+| | |
+|---|---|
+| **Answers** | Is the new therapy **not worse** than control by more than a prespecified margin? |
+| **Outcome** | Continuous (FEV1 change), binary (exacerbation), or rate |
+| **Design** | Parallel NI/ equivalence trial with **prespecified Δ** |
+| **Assumptions** | Margin clinically justified; powered for NI (not superiority) |
+| **Effect measure** | Mean difference vs margin; or proportion difference vs margin |
+| **Methods** | Two one-sided tests (TOST); or 90% CI vs margin (common in NI) |
+| **Report** | Margin Δ, NI conclusion yes/no, CI relative to Δ |
+| **Avoid when** | Declaring equivalence from superiority *p* > 0.05 |
+
+**Plain language:** “Not significantly different” ≠ “equivalent.” You must prespecify how much worse is acceptable.
+
+**Clinician read:** device and inhaler NI trials live or die on the **margin**, not the *p*-value from a superiority test.
+
+#### Reporting template (non-inferiority, continuous FEV1)
+
+**Methods:** The primary estimand was the mean difference in change from baseline FEV1 at 12 weeks (new therapy − control). Non-inferiority was prespecified with margin Δ = −0.10 L (one-sided α = 0.025). We used a two one-sided tests (TOST) procedure / 90% confidence interval against Δ.
+
+**Results:** Mean difference = −0.03 L (90% CI −0.08 to 0.02). The upper bound of the CI was below Δ → **non-inferiority demonstrated** / exceeded Δ → **not demonstrated**.
+
+**Do not say:** “Groups were equivalent because p = 0.34.”
+
+See also [Chapter 8](08-validation-reporting.md) reporting checklist for NI trials.
+
+### Design extensions (longitudinal and survival)
 
 | Design feature | Why Ch 4 methods fail | Handbook chapter |
 |---|---|---|
 | Repeated measures | observations not independent | [Ch 18](18-longitudinal-mixed-models.md) mixed models / GEE |
-| Multi-centre clustering | SEs too small if ignored | [Ch 18](18-longitudinal-mixed-models.md) cluster-robust / mixed |
+| Multi-centre clustering | SEs too small if ignored | Cluster-robust SE / `(1 \| centre)` ; this chapter + Ch 18 |
 | Time-to-event endpoints | censoring | [Ch 19](19-survival-analysis.md) survival analysis |
 
-### Equivalence / non-inferiority (when “no difference” is the goal)
+### Equivalence (superiority test insufficient)
 
-If the scientific goal is **equivalence** (or non-inferiority), prespecify a margin and use an appropriate framework (e.g. TOST). A non-significant p-value from a superiority test is not evidence of equivalence [@harrell2015rms].
+If the scientific goal is **equivalence** (two-sided margin), prespecify bounds and use an equivalence framework. A non-significant *p*-value from a superiority test is not evidence of equivalence [@harrell2015rms] ; use the [NI template above](#technique-non-inferiority-and-equivalence-trials).
 
 ## Catalog of wrong analyses (comparison chapter)
 
@@ -733,8 +857,9 @@ If the scientific goal is **equivalence** (or non-inferiority), prespecify a mar
 | 2 | t-test on count of exacerbations | Poisson / NB |
 | 3 | Ignore pairing in pre/post BD | Paired t or Wilcoxon signed-rank |
 | 4 | ANOVA then all pairwise without plan | Prespecified contrasts or Tukey with multiplicity awareness |
-| 5 | Claim equivalence from p > 0.05 | Equivalence trial with margin |
-| 6 | Pool sites without clustering check | Mixed model or cluster-robust SE (Vol II) |
+| 5 | Claim equivalence from p > 0.05 | NI trial with prespecified margin (TOST) |
+| 6 | Pool sites without clustering check | Mixed model `(1 \| centre)` or GEE ([Ch 18](18-longitudinal-mixed-models.md)) |
+| 7 | Cluster RCT analysed with patient-level Welch *t* | Cluster-aware mixed model / GEE |
 
 ---
 
@@ -749,7 +874,11 @@ If the scientific goal is **equivalence** (or non-inferiority), prespecify a mar
 
 ## Exercises
 
-[Chapter 4 exercises](../exercises/ch04_exercises.md) · [Solutions](../solutions/ch04_solutions.md)
+[Chapter 4 exercises](../exercises/ch04_exercises.md); [Solutions](../solutions/ch04_solutions.md)
+
+## Where this chapter leads
+
+**Next:** Continuous outcomes with covariates → [Chapter 5](05-linear-models.md). Binary/count outcomes → [Chapter 6](06-generalized-linear-models.md). Repeated visits → [Chapter 18](18-longitudinal-mixed-models.md).
 
 ## Further reading
 

@@ -1,4 +1,4 @@
-# Chapter 5 Exercises — Linear Models
+# Chapter 5 Exercises: Linear models
 
 **E5.1** Interpret β = −0.03 for age (years) in FEV1 model.
 

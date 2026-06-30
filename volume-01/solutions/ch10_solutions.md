@@ -1,4 +1,4 @@
-# Chapter 10 — Solutions
+# Chapter 10 solutions
 
 ## E10.1
 Markers on different scales (e.g. protein concentrations); without scaling, high-variance markers dominate PC1.

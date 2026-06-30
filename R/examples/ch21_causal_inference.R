@@ -61,7 +61,7 @@ p_bal <- bal_tbl %>%
   theme_minimal() +
   labs(
     title = "FEV1 % balance: before vs IPW-weighted (toy)",
-    subtitle = "Teaching IPW on FEV1 tertiles — not a full propensity model",
+    subtitle = "Teaching IPW on FEV1 tertiles, not a full propensity model",
     x = NULL,
     y = "Mean (or weighted mean) FEV1 % predicted",
     fill = NULL

@@ -8,4 +8,6 @@
 
 **E13.4** Counts are non-negative integers with mean–variance relationship; Gaussian tests ignore library size and overdispersion.
 
-**Applied (outline)** Use script output tables; discuss BH discoveries; draft Methods/Results from templates with placeholders filled from your run.
+**E13.5** Multiplicity: many nominal significances are expected under the null; BH adjustment leaves no FDR-controlled discoveries. Report effect sizes anyway.
+
+**Applied (outline)** Proteomics often 0 at q<0.05 with batch; RNA many in teaching global-shift demo. Draft honest Results for both.

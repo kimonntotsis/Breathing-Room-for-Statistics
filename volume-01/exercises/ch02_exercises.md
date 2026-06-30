@@ -1,15 +1,19 @@
-# Chapter 2 Exercises — Respiratory Data
+# Chapter 2 Exercises: Respiratory data
 
-**E2.1** Classify outcome type: FEV1, exacerbation count, GOLD stage, time to death.
+**E2.1** Classify outcome type: FEV1, exacerbation Y/N, exacerbations/year, time to first exacerbation.
 
 **E2.2** Why is repeated FEV1 not independent cross-sectional data?
 
 **E2.3** List three quality checks before analysing spirometry data.
 
-**E2.4** Same variable `therapy` as exposure vs confounder — give scenarios.
+**E2.4** Same variable `therapy` as exposure vs confounder; give scenarios.
 
-**E2.5** Using [QUICK_REFERENCE.md](../QUICK_REFERENCE.md), which chapter handles binary exacerbation with covariate adjustment?
+**E2.5** Route `time_to_exacerbation.csv` to the correct handbook chapter.
 
-**Applied:** Load `spirometry.csv`; document outcome type, unit of analysis, and one pitfall. Route each CASTOR file in §2.7 to a chapter.
+**Applied**
+
+1. Load `spirometry.csv` and `exacerbation.csv`; document outcome type and unit of analysis.
+2. Complete the seven-item checklist for a smoking–FEV1 question.
+3. Route each file in the CASTOR outcome map to a chapter.
 
 [Solutions](../solutions/ch02_solutions.md)

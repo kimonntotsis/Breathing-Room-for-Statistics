@@ -1,0 +1,25 @@
+% Single custom cover: CASTOR beaver prominent, then title block from _quarto.yml
+\begingroup
+\thispagestyle{empty}
+
+\vspace*{1.2cm}
+\begin{center}
+\noindent\includegraphics[width=0.44\textwidth,keepaspectratio]{figures/book-cover-castor.png}
+
+\vspace{1.4cm}
+\makeatletter
+{\fontsize{24}{29}\selectfont\bfseries \@title\par}
+\vspace{0.65cm}
+{\fontsize{12.5}{16}\selectfont\itshape \@subtitle\par}
+\vspace{0.5cm}
+{\fontsize{11}{14}\selectfont With reproducible R examples\par}
+\vspace{1.3cm}
+{\fontsize{13}{16}\selectfont \@author\par}
+\vspace{0.35cm}
+{\fontsize{10}{12}\selectfont \the\year\par}
+\makeatother
+\end{center}
+
+\vfill
+\clearpage
+\endgroup

@@ -10,10 +10,10 @@
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Methods** | PCA + alternatives menu (PLS, sparse/robust PCA, MCA/FAMD, logistic PCA), scree, loadings, biplots |
 | **R** | `R/examples/ch10_pca.R` |
-| **Figures** | [ch10_scree](../figures/ch10_scree.png) · [ch10_pca_biplot](../figures/ch10_pca_biplot.png) |
-| **Navigation** | [QUICK_REFERENCE](../QUICK_REFERENCE.md) · Omics reporting: [@mcshane2011biomarker] |
+| **Figures** | [ch10_scree](../figures/ch10_scree.png), [ch10_pca_biplot](../figures/ch10_pca_biplot.png) |
 | **Exercises** | [ch10](../exercises/ch10_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), Omics reporting: [@mcshane2011biomarker]
 ## Learning objectives
 
 1. Use PCA for exploratory summarisation of many correlated markers.
@@ -27,6 +27,10 @@
 Chapters 3, 5.
 
 ---
+
+## Why this chapter
+
+Marker panels and omics produce too many correlated columns to inspect by eye. PCA and related tools help you **see** structure without pretending every axis is a new biomarker. Use this chapter for exploration; use Ch 13+ when the goal is formal differential analysis.
 
 ## Opening question (CASTOR marker panel)
 
@@ -98,6 +102,10 @@ Use this menu first, then read the relevant technique section.
 | Batch effects | Can drive top PCs in omics [@mcshane2011biomarker] |
 | Circular analysis | Fit PCA on full data then "predict" outcome on same data |
 
+### In practice
+
+PCA on 30 markers can be dominated by one batch variable. Colour points by batch before colouring by phenotype: the same rule as omics, at smaller scale.
+
 ### Wrong analysis ⚠
 
 | | |
@@ -115,6 +123,7 @@ Use this menu first, then read the relevant technique section.
 **Methods:** Markers were standardised (z-scores). PCA used the correlation matrix. Scree plot and cumulative variance guided component retention (exploratory) [@jolliffe2016pca].
 
 **Results:** PC1 explained 27% of variance. Loadings were highest on M1-M5 (Table S3). No confirmatory inference was drawn.
+
 
 ### R lab
 
@@ -309,6 +318,10 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 - Scale, scree, and loadings need careful reporting.
 - Never skip external validation for clinical claims [@mcshane2011biomarker].
 
+## Where this chapter leads
+
+**Next:** [Chapter 11](11-clustering.md) for patient groups; [Chapter 13](13-differential-analysis-fdr.md) when the goal is formal per-feature inference with FDR.
+
 ## Further reading
 
 - Jolliffe & Cadima, PCA review [@jolliffe2016pca]  
@@ -316,6 +329,6 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 - Wenzel, asthma phenotypes/endotypes context [@wenzel2012asthma]
  - ISL (penalization / CV mindset carries over to PLS/omics) [@james2023ISL]
 
-## Exercises · [Solutions](../solutions/ch10_solutions.md)
+## Exercises ([Solutions](../solutions/ch10_solutions.md))
 
 **Next:** [Chapter 11](11-clustering.md)

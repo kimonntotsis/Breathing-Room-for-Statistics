@@ -1,4 +1,4 @@
-# Solutions — handbook (instructor edition, Ch 1–21)
+# Solutions (instructor edition, Ch 1–21)
 
 Full solutions with R code for all chapters.
 

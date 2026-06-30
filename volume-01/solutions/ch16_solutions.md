@@ -6,4 +6,6 @@
 
 **E16.3** Post hoc tuning optimises noise and inflates apparent performance (hidden multiplicity).
 
-**Applied** PPV ≈ 0.52–0.56 at threshold 1.4 in CASTOR-HD; top-20 overlap 13–15/20 shows rank instability → use tiers.
+**E16.4** Background and hit rates differ by target; one threshold does not fit all antigens.
+
+**Applied** PPV ≈ 0.52–0.56 at threshold 1.4; AgA/B/C each reported separately.

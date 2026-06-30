@@ -10,10 +10,10 @@
 | **Question type** | How is FEV1 associated with predictors, adjusted for others? |
 | **Key methods** | SLR, MLR, interactions, ANCOVA, diagnostics, VIF |
 | **R scripts** | `R/examples/ch05_linear_models.R` |
-| **Figures** | [residual diagnostics](../figures/ch05_residual_diagnostics.png) · [adjusted means](../figures/ch05_fev1_by_smoking_adjusted.png) |
-| **Navigation** | [QUICK_REFERENCE § Step 5](../QUICK_REFERENCE.md) · When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#master-decision-table) |
+| **Figures** | [residual diagnostics](../figures/ch05_residual_diagnostics.png), [adjusted means](../figures/ch05_fev1_by_smoking_adjusted.png) |
 | **Exercises** | [ch05](../exercises/ch05_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE § Step 5](../QUICK_REFERENCE.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#master-decision-table)
 ---
 
 ## Learning objectives
@@ -30,6 +30,10 @@
 Chapters 3-4.
 
 ---
+
+## Why this chapter
+
+Trials rarely stop at a raw mean difference; they adjust for baseline FEV1, centre, or stratification factors. Linear models are the workhorse for continuous lung function and for ANCOVA-style trial analysis. You need this chapter before interpreting “adjusted” results in papers.
 
 ## Opening question (CASTOR cohort)
 
@@ -85,6 +89,10 @@ A t-test compares smokers vs non-smokers on FEV1 alone. Regression estimates the
 | **Extrapolation** | Do not predict outside observed age/height range |
 | **One time point** | Cross-sectional model ≠ longitudinal decline | [Ch 18](18-longitudinal-mixed-models.md) |
 | **% predicted vs litres** | Mixing units confounds interpretation |
+
+### In practice
+
+“Adjust for baseline FEV1” usually means ANCOVA, not change scores unless prespecified. Check whether baseline was measured pre-randomisation and whether missing baseline rows are excluded silently.
 
 ### Wrong analysis ⚠
 
@@ -256,6 +264,7 @@ car::vif(fit)  # values > 5–10 warrant attention
 
 ---
 
+
 ## R lab
 
 ```r
@@ -298,18 +307,20 @@ Linear regression (Gaussian errors) is the default for continuous outcomes, but 
 
 ## Chapter summary
 
-## Chapter summary
-
 - Linear regression answers **adjusted** questions about continuous outcomes [@harrell2015rms].
 - Every coefficient needs a reference category or unit definition.
 - Diagnostics and caveats are part of the analysis, not optional extras.
 - Report coefficients + CI; avoid causal language without design support.
+
+## Where this chapter leads
+
+**Next:** Non-Gaussian outcomes → [Chapter 6](06-generalized-linear-models.md). Model selection and penalization → [Chapter 7](07-model-building.md). Reporting → [Chapter 8](08-validation-reporting.md).
 
 ## Further reading
 
 - Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
 - Venables & Ripley, *Modern Applied Statistics with S* [@venables2002modern]
 
-## Exercises · [Solutions](../solutions/ch05_solutions.md)
+## Exercises ([Solutions](../solutions/ch05_solutions.md))
 
 **Next:** [Chapter 6 - GLMs](06-generalized-linear-models.md)

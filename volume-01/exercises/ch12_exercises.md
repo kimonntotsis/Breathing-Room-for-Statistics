@@ -1,4 +1,4 @@
-# Chapter 12 Exercises — Case Studies
+# Chapter 12 Exercises: Case studies
 
 **E12.1** For Case A (trial FEV1): write estimand, test, and reporting sentence.
 

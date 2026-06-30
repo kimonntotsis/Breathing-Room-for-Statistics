@@ -4,20 +4,32 @@ project:
   render:
     - index.md
     - chapters/*.md
+    - appendix-a-r-setup.md
+    - appendix-b-quick-reference.md
+    - appendix-c-glossary.md
+    - appendix-d-missing-data-checklists.md
+    - appendix-f-exercises.md
+    - appendix-g-handbook-navigation.md
+    - appendix-h-clinicians-route.md
     - references.qmd
 
 filters:
   - filters/remove_hr.lua
 
+github-repo: https://github.com/kimonntotsis/Breathing-Room-for-Statistics
+github-repo-base: https://github.com/kimonntotsis/Breathing-Room-for-Statistics/tree/main
+
 book:
-  title: "Statistical Methods for Respiratory Research"
-  subtitle: "Foundations through High-Dimensional, Longitudinal, and Causal Analysis"
+  title: "Breathing Room for Statistics"
+  subtitle: "A statistical handbook for respiratory research: from trials to omics and prediction"
   author: "Kimon Ntotsis"
   date: today
+  cover-image: figures/book-cover-castor.png
+  cover-image-alt: "Illustration of a beaver in a lab coat with statistical notation: a mascot for the CASTOR workflow (question first, limits last) and the synthetic teaching cohort."
   chapters:
+    - chapters/00-preface.md
     - index.md
     - parts/part-01-foundations.md
-    - chapters/00-preface.md
     - chapters/01-statistical-thinking.md
     - chapters/02-respiratory-data.md
     - parts/part-02-describe-compare.md
@@ -46,9 +58,17 @@ book:
     - chapters/19-survival-analysis.md
     - chapters/20-missing-data.md
     - chapters/21-causal-inference.md
+    - appendix-a-r-setup.md
+    - appendix-b-quick-reference.md
+    - appendix-c-glossary.md
+    - appendix-d-missing-data-checklists.md
+    - appendix-f-exercises.md
+    - appendix-g-handbook-navigation.md
+    - appendix-h-clinicians-route.md
     - references.qmd
 
 bibliography: ../references.bib
+csl: apa.csl
 link-citations: true
 reference-section-title: References
 
@@ -58,7 +78,11 @@ format:
     toc: true
     number-sections: true
     citeproc: true
+    cover-image: figures/book-cover-castor.png
   pdf:
+    filters:
+      - filters/remove_hr.lua
+      - filters/github_pdf_links.lua
     documentclass: scrreprt
     papersize: a4
     geometry:
@@ -67,6 +91,12 @@ format:
     number-sections: true
     colorlinks: true
     citeproc: true
+    code-overflow: wrap
+    template-partials:
+      - latex/before-body.tex
+    include-before-body:
+      text: |
+        \input{latex/cover-page.tex}
     include-in-header:
       text: |
         \usepackage{amsmath}
@@ -78,6 +108,7 @@ format:
         \usepackage{array}
         \usepackage{tabularx}
         \usepackage{calc}
+        \input{latex/pdf-preamble.tex}
     fig-pos: 'H'
 
 execute:

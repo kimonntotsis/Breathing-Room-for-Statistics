@@ -9,8 +9,9 @@
 | **Focus** | How to think before analysing |
 | **Key ideas** | Estimands, design, bias, inference vs prediction |
 | **Tools** | PICO, method map, reporting frameworks |
-| **Navigation** | [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md) · [QUICK_REFERENCE](../QUICK_REFERENCE.md) · [METHOD_MAP](../METHOD_MAP.md) · [Decision tree](../figures/method_decision_tree.png) · [REFERENCES](../REFERENCES.md) |
-| **Exercises** | [ch01](../exercises/ch01_exercises.md) · [Solutions](../solutions/ch01_solutions.md) |
+| **Exercises** | [ch01](../exercises/ch01_exercises.md), [Solutions](../solutions/ch01_solutions.md) |
+
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Pipeline figure](../figures/analysis_pipeline.png), [Appendix B](../appendix-b-quick-reference.md), [Appendix C glossary](../appendix-c-glossary.md), [METHOD_MAP](../METHOD_MAP.md), [Decision tree](../figures/method_decision_tree.png), [REFERENCES](../REFERENCES.md)
 
 ## Learning objectives
 
@@ -22,23 +23,19 @@
 
 ## Prerequisites
 
-None - start here.
+None - start here. **Unfamiliar term?** See [Appendix C](../appendix-c-glossary.md) (plain-language column first).
 
 ---
 
+## Why this chapter
+
+Later chapters presuppose a written estimand. Without it, even a correct *t*-test or Cox model answers the wrong question. This chapter is that gate.
+
 ## Opening question
 
-A pulmonologist asks: *"Is FEV1 lower in smokers?"*
+*"Is FEV1 lower in smokers?"* is not yet an analysis. Three clarifications precede any software: what decision the answer would inform (clinical); the exact contrast and population (statistical estimand); and whether the data are cross-sectional, trial follow-up, or repeated visits with missingness (data). Methods from [Chapter 4](04-comparing-groups.md) onward assume this order [@harrell2015rms].
 
-Before opening R, you need three answers:
-
-1. **Clinical:** What decision changes if we know the answer?  
-2. **Statistical:** What exact quantity are we estimating (estimand)?  
-3. **Data:** Cross-sectional snapshot or longitudinal trial? Which confounders?
-
-This chapter teaches that order. Methods come in [Chapter 4](04-comparing-groups.md) onward; **thinking** comes first [@harrell2015rms].
-
-> **Handbook rule:** Open [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) only **after** you can write the estimand in one sentence.
+Write the estimand in one sentence before opening [Appendix B](../appendix-b-quick-reference.md) or [QUICK_REFERENCE.md](../QUICK_REFERENCE.md).
 
 ---
 
@@ -69,6 +66,34 @@ This chapter teaches that order. Methods come in [Chapter 4](04-comparing-groups
 | Clinical | What decision or knowledge? | Using the wrong endpoint (symptom score when regulatory approval needs exacerbations) |
 | Statistical | What estimand/hypothesis? | Testing mean FEV1 when the protocol specifies risk difference |
 | Data | What was measured, in whom? | Ignoring missing spirometry or mixed BD protocols |
+
+### In practice
+
+Sponsor timelines compress analysis into a test name. The durable step is five minutes on the estimand in the analysis plan before the first line of R. That prevents more errors than revising the model choice later.
+
+## What CASTOR means
+
+**CASTOR** names both the working sequence in this book and the synthetic cohort that carries the examples. The sequence is fixed; the data file grows from core trial variables to omics in **CASTOR-HD** ([RECURRING_COHORT](../RECURRING_COHORT.md)).
+
+**C. Clinical question.** One sentence on what would change in practice if the answer were known. Endpoints and estimands follow from that sentence, not from a software menu.
+
+**A. Assess design and data.** Classify outcome type, follow-up structure, missingness, and confounding while the question can still be revised.
+
+**S. Select method.** Match the estimand to a technique ([Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md)); never reverse the order.
+
+**T. Test and fit.** Estimate with stated assumptions; run the sensitivity analysis you prespecified, not the one that rescues the *p*-value.
+
+**O. Output estimand.** Report effect size and uncertainty. A *p*-value alone is not an output.
+
+**R. Report limits.** State explicitly what the analysis did not establish (transport, causality, generalisation, multiplicity).
+
+The figure below expands the six letters into eight operational steps (description, diagnostics, written limits). Step 4 links to the [method decision tree](../figures/method_decision_tree.png) for outcome-specific choice; branches cover prediction, omics, and longitudinal designs.
+
+### The pipeline in eight steps
+
+![CASTOR analysis pipeline (eight steps) from question to report](../figures/analysis_pipeline.png){width=92%}
+
+*Same path for a Welch *t*-test on FEV1, a Cox model for time to exacerbation, or a batch-aware omics screen: question, data, method, estimate, limits.*
 
 ### Wrong analysis ⚠
 
@@ -216,15 +241,16 @@ Checklists improve **transparency**; they do not replace correct analysis [@harr
 
 ## Navigating the method map
 
-This handbook provides three linked tools:
+This handbook provides four linked tools:
 
 | Tool | Use when |
 |------|----------|
+| [figures/analysis_pipeline.png](../figures/analysis_pipeline.png) | You need the **full process** (question → report) |
 | [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) | You know outcome type; need test/model now |
 | [METHOD_MAP.md](../METHOD_MAP.md) | Full inventory and decision tree text |
-| [figures/method_decision_tree.png](../figures/method_decision_tree.png) | Visual flowchart for teaching or slides |
+| [figures/method_decision_tree.png](../figures/method_decision_tree.png) | Visual routing by outcome type |
 
-**Workflow:** estimand → outcome type (Ch 2) → QUICK_REFERENCE → chapter technique card → R script.
+**Workflow:** pipeline steps 1–3 → method decision tree (step 4) → chapter technique card → R script → report + limitations (steps 7–8).
 
 ---
 
@@ -256,6 +282,7 @@ These are not “more statistics.” They are ways to make the same methods more
 
 ---
 
+
 ## R lab: first look at CASTOR
 
 ```r
@@ -285,12 +312,16 @@ Always **describe** ([Ch 3](03-descriptive-analysis.md)) before **compare** ([Ch
 - Design limits causal language; reporting guidelines limit hidden flexibility.
 - Use [QUICK_REFERENCE](../QUICK_REFERENCE.md) after the estimand is clear - not before.
 
+## Where this chapter leads
+
+**Next:** [Chapter 2](02-respiratory-data.md) classifies CASTOR variables so [QUICK_REFERENCE](../QUICK_REFERENCE.md) routes you to the right method. Keep your estimand sentence from this chapter on hand.
+
 ## Further reading
 
 - Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
 - Shmueli, "To explain or to predict?" [@shmueli2010predict]  
 - ATS/ERS COPD research statement [@celli2015copdresearch]
 
-## Exercises · [Solutions](../solutions/ch01_solutions.md)
+## Exercises ([Solutions](../solutions/ch01_solutions.md))
 
 **Next:** [Chapter 2 - Data in Respiratory Research](02-respiratory-data.md)

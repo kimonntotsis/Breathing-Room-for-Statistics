@@ -9,16 +9,20 @@
 | **Recurring dataset** | `data/longitudinal_spirometry.csv` ([CASTOR extension](../RECURRING_COHORT.md)) |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Question** | How does FEV1 change over time, and does treatment modify that trajectory? |
-| **Core methods** | spaghetti plots, linear mixed models (`lmer`), random intercepts |
+| **Core methods** | spaghetti plots, linear mixed models (`lmer`), random intercepts, GEE pointer |
 | **R** | `R/examples/ch18_longitudinal_mixed_models.R` |
-| **Capstone link** | [Ch 12 Case E](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation) |
+| **Figures** | [spaghetti](../figures/ch18_spaghetti_fev1.png), [fitted trajectories](../figures/ch18_mixed_model_fitted.png) |
+| **Exercises** | [Chapter 18 exercises](../exercises/ch18_exercises.md) |
 
+**Also see:** [Ch 4](04-comparing-groups.md) (independence), [Ch 20](20-missing-data.md) (dropout), [Ch 12 Case E](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation)
 ## Learning objectives
 
 1. Recognise when repeated measures violate independence (Ch 4–5).
-2. Fit a random-intercept mixed model for FEV1 trajectories.
-3. Interpret `weeks × group` interaction as differential change over time.
-4. Report participant-level *n*, visit structure, and sensitivity to cross-sectional shortcuts.
+2. State the estimand for a longitudinal trial (level, slope, or both).
+3. Fit a random-intercept mixed model for FEV1 trajectories and read the coefficient table.
+4. Interpret `weeks × group` interaction as differential change over time.
+5. Compare mixed models to cross-sectional shortcuts and explain SE differences.
+6. Report participant-level *n*, visit structure, and sensitivity to missing visits.
 
 ## Prerequisites
 
@@ -26,11 +30,55 @@ Chapters 4–5 (group comparisons, linear models); Ch 8 (reporting).
 
 ---
 
+## Why this chapter
+
+Repeated FEV1 visits carry more information than a single timepoint; a week-52 *t*-test discards most of that structure. This chapter is for extension trials and observational spirometry trajectories where the same patient appears more than once.
+
 ## Opening question (CASTOR extension)
 
 *Does intervention slow FEV1 decline compared with standard care when each patient contributes four visits at weeks 0, 12, 24, and 52?*
 
 A Welch *t*-test on week-52 FEV1 alone **throws away** within-person information and treats visits as independent. Mixed models keep all visits while accounting for correlation within patient [@harrell2015rms].
+
+The CASTOR extension cohort has **160 participants** and **640 visits** (four scheduled time points). That structure is typical of COPD and asthma trials where spirometry is repeated but not every week.
+
+---
+
+## Clinical and biostatistics notes
+
+**Clinical:** Prespecify whether the estimand is **week-52 level**, **slope**, or **change from baseline**; they answer different trial questions. Missed visits and inability to perform manoeuvres are clinical missingness ([Ch 20](20-missing-data.md)).
+
+**Biostatistics:** **Random intercept** is the minimum for repeated FEV1. A significant `weeks:group` term means **differential slope**, not automatically week-52 benefit. Stacking visits in `lm()` or Welch *t* inflates precision; compare to Ch 4 only for prespecified single-visit snapshots.
+
+**Clinical nuance:** population fitted lines are **average trajectories**, not individual forecasts for clinic.
+
+**Biostat nuance:** CASTOR teaching output: intervention × time coefficient ≈ **+0.00054 L/week** (95% CI roughly −0.00015 to +0.00122); modelled week-52 separation is modest; illustrate workflow, not a powered trial result.
+
+---
+
+## The longitudinal workflow
+
+Every repeated-measures analysis should follow these steps:
+
+1. **Estimand**: mean difference at week 52? difference in **slope**? area under the curve?
+2. **Visit map**: prespecified times; define time origin (randomisation vs first dose).
+3. **Plot**: spaghetti or profile plot; check dropout pattern by arm.
+4. **Model**: mixed model or GEE matched to estimand; random intercept at minimum.
+5. **Sensitivity**: cross-sectional shortcut, complete-case visits, dropout discussion (Ch 20).
+6. **Report**: participant *n*, visits per person, fixed effects with CI, not only visit *n*.
+
+---
+
+## When independence fails
+
+| Design | Rows in data | Correct unit of inference | Wrong approach |
+|--------|--------------|----------------------------|----------------|
+| One FEV1 per patient | 160 | Patient | (none needed) |
+| Four visits per patient | 640 | Patient | *t*-test on 640 rows |
+| Two centres, 20 patients each | 640 | Patient (centre in model if needed) | Ignore centre |
+| Bronchodilator pre/post same day | 2 per patient | Patient (paired) | Two independent groups |
+
+**Rule:** if the same `patient_id` appears more than once, rows are **correlated**. Standard errors from ordinary `lm()` on stacked visits are often **too small** because the model treats each visit as a new person.
 
 ---
 
@@ -58,7 +106,54 @@ A Welch *t*-test on week-52 FEV1 alone **throws away** within-person information
 
 **Precise language:** we model FEV1 as a linear function of time and treatment with patient-specific random intercepts; the `weeks:group` interaction estimates differential mean change per week between arms, conditional on covariates.
 
-**Clinician read:** is the modelled gap at 52 weeks clinically meaningful (MCID ~0.1 L in many COPD contexts)? Trajectory matters more than a single visit snapshot.
+**Clinician read:** is the modelled gap at 52 weeks clinically meaningful (MCID ~0.1 L in many COPD contexts)? Trajectory matters more than a single visit snapshot [@cazzola2008mcid].
+
+### Worked example (CASTOR extension)
+
+After `source("R/examples/ch18_longitudinal_mixed_models.R")`, the mixed model reports approximately:
+
+| Term | Estimate (L or L/week) | Plain read |
+|------|------------------------|------------|
+| `weeks` | −0.0018 per week | Both arms decline slightly on average |
+| `groupintervention` | −0.066 at week 0 | Level shift at baseline (should be ~0 in well-randomised trials) |
+| `weeks:groupintervention` | +0.00054 per week | Intervention associated with **less decline** per week |
+| `(1 \| patient_id)` | random intercept | Each patient has their own baseline FEV1 |
+
+The **interaction** is the prespecified treatment effect when the estimand is *differential slope*. Over 52 weeks, the modelled extra gain is roughly \(0.00054 \times 52 \approx 0.03\) L: small in this synthetic run; always compare to MCID and CI, not only the point estimate.
+
+**Sensitivity:** a cross-sectional `lm()` at week 52 alone gives a similar point estimate for the intervention effect (−0.051 L) but the **logic** differs: the mixed model uses all visits and models correlation. See `ch18_sensitivity_mixed_vs_fixed.csv`. If the cross-sectional SE were much smaller than the mixed-model SE, that would be a red flag for pseudo-replication; here they are similar because visit count is balanced.
+
+```r
+long <- readr::read_csv("data/longitudinal_spirometry.csv")
+library(lme4)
+fit <- lmer(
+  fev1 ~ weeks * group + age + sex + smoking + (1 | patient_id),
+  data = long
+)
+summary(fit)
+```
+
+### Technique: Random intercept and slope (extension)
+
+| | |
+|---|---|
+| **Model** | `(weeks \| patient_id)` or `(1 + weeks \| patient_id)` |
+| **When to add random slope** | Substantial heterogeneity in individual decline rates |
+| **Cost** | More parameters; may not converge with few visits per person |
+| **CASTOR note** | Four visits per patient is usually enough for random intercept only |
+
+Use random slopes when biology suggests patients **differ in rate of decline**, not only baseline. With only four time points, start with random intercept; add slope only if prespecified and convergence is stable.
+
+### Technique: GEE (population-averaged alternative)
+
+| | |
+|---|---|
+| **Answers** | Marginal (population-average) effect of treatment on mean FEV1 trajectory |
+| **R** | `geepack::geeglm(fev1 ~ weeks * group, id = patient_id, corstr = "exchangeable")` |
+| **Contrast with mixed model** | Mixed model = conditional (subject-specific); GEE = marginal |
+| **When to prefer GEE** | Robust SE focus; many subjects, few visits; explicit population estimand |
+
+Both are valid; **do not mix estimands** in the same paper without stating which you target.
 
 ### Caveats box
 
@@ -70,6 +165,14 @@ A Welch *t*-test on week-52 FEV1 alone **throws away** within-person information
 | Non-linear decline | FEV1 decline may accelerate; consider splines (Ch 7) |
 | Clustered centres | Patients nested in hospitals need centre random effects or robust SEs |
 | Cross-sectional shortcut | Week-52 *t*-test ignores baseline and correlation |
+
+### In practice
+
+Week-52 t-tests on last observation carried forward still appear in extension studies. Mixed models or principled missing-data methods (Ch 20) are the defensible default when visits are scheduled.
+
+### In practice (GEE vs mixed)
+
+The statistician mentions GEE; another analyst fits `lmer`. Both can be correct; they answer **slightly different estimands**. Ask: do we want **subject-specific** trajectories (mixed model) or **population-averaged** marginal effects (GEE)? For most COPD trial reports, either is acceptable if prespecified; do not swap after seeing results ([technique card below](#technique-mixed-models-vs-gee)).
 
 ### Wrong analysis ⚠
 
@@ -94,7 +197,23 @@ A Welch *t*-test on week-52 FEV1 alone **throws away** within-person information
 
 > Longitudinal FEV1 (litres) was analysed in *n* = … participants contributing … visits (weeks 0, 12, 24, 52). We fitted a linear mixed model with random intercepts for patient: FEV1 ~ time × treatment + age + sex + smoking + (1\|patient). The estimated difference in slope (intervention − standard) was … L per week (95% CI …). Sensitivity analysis compared a cross-sectional model at week 52 only. Missing visits were …%.
 
+**Results (CASTOR extension):** Among 160 participants (640 visits), mean FEV1 declined by approximately 0.0018 L per week in the standard arm (fixed effect for `weeks`). The intervention × time interaction was **0.00054 L per week** (95% CI −0.00015 to 0.00122), corresponding to a modelled **≈0.028 L** separation at week 52 under linearity. Spaghetti plots showed heterogeneous trajectories; population-level fitted means are in Figure.
+
 ---
+
+## Decision table: which longitudinal method?
+
+| Situation | Primary method | Chapter |
+|-----------|----------------|---------|
+| RCT, continuous FEV1, 2+ visits | Mixed model, random intercept | This chapter |
+| Population-average estimand explicit | GEE | This chapter §GEE |
+| Single post-baseline visit only | ANCOVA with baseline FEV1 | Ch 5 |
+| Time to first exacerbation | Survival model | Ch 19 |
+| Informative dropout suspected | Mixed model + missing-data sensitivity | Ch 20 |
+| Non-linear decline prespecified | Splines in `weeks` | Ch 7 |
+
+---
+
 
 ## R lab
 
@@ -105,13 +224,63 @@ source("R/examples/ch18_longitudinal_mixed_models.R")
 
 ![Spaghetti plot: FEV1 trajectories by participant](../figures/ch18_spaghetti_fev1.png)
 
+Each line is one participant. Use this plot to spot outliers, dropout, and whether a linear trend is plausible before trusting the mixed model.
+
 ![Mixed model fitted population trajectories](../figures/ch18_mixed_model_fitted.png)
+
+Fitted lines are **population-level** predictions (random effects set to zero), not individual patient forecasts.
 
 **Tables:** `ch18_mixed_model_coefficients.csv`, `ch18_visit_counts_by_group.csv`, `ch18_sensitivity_mixed_vs_fixed.csv`
 
-### Mini-lab: GEE pointer
+### Mini-lab: read the interaction
 
-When the scientific focus is a population-averaged contrast rather than subject-specific trajectories, GEE (`geepack::geeglm`) is a common alternative. Mixed models estimate conditional (subject-specific) slopes; GEE estimates marginal effects — both are valid with different estimands.
+```r
+coefs <- readr::read_csv("volume-01/tables/ch18_mixed_model_coefficients.csv")
+coefs %>% filter(term == "weeks:groupintervention")
+```
+
+Ask: if the interaction is positive, does intervention **slow** or **accelerate** decline relative to standard care?
+
+### Mini-lab: week-52 shortcut vs mixed model
+
+```r
+sens <- readr::read_csv("volume-01/tables/ch18_sensitivity_mixed_vs_fixed.csv")
+sens
+```
+
+Compare `std.error` for `groupintervention` across models. Smaller SE in the cross-sectional model with stacked visits would suggest pseudo-replication.
+
+---
+
+## Technique: Mixed models vs GEE {#technique-mixed-models-vs-gee}
+
+| | **Mixed model (random effects)** | **GEE** |
+|---|---|---|
+| **Answers** | Subject-specific trajectory; variance components | Population-averaged (marginal) effect |
+| **Outcome** | Continuous FEV1 (Gaussian mixed); extensions for binary/count | Continuous, binary, count with working correlation |
+| **Design** | Repeated measures; optional `(1 \| centre)` for multi-centre |
+| **Assumptions** | Random effects distribution; MAR for likelihood-based inference | Mean model correct; robust SE with sandwich estimator |
+| **Effect measure** | Fixed effect for time × treatment (conditional on random effects) | Same regression coefficients interpreted marginally |
+| **R** | `lme4::lmer(fev1 ~ weeks * group + (1 \| patient_id))` | `geepack::geeglm(..., id = patient_id, corstr = "exchangeable")` |
+| **Report** | Participant *n*, visits, random-effect structure, fixed effects + CI | Correlation structure chosen; robust SE; same estimand language |
+| **Prefer mixed when** | Random slopes clinically meaningful; small number of clusters with random centre effects |  |
+| **Prefer GEE when** | Robustness to correlation misspecification matters; marginal estimand is target | Few clusters; need simple marginal interpretation |
+
+**Plain language:** mixed models let each patient have their own baseline FEV1; GEE averages over patients with a chosen correlation pattern.
+
+**Precise language:** mixed models are **conditional** (subject-specific); GEE coefficients are **marginal** (population-averaged); they can differ when the link is non-identity [@harrell2015rms].
+
+**Clinician read:** for a parallel-group trial with linear FEV1 trends, both usually give **similar direction**; prespecify one primary approach in the SAP.
+
+#### Wrong analysis ⚠
+
+| Mistake | Why it fails | Do instead |
+|---------|--------------|------------|
+| Stack visits in `lm()` without patient | Pseudo-replication | `(1 \| patient_id)` or GEE with `id` |
+| Report only week-52 *t*-test | Discards visits | Mixed / GEE on all scheduled times |
+| Switch from mixed to GEE after NS interaction | Analysis shopping | Prespecify; report sensitivity |
+
+CASTOR script fits mixed models: `R/examples/ch18_longitudinal_mixed_models.R`. GEE sensitivity can use `geepack` on the same `longitudinal_spirometry.csv`.
 
 ---
 
@@ -119,6 +288,7 @@ When the scientific focus is a population-averaged contrast rather than subject-
 
 | Situation | Method | Note |
 |-----------|--------|------|
+| Marginal estimand, robust SE | **GEE** | [Mixed vs GEE](#technique-mixed-models-vs-gee) |
 | Non-linear FEV1 decline | Splines in `weeks` | Prespecify knots |
 | Clustered centres | `(1 \| centre)` or GEE | Multi-centre trials |
 | Binary event over time | Survival model | [Ch 19](19-survival-analysis.md) |
@@ -126,7 +296,7 @@ When the scientific focus is a population-averaged contrast rather than subject-
 
 ---
 
-## Exercises · [Solutions](../solutions/ch18_solutions.md)
+## Exercises ([Solutions](../solutions/ch18_solutions.md))
 
 **E18.1** Why is independence violated with repeated FEV1?
 
@@ -134,15 +304,25 @@ When the scientific focus is a population-averaged contrast rather than subject-
 
 **E18.3** When is a week-52 *t*-test misleading compared with a mixed model?
 
+**E18.4** If `weeks:groupintervention` is positive, how do you describe the intervention effect on **slope**?
+
+**E18.5** Mixed model vs GEE: which estimand is population-averaged?
+
 **Applied**
 
 1. Run `source("R/examples/ch18_longitudinal_mixed_models.R")`.
 2. Interpret `weeks:groupintervention` from the coefficient table.
-3. Compare `ch18_sensitivity_mixed_vs_fixed.csv` — which SE is smaller, and why is that suspicious?
+3. Compare `ch18_sensitivity_mixed_vs_fixed.csv`; which SE is smaller, and why is that suspicious?
+4. From the spaghetti plot, would you prespecify a random slope? Why or why not?
+5. Draft one Results sentence using the reporting template.
 
 **Capstone:** [Case E in Ch 12](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation).
 
 ---
+
+## Where this chapter leads
+
+**Next:** [Chapter 19](19-survival-analysis.md) for time-to-exacerbation; [Chapter 20](20-missing-data.md) when dropout is informative.
 
 ## Further reading
 

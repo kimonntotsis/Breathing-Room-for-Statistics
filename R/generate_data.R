@@ -7,7 +7,7 @@ set.seed(20250616)
 n <- 400
 
 # --- Cross-sectional spirometry cohort ---------------------------------------
-# FEV1 (L) modelled from age, sex, smoking, height — simplified anthropometric logic
+# FEV1 (L) modelled from age, sex, smoking, height: simplified anthropometric logic
 
 sex <- sample(c("female", "male"), n, replace = TRUE)
 smoking <- rbinom(n, 1, prob = 0.35)
@@ -188,12 +188,14 @@ age_s <- round(rnorm(n_surv, 64, 10))
 fev1_pct_s <- pmax(30, pmin(110, 88 - 7 * smoke_s - 0.2 * (age_s - 60) + rnorm(n_surv, 0, 10)))
 therapy_s <- sample(c("ICS", "ICS_LABA", "triple"), n_surv, TRUE, prob = c(0.28, 0.42, 0.30))
 
-hazard <- exp(-3.2 + 0.55 * smoke_s - 0.022 * fev1_pct_s +
-                ifelse(therapy_s == "triple", -0.45, ifelse(therapy_s == "ICS_LABA", -0.2, 0)))
-time_days <- round(rexp(n_surv, rate = hazard) * 365)
-censored <- time_days > 365
-time_days <- pmin(time_days, 365)
-event_exac <- as.integer(!censored)
+# Daily hazard scale tuned for teaching: ~40–50 events within 365 d, smoking hazard elevated
+hazard <- exp(
+  -0.25 + 0.75 * smoke_s - 0.028 * fev1_pct_s +
+    ifelse(therapy_s == "triple", -0.55, ifelse(therapy_s == "ICS_LABA", -0.25, 0))
+)
+time_raw <- rexp(n_surv, rate = hazard / 200)
+time_days <- pmin(round(time_raw), 365)
+event_exac <- as.integer(time_raw <= 365)
 
 time_to_exacerbation <- tibble(
   patient_id = sprintf("S%04d", seq_len(n_surv)),

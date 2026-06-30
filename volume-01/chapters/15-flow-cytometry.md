@@ -12,7 +12,9 @@
 | **R** | `R/examples/ch15_flow_cytometry.R` |
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch15_*.png` |
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
+| **Exercises** | [Chapter 15 exercises](../exercises/ch15_exercises.md) |
 
+**Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
 ## Learning objectives
 
 1. Choose the correct **unit of analysis**: participant-level summaries vs cells.
@@ -20,12 +22,17 @@
 3. Compare groups on cell-type proportions with interpretable effect measures and drift adjustment.
 4. Use embeddings/clustering as **descriptive** tools unless validated.
 5. Avoid **pseudo-replication** and "UMAP as evidence" claims.
+6. Apply multiplicity control when testing many cell types (Ch 13 link).
 
 ## Prerequisites
 
 Ch 4 (comparisons), Ch 5 (linear models), Ch 13 (multiplicity), Ch 14 (batch/drift logic).
 
 ---
+
+## Why this chapter
+
+Flow data are beautiful and easy to mis-analyse. A stunning UMAP is not evidence; pooling cells as if they were patients is pseudo-replication. This chapter keeps immune phenotyping at the **participant** level where clinicians can interpret it.
 
 ## Opening question
 
@@ -35,6 +42,17 @@ Flow cytometry invites a common error: using an appealing picture (embedding) as
 
 - **Inference** (estimates + uncertainty on **participant-level** summaries) from
 - **Visualization** (embeddings, clustering, gating diagnostics).
+
+---
+
+## The flow analysis workflow
+
+1. **Panel & gating**: document manual or algorithmic strategy.
+2. **Summarise per participant**: proportions and/or median intensities.
+3. **Drift QC**: plot by batch/run day ([Ch 14](14-batch-effects.md)).
+4. **Primary models**: participant-level `lm` or beta regression on prespecified cell types.
+5. **Multiplicity**: BH across cell types if many tested (Ch 13).
+6. **Embeddings**: UMAP/PCA for QC only unless validated.
 
 ---
 
@@ -53,6 +71,19 @@ The chapter script compares two analysis units on the same CASTOR-HD toy per-cel
 | **n in CASTOR-HD** | 120 participants in `flowcytometry_summary.csv` |
 
 **Clinician read:** "Among 120 people, cases had a higher median monocyte fraction" - this is the claim you can defend.
+
+### Worked example (CASTOR-HD participant models)
+
+From `ch15_flow_effects_by_celltype.csv` (logit scale, batch-adjusted, *n* = 120 participants):
+
+| Cell type | Logit difference (case vs control) | *q* (BH) | Interpretation |
+|-----------|-----------------------------------|----------|----------------|
+| Mono | +0.81 | 0.025 | Higher monocyte proportion in cases |
+| NK | +0.63 | 0.030 | Higher NK proportion in cases |
+| CD8_T | −0.58 | 0.060 | Suggestive lower CD8 (borderline FDR) |
+| CD4_T | −0.12 | 0.60 | No FDR evidence |
+
+Report **participant *n***, not cell event counts. The pseudo-replication demo in the chapter script shows pooled-cell *p*-values far smaller than participant-level models for the same comparison.
 
 ### Case B (wrong): per-cell analysis as if independent
 
@@ -120,6 +151,10 @@ The pseudo-replication model will show a much smaller p-value and misleading pre
 | Multiple comparisons | many cell types/markers -> multiplicity (Ch 13) |
 | Unit of analysis | do not treat cells as independent patients |
 
+### In practice
+
+A flow core returns 50,000 events per patient and a beautiful t-SNE. Summarise to participant proportions first; show the embedding in supplementary material as QC.
+
 ### Wrong analysis ⚠
 
 | | |
@@ -183,7 +218,11 @@ Embeddings (UMAP/t-SNE) and clustering can help you **see** structure and check 
 
 ![Cell-type proportions by group (participant-level)](../figures/ch15_flow_props_by_group.png)
 
+Bars are participant means: the level at which group comparisons belong in a respiratory paper.
+
 ![Pseudo-replication: participant vs pooled-cell p-values](../figures/ch15_pseudoreplication_demo.png)
+
+Inflated significance when cells are pooled is the reason flow claims must stay at participant *n*.
 
 ---
 
@@ -194,7 +233,7 @@ Embeddings (UMAP/t-SNE) and clustering can help you **see** structure and check 
 | Many cell types tested | FDR across populations (Ch 13) | prespecify primary endpoint |
 | Strong drift | include batch + control beads QC | see Ch 14 overlap logic |
 | Need single-cell discovery | clustering + stability (Ch 11 mindset) | do not call "endotypes" |
-| Modelling cells directly | mixed model: `marker ~ group + (1|patient_id)` | still harder to interpret than summaries |
+| Modelling cells directly | mixed model: `marker ~ group + (1\|patient_id)` | still harder to interpret than summaries |
 | Compositional core question | log-ratio between prespecified types | advanced; document clearly |
 
 ### Mini-lab: beta regression pointer (proportions)
@@ -207,6 +246,7 @@ fit <- lm(logit_mono ~ group + batch, data = flow_m)
 ```
 
 ---
+
 
 ## R lab: Flow cytometry on CASTOR-HD
 
@@ -241,9 +281,13 @@ table(flow$group, flow$batch)
 
 ![Compositional structure: proportions sum to 1](../figures/ch15_compositional_stacked.png)
 
+Shifts in one population often accompany opposite shifts elsewhere because proportions are bounded.
+
 ![Drift check: proportions by batch/day](../figures/ch15_flow_props_by_batch.png)
 
-## Exercises · [Solutions](../solutions/ch15_solutions.md)
+Batch-separated bars mean immunology and processing are confounded until drift is modelled or redesigned.
+
+## Exercises ([Solutions](../solutions/ch15_solutions.md))
 
 **E15.1** Why is pooling 6,000 cells as n = 6,000 wrong?
 
@@ -251,13 +295,27 @@ table(flow$group, flow$batch)
 
 **E15.3** When is a UMAP figure acceptable in a paper?
 
+**E15.3** When is a UMAP figure acceptable in a paper?
+
+**E15.4** Why prespecify 1–3 cell types for primary inference?
+
 **Applied**
 
 1. Run `source("R/examples/ch15_flow_cytometry.R")`.
 2. Compare participant vs pooled-cell p-values in `ch15_pseudoreplication_demo.png`.
 3. Interpret monocyte results in `volume-01/tables/ch15_flow_effects_by_celltype.csv`.
 4. Write a Results sentence for monocyte proportion difference with batch adjustment.
+5. State the unit of analysis in one Methods sentence.
 
+---
+
+## Where this chapter leads
+
+**Next:** [Chapter 16](16-antibody-discovery.md) for confirmation assays; [Chapter 17](17-integrated-castor-hd.md) for the full CASTOR-HD story.
+
+## Further reading
+
+- Roederer & Moody flow cytometry guidelines; [Ch 14](14-batch-effects.md) for drift
 
 ## Chapter summary
 

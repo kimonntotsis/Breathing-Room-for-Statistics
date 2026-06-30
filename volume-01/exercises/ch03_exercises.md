@@ -1,4 +1,4 @@
-# Chapter 3 Exercises — Descriptive Analysis
+# Chapter 3 Exercises: Descriptive analysis
 
 **E3.1** When report median instead of mean for FEV1?
 
@@ -8,6 +8,6 @@
 
 **Applied:** Create Table 1 by `group` for age, sex, smoking, FEV1. Histogram and boxplot of FEV1.
 
-**Extension:** QQ plot of FEV1 — comment on normality.
+**Extension:** QQ plot of FEV1; comment on normality.
 
 [Solutions](../solutions/ch03_solutions.md)

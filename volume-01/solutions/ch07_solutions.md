@@ -1,7 +1,7 @@
-# Chapter 7 — Solutions
+# Chapter 7 solutions
 
 ## E7.1
-Inflates type I error; biased coefficients; overoptimistic fit — invalid for confirmatory p-values.
+Inflates type I error; biased coefficients; overoptimistic fit: invalid for confirmatory p-values.
 
 ## E7.2
 **LASSO:** many predictors, prediction focus, need variable selection. **Prespecified logistic:** confirmatory inference with known confounders.

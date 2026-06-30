@@ -9,9 +9,9 @@
 | **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Methods** | CI, bootstrap, multiplicity, CONSORT/STROBE/TRIPOD, sensitivity, reproducibility |
-| **Navigation** | [QUICK_REFERENCE](../QUICK_REFERENCE.md) · [REFERENCES](../REFERENCES.md) · Reporting checklists below |
 | **Exercises** | [ch08](../exercises/ch08_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), [REFERENCES](../REFERENCES.md), Reporting checklists below
 ## Learning objectives
 
 1. Report estimates with uncertainty, not p-values alone.
@@ -25,6 +25,10 @@
 Chapters 4-7.
 
 ---
+
+## Why this chapter
+
+A correct analysis reported badly is still unusable in a protocol or journal. This chapter is for anyone writing the Methods or Results: CONSORT, STROBE, TRIPOD, intervals instead of “p > 0.05 means no effect.” CASTOR examples show how to report evidence, not just significance.
 
 ## Opening question (CASTOR)
 
@@ -62,6 +66,18 @@ This chapter is about **how to report evidence** - intervals, validation, transp
 | Multiple CIs | Do not cherry-pick the narrowest |
 | Model-based CI | Assumes model correct |
 | Small n | Wald CI for OR can be poor - profile/likelihood or bootstrap [@efron1993bootstrap] |
+
+### In practice
+
+Reviewers will ask for CIs even when you reported p-values. Build tables with estimate, CI, and n from the start: retrofitting intervals before resubmission wastes a week and invites arithmetic errors.
+
+### In practice (CONSORT flow)
+
+For RCTs, the number analysed is often smaller than enrolled. The CONSORT flow is not bureaucracy; it documents who entered the estimand. If FEV1 at week 12 excludes patients who died or withdrew, say so explicitly and link to [Chapter 20](20-missing-data.md).
+
+### In practice (non-inferiority reporting)
+
+Regulatory and device submissions ask: “Did you demonstrate non-inferiority?” A Results paragraph with only “p = 0.08” fails that question. Report the **prespecified margin**, the **90% CI** (or TOST result), and a plain conclusion relative to Δ ([Ch 4 NI template](04-comparing-groups.md#technique-non-inferiority-and-equivalence-trials)).
 
 ### Wrong analysis ⚠
 
@@ -109,7 +125,7 @@ quantile(boot_diff, c(0.025, 0.975))
 
 ### Caveats
 
-Clustered data need cluster bootstrap (Vol II). Percentile bootstrap can fail for skewed ORs - consider BCa.
+Clustered data need cluster bootstrap ([Ch 18](18-longitudinal-mixed-models.md)). Percentile bootstrap can fail for skewed ORs - consider BCa.
 
 ### Wrong analysis ⚠
 
@@ -251,6 +267,7 @@ Run 12 models; report only the one with p < 0.05.
 
 ---
 
+
 ## R lab
 
 ```r
@@ -288,6 +305,26 @@ sessionInfo()
 | Prediction models | optimism correction / bootstrap validation | complements single split |
 | Clustering / PCA | stability + external replication | Ch 10-11 |
 
+### Non-inferiority and equivalence reporting
+
+| Element | Report |
+|---|---|
+| **Margin Δ** | Prespecified clinical margin (e.g. −0.10 L FEV1) |
+| **Hypothesis** | NI: H0: difference ≤ Δ vs Ha: difference > Δ (example for continuous) |
+| **Interval** | 90% CI for NI (convention) or two one-sided tests |
+| **Conclusion** | NI demonstrated / not demonstrated. **not** “no difference” from *p* > 0.05 |
+| **Power** | NI trials must be powered for the margin, not superiority |
+
+**Methods sentence (template):**
+
+> Non-inferiority of [intervention] vs [control] on [endpoint] was tested with prespecified margin Δ = …. We used [TOST / CI against margin] at one-sided α = 0.025.
+
+**Results sentence (template):**
+
+> The estimated difference was … (90% CI …). Because the CI [was / was not] entirely above Δ, non-inferiority [was / was not] demonstrated.
+
+Full technique card: [Chapter 4](04-comparing-groups.md#technique-non-inferiority-and-equivalence-trials).
+
 ### Missing data ([Ch 20](20-missing-data.md))
 
 Multiple imputation (MICE) is the default modern sensitivity tool when missingness is plausibly MAR. [Ch 20](20-missing-data.md) introduces patterns and sensitivity; production analyses should use `mice` with pooled estimates.
@@ -298,12 +335,16 @@ Multiple imputation (MICE) is the default modern sensitivity tool when missingne
 - Bootstrap and sensitivity analyses support robust conclusions [@efron1993bootstrap].
 - Match reporting guideline to design [@schulz2010consort; @vonelm2007strobe; @moons2015tripod]; document reproducibility.
 
+## Where this chapter leads
+
+**Next:** Prediction workflows → [Chapter 9](09-prediction-vs-inference.md). Discovery on marker panels → [Chapters 10–12](10-dimensionality-reduction.md). Omics → [Chapter 13](13-differential-analysis-fdr.md).
+
 ## Further reading
 
 - Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
 - Efron & Tibshirani, *An Introduction to the Bootstrap* [@efron1993bootstrap]  
 - Steyerberg, *Clinical Prediction Models* [@steyerberg2019clinical]
 
-## Exercises · [Solutions](../solutions/ch08_solutions.md)
+## Exercises ([Solutions](../solutions/ch08_solutions.md))
 
 **Next:** [Chapter 9](09-prediction-vs-inference.md)

@@ -12,7 +12,9 @@
 | **Primary tools** | QC plots, PCA by batch, batch as covariate, sensitivity analysis |
 | **R** | `R/examples/ch14_batch_effects.R` |
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch14_*.png` |
+| **Exercises** | [Chapter 14 exercises](../exercises/ch14_exercises.md) |
 
+**Also see:** [Ch 13 DE](13-differential-analysis-fdr.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
 ## Learning objectives
 
 1. Recognise when "discoveries" are likely technical.
@@ -20,12 +22,17 @@
 3. Distinguish **adjustable batch** from **confounded batch** (not identifiable).
 4. Apply three defensible strategies: covariate adjustment, adjustment inside resampling (prediction), or redesign.
 5. Avoid overcorrection when batch removal would erase real site differences.
+6. Report discovery counts with and without batch adjustment.
 
 ## Prerequisites
 
 Ch 10 (PCA intuition), Ch 13 (differential analysis logic), Ch 8 (reporting).
 
 ---
+
+## Why this chapter
+
+Batch effects are the default in proteomics, RNA, and flow, not the exception. This chapter asks the uncomfortable question first: did we rediscover the lab calendar? Read it before interpreting any hit list from Chapter 13.
 
 ## Opening question
 
@@ -39,6 +46,17 @@ Batch effects are not a niche issue; they are the default in real omics and cyto
 - processing batches
 
 If batch aligns with group (e.g., all cases measured later), adjustment cannot create truth from confounding. At that point the honest conclusion is: **the study is not identifiable without stronger design.**
+
+---
+
+## The batch QC workflow
+
+1. **Record** batch, plate, run day, site, operator (whatever exists).
+2. **Tabulate** `group × batch` (and plate if relevant).
+3. **Plot** PCA or similar QC embedding coloured by batch **and** group.
+4. **Quantify** variance explained by batch on leading PCs (if helpful).
+5. **Sensitivity**: fit DE with and without batch; compare discovery counts.
+6. **Stop rule**: if batch == group, report non-identifiability; do not force ComBat.
 
 ---
 
@@ -58,6 +76,8 @@ In `proteomics_olink_like.csv`, cases and controls appear in **both** batches. B
 | Interpretation | Group effects are **conditional on measured technical variables**; still need replication |
 
 **Clinician read:** we can attempt to separate biology from lab process because both patient types were measured under multiple conditions.
+
+**Teaching numbers** (`ch14_batch_mini_case_summary.csv`): with batch overlap, **3** proteomics discoveries at FDR *q* < 0.05 **with** batch adjustment and **3 without** in this synthetic run. Stability across adjustment is reassuring; a large flip (e.g. 50 → 0) would signal an unstable conclusion.
 
 ### Case B (synthetic confounding): batch == group
 
@@ -118,6 +138,10 @@ Imagine a study where **all controls** were run on Batch1 and **all cases** on B
 | Missingness | LOD missingness can mimic batch clustering (proteomics) |
 | Reporting | you must say what batch variables existed and what you did |
 
+### In practice
+
+ComBat on the full dataset before train/test split has sunk prediction papers. Any correction: covariate or ComBat: must respect the same leakage rules as Chapter 9.
+
 ### Wrong analysis ⚠
 
 | | |
@@ -171,7 +195,11 @@ This is the most defensible "first-line" strategy for **inference** when batch i
 
 ![PCA colored by batch (proteomics subset)](../figures/ch14_pca_proteomics_batch.png)
 
+Separation along PC1 by colour (batch) means batch-aware models or redesign, not a raw hit list: come first.
+
 ![Valid overlap vs confounded group × batch design](../figures/ch14_group_batch_overlap.png)
+
+Only the left-hand pattern supports identifiable group effects after batch adjustment; the right-hand pattern is a stop/go gate.
 
 ---
 
@@ -190,6 +218,7 @@ This is the most defensible "first-line" strategy for **inference** when batch i
 ComBat and similar tools can help when batch is measured and **not fully confounded** with group. Always run the overlap + PCA checks in this chapter first. If `table(group, batch)` has empty cells, report non-identifiability instead of forcing correction.
 
 ---
+
 
 ## R lab: Batch effects on CASTOR-HD
 
@@ -223,9 +252,13 @@ If the *existence* of your main result depends on whether batch is included, say
 
 ![Discoveries with vs without batch adjustment](../figures/ch14_batch_sensitivity_discoveries.png)
 
+A large drop in hit count after batch adjustment means many “discoveries” were technical. Report both numbers.
+
 ![PC1 variance explained by batch vs group](../figures/ch14_pc1_variance_explained.png)
 
-## Exercises · [Solutions](../solutions/ch14_solutions.md)
+When batch explains more variance than group on PC1, prioritise batch QC over interpreting loadings.
+
+## Exercises ([Solutions](../solutions/ch14_solutions.md))
 
 **E14.1** When is including batch as a covariate defensible?
 
@@ -233,14 +266,27 @@ If the *existence* of your main result depends on whether batch is included, say
 
 **E14.3** Why is ComBat before train/test split a leakage problem?
 
+**E14.3** Why is ComBat before train/test split a leakage problem?
+
+**E14.4** What should you report if discoveries go from 50 to 0 when batch is added?
+
 **Applied**
 
 1. Run `source("R/examples/ch14_batch_effects.R")`.
 2. Interpret `ch14_group_batch_overlap.png` for Cases A and B.
 3. Read `volume-01/tables/ch14_batch_mini_case_summary.csv`.
 4. Draft a Methods sentence on batch handling for a proteomics paper.
+5. Write a one-sentence **stop** message for a perfectly confounded design.
 
 ---
+
+## Where this chapter leads
+
+**Next:** [Chapter 15](15-flow-cytometry.md) for immune summaries; [Chapter 16](16-antibody-discovery.md) for screens. Return to [Chapter 13](13-differential-analysis-fdr.md) sensitivity after batch QC.
+
+## Further reading
+
+- Leek et al. on batch effects; [Ch 13](13-differential-analysis-fdr.md) for DE context
 
 ## Chapter summary
 

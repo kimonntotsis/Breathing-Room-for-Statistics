@@ -1,4 +1,4 @@
-# Chapter 4 — Solutions
+# Chapter 4 solutions
 
 ## E4.1
 Comparing post-BD FEV1 in one arm with pre-BD in another mixes **measurement conditions**. Bronchodilator response is part of the comparison; estimand is unclear. Both arms need the same spirometry protocol (pre or post).
@@ -75,7 +75,7 @@ summary(lm(fev1_followup ~ group + fev1_baseline + age + sex, data = trial))
 
 ## Permutation extension
 
-See `R/examples/ch04_comparing_groups.R` — permutation p printed.
+See `R/examples/ch04_comparing_groups.R`; permutation p printed.
 
 ## Power extension
 

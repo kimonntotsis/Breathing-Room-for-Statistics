@@ -13,7 +13,9 @@
 | **R** | `R/examples/ch16_antibody_screening.R` |
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch16_*.png` |
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
+| **Exercises** | [Chapter 16 exercises](../exercises/ch16_exercises.md) |
 
+**Also see:** [Ch 13 FDR](13-differential-analysis-fdr.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
 ## Learning objectives
 
 1. Combine replicates and quantify replicate agreement before hit calling.
@@ -21,6 +23,7 @@
 3. Evaluate screen performance with **confirmation PPV**, not screen p-values alone.
 4. Assign **stability tiers** when ranks change under replicate resampling.
 5. Report shortlists as tiers, not fragile 1..K rankings.
+6. Distinguish screen triage from confirmation endpoints.
 
 ## Prerequisites
 
@@ -28,11 +31,26 @@ Ch 8 (reporting), Ch 13 (multiplicity mindset), Ch 14 (batch), Ch 11 (do not ove
 
 ---
 
+## Why this chapter
+
+Screens are triage, not truth. This chapter is for teams deciding which clones to pay to validate: using PPV, prespecified thresholds, and stability tiers instead of rank #7 versus #9 storytelling.
+
 ## Opening question
 
 *Which clones should we spend money validating - and how confident are we that the top of the list stays the top when noise is resampled?*
 
 Discovery screens are not hypothesis tests. They are **prioritisation pipelines**. The "result" is not a p-value; it is a defensible shortlist and a confirmation plan.
+
+---
+
+## The screen-to-confirmation workflow
+
+1. **Replicate QC**: agreement between technical replicates; batch plots.
+2. **Prespecified hit rule**: threshold or control-based cutoff (not post hoc).
+3. **Shortlist**: hits per antigen; report hit count.
+4. **Confirmation assay**: orthogonal readout with prespecified positivity (e.g. KD).
+5. **PPV**: confirmed hits / screen hits; **per antigen**.
+6. **Stability tiers**: top-*K* overlap across replicates; advance Tier 1 first.
 
 ---
 
@@ -63,6 +81,16 @@ Before calling hits, check that replicates agree. Poor agreement means ranks are
 PPV answers: *of the clones we would advance, what fraction actually confirm?*
 
 This is more actionable than a screen p-value.
+
+**Teaching numbers** (`ch16_screen_ppv_by_antigen.csv`, threshold = 1.4):
+
+| Antigen | Hits | Confirmed in hits | PPV |
+|---------|------|-------------------|-----|
+| AgA | 85 | 44 | 0.52 |
+| AgB | 69 | 37 | 0.54 |
+| AgC | 61 | 34 | 0.56 |
+
+PPV ≈ 50% means **half** of screen hits fail confirmation: normal for screens. Budget confirmation for Tier 1 clones first.
 
 ### Step 3: Ranking stability tiers (when ranks are noisy)
 
@@ -122,6 +150,10 @@ Recompute top-20 lists using replicate 1, 2, and 3 separately. Assign each clone
 | Confirmation bias | only confirming "pretty" candidates hides failure rates |
 | Definition drift | "confirmed positive" must be prespecified (KD cutoff etc.) |
 
+### In practice
+
+Changing the hit threshold after seeing the plate layout is post hoc tuning. Prespecify the rule (or control-based z-score) and show sensitivity across a grid of cutoffs.
+
 ### Wrong analysis ⚠
 
 | | |
@@ -170,7 +202,11 @@ If PPV collapses when you move the threshold slightly, your shortlist is fragile
 
 ![Replicate agreement (AgA screen)](../figures/ch16_screen_replicate_agreement.png)
 
+Low replicate correlation flags unstable hits before you spend confirmation budget.
+
 ![Threshold sensitivity: hits and PPV vs cutoff](../figures/ch16_threshold_sensitivity.png)
+
+A cliff edge in PPV means the shortlist is threshold-dependent: show the curve, not one lucky cutoff.
 
 ---
 
@@ -209,6 +245,7 @@ screen %>% group_by(antigen) %>%
 
 ---
 
+
 ## R lab: Antibody screening on CASTOR-HD
 
 **Script:** `R/examples/ch16_antibody_screening.R`
@@ -241,9 +278,13 @@ conf <- readr::read_csv(file.path(paths$data, "antibody_confirmation.csv"), show
 
 ![Stability tiers and PPV by tier (AgA)](../figures/ch16_stability_tiers.png)
 
+Tier 1 clones are the only defensible primary shortlist; lower tiers belong in supplementary exploration.
+
 ![Top-20 overlap across replicate pairs](../figures/ch16_ranking_stability.png)
 
-## Exercises · [Solutions](../solutions/ch16_solutions.md)
+Low overlap between replicate top-20 lists means ranking noise, not biology.
+
+## Exercises ([Solutions](../solutions/ch16_solutions.md))
 
 **E16.1** What is PPV among screen hits, and why is it more useful than a screen p-value?
 
@@ -251,13 +292,27 @@ conf <- readr::read_csv(file.path(paths$data, "antibody_confirmation.csv"), show
 
 **E16.3** Why is post hoc threshold tuning dangerous?
 
+**E16.3** Why is post hoc threshold tuning dangerous?
+
+**E16.4** Why report PPV **per antigen**?
+
 **Applied**
 
 1. Run `source("R/examples/ch16_antibody_screening.R")`.
 2. Report PPV by antigen from `ch16_screen_ppv_by_antigen.csv`.
 3. Interpret `ch16_threshold_sensitivity.png` at the prespecified threshold.
 4. List Tier 1 clones from `ch16_ranking_tiers_aga.csv` and their confirmation status.
+5. Draft Methods + Results sentences using Template D.
 
+---
+
+## Where this chapter leads
+
+**Next:** [Chapter 17](17-integrated-castor-hd.md) stitches omics, flow, and antibody steps into one report.
+
+## Further reading
+
+- Confirmation assay standards; [Ch 17](17-integrated-castor-hd.md) integrated pipeline
 
 ## Chapter summary
 

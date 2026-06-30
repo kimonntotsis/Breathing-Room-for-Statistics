@@ -1,8 +1,8 @@
-# Chapter 11 Exercises — Clustering
+# Chapter 11 Exercises: Clustering
 
 **E11.1** Why is clustering unsupervised? Give one CASTOR example of supervised learning for contrast.
 
-**E11.2** k-means vs hierarchical vs PAM — one trade-off each.
+**E11.2** k-means vs hierarchical vs PAM: one trade-off each.
 
 **E11.3** Explain the **endotype claim ladder** in plain language. At which rung may you use the word “endotype” in a title?
 

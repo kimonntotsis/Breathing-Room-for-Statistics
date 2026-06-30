@@ -8,10 +8,12 @@
 |---|---|
 | **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) - full workflow |
 | **Format** | End-to-end narratives with caveats, wrong analyses, reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Cases** | A: RCT FEV1 · B: Exacerbation logistic · C: PCA + clustering · D: CASTOR-HD (Ch 13–17) · **E: Longitudinal + survival (Ch 18–19)** |
+| **Cases** | A: RCT FEV1, B: Exacerbation logistic, C: PCA + clustering, D: CASTOR-HD (Ch 13–17), **E: Longitudinal + survival (Ch 18–19)** |
 | **R** | `R/examples/ch12_case_*.R` |
-| **Navigation** | [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md) · [QUICK_REFERENCE](../QUICK_REFERENCE.md) · [METHOD_MAP](../METHOD_MAP.md) · [REFERENCES](../REFERENCES.md) |
+| **Navigation** | [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [QUICK_REFERENCE](../QUICK_REFERENCE.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md) |
 
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [QUICK_REFERENCE](../QUICK_REFERENCE.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [QUICK_REFERENCE](../QUICK_REFERENCE.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
 ---
 
 ## Learning objectives
@@ -27,15 +29,21 @@ Chapters 1-11.
 
 ---
 
+## Why this chapter
+
+Technique cards teach atoms; case studies teach **workflow**. You will walk four complete CASTOR narratives (trial, cohort, discovery, omics pipeline, longitudinal/survival) and practice saying what each analysis does **not** prove. This is the chapter to read before your first manuscript discussion section.
+
 ## Opening question
 
-*How do the CASTOR analyses from Chapters 3-11 fit together in three publishable-style case reports?*
+*How do the CASTOR analyses from Chapters 3–11 fit together in **five publishable-style case reports** (Cases A–E)?*
 
-This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), three complete narratives, and explicit limits on what each analysis proves.
+This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), five complete narratives (core trial/cohort/discovery through longitudinal/survival), and explicit limits on what each analysis proves.
 
 ---
 
 ## Master workflow (every CASTOR analysis)
+
+![CASTOR analysis pipeline](../figures/analysis_pipeline.png){width=85%}
 
 | Step | Action | Chapter |
 |------|--------|---------|
@@ -50,23 +58,27 @@ This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_
 
 Reporting frameworks by design: CONSORT (RCT) [@schulz2010consort]; STROBE (cohort) [@vonelm2007strobe]; TRIPOD (prediction) [@moons2015tripod]; biomarker discovery [@mcshane2011biomarker].
 
+### In practice
+
+Manuscripts often mix discovery language (omics hits) with confirmatory language (trial primary endpoint). Use separate paragraphs, and separate limitations: for each CASTOR case narrative you mirror.
+
 ---
 
 # Case study A: Randomised trial: FEV1 comparison
 
-## Clinical question
+### Clinical question
 
 Does intervention improve mean FEV1 at 12 weeks compared with standard care in CASTOR?
 
-## Estimand
+### Estimand
 
 Difference in mean FEV1 (litres) at 12 weeks: intervention − standard care, intention-to-treat population.
 
-## Design
+### Design
 
 Parallel RCT; independent groups; continuous outcome [@schulz2010consort].
 
-## Analysis path
+### Analysis path
 
 | Step | Done |
 |------|------|
@@ -77,15 +89,19 @@ Parallel RCT; independent groups; continuous outcome [@schulz2010consort].
 | Bootstrap CI | Ch 8 [@efron1993bootstrap] |
 | Power note (if negative) | Ch 4, 8 |
 
+### Before you run the case scripts
+
+For each case, write the estimand and unit of analysis on paper first. Case A is participant-level RCT inference; Case C is exploratory clustering; Case D is a discovery pipeline with stop/go gates. Do not reuse code from one case as if it answered another case’s question.
+
 ```r
 source("R/examples/ch12_case_a_trial.R")
 ```
 
-## Results template
+### Results template
 
 > Among 400 participants, mean FEV1 was 3.85 L (SD 0.64) in intervention and 3.76 L (SD 0.64) in standard care. The mean difference was 0.09 L (95% CI −0.04 to 0.21; Welch t, p = 0.20). Results are inconclusive with respect to a prespecified MCID of 0.10 L [@cazzola2008mcid].
 
-## Three-reader interpretation
+### Three-reader interpretation
 
 | Reader | Takeaway |
 |--------|----------|
@@ -93,11 +109,11 @@ source("R/examples/ch12_case_a_trial.R")
 | **Clinician** | Cannot claim benefit or futility without MCID/power context |
 | **General** | Trial did not show clear average improvement; more data or larger effect needed |
 
-## Caveats
+### Caveats
 
 Single time point; CASTOR synthetic; no site clustering modelled. Spirometry per ATS/ERS standards [@graham2019spirometry].
 
-## Wrong analysis ⚠ (Case A)
+### Wrong analysis ⚠ (Case A)
 
 | Mistake | Correct |
 |---------|---------|
@@ -113,19 +129,19 @@ Causal effect in broader population; long-term FEV1 decline; symptom benefit.
 
 # Case study B: Observational cohort: exacerbation risk
 
-## Clinical question
+### Clinical question
 
 Is smoking associated with ≥1 exacerbation in 12 months after adjusting for age, FEV1 % predicted, and prior exacerbations?
 
-## Estimand
+### Estimand
 
 Adjusted odds ratio for smoking (binary exposure).
 
-## Design
+### Design
 
 Observational cohort; binary outcome; logistic regression [@vonelm2007strobe; @hosmer2013applied].
 
-## Analysis path
+### Analysis path
 
 | Step | Done |
 |------|------|
@@ -139,11 +155,11 @@ Observational cohort; binary outcome; logistic regression [@vonelm2007strobe; @h
 source("R/examples/ch12_case_b_exacerbation.R")
 ```
 
-## Results template
+### Results template
 
 > In 350 patients (18 exacerbation events), prior exacerbation count was associated with higher odds of a new event (OR 1.70, 95% CI 1.12 to 2.59). FEV1 % predicted OR 0.95 per 1% (95% CI 0.91 to 0.99). Smoking OR was imprecise (95% CI included 1.0). Low event count limits precision; Firth sensitivity similar (supplementary).
 
-## Three-reader interpretation
+### Three-reader interpretation
 
 | Reader | Takeaway |
 |--------|----------|
@@ -151,11 +167,11 @@ source("R/examples/ch12_case_b_exacerbation.R")
 | **Clinician** | Prior history matters most; smoking signal uncertain here |
 | **General** | Past flare-ups predict future ones; smoking link not confirmed in this sample |
 
-## Caveats
+### Caveats
 
 Unmeasured confounding (adherence, SES); exacerbation definition [@hurst2010exacerbation]; low events.
 
-## Wrong analysis ⚠ (Case B)
+### Wrong analysis ⚠ (Case B)
 
 | Mistake | Correct |
 |---------|---------|
@@ -172,19 +188,19 @@ Causal effect of smoking; prediction model performance (see Case C / Ch 9).
 
 # Case study C: Multi-marker panel: PCA + clustering
 
-## Clinical question
+### Clinical question
 
 Is there exploratory evidence of patient subgroups in a 30-marker panel?
 
-## Estimand
+### Estimand
 
 None confirmatory - descriptive structure only.
 
-## Design
+### Design
 
 Cross-sectional marker panel; unsupervised methods [@jolliffe2016pca; @hennig2007cluster].
 
-## Analysis path
+### Analysis path
 
 | Step | Done |
 |------|------|
@@ -199,11 +215,11 @@ Cross-sectional marker panel; unsupervised methods [@jolliffe2016pca; @hennig200
 source("R/examples/ch12_case_c_phenotypes.R")
 ```
 
-## Results template
+### Results template
 
 > PCA: PC1 explained 27% of variance; loadings highest on M1-M5 [@jolliffe2016pca]. k-means (*k* = 2) yielded clusters with silhouette 0.25. Cluster profiles differed on marker weights (Figure). Analysis was exploratory; clusters were not validated in an independent cohort or against clinical outcomes [@mcshane2011biomarker; @wenzel2012asthma].
 
-## Three-reader interpretation
+### Three-reader interpretation
 
 | Reader | Takeaway |
 |--------|----------|
@@ -211,11 +227,11 @@ source("R/examples/ch12_case_c_phenotypes.R")
 | **Clinician** | Do not change care based on these clusters |
 | **General** | Possible groups in data - needs replication |
 
-## Caveats
+### Caveats
 
 p >> n risk in real omics; batch effects [@mcshane2011biomarker]; CASTOR has simulated structure.
 
-## Wrong analysis ⚠ (Case C)
+### Wrong analysis ⚠ (Case C)
 
 | Mistake | Correct |
 |---------|---------|
@@ -232,19 +248,19 @@ Biological subtypes; treatment response groups; diagnostic categories.
 
 # Case study D: CASTOR-HD discovery bridge (Ch 13–17)
 
-## Clinical question
+### Clinical question
 
 In the CASTOR-HD extension, which molecular and immune readouts support a coherent discovery story from proteomics through confirmation assays?
 
-## Estimand
+### Estimand
 
-Not a single causal estimand — this is a **staged discovery pipeline**: (1) controlled false discovery among proteins; (2) batch-robust shortlist; (3) participant-level immune phenotypes; (4) confirmed antibody binding among screen hits.
+Not a single causal estimand; this is a **staged discovery pipeline**: (1) controlled false discovery among proteins; (2) batch-robust shortlist; (3) participant-level immune phenotypes; (4) confirmed antibody binding among screen hits.
 
-## Design
+### Design
 
 Observational case–control with multi-plate proteomics, RNA-seq, flow summaries, and replicate antibody screens [@mcshane2011biomarker].
 
-## Analysis path
+### Analysis path
 
 | Step | Chapter | Done |
 |------|---------|------|
@@ -259,19 +275,19 @@ source("R/00_setup.R")
 source("R/examples/ch17_integrated_castor_hd.R")
 ```
 
-## Results template
+### Results template
 
 > We tested ~1000 proteins (linear models with batch/plate covariates; BH FDR). Batch overlap was assessed by PCA and group × batch tables (Figure). After batch adjustment, *N* proteins had q < 0.05; rankings were compared with and without batch covariates. Participant-level flow cytometry (*n* = …) showed … Monocyte proportions differed … (batch-adjusted). Antibody screen hits at prespecified threshold … had PPV … among confirmation assays; Tier 1 clones (3/3 replicate rankings) were … Analysis was discovery-stage; external validation is required [@mcshane2011biomarker].
 
-## Three-reader interpretation
+### Three-reader interpretation
 
 | Reader | Takeaway |
 |--------|----------|
 | **Statistician** | Multiplicity controlled per modality; batch and stability audited |
 | **Clinician** | No diagnostic or treatment claims from this pipeline alone |
-| **General** | Hypothesis list for targeted follow-up — not a validated signature |
+| **General** | Hypothesis list for targeted follow-up, not a validated signature |
 
-## Wrong analysis ⚠ (Case D)
+### Wrong analysis ⚠ (Case D)
 
 | Mistake | Correct |
 |---------|---------|
@@ -284,34 +300,34 @@ source("R/examples/ch17_integrated_castor_hd.R")
 
 Causal mechanisms; clinical utility; transportability; antibody therapeutic potential.
 
-**Continue:** [Ch 17 integrated pipeline](17-integrated-castor-hd.md) · [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md)
+**Continue:** [Ch 17 integrated pipeline](17-integrated-castor-hd.md); [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md)
 
 ---
 
 # Case study E: Longitudinal FEV1 + time to exacerbation
 
-## Clinical question
+### Clinical question
 
 In the CASTOR extension cohort, (1) does intervention improve the **FEV1 trajectory** over 52 weeks, and (2) is smoking associated with **shorter time to first exacerbation** under one-year follow-up?
 
-## Estimands
+### Estimands
 
-1. **Longitudinal:** difference in mean FEV1 trajectory (intervention vs standard), weeks 0–52, randomised extension population — slope and level from mixed model.
+1. **Longitudinal:** difference in mean FEV1 trajectory (intervention vs standard), weeks 0–52, randomised extension population; slope and level from mixed model.
 2. **Survival:** hazard of first exacerbation comparing smokers vs non-smokers, adjusted for FEV1 % predicted, therapy, and age (associational cohort estimand).
 
-## Design
+### Design
 
 - **Part 1:** parallel-group trial extension with four scheduled spirometry visits per participant (`longitudinal_spirometry.csv`).
 - **Part 2:** observational time-to-event cohort with administrative censoring at 365 days (`time_to_exacerbation.csv`) [@vonelm2007strobe].
 
-## Analysis path
+### Analysis path
 
 | Step | Chapter | Done |
 |------|---------|------|
 | Spaghetti plot + visit counts | 18 | QC trajectory data |
 | Mixed model `fev1 ~ weeks * group + (1\|patient_id)` | 18 | Coefficient table + fitted means |
 | Sensitivity: week-52 cross-section vs mixed | 18 | `ch18_sensitivity_mixed_vs_fixed.csv` |
-| Kaplan–Meier by smoking + log-rank | 19 | `ch19_km_by_smoking.png` |
+| Kaplan-Meier by smoking + log-rank | 19 | `ch19_km_by_smoking.png` |
 | Cox PH + Schoenfeld check | 19 | HR table + PH test |
 | Integrated Case E summary | 12 | `ch12_case_e_summary.csv` |
 
@@ -320,19 +336,19 @@ source("R/00_setup.R")
 source("R/examples/ch12_case_e_longitudinal_survival.R")
 ```
 
-## Results template
+### Results template
 
-> **Longitudinal (RCT extension):** Among *n* = … participants (… visits), FEV1 trajectories differed by treatment (Figure). A linear mixed model with random intercepts estimated a week × intervention interaction of … L per week (95% CI …). A sensitivity analysis using only week-52 FEV1 yielded a different standard error, illustrating pseudo-replication risk. **Survival (cohort):** During 365 days of follow-up, … exacerbations occurred. Kaplan–Meier curves separated by smoking (log-rank *p* = …). The adjusted Cox hazard ratio for smoking was … (95% CI …). Proportional hazards diagnostics: … [@harrell2015rms; @vonelm2007strobe].
+> **Longitudinal (RCT extension):** Among *n* = … participants (… visits), FEV1 trajectories differed by treatment (Figure). A linear mixed model with random intercepts estimated a week × intervention interaction of … L per week (95% CI …). A sensitivity analysis using only week-52 FEV1 yielded a different standard error, illustrating pseudo-replication risk. **Survival (cohort):** During 365 days of follow-up, … exacerbations occurred. Kaplan-Meier curves separated by smoking (log-rank *p* = …). The adjusted Cox hazard ratio for smoking was … (95% CI …). Proportional hazards diagnostics: … [@harrell2015rms; @vonelm2007strobe].
 
-## Three-reader interpretation
+### Three-reader interpretation
 
 | Reader | Takeaway |
 |--------|----------|
 | **Statistician** | Correct units: patients for trajectories; events + censoring for survival |
 | **Clinician** | Trajectory answers “lung function over time”; survival answers “how soon exacerbation” |
-| **General** | Two related but distinct questions — do not merge into one headline |
+| **General** | Two related but distinct questions: do not merge into one headline |
 
-## Wrong analysis ⚠ (Case E)
+### Wrong analysis ⚠ (Case E)
 
 | Mistake | Correct |
 |---------|---------|
@@ -345,7 +361,7 @@ source("R/examples/ch12_case_e_longitudinal_survival.R")
 
 That improving FEV1 trajectory prevents exacerbations (different endpoints); causal effect of smoking; transportability to other healthcare systems.
 
-**Continue:** [Ch 20 missing data](20-missing-data.md) · [Ch 21 causal inference](21-causal-inference.md)
+**Continue:** [Ch 20 missing data](20-missing-data.md); [Ch 21 causal inference](21-causal-inference.md)
 
 ---
 
@@ -387,9 +403,9 @@ Before submitting any respiratory paper, verify:
 
 ## Closing
 
-The **core path (Ch 1–12)** is complete when you can run the CASTOR pipeline yourself — including **Case E** (longitudinal + survival). The **advanced discovery path (Ch 13–17)** extends CASTOR-HD; **Part VIII (Ch 18–21)** completes the single-volume handbook for repeated measures, time-to-event, missing data, and causal framing [@harrell2015rms; @shmueli2010predict].
+The **core path (Ch 1–12)** is complete when you can run the CASTOR pipeline yourself, including **Case E** (longitudinal + survival). The **advanced discovery path (Ch 13–17)** extends CASTOR-HD; **Part VIII (Ch 18–21)** completes the single-volume handbook for repeated measures, time-to-event, missing data, and causal framing [@harrell2015rms; @shmueli2010predict].
 
-Replace author details, swap CASTOR for your cohort, and obtain statistical and clinical review before publication.
+Adapt CASTOR details to your cohort and have a statistician and clinician review the analysis plan before you submit.
 
 ---
 
@@ -404,12 +420,16 @@ Replace author details, swap CASTOR for your cohort, and obtain statistical and 
 | Clinical decision thresholds | Add decision-curve / net benefit | Ch 9 extensions |
 | Proteomics + flow + screens | Case D → Ch 17 pipeline | Ch 13–17 |
 
+## Where this chapter leads
+
+**Next:** CASTOR-HD omics pipeline → [Chapters 13–17](13-differential-analysis-fdr.md). Longitudinal and survival extensions → [Chapters 18–19](18-longitudinal-mixed-models.md).
+
 ## Further reading
 
 - Full bibliography: [REFERENCES.md](../REFERENCES.md) and `references.bib`  
 - Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
 - CONSORT / STROBE / TRIPOD reporting [@schulz2010consort; @vonelm2007strobe; @moons2015tripod]
 
-## Exercises · [Solutions](../solutions/ch12_solutions.md)
+## Exercises ([Solutions](../solutions/ch12_solutions.md))
 
-**End of core path (Ch 1–12)** — continue with [Ch 13](13-differential-analysis-fdr.md) (CASTOR-HD) or [Ch 18](18-longitudinal-mixed-models.md) (longitudinal/survival).
+**End of core path (Ch 1–12)**. Continue with [Ch 13](13-differential-analysis-fdr.md) (CASTOR-HD) or [Ch 18](18-longitudinal-mixed-models.md) (longitudinal/survival).

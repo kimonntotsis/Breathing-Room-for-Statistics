@@ -1,0 +1,23 @@
+% PDF typography and Unicode (LuaLaTeX)
+\usepackage{newunicodechar}
+\newunicodechar{⚠}{\textbf{Warning}}
+\newunicodechar{≥}{\ensuremath{\geq}}
+\newunicodechar{≤}{\ensuremath{\leq}}
+\newunicodechar{≠}{\ensuremath{\neq}}
+\newunicodechar{≈}{\ensuremath{\approx}}
+\newunicodechar{α}{\ensuremath{\alpha}}
+\newunicodechar{β}{\ensuremath{\beta}}
+\newunicodechar{μ}{\ensuremath{\mu}}
+\newunicodechar{≫}{\ensuremath{\gg}}
+
+% Figures: fit line width; allow slight shrink for tall pipeline art
+\setkeys{Gin}{width=0.92\linewidth,keepaspectratio}
+
+% Dense tables (appendices, routing): smaller type, wrapped columns
+\usepackage{makecell}
+\AtBeginEnvironment{longtable}{\footnotesize\setlength{\tabcolsep}{4pt}}
+\AtBeginEnvironment{table}{\footnotesize\setlength{\tabcolsep}{4pt}}
+
+% Allow URLs and long words to break in tables
+\usepackage{xurl}
+\Urlmuskip=0mu plus 1mu

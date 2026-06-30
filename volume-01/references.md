@@ -1,4 +1,4 @@
-# References — handbook
+# References
 
 > **Quarto build:** formatted cited-reference list → [`references.qmd`](references.qmd) (appendix in PDF/HTML). Render with `quarto render` from `volume-01/`.
 
@@ -28,7 +28,7 @@ Curated reading list by topic. BibTeX keys match `references.bib` for Quarto/PDF
 | **TRIPOD** | Prediction model development/validation | `moons2015tripod` |
 | **RECORD** | Routinely collected health data | `benchimol2015record` |
 
-See [Ch 8 — Validation & reporting](chapters/08-validation-reporting.md).
+See [Ch 8: Validation & reporting](chapters/08-validation-reporting.md).
 
 ---
 
@@ -86,11 +86,7 @@ See [Ch 9](chapters/09-prediction-vs-inference.md).
 
 ## How to cite this handbook
 
-Until formal publication, cite the repository version and date:
-
-> *Statistical Methods for Respiratory Research: Foundations through High-Dimensional, Longitudinal, and Causal Analysis.* Open handbook draft. `[repository URL]` (accessed YYYY-MM-DD).
-
-Add DOI when registered (Zenodo recommended for open books).
+See **[Cite this book](chapters/00-preface.md#cite-this-book)** in the Preface (APA 7th ed.).
 
 ---
 

@@ -1,6 +1,6 @@
-# Chapter 8 Exercises — Validation & Reporting
+# Chapter 8 Exercises: Validation & Reporting
 
-**E8.1** CI vs p-value — what does each communicate?
+**E8.1** CI vs p-value: what does each communicate?
 
 **E8.2** Name three TRIPOD items for prediction models.
 

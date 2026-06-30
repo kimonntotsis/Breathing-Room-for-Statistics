@@ -1,4 +1,4 @@
-# Chapter 4 — Exercises: Comparing Groups
+# Chapter 4 exercises: Comparing Groups
 
 ## Conceptual
 

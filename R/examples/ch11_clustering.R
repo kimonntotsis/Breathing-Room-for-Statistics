@@ -158,7 +158,7 @@ p_prof <- ggplot(profile, aes(marker, mean_value, fill = cluster)) +
   )
 ggsave(file.path(fig_dir, "ch11_cluster_profiles.png"), p_prof, width = 7, height = 4, dpi = 120)
 
-# --- Dendrogram (sample if needed — n=120 is fine) -----------------------------
+# --- Dendrogram (sample if needed: n=120 is fine) -----------------------------
 png(file.path(fig_dir, "ch11_dendrogram.png"), width = 800, height = 500, res = 120)
 plot(hc, labels = FALSE, main = "CASTOR: hierarchical clustering (Ward.D2)")
 rect.hclust(hc, k = k, border = "red")

@@ -1,4 +1,4 @@
-# Chapter 3 — Solutions
+# Chapter 3 solutions
 
 ## E3.1
 Use **median [IQR]** when distribution is skewed, outliers present, or small n with extreme values (e.g. ICU length of stay).

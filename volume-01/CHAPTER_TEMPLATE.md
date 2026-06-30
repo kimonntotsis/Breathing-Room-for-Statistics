@@ -1,18 +1,33 @@
-# Chapter template — handbook signature format
+# Chapter template: handbook signature format
 
 Every major technique in Chapters 4–11 and 13–21 uses this **seven-block structure**. Readers always know where to look.
 
 ---
 
-## Block 1 — Clinical question
+## Editorial layer (glue between techniques)
 
-One sentence a pulmonologist, trialist, or patient advocate understands.
+These blocks sit **outside** the technique cards. They do not replace assumptions or reporting templates.
+
+| Block | Where | Purpose |
+|-------|--------|---------|
+| **Why this chapter** | After prerequisites, before opening question | 3–5 sentences: who needs this, what mistake it prevents |
+| **In practice** | Once per chapter, before first Wrong analysis | Sponsor meeting / manuscript reality check |
+| **Before you open R** | Immediately before `## R lab` or `### R lab` | Estimand + unit + file + one sensitivity: then code |
+| **Where this chapter leads** | Before Further reading / Exercises | Two sentences linking to the next chapter(s) |
+
+Part intros may include a **CASTOR vignette** (short narrative hook). See `parts/part-*.md`.
+
+---
+
+## Block 1: Clinical question
+
+One sentence a co-author or patient advocate understands.
 
 *Example:* Does mean FEV1 at 12 weeks differ between intervention and standard care?
 
 ---
 
-## Block 2 — Technique card
+## Block 2: Technique card
 
 | Field | Content |
 |-------|---------|
@@ -29,7 +44,7 @@ One sentence a pulmonologist, trialist, or patient advocate understands.
 
 ---
 
-## Block 3 — Dual interpretation
+## Block 3: Dual interpretation
 
 **Plain language:** one sentence for non-specialists.
 
@@ -39,7 +54,7 @@ One sentence a pulmonologist, trialist, or patient advocate understands.
 
 ---
 
-## Block 4 — Caveats box (respiratory-specific)
+## Block 4: Caveats box (respiratory-specific)
 
 Table format:
 
@@ -51,7 +66,7 @@ Minimum **4 caveats** per major technique.
 
 ---
 
-## Block 5 — Wrong analysis ⚠
+## Block 5: Wrong analysis ⚠
 
 **Common mistake:** what analysts do wrong.
 
@@ -61,7 +76,7 @@ Minimum **4 caveats** per major technique.
 
 ---
 
-## Block 6 — Reporting template
+## Block 6: Reporting template
 
 **Methods sentence** (copy-ready):
 
@@ -75,11 +90,13 @@ Minimum **4 caveats** per major technique.
 
 ---
 
-## Block 7 — R lab + sensitivity
+## Block 7: R lab and sensitivity
 
+- **Before you open R** checklist (see editorial layer above)
 - Primary code chunk
 - One **sensitivity analysis** (nonparametric, Firth, bootstrap, calibration, …)
 - Link to `R/examples/chXX_*.R`
+- Figure caption: one interpretive sentence after each teaching plot (what to look for, what would worry you)
 
 ---
 

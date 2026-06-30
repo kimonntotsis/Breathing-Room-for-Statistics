@@ -1,4 +1,4 @@
-# Exercises — handbook (Ch 1–21)
+# Exercises (Ch 1–21)
 
 Each chapter has conceptual, applied, and extension problems. Solutions are in `../solutions/`.
 

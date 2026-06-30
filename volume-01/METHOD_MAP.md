@@ -1,6 +1,6 @@
-# Master method map — Statistical Methods for Respiratory Research
+# Master method map: Statistical Methods for Respiratory Research
 
-> **Handbook navigation:** [QUICK_REFERENCE.md](QUICK_REFERENCE.md) · [HANDBOOK_GUIDE.md](HANDBOOK_GUIDE.md) · [Decision tree figure](figures/method_decision_tree.png) · [FIGURE_INDEX.md](FIGURE_INDEX.md)
+> **Handbook navigation:** [QUICK_REFERENCE.md](QUICK_REFERENCE.md), [HANDBOOK_GUIDE.md](HANDBOOK_GUIDE.md), [Decision tree figure](figures/method_decision_tree.png), [FIGURE_INDEX.md](FIGURE_INDEX.md)
 
 Use this before opening any software. Start with the **scientific question**, not the menu of tests.
 
@@ -102,7 +102,7 @@ OUTCOME?
 
 LONGITUDINAL / SURVIVAL / CAUSAL (Ch 18–21)
     ├─ Repeated measures per patient?       → Mixed models (Ch 18)
-    ├─ Time to event with censoring?        → Kaplan–Meier, Cox (Ch 19)
+    ├─ Time to event with censoring?        → Kaplan-Meier, Cox (Ch 19)
     ├─ Missing outcome/predictors?          → MI sensitivity (Ch 20)
     └─ Observational causal estimand?       → DAGs, IPW (Ch 21)
 ```
@@ -190,7 +190,7 @@ LONGITUDINAL / SURVIVAL / CAUSAL (Ch 18–21)
 ### Longitudinal, survival, missing data, causal (Ch 18–21)
 - Linear mixed models (random intercepts; teaching `lmer`)
 - Spaghetti plots and trajectory visualization
-- Kaplan–Meier curves; log-rank tests
+- Kaplan-Meier curves; log-rank tests
 - Cox proportional hazards models
 - Missing data patterns (MCAR/MAR/MNAR); complete-case vs imputation sensitivity
 - MICE overview (production workflows)
@@ -223,16 +223,16 @@ LONGITUDINAL / SURVIVAL / CAUSAL (Ch 18–21)
 
 | Analysis | Minimum report | Guideline |
 |----------|----------------|-----------|
-| t-test | Mean difference, 95% CI, n, test used | — |
-| ANOVA | Omnibus test + prespecified contrasts | — |
+| t-test | Mean difference, 95% CI, n, test used |, |
+| ANOVA | Omnibus test + prespecified contrasts |, |
 | Logistic | OR or adjusted risk with 95% CI, n, events | STROBE [@vonelm2007strobe] |
-| Poisson/NB | Rate ratio with 95% CI, offset stated | — |
-| Regression | Coefficients, CI, n, R² optional | — |
+| Poisson/NB | Rate ratio with 95% CI, offset stated |, |
+| Regression | Coefficients, CI, n, R² optional |, |
 | Prediction | AUC + calibration; training vs test stated | TRIPOD [@moons2015tripod] |
-| PCA/cluster | n, scaling, k/components chosen, stability note | — |
+| PCA/cluster | n, scaling, k/components chosen, stability note |, |
 | RCT | Primary estimand, CONSORT flow | CONSORT [@schulz2010consort] |
 
-Full bibliography: [REFERENCES.md](REFERENCES.md) · `references.bib`
+Full bibliography: [REFERENCES.md](REFERENCES.md); `references.bib`
 
 ---
 

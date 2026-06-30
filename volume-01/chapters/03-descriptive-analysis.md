@@ -10,9 +10,9 @@
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **R** | `R/examples/ch03_descriptive.R` |
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch03_*.png` |
-| **Navigation** | [QUICK_REFERENCE](../QUICK_REFERENCE.md) · Describe before infer: [Ch 4-6](04-comparing-groups.md) |
 | **Exercises** | [ch03](../exercises/ch03_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), Describe before infer: [Ch 4-6](04-comparing-groups.md)
 ## Learning objectives
 
 1. Choose summaries matched to variable type and distribution.
@@ -26,6 +26,10 @@
 Chapters 1-2.
 
 ---
+
+## Why this chapter
+
+Reviewers and clinicians meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
 
 ## Opening question (CASTOR)
 
@@ -77,6 +81,10 @@ Description is not optional preamble. It is how you catch errors and justify the
 | Collapsed categories | Hides severity spectrum (GOLD, mMRC) |
 | Single time point | Baseline only - not longitudinal status |
 | Synthetic vs real | CASTOR is simulated - replace with your cohort |
+
+### In practice
+
+Table 1 is often drafted by a junior author while the statistician is busy elsewhere. Agree on variable definitions and missingness rules first; otherwise Table 1 and the model use different populations.
 
 ### Wrong analysis ⚠
 
@@ -252,6 +260,7 @@ Report n for each variable. Note if complete-case n drops. Missing FEV1 in spiro
 
 ---
 
+
 ## R lab
 
 ```r
@@ -309,6 +318,10 @@ Descriptives are where you decide what later methods are plausible. Use these al
 | **Examples** | log-transform biomarkers; log(1+y) for counts *only descriptively* |
 | **Caution** | Transformation changes estimand; report scale clearly |
 
+## Where this chapter leads
+
+**Next:** [Chapter 4](04-comparing-groups.md) is the comparison reference. Bring your Table 1 insights (skew, missingness, n per arm) into every test choice.
+
 ## Further reading
 
 - Harrell, *Regression Modeling Strategies* - descriptive summaries before modelling [@harrell2015rms]  
@@ -316,6 +329,6 @@ Descriptives are where you decide what later methods are plausible. Use these al
 - Wickham, *ggplot2* [@wickham2016ggplot2]  
 - CONSORT / STROBE baseline reporting [@schulz2010consort; @vonelm2007strobe]
 
-## Exercises · [Solutions](../solutions/ch03_solutions.md)
+## Exercises ([Solutions](../solutions/ch03_solutions.md))
 
 **Next:** [Chapter 4](04-comparing-groups.md)

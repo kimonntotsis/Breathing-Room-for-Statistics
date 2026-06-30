@@ -12,5 +12,7 @@ volume-01/.quarto/
 volume-01/**/.quarto/
 **/*.quarto_ipynb
 
-# Optional: uncomment to exclude built PDF from git (still attach to GitHub Release)
-# volume-01/_book/
+# Optional: exclude built PDF from git (attach to releases separately)
+/Breathing-Room-for-Statistics.pdf
+volume-01/_book/
+cover-art-draft*

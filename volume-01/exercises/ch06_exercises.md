@@ -1,4 +1,4 @@
-# Chapter 6 — Exercises: Generalized Linear Models
+# Chapter 6 exercises: Generalized Linear Models
 
 ## Conceptual
 
@@ -32,7 +32,7 @@
 
 ## Extension
 
-**E6.12** Fit probit and logistic models with the same formula. Compare coefficient signs and rankings — are conclusions consistent?
+**E6.12** Fit probit and logistic models with the same formula. Compare coefficient signs and rankings: are conclusions consistent?
 
 **E6.13** Simulate count data with variance twice the mean. Show Poisson vs NB coverage of 95% CIs for a rate ratio.
 

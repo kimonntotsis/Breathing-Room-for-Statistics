@@ -1,16 +1,11 @@
 # Part I: Foundations {.unnumbered}
 
-This part makes the rest of the handbook *cohere*.
+Part I supplies the vocabulary the rest of the handbook assumes: the estimand, the outcome family, the design, and the CASTOR workflow before any formula. Read the [Preface](../chapters/00-preface.md) and [Welcome](../index.md) once; then [Chapter 1](../chapters/01-statistical-thinking.md) for CASTOR and [Chapter 2](../chapters/02-respiratory-data.md) for data types. After that, most readers route by outcome via [Appendix B](../appendix-b-quick-reference.md) or [METHOD_MAP](../METHOD_MAP.md).
 
-You will learn the shared workflow that every later chapter reuses:
+**Read this if** you are drafting or reviewing an analysis plan, or need a shared language with your statistician before results exist.
 
-1. **Write the estimand** (what number answers the question?)  
-2. **Classify the outcome and design** (continuous / binary / count; independent / paired / clustered)  
-3. **Choose a method** using [QUICK_REFERENCE](../QUICK_REFERENCE.md) and [METHOD_MAP](../METHOD_MAP.md)  
-4. **Describe first**, then infer  
-5. **Report estimates + uncertainty + limitations** (not p-values alone)
+**Skip this if** you only need a prespecified comparison table in [Appendix B](../appendix-b-quick-reference.md); still read the CASTOR section in [Chapter 1](../chapters/01-statistical-thinking.md) once.
 
-If you are using this volume as a handbook, you can skim Part I once and then jump directly by outcome type.
+## CASTOR vignette: the new analyst's first week
 
-**Start here:** [QUICK_REFERENCE](../QUICK_REFERENCE.md)
-
+Models appear before the protocol is opened: a logistic regression on the wrong endpoint, a week-12 snapshot where the estimand is longitudinal. Part I is the correction: estimand in Ch 1, variable roles in Ch 2, then the method map, not the reverse.

@@ -11,9 +11,9 @@
 | **Methods** | k-means, hierarchical, PAM, silhouette, bootstrap stability, validation ladder |
 | **R** | `R/examples/ch11_clustering.R` |
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch11_*.png` |
-| **Navigation** | [QUICK_REFERENCE](../QUICK_REFERENCE.md) · Endotype ladder §11.6 · [REFERENCES](../REFERENCES.md) |
 | **Exercises** | [ch11](../exercises/ch11_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), Endotype ladder §11.6, [REFERENCES](../REFERENCES.md)
 ## Learning objectives
 
 1. Distinguish unsupervised clustering from supervised classification.
@@ -27,6 +27,10 @@
 Chapter 10 (PCA). Clustering on principal components is covered in §11.11.
 
 ---
+
+## Why this chapter
+
+“Endotypes” and “subgroups” sell papers; unstable clusters do not. This chapter teaches clustering as **hypothesis generation** with explicit stability and batch checks: the antidote to naming k-means groups after Greek letters without validation.
 
 ## Opening question (CASTOR)
 
@@ -96,6 +100,10 @@ where $\mathbf{x}_i$ is the scaled marker vector for patient $i$, $C_c$ is clust
 | Outcome circularity | Never cluster on markers **and** FEV1, then claim clusters “predict” lung function |
 | Small *n* | Asthma/COPD omics with *n* < 100 → unstable clusters; avoid “precision medicine” language |
 
+### In practice
+
+Clusters that align perfectly with processing batch are a QC finding, not an endotype. Say so in the team meeting before the abstract draft uses the word “subtype.”
+
 ### Wrong analysis ⚠
 
 | | |
@@ -117,6 +125,7 @@ where $\mathbf{x}_i$ is the scaled marker vector for patient $i$, $C_c$ is clust
 **Results:** Two clusters were identified (mean silhouette = 0.25; mean item stability = 0.XX). Cluster profiles differed on M1-M5 (Figure). Agreement with hierarchical clustering was high in CASTOR (adjusted Rand index ≈ 1.0); agreement with processing batch was low (technical confounding not detected).
 
 **Do not say:** “validated endotype”, “definitive subtype”, “precision medicine target” (from one cohort).
+
 
 ### R lab
 
@@ -194,6 +203,8 @@ plot(hc, labels = FALSE); rect.hclust(hc, k = 2, border = "red")
 
 ![Ward.D2 dendrogram with k = 2 cut](../figures/ch11_dendrogram.png)
 
+The height at which branches merge guides *k*; unstable cuts across bootstrap resamples mean unstable clusters.
+
 ---
 
 ## Technique: PAM (k-medoids)
@@ -249,10 +260,12 @@ plot(hc, labels = FALSE); rect.hclust(hc, k = 2, border = "red")
 | | |
 |---|---|
 | **Metric** | Silhouette width ∈ [−1, 1]; higher = better separation |
-| **Formula (patient *i*)** | $(b_i - a_i) / \max(a_i, b_i)$ where $a_i$ = mean distance to own cluster, $b_i$ = mean distance to nearest other cluster |
+| **Formula (patient *i*)** | Mean within-cluster vs nearest-cluster distance (see below) |
 | **R** | `cluster::silhouette(cl, dist(X))`; compare mean width across *k* |
 | **Use** | Compare candidate *k* values alongside domain knowledge |
 | **Does NOT prove** | Correct *k* - geometry-dependent |
+
+For patient *i*, silhouette uses $(b_i - a_i) / \max(a_i, b_i)$ where $a_i$ is mean distance to the own cluster and $b_i$ to the nearest other cluster.
 
 ### Dual interpretation
 
@@ -283,6 +296,8 @@ plot(hc, labels = FALSE); rect.hclust(hc, k = 2, border = "red")
 **Results:** Mean silhouette was 0.25 (*k* = 2), 0.15 (*k* = 3), …; *k* = 2 was retained per prespecified plan [or: exploratory comparison only].
 
 ![Mean silhouette width by k](../figures/ch11_silhouette_k.png)
+
+Silhouette peaks are a heuristic for *k*, not proof of biology: compare with batch-coloured plots.
 
 ---
 
@@ -483,6 +498,8 @@ When k-means is too brittle, escalate deliberately:
 
 ![Mean marker levels by cluster (M1-M5)](../figures/ch11_cluster_profiles.png)
 
+Profile plots help name clusters for discussion; they do not validate that clusters generalise to new cohorts.
+
 ---
 
 ## Catalog of wrong analyses (respiratory-specific)
@@ -513,6 +530,10 @@ When k-means is too brittle, escalate deliberately:
 - **Bootstrap stability**, batch checks, and PC-space clustering are modern minimum standards before naming subgroups [@hennig2007cluster].
 - Respiratory phenotype names (Th2-high, eosinophilic, etc.) are clinical constructs - demonstrate alignment, do not assume it.
 
+## Where this chapter leads
+
+**Next:** [Chapter 12](12-case-studies.md) integrates discovery narratives. Formal omics DE → [Chapter 13](13-differential-analysis-fdr.md).
+
 ## Further reading
 
 - Hennig, cluster stability assessment [@hennig2007cluster]  
@@ -520,6 +541,6 @@ When k-means is too brittle, escalate deliberately:
 - McShane et al., biomarker study reporting [@mcshane2011biomarker]  
 - Jolliffe & Cadima, PCA (preprocessing for clustering) [@jolliffe2016pca]
 
-## Exercises · [Solutions](../solutions/ch11_solutions.md)
+## Exercises ([Solutions](../solutions/ch11_solutions.md))
 
 **Next:** [Chapter 12 - Integrated case studies](12-case-studies.md)

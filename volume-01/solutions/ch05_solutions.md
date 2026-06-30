@@ -1,4 +1,4 @@
-# Chapter 5 — Solutions
+# Chapter 5 solutions
 
 ## E5.1
 Each additional year of age is associated with 0.03 L lower mean FEV1, holding other predictors fixed.

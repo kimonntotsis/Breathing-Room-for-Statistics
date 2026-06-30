@@ -1,4 +1,4 @@
-# Chapter 12 — Solutions
+# Chapter 12 solutions
 
 ## E12.1 (Case A)
 **Estimand:** mean FEV1 difference at 12 weeks. **Test:** Welch t (prespecified). **Sentence:** "Mean FEV1 differed by 0.09 L (95% CI −0.04 to 0.21; n = 400); inconclusive vs MCID 0.10 L."
@@ -10,7 +10,7 @@ Unmeasured confounding: adherence, socioeconomic factors, disease severity not f
 Unsupervised clusters on one dataset may reflect noise; no external replication or outcome validation → not "validated endotypes."
 
 ## E12.4 (Case E)
-Mixed models estimate **FEV1 trajectory** over scheduled visits (continuous, repeated measures). Cox PH estimates **time to first exacerbation** with censoring — a different outcome scale and estimand. Linking them narratively is fine; merging them into one statistical model is not.
+Mixed models estimate **FEV1 trajectory** over scheduled visits (continuous, repeated measures). Cox PH estimates **time to first exacerbation** with censoring: a different outcome scale and estimand. Linking them narratively is fine; merging them into one statistical model is not.
 
 ## Applied
 

@@ -10,9 +10,9 @@
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Key methods** | Prespecification, LRT, AIC/BIC, LASSO, splines, missing-data overview |
 | **R scripts** | `R/examples/ch07_model_building.R` |
-| **Navigation** | [QUICK_REFERENCE § Step 6](../QUICK_REFERENCE.md) · Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction) |
 | **Exercises** | [ch07 exercises](../exercises/ch07_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE § Step 6](../QUICK_REFERENCE.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction)
 ## Learning objectives
 
 1. Match model-building strategy to inference vs prediction goal.
@@ -26,6 +26,10 @@
 Chapters 5-6.
 
 ---
+
+## Why this chapter
+
+Model building is where optimism hides: too many predictors, data-driven selection, and overfitted “risk scores.” This chapter separates prespecified adjustment from fishing. Read it before adding “one more covariate” because it improved the p-value.
 
 ## Opening question (CASTOR)
 
@@ -73,6 +77,10 @@ Model building is where good studies become invalid: data dredging, stepwise sel
 | Overadjustment | Adjusting for variables on causal path |
 | Table 2 fallacy | Changing coefficients by adding variables without theory |
 | MRC / GOLD | Severity measures may be mediators depending on question |
+
+### In practice
+
+Stepwise selection after seeing results is still common in submitted manuscripts. If variables were not in the prespecified SAP, call the model exploratory and show stability (bootstrap or penalization), not a definitive p-value.
 
 ### Wrong analysis ⚠
 
@@ -260,6 +268,7 @@ exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations
 
 ---
 
+
 ## R lab
 
 ```r
@@ -297,12 +306,16 @@ source("R/examples/ch07_model_building.R")
 - Stepwise is not a substitute for thinking [@harrell2015rms].
 - LRT for nested prespecified comparisons; LASSO for prediction with low EPV caution [@james2023ISL].
 
+## Where this chapter leads
+
+**Next:** [Chapter 8](08-validation-reporting.md) for honest reporting; [Chapter 9](09-prediction-vs-inference.md) if the goal is risk prediction rather than association.
+
 ## Further reading
 
 - Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
 - James et al., *An Introduction to Statistical Learning* [@james2023ISL]  
 - Shmueli, "To explain or to predict?" [@shmueli2010predict]
 
-## Exercises · [Solutions](../solutions/ch07_solutions.md)
+## Exercises ([Solutions](../solutions/ch07_solutions.md))
 
 **Next:** [Chapter 8](08-validation-reporting.md)

@@ -1,4 +1,4 @@
-# Chapter 7 Exercises — Model Building
+# Chapter 7 Exercises: Model building
 
 **E7.1** Why not use stepwise selection for primary trial endpoint?
 

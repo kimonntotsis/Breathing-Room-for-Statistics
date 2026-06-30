@@ -1,7 +1,8 @@
-# Statistical Methods for Respiratory Research — handbook outline
+# Breathing Room for Statistics: handbook outline
 
-**Title:** Statistical Methods for Respiratory Research  
-**Subtitle:** Foundations through High-Dimensional, Longitudinal, and Causal Analysis  
+**Title:** Breathing Room for Statistics  
+**Subtitle:** A statistical handbook for respiratory research: from trials to omics and prediction  
+**Tagline:** With reproducible R examples  
 **Edition:** Single-volume handbook (Ch 0–21)
 
 ---
@@ -27,7 +28,11 @@
 - [x] Ch 18–21 (longitudinal, survival, missing data, causal)
 - [x] Case E capstone (Ch 12); meta-file cleanup; RECURRING_COHORT through Ch 21
 - [x] Author name in `_quarto.yml`; Ch 20–21 deepened
-- [ ] Clinical review
+- [x] Appendix A (R environment) + Appendix B (quick reference in PDF)
+- [x] Appendix C (glossary in PDF)
+- [x] Appendix D (missing-data checklists); Ch 20 MICE demo
+- [x] Appendices E (index), F (exercises); INSTRUCTOR_PACK; REVIEWER_RUBRIC; expert review v1 (Ch 4, 6, 13, 18, 20)
+- [ ] Named clinical/biostatistics sign-off (use REVIEWER_RUBRIC)
 - [ ] Deeper optional topics (competing risks, IV, full Bayesian workflows)
 
 **Navigation:** [HANDBOOK_GUIDE](volume-01/HANDBOOK_GUIDE.md) · [QUICK_REFERENCE](volume-01/QUICK_REFERENCE.md) · [METHOD_MAP](volume-01/METHOD_MAP.md)

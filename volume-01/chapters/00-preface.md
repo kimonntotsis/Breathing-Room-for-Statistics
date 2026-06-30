@@ -4,41 +4,35 @@ number-sections: false
 
 # Preface {.unnumbered}
 
-Respiratory research generates an unusual breadth of data: spirometry and lung function, symptom scores, exacerbation counts, imaging features, biomarker panels, trial endpoints, and intensive-care time series. The statistical methods available are equally broad. The gap is not a shortage of techniques. It is a shortage of **clear connections** between clinical questions, valid analysis, and reproducible implementation.
+Respiratory research rests on incompatible data shapes in the same programme: spirometry and symptom scores, exacerbation counts, imaging, biomarker panels, trial endpoints, ICU trajectories, and omics tables with more variables than patients. Textbooks and courses teach methods in isolation. Manuscripts still fail for recurring reasons: the wrong estimand, the wrong outcome family, missingness handled as an afterthought, discovery claims without multiplicity or batch discipline, prediction metrics without calibration. This handbook connects question, method, reporting, and reproducible R on one synthetic cohort so each step is visible in code you can rerun.
 
-This book was written to fill that gap.
+## Cite this book {#cite-this-book}
+
+**APA (7th ed.)**
+
+> Ntotsis, K. (2026). *Breathing room for statistics: A statistical handbook for respiratory research: from trials to omics and prediction* [Open handbook]. *With reproducible R examples.* Retrieved June 28, 2026, from https://github.com/kimonntotsis/Breathing-Room-for-Statistics
+
+**Source (chapters, appendices, R code, data):** [github.com/kimonntotsis/Breathing-Room-for-Statistics](https://github.com/kimonntotsis/Breathing-Room-for-Statistics)
+
+**In-text:** (Ntotsis, 2026)
+
+For a fixed edition, cite a tagged release URL rather than the default branch.
 
 ## Why question-first?
 
-In practice, analysts often learn methods in reverse: they know how to run a t-test or fit a logistic model before they have articulated what is being estimated, for whom, and under what assumptions. That order produces technically correct code and scientifically weak conclusions.
-
-We reverse it.
-
-Before any formula appears, we ask:
-
-- What would change in clinical or scientific practice if we knew the answer?
-- What quantity are we estimating or comparing?
-- What data structure do we actually have?
-- What could bias the result?
-
-This mirrors good applied biostatistics. We make it explicit and repeatable.
+Most training still runs software-first: a test is chosen, then justified. The result can be numerically correct and scientifically beside the point. Every chapter here assumes the reverse order. State what would change in practice if you knew the answer; name the estimand and the population it targets; describe the data you actually have (design, visits, missingness, confounding); only then select a method and prespecify what would falsify your conclusion.
 
 ## Accessibility and validity
 
-These are not opposites. A method explained well is not a method explained loosely. Throughout the book, we use layered exposition:
-
-- a plain-language statement of the idea
-- a precise statistical statement nearby
-- assumptions stated openly
-- respiratory examples where things go wrong in real studies
-
-We avoid jargon without definition. We also avoid replacing assumptions with metaphors that mislead.
+Precision and readability are not trade-offs. Each chapter pairs plain language with a formal statement, lists assumptions explicitly, and shows where respiratory studies commonly misstep. Terms are defined in [Appendix C](../appendix-c-glossary.md); use the plain-language column as a lookup, not a memorisation exercise.
 
 ## R as a teaching tool
 
-R is used here not as a software manual but as a **proof of understanding**. If you can simulate data, fit a model, check assumptions, and report an estimand with code, you understand the method at a level that reading alone cannot provide.
+R is used here as a **proof of understanding**, not as a software manual. If you can simulate data, fit a model, check assumptions, and report an estimand in code, you understand the method at a level reading alone rarely reaches.
 
 We use the tidyverse for readability. Where base R is clearer, we use base R.
+
+**New to R?** See [Appendix A](../appendix-a-r-setup.md). You do not need it before Chapter 1 if you are only reading the statistical content.
 
 ## What this book is not
 
@@ -49,29 +43,19 @@ We use the tidyverse for readability. Where base R is clearer, we use base R.
 
 ## Acknowledgements
 
-Replace this section with your own acknowledgements before publication. Review by a biostatistician and a respiratory clinician is strongly recommended.
+Draft reviewers from biostatistics and respiratory medicine will be named in a later edition.
 
 ## How to use this handbook
 
-| Resource | Purpose |
-|----------|---------|
-| [HANDBOOK_GUIDE.md](../HANDBOOK_GUIDE.md) | Reader paths and workflow |
-| [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) | **Which test / which model** (open first) |
-| [METHOD_MAP.md](../METHOD_MAP.md) | Full technique inventory |
-| [FIGURE_INDEX.md](../FIGURE_INDEX.md) | All plots and decision figures |
-| [REFERENCES.md](../REFERENCES.md) | Citations and reporting guidelines |
+Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix H](../appendix-h-clinicians-route.md) gives a path without R. The [Welcome](../index.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, interpretation, caveats, common errors, reporting template, code.
 
-You do not need to read cover-to-cover. Most analysts open **QUICK_REFERENCE**, jump to one chapter, run the R script, and copy the reporting template.
+**Signposts in the chapters:** **Why this chapter** (the mistake it prevents), **In practice** (sponsor or manuscript reality), **Before you open R** (estimand and one sensitivity), **Where this chapter leads**, and **Alternatives & extensions** when assumptions fail. The alternatives boxes are for defensible choice, not post hoc shopping.
 
-## “Alternatives & extensions” boxes (how to use them)
+## What CASTOR means {#what-castor-means}
 
-Each chapter includes an **Alternatives & extensions** section. This is where you’ll find:
+**CASTOR** is the analysis sequence used throughout the book: **C**linical question, **A**ssess design and data, **S**elect method, **T**est and fit, **O**utput estimand, **R**eport limits. The letters are unpacked in [Chapter 1](01-statistical-thinking.md) with an eight-step pipeline figure and a method decision tree at the selection step.
 
-- method variants that apply when assumptions break (non-normality, sparse events, overdispersion)
-- modern alternatives used in respiratory papers (penalization, bootstrap validation, supervised reduction)
-- pointers to [Ch 18–21](chapters/18-longitudinal-mixed-models.md) when the data structure requires them (longitudinal, survival, missing data, causal)
-
-These sections are not an invitation to “try everything until something is significant.” They are a **menu** for defensible method choice: pick one primary analysis and prespecify a small number of sensitivity analyses.
+**CASTOR** also names the synthetic respiratory cohort reused from descriptive tables through omics capstones; **CASTOR-HD** extends the same patients to high-dimensional biology. The workflow is fixed; only the data file changes.
 
 ## About the data
 

@@ -1,4 +1,4 @@
-# Chapter 21: Causal inference — confounding and IPW
+# Chapter 21: Causal inference, confounding and IPW
 
 > **Part VIII: Longitudinal, survival, and causal inference**
 
@@ -11,14 +11,18 @@
 | **Question** | When can we interpret an adjusted association as closer to a causal effect? |
 | **Core methods** | confounding diagram, target trial, associational vs causal estimands, introductory IPW |
 | **R** | `R/examples/ch21_causal_inference.R` |
-| **Links** | [Ch 6 logistic](06-generalized-linear-models.md) · [Ch 12 Case B](12-case-studies.md) |
+| **Figures** | [covariate balance](../figures/ch21_covariate_balance.png), [naive vs IPW OR](../figures/ch21_or_naive_vs_ipw.png) |
+| **Links** | [Ch 6 logistic](06-generalized-linear-models.md), [Ch 12 Case B](12-case-studies.md) |
+| **Exercises** | [Chapter 21 exercises](../exercises/ch21_exercises.md) |
 
 ## Learning objectives
 
 1. State the difference between association and causation in observational respiratory studies.
 2. Draw a simple confounding structure (smoking, FEV1, exacerbation).
-3. Run a toy IPW sensitivity for smoking exposure and compare to naive logistic regression.
-4. List requirements for causal language (design, assumptions, diagnostics, sensitivity).
+3. Distinguish confounders, mediators, and colliders in a respiratory DAG.
+4. Run a toy IPW sensitivity for smoking exposure and compare to naive logistic regression.
+5. Describe target trial emulation in plain language.
+6. List requirements for causal language (design, assumptions, diagnostics, sensitivity).
 
 ## Prerequisites
 
@@ -26,11 +30,66 @@ Chapters 1 (estimands), 6–7 (logistic regression), 8 (STROBE reporting).
 
 ---
 
+## Why this chapter
+
+Observational smoking and therapy comparisons invite causal language. This chapter separates associational estimands from causal claims, introduces IPW as sensitivity (not proof), and points back to randomised Case A when you need real causal evidence.
+
 ## Opening question (CASTOR)
 
-*Does smoking **cause** higher 12-month exacerbation risk — or is low FEV1 a common consequence of smoking and severe disease that also drives exacerbations?*
+*Does smoking **cause** higher 12-month exacerbation risk, or is low FEV1 a common consequence of smoking and severe disease that also drives exacerbations?*
 
 Standard logistic regression adjusts for measured covariates, but **which** covariates belong in the model is a causal question, not a significance question [@harrell2015rms].
+
+Case B in [Chapter 12](12-case-studies.md) fits an associational logistic model. This chapter makes the **estimand explicit** and introduces inverse probability weighting as a sensitivity analysis, not a magic causal proof.
+
+---
+
+## The causal workflow
+
+1. **Estimand**: total effect? direct effect? risk difference at 12 months?
+2. **DAG / subject-matter map**: what causes what; what must not be adjusted for?
+3. **Design**: RCT (Case A) vs observational (Case B, this chapter).
+4. **Analysis**: regression, IPW, matching aligned to estimand.
+5. **Diagnostics**: balance, positivity, weight distribution.
+6. **Humility**: unmeasured confounding sensitivity; avoid causal verbs unless justified.
+
+---
+
+## Association vs causation (respiratory)
+
+| Claim type | Example sentence | Supported by observational logistic? |
+|------------|------------------|--------------------------------------|
+| **Association** | Smoking is associated with higher exacerbation odds after adjusting for FEV1 | Yes, with STROBE limits |
+| **Prediction** | Smoking improves risk model AUC | Ch 9 framing |
+| **Causation** | Smoking **causes** excess exacerbations | Needs design + assumptions |
+
+Randomised trials (Case A) support causal **treatment** claims for the randomised factor. Observational smoking studies do not, without stronger design and sensitivity.
+
+---
+
+## Confounding structure (CASTOR)
+
+**Smoking** → lower **FEV1** and higher **exacerbation** risk. FEV1 is also on the causal path from smoking to exacerbation (partial mediator) and a **confounder** if other factors affect both FEV1 and exacerbation.
+
+```
+Smoking -----> Exacerbation (12m)
+   |                 ^
+   v                 |
+  FEV1 ---------------+
+```
+
+**Adjust for FEV1** when the estimand is the association of smoking **not explained by** measured lung function (or when FEV1 is a confounder per protocol). **Do not adjust** for FEV1 when the **total effect** of smoking including its impact via FEV1 is the target, unless using a mediation framework prespecified in advance.
+
+---
+
+## Confounder, mediator, collider (quick reference)
+
+| Variable role | Adjust? | Respiratory trap |
+|---------------|---------|------------------|
+| **Confounder** | Yes (if measured) | Omitting prior exacerbation history |
+| **Mediator** | Only for direct effect estimand | Adjusting FEV1 when total smoking effect wanted |
+| **Collider** | **No** | Adjusting for hospitalisation that is caused by both smoking and exacerbation |
+| **Instrument** | Special methods | Rare in basic COPD cohorts |
 
 ---
 
@@ -41,12 +100,12 @@ Standard logistic regression adjusts for measured covariates, but **which** cova
 | | |
 |---|---|
 | **Answers** | Is smoking associated with exacerbation after adjusting for measured covariates? |
-| **Estimand** | Conditional odds ratio (logistic) — **associational** |
+| **Estimand** | Conditional odds ratio (logistic) (**associational**) |
 | **R** | `glm(exacerbation_12m ~ smoking + fev1_pct, family = binomial)` |
 | **When to use** | Hypothesis generation; STROBE cohort descriptions |
 | **Does NOT prove** | Smoking causes exacerbations |
 
-### Technique card (IPW — introductory)
+### Technique card (IPW, introductory)
 
 | | |
 |---|---|
@@ -65,7 +124,38 @@ Standard logistic regression adjusts for measured covariates, but **which** cova
 
 **Precise language:** IPW estimates a marginal or appropriately weighted estimand under a structural model where conditioning on measured confounders blocks back-door paths; residual confounding remains if unmeasured common causes exist.
 
-**Clinician read:** "Adjusted OR" and "IPW OR" still describe **observational** data — randomised trials (Case A) remain the gold standard for causal treatment effects.
+**Clinician read:** "Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
+
+### Worked example (CASTOR)
+
+From `ch21_smoking_or_naive_vs_ipw.csv` (teaching run):
+
+| Model | Smoking OR (95% CI) |
+|-------|----------------------|
+| Naive logistic | 1.89 (0.64 to 6.30) |
+| IPW-weighted | 1.84 (0.88 to 4.08) |
+
+ORs are similar here because the toy weighting scheme is crude. The lesson is **process**: check balance, weights, and overlap before interpreting either OR causally. Wide CIs reflect sparse events.
+
+```r
+source("R/examples/ch21_causal_inference.R")
+or_tbl <- readr::read_csv("volume-01/tables/ch21_smoking_or_naive_vs_ipw.csv")
+wt <- readr::read_csv("volume-01/tables/ch21_ipw_weight_summary.csv")
+```
+
+### Target trial (concept)
+
+Ask: *What randomized experiment would answer this question?* Then emulate its eligibility, treatment strategies, assignment, follow-up, and outcomes using observational data. Misalignment at any step introduces bias.
+
+| Target trial component | CASTOR observational analogue |
+|------------------------|------------------------------|
+| Eligibility | COPD cohort inclusion criteria |
+| Treatment strategies | Smoker vs non-smoker (not well-defined intervention) |
+| Assignment | Not random → confounding |
+| Follow-up | 12 months |
+| Outcome | `exacerbation_12m` |
+
+Smoking is **not** a randomised exposure in CASTOR; causal language is especially fragile.
 
 ### Caveats box
 
@@ -77,6 +167,10 @@ Standard logistic regression adjusts for measured covariates, but **which** cova
 | Positivity / extreme weights | Sparse cells → unstable weights; trim and report ESS |
 | Overlap | No empirical overlap → estimand not supported in data |
 | Transportability | CASTOR-like synthetic cohort ≠ your clinic population |
+
+### In practice
+
+“Adjusted for confounders” in an abstract is not causal language. Match verbs to design: randomised trial → effect; observational cohort → association unless prespecified causal framework and sensitivity are in place.
 
 ### Wrong analysis ⚠
 
@@ -101,11 +195,18 @@ Standard logistic regression adjusts for measured covariates, but **which** cova
 
 > We estimated the association between smoking and 12-month exacerbation in an observational cohort (*n* = …). The naive logistic model adjusting for FEV1 % predicted yielded OR = … (95% CI …). As a sensitivity analysis, we applied inverse probability weights for smoking based on … (weight range …; mean …). The IPW OR was … (95% CI …). These analyses assume no unmeasured confounding and sufficient overlap of smokers and non-smokers within confounder strata. Causal interpretation is not claimed; findings are associational [@vonelm2007strobe].
 
-### Target trial (concept)
+---
 
-Ask: *What randomized experiment would answer this question?* Then emulate its eligibility, treatment strategies, assignment, follow-up, and outcomes using observational data — misalignment at any step introduces bias.
+## RCT vs observational (when to say "cause")
+
+| Design | Causal treatment claim | Key chapter |
+|--------|------------------------|-------------|
+| RCT (Case A) | Supported for randomised factor | Ch 12 Case A |
+| Observational cohort (Case B) | Associational only | Ch 12 Case B, this chapter |
+| IPW / propensity | Sensitivity; not proof | This chapter |
 
 ---
+
 
 ## R lab
 
@@ -116,13 +217,28 @@ source("R/examples/ch21_causal_inference.R")
 
 ![FEV1 balance before vs after IPW (toy)](../figures/ch21_covariate_balance.png)
 
+Check whether FEV1 % means are closer across smoking groups after weighting. Poor balance after weighting → revisit exposure model or overlap.
+
 ![Smoking OR: naive vs IPW](../figures/ch21_or_naive_vs_ipw.png)
+
+Material movement between naive and IPW-adjusted ORs is a sensitivity flag, not proof of a causal smoking effect.
 
 **Tables:** `ch21_smoking_or_naive_vs_ipw.csv`, `ch21_balance_before_after_ipw.csv`, `ch21_ipw_weight_summary.csv`
 
 ### Mini-lab: propensity score pointer
 
 Full propensity score workflow: estimate `e(X) = P(smoking=1|X)`, check overlap, weight or match, then outcome model. Packages: `WeightIt`, `MatchIt`. Always report balance diagnostics (standardised mean differences).
+
+```r
+# Illustrative only, not the teaching script:
+# library(WeightIt)
+# w <- weightit(smoking ~ fev1_percent_predicted + age, data = exac, method = "ps")
+# summary(w)
+```
+
+### Mini-lab: E-value pointer
+
+When unmeasured confounding is plausible, E-values quantify how strong an unmeasured confounder would need to be to explain away the observed association (advanced; see Hernán & Robins).
 
 ---
 
@@ -137,7 +253,7 @@ Full propensity score workflow: estimate `e(X) = P(smoking=1|X)`, check overlap,
 
 ---
 
-## Exercises · [Solutions](../solutions/ch21_solutions.md)
+## Exercises ([Solutions](../solutions/ch21_solutions.md))
 
 **E21.1** Name one confounder on the smoking → exacerbation path in CASTOR.
 
@@ -145,15 +261,25 @@ Full propensity score workflow: estimate `e(X) = P(smoking=1|X)`, check overlap,
 
 **E21.3** Why check weight distributions after IPW?
 
+**E21.4** Is FEV1 a confounder, mediator, or both? Why does it matter?
+
+**E21.5** What is one component of a target trial emulation?
+
 **Applied**
 
 1. Run `source("R/examples/ch21_causal_inference.R")`.
 2. Compare naive vs IPW OR in `ch21_smoking_or_naive_vs_ipw.csv`.
-3. Read `ch21_ipw_weight_summary.csv` — any extreme weights?
+3. Read `ch21_ipw_weight_summary.csv`: any extreme weights?
+4. From the balance plot, did IPW improve FEV1 balance in this toy run?
+5. Rewrite a causal-sounding sentence as an associational sentence suitable for STROBE.
 
 **Capstone link:** [Case B](12-case-studies.md) (associational logistic) vs this chapter (explicit causal framing).
 
 ---
+
+## Where this chapter leads
+
+You have completed the single-volume path (Ch 0–21). Return to [Chapter 12](12-case-studies.md) when writing integrated discussions, or to [QUICK_REFERENCE](../QUICK_REFERENCE.md) for day-to-day method choice.
 
 ## Further reading
 

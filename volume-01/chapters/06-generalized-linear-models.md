@@ -11,10 +11,10 @@
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Key methods** | Logistic, Firth, log-binomial, Poisson, NB, zero-inflated, offset |
 | **R scripts** | `R/examples/ch06_glm.R` |
-| **Figures** | [logistic forest](../figures/ch06_logistic_forest.png) · [Poisson RR](../figures/ch06_poisson_rate_ratio.png) |
-| **Navigation** | [QUICK_REFERENCE § Step 3-5](../QUICK_REFERENCE.md) · [Decision table](#decision-table-which-glm) |
+| **Figures** | [logistic forest](../figures/ch06_logistic_forest.png), [Poisson RR](../figures/ch06_poisson_rate_ratio.png) |
 | **Exercises** | [Chapter 6 exercises](../exercises/ch06_exercises.md) |
 
+**Also see:** [QUICK_REFERENCE § Step 3-5](../QUICK_REFERENCE.md), [Decision table](#decision-table-which-glm)
 ---
 
 ## Learning objectives
@@ -33,6 +33,10 @@
 
 ---
 
+## Why this chapter
+
+Exacerbation yes/no, exacerbation counts, and ordinal symptoms do not belong on a Gaussian model. GLMs are where CASTOR’s binary and count endpoints live. If your outcome is 0/1 or a small non-negative integer, you are in this chapter.
+
 ## Opening question
 
 *Among COPD patients, is smoking associated with at least one exacerbation in 12 months after adjusting for age, lung function, and prior history?*
@@ -40,6 +44,18 @@
 The outcome is **binary**. Fitting `lm(exacerbation ~ ...)` predicts values outside [0,1] and wrong variance structure. We need a **GLM** [@hosmer2013applied].
 
 We continue with **[CASTOR](RECURRING_COHORT.md)** - `data/exacerbation.csv`.
+
+---
+
+## Clinical and biostatistics notes
+
+**Clinical:** **Odds ratios** mislead when exacerbations are common: prefer risk difference, RR, or predicted risks. Prior exacerbation history is clinically dominant. Observational smoking associations are not causal without design.
+
+**Biostatistics:** Check **events per variable** in logistic models. Default to **negative binomial** when Poisson shows overdispersion. Use **offset(log person-time)** when follow-up varies. Use **Firth** when separation or sparse events destabilise MLE.
+
+**Clinical nuance:** "any exacerbation" (binary) and "exacerbations per year" (count) answer different questions: do not swap models for convenience.
+
+**Biostat nuance:** `glm(..., family = binomial)` is the minimum correct model for 0/1 outcomes; `lm()` on binary Y remains a common submission error.
 
 ---
 
@@ -108,6 +124,18 @@ broom::tidy(logit_fit, conf.int = TRUE, exponentiate = TRUE)
 | **Observational** | Smoking-exacerbation not causal without design |
 | **No clustering** | Patients at same centre may correlate |
 | **Linear on logit scale** | May miss nonlinear age effects - splines |
+
+### In practice
+
+Exacerbation counts of 0, 1, 2, 3 dominate COPD cohorts. Poisson will look fine in R and fail on overdispersion. Always check observed vs fitted counts and consider negative binomial before trusting the rate ratio.
+
+### In practice (ordinal symptoms)
+
+mMRC dyspnoea (0–4) and CAT scores are **ordered categories**, not continuous measurements. A coefficient from `lm(mMRC ~ treatment)` implies equal spacing between “slightly breathless” and “housebound.” Use ordinal logistic regression ([technique below](#technique-ordinal-logistic-regression-mmrccat)) or report medians with ordinal-aware comparisons.
+
+### In practice (common events)
+
+When exacerbation rates exceed ~10–15%, odds ratios from logistic regression exaggerate relative to risk ratios. Ask for **risk differences** or log-binomial **rate ratios** for the clinical read.
 
 #### Wrong analysis ⚠
 
@@ -458,6 +486,8 @@ See [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) for the full outcome → model t
 
 ![Logistic regression forest plot](../figures/ch06_logistic_forest.png)
 
+Odds ratios above 1 increase odds of the outcome; check CIs that cross 1 and whether OR language matches the clinical estimand (risk vs odds).
+
 ---
 
 ## Worked example: exacerbation logistic model
@@ -492,6 +522,7 @@ Always state **event count and n**.
 
 ---
 
+
 ## R lab
 
 ```r
@@ -509,6 +540,40 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 3. Ignoring overdispersion → false precision.
 4. Causal language from observational logistic models.
 5. Reporting model without number of events.
+
+---
+
+## Technique: Ordinal logistic regression (mMRC/CAT) {#technique-ordinal-logistic-regression-mmrccat}
+
+| | |
+|---|---|
+| **Answers** | Is treatment associated with **higher or lower ordered** symptom category? |
+| **Outcome** | Ordinal (mMRC 0–4, CAT bands, Likert scales) |
+| **Design** | Cross-sectional or single visit; extensions for repeated ordinal → mixed ordinal (advanced) |
+| **Assumptions** | Proportional odds (parallel slopes across categories); check with Brant test / sensitivity |
+| **Effect measure** | Odds ratio per unit increase (proportional odds model) or cumulative OR |
+| **R** | `MASS::polr(ordered_factor ~ predictors, Hess = TRUE)` or `ordinal` package |
+| **Report** | OR + 95% CI; state proportional-odds assumption; median category by arm as descriptive |
+| **Avoid when** | Treating 0–4 as continuous (`lm`); collapsing to binary without prespecification |
+
+**Plain language:** mMRC 3 is worse than 2, but not necessarily “one unit” on a lung-function scale; model **order**, not distance.
+
+**Precise language:** proportional odds logistic model estimates cumulative log-odds of being in category *j* or below [@agresti2018introduction].
+
+**Clinician read:** “OR 1.4 per mMRC point” is hard to interpret clinically; pair with **proportions in each category** or median shift.
+
+#### Wrong analysis ⚠
+
+| Mistake | Why it fails | Do instead |
+|---------|--------------|------------|
+| Linear regression on mMRC 0–4 | Equal spacing assumed | Ordinal logistic or nonparametric comparison |
+| Collapse mMRC to binary “≥2” without protocol | Changes estimand | Prespecify threshold or use full ordinal model |
+
+#### Reporting template
+
+**Methods:** mMRC (0–4) was modelled as an ordered factor using proportional odds logistic regression, adjusting for … Proportional odds was assessed with …
+
+**Results:** Adjusted OR for treatment = … (95% CI …) per one-category increase in mMRC. Distribution by arm: [table of category counts].
 
 ---
 
@@ -535,7 +600,7 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 
 | Outcome | Why GLM may be wrong | Handbook chapter |
 |---|---|---|
-| Ordinal (mMRC 0-4) | ordered categories | ordinal logistic (Ch 6 extensions) |
+| Ordinal (mMRC 0-4) | ordered categories | [Ordinal logistic](#technique-ordinal-logistic-regression-mmrccat) (this chapter) |
 | Time-to-event | censoring | [Ch 19](19-survival-analysis.md) survival analysis |
 | Repeated counts over time | correlation + time trends | [Ch 18](18-longitudinal-mixed-models.md) mixed models / GEE |
 
@@ -548,7 +613,11 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 
 ## Exercises
 
-[Chapter 6 exercises](../exercises/ch06_exercises.md) · [Solutions](../solutions/ch06_solutions.md)
+[Chapter 6 exercises](../exercises/ch06_exercises.md); [Solutions](../solutions/ch06_solutions.md)
+
+## Where this chapter leads
+
+**Next:** [Chapter 7](07-model-building.md) for selection and LASSO; [Chapter 8](08-validation-reporting.md) for reporting ORs and rate ratios with intervals. Time-to-event endpoints → [Chapter 19](19-survival-analysis.md).
 
 ## Further reading
 

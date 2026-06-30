@@ -6,4 +6,6 @@
 
 **E14.3** Test samples inform the correction applied to training data, inflating apparent performance or stability.
 
-**Applied** Case A supports covariate adjustment with sensitivity; Case B requires redesign or honest non-identifiability statement.
+**E14.4** Report instability explicitly; do not report only the unadjusted model. Discuss batch-driven findings and need for replication or balanced design.
+
+**Applied** Case A: 3 discoveries with/without batch in teaching data. Case B: non-identifiability statement required.

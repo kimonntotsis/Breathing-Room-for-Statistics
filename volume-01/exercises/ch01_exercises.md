@@ -1,4 +1,4 @@
-# Chapter 1 Exercises — Statistical Thinking
+# Chapter 1 Exercises: Statistical thinking
 
 **E1.1** Define estimand for: *"Does pulmonary rehab improve 6-minute walk distance at 8 weeks?"*
 

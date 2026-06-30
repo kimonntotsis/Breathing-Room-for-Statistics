@@ -6,4 +6,6 @@
 
 **E15.3** As descriptive QC or gating check, alongside participant-level summaries that support inference.
 
-**Applied** Participant n ≈ 120; pooled-cell p should be smaller but not reported as confirmatory n.
+**E15.4** Many cell types → multiplicity; compositional coupling; avoids fishing through 20 populations.
+
+**Applied** Mono q≈0.025, NK q≈0.030 at participant level; pooled-cell p much smaller (do not report).

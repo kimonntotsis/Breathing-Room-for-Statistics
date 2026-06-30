@@ -1,18 +1,18 @@
-# Handbook guide — how to use this book
+# Handbook guide: how to use this book
 
-This volume is designed as a **working handbook**: choose a method, check assumptions, run R, report correctly. You do not need to read cover-to-cover.
+This volume is designed as a **working handbook**: choose a method, check assumptions, run R, report correctly. You do not need to read cover-to-cover. New readers: [Preface](chapters/00-preface.md) → [Welcome tour](index.md). Full tables and file lists: [Appendix G](appendix-g-handbook-navigation.md).
 
 ---
 
-## Start here (by role)
+## Reader paths
 
-| If you are… | Start with | Then |
-|-------------|------------|------|
-| **Clinician / trialist** | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) → outcome row | Technique card + Reporting template in that chapter |
-| **Analyst new to respiratory data** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) | [METHOD_MAP.md](METHOD_MAP.md) |
-| **Statistician** | [METHOD_MAP.md](METHOD_MAP.md) + [Ch 1 estimands](chapters/01-statistical-thinking.md) | Ch 4–6 technique cards; Ch 8 validation |
-| **Teaching a course** | [index.md](index.md) reading order | [exercises/](exercises/) + CASTOR scripts |
-| **Writing a paper** | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Reporting template in chapter + [Ch 8](chapters/08-validation-reporting.md) checklists |
+| If you want to… | Start with | Then |
+|-----------------|------------|------|
+| **Read papers without running R** | [Appendix H](appendix-h-clinicians-route.md) → [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Technique card + Reporting template |
+| **Analyse respiratory data in R** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) | [METHOD_MAP.md](METHOD_MAP.md) |
+| **Pick among similar methods** | [METHOD_MAP.md](METHOD_MAP.md) + [Ch 1 estimands](chapters/01-statistical-thinking.md) | Ch 4–6 technique cards; Ch 8 validation |
+| **Teach or self-study** | [Preface](chapters/00-preface.md) → [Welcome tour](index.md) → Core 1–12 + [exercises](exercises/) |
+| **Write a manuscript** | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Reporting template in chapter + [Ch 8](chapters/08-validation-reporting.md) checklists |
 
 ---
 
@@ -23,16 +23,18 @@ This volume is designed as a **working handbook**: choose a method, check assump
 | **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** | One-page tables: outcome → test → model | **Before any analysis** |
 | **[METHOD_MAP.md](METHOD_MAP.md)** | Full decision tree + technique inventory | Choosing among similar methods |
 | **[FIGURE_INDEX.md](FIGURE_INDEX.md)** | All plots and decision figures | Writing / teaching / slides |
-| **[GLOSSARY.md](GLOSSARY.md)** | Terms in plain and precise language | Unfamiliar jargon |
+| **[GLOSSARY.md](GLOSSARY.md)** | Pointer to full glossary in Appendix C | Unfamiliar jargon |
 | **[REFERENCES.md](REFERENCES.md)** | Curated bibliography by topic | Methods sentences, background reading |
 
 ---
 
 ## Standard workflow (every analysis)
 
+**CASTOR** is the order of work: **C**linical question, **A**ssess design and data, **S**elect method, **T**est and fit, **O**utput estimand, **R**eport limits. Pipeline figure and decision tree: [Chapter 1](chapters/01-statistical-thinking.md) and [Appendix B](appendix-b-quick-reference.md).
+
 ```
 1. Clinical question (one sentence)          → Ch 1
-2. Outcome type + design                     → Ch 2, QUICK_REFERENCE
+2. Outcome type + design                     → Ch 2, Appendix B
 3. Choose method                             → METHOD_MAP, decision figure
 4. Describe sample (Table 1)                 → Ch 3
 5. Fit model / test                          → Ch 4–7, R/examples/
@@ -72,8 +74,10 @@ Each method in Ch 4–11 and major techniques in Ch 13–21 follows [CHAPTER_TEM
 
 ## R setup (once per session)
 
+Install guide: **[Appendix A](appendix-a-r-setup.md)** (in the PDF). Quick start:
+
 ```r
-setwd("/path/to/respiratory-research-methods")  # your clone path
+setwd("/path/to/Breathing-Room-for-Statistics")  # your clone path; or open as Posit project
 source("R/00_setup.R")
 source("R/generate_data.R")
 source("R/examples/generate_figures.R")       # all handbook figures
@@ -84,15 +88,10 @@ source("R/run_all_examples.R")                # optional: full chapter scripts
 
 ## CASTOR recurring cohort
 
-One synthetic cohort threads Ch 3→12; **CASTOR-HD** extends through Ch 13–17. See [RECURRING_COHORT.md](RECURRING_COHORT.md).
-
----
-
-| **VII Integrated capstone** | 17 | End-to-end CASTOR-HD + elastic net |
-| **VIII Longitudinal & causal** | 18–21 | Repeated measures, survival, missing data, causality |
+The workflow above applies to every analysis. The **CASTOR cohort** is where you run it: one synthetic respiratory dataset from Ch 3→12; **CASTOR-HD** extends through Ch 13–17. See [RECURRING_COHORT.md](RECURRING_COHORT.md).
 
 ---
 
 ## Extended topics
 
-Longitudinal spirometry, survival, missing data, and causal inference are **[Ch 18–21](chapters/18-longitudinal-mixed-models.md)** in this same volume. Optional deeper material (competing risks, IV, full Bayesian workflows) remains for future expansion — see [BOOK_OUTLINE.md](../BOOK_OUTLINE.md).
+Longitudinal spirometry, survival, missing data, and causal inference are **[Ch 18–21](chapters/18-longitudinal-mixed-models.md)** in this same volume. Optional deeper material (competing risks, IV, full Bayesian workflows) remains for future expansion; see [BOOK_OUTLINE.md](../BOOK_OUTLINE.md).
