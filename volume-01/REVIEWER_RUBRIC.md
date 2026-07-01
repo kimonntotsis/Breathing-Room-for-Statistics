@@ -3,7 +3,7 @@
 Use this form for a **one-pass** clinical or biostatistical review of a single chapter. Priority chapters: **4, 6, 13, 18, 20** (highest traffic for inference, GLMs, omics, longitudinal, missing data).
 
 **Reviewer:** ___________________  
-**Role:** [ ] Respiratory investigator  [ ] Trialist  [ ] Biostatistician  [ ] Omics analyst  
+**Role:** [ ] Investigator  [ ] Analyst  [ ] Omics analyst  
 **Chapter:** ___________________  
 **Date:** ___________________
 

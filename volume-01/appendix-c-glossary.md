@@ -14,12 +14,12 @@ Plain-language and precise definitions for terms used across Chapters 0–21. Fo
 
 ---
 
-## For readers without R: how to use this glossary
+## For investigators without R: how to use this glossary
 
 When you see an unfamiliar word:
 
 1. **Read the middle column first** (“Plain language”). That is the everyday meaning used in the chapters.
-2. **Use the third column only if you are writing Methods** or reviewing analysis with a statistician.
+2. **Use the third column only if you are writing Methods** or reviewing analysis with an analyst.
 3. **Ask three questions** (same habit as Chapter 1):
    - What number are they actually estimating?
    - Who is in the population?

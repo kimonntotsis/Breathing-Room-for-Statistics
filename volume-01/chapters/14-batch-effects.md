@@ -154,7 +154,7 @@ ComBat on the full dataset before train/test split has sunk prediction papers. A
 
 | Wrong analysis | Why it fails | Do instead |
 |---|---|---|
-| **Skip batch QC** because "the statistician will fix it" | Technical structure becomes "biology" in DE/ML outputs | Always tabulate group × batch and plot PCA by batch |
+| **Skip batch QC** because "the analyst will fix it" | Technical structure becomes "biology" in DE/ML outputs | Always tabulate group × batch and plot PCA by batch |
 | **Adjust for batch when batch == group** | Model is not identifiable; coefficients are arbitrary | Report confounding; redesign (balance batches) or external validation |
 | **Report only the batch-adjusted model** | Hides instability and post hoc storytelling | Show with vs without batch; report overlap of top features |
 | **Use ComBat on the full matrix before splitting data** (prediction) | Leakage: test set informs correction | Fit correction inside training folds only |

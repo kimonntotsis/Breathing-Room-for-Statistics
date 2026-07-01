@@ -21,7 +21,7 @@ Part intros may include a **CASTOR vignette** (short narrative hook). See `parts
 
 ## Block 1: Clinical question
 
-One sentence a co-author or patient advocate understands.
+One sentence an investigator understands.
 
 *Example:* Does mean FEV1 at 12 weeks differ between intervention and standard care?
 
@@ -48,7 +48,7 @@ One sentence a co-author or patient advocate understands.
 
 **Plain language:** one sentence for non-specialists.
 
-**Precise language:** one sentence for statisticians (estimand, link, assumptions).
+**Precise language:** one sentence for analysts (estimand, link, assumptions).
 
 **Practice read:** what would change in practice if the estimate were true?
 

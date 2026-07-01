@@ -30,7 +30,7 @@ Materials for course leads and self-study coordinators.
 
 ## Formal review before teaching
 
-Complete [REVIEWER_RUBRIC.md](REVIEWER_RUBRIC.md) for Chapters **4, 6, 13, 18, 20** with a biostatistician and a respiratory investigator. Those chapters include **Clinical and biostatistics notes** summarising the main checks.
+Complete [REVIEWER_RUBRIC.md](REVIEWER_RUBRIC.md) for Chapters **4, 6, 13, 18, 20** with an investigator and an analyst. Those chapters include **Clinical and biostatistics notes** summarising the main checks.
 
 ## Package note for Chapter 20
 

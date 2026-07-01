@@ -29,7 +29,7 @@ Chapters 1-2.
 
 ## Why this chapter
 
-Reviewers and co-authors meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
+Reviewers and investigators meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
 
 ## Opening question (CASTOR)
 
@@ -84,7 +84,7 @@ Description is not optional preamble. It is how you catch errors and justify the
 
 ### In practice
 
-Table 1 is often drafted by a junior author while the statistician is busy elsewhere. Agree on variable definitions and missingness rules first; otherwise Table 1 and the model use different populations.
+Table 1 is often drafted by a junior author while the analyst is busy elsewhere. Agree on variable definitions and missingness rules first; otherwise Table 1 and the model use different populations.
 
 ### Wrong analysis ⚠
 

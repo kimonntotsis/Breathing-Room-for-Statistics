@@ -32,7 +32,7 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **D** | [Missing data checklists](appendix-d-missing-data-checklists.md) |
 | **F** | [Exercises](appendix-f-exercises.md) |
 | **G** | [Handbook navigation](appendix-g-handbook-navigation.md) (this index; includes topic index below) |
-| **H** | [Path without R](appendix-h-clinicians-route.md) |
+| **H** | [Investigator path (without R)](appendix-h-clinicians-route.md) |
 | **References** | [Bibliography](references.qmd) |
 
 ## Reader paths
@@ -49,14 +49,14 @@ Technique chapters are meant to be opened by outcome. If you want one continuous
 
 | Role | Read first | Then | Capstone case |
 |------|------------|------|---------------|
-| **Trialist / protocol** | [Ch 1–2](chapters/01-statistical-thinking.md), [Ch 3–4](chapters/03-descriptive-analysis.md), [Ch 8](chapters/08-validation-reporting.md) | [Appendix B](appendix-b-quick-reference.md) for prespecification | [Case A](chapters/12-case-studies.md); [Case E](chapters/12-case-studies.md) if visits or survival are in the SAP |
-| **Analyst (R)** | [Ch 1–3](chapters/01-statistical-thinking.md), [Appendix B](appendix-b-quick-reference.md), [Ch 4–7](chapters/04-comparing-groups.md) as needed | [Ch 8–9](chapters/08-validation-reporting.md) if reporting or prediction | [Cases A & B](chapters/12-case-studies.md); [Ch 18–19](chapters/18-longitudinal-mixed-models.md) + Case E for trajectories |
+| **Investigator** | [Ch 1–2](chapters/01-statistical-thinking.md), [Ch 3–4](chapters/03-descriptive-analysis.md), [Ch 8](chapters/08-validation-reporting.md) | [Appendix B](appendix-b-quick-reference.md) for prespecification | [Case A](chapters/12-case-studies.md); [Case E](chapters/12-case-studies.md) if visits or survival are in the SAP |
+| **Analyst** | [Ch 1–3](chapters/01-statistical-thinking.md), [Appendix B](appendix-b-quick-reference.md), [Ch 4–7](chapters/04-comparing-groups.md) as needed | [Ch 8–9](chapters/08-validation-reporting.md) if reporting or prediction | [Cases A & B](chapters/12-case-studies.md); [Ch 18–19](chapters/18-longitudinal-mixed-models.md) + Case E for trajectories |
 | **Omics / discovery** | [Ch 1–2](chapters/01-statistical-thinking.md), [Ch 10–11](chapters/10-dimensionality-reduction.md), [Ch 13–16](chapters/13-differential-analysis-fdr.md) | [Ch 17](chapters/17-integrated-castor-hd.md) integrated pipeline | [Cases C & D](chapters/12-case-studies.md) |
 
 | Goal | Path |
 |------|------|
-| **Read without running R** | [Appendix H](appendix-h-clinicians-route.md) → [Appendix B](appendix-b-quick-reference.md) → chapter technique card |
-| **Run analyses in R** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) → [METHOD_MAP](METHOD_MAP.md) |
+| **Investigator (without R)** | [Appendix H](appendix-h-clinicians-route.md) → [Appendix B](appendix-b-quick-reference.md) → chapter technique card |
+| **Analyst (run R)** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) → [METHOD_MAP](METHOD_MAP.md) |
 | **Teach or self-study** | [Preface](chapters/00-preface.md) → Core 1–12 + [exercises](exercises/README.md); optional 13–21 blocks |
 | **Write a manuscript** | [Appendix B](appendix-b-quick-reference.md) → [Ch 8 reporting](chapters/08-validation-reporting.md) → [REFERENCES](REFERENCES.md) |
 | **Omics / discovery** | [Ch 13](chapters/13-differential-analysis-fdr.md) → [Ch 14 batch](chapters/14-batch-effects.md) → [Ch 17 pipeline](chapters/17-integrated-castor-hd.md) |

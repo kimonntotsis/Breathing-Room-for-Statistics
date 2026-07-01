@@ -172,7 +172,7 @@ Week-52 t-tests on last observation carried forward still appear in extension st
 
 ### In practice (GEE vs mixed)
 
-The statistician mentions GEE; another analyst fits `lmer`. Both can be correct; they answer **slightly different estimands**. Ask: do we want **subject-specific** trajectories (mixed model) or **population-averaged** marginal effects (GEE)? For most COPD trial reports, either is acceptable if prespecified; do not swap after seeing results ([technique card below](#technique-mixed-models-vs-gee)).
+One analyst proposes GEE; another fits `lmer`. Both can be correct; they answer **slightly different estimands**. Ask: do we want **subject-specific** trajectories (mixed model) or **population-averaged** marginal effects (GEE)? For most COPD trial reports, either is acceptable if prespecified; do not swap after seeing results ([technique card below](#technique-mixed-models-vs-gee)).
 
 ### Wrong analysis ⚠
 

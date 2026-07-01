@@ -13,7 +13,7 @@ This part is the antidote:
 
 If you only read two chapters before running an analysis, read **Ch 3–4**.
 
-**Read this if:** you are drafting a week-12 readout, comparing arms on FEV1 or exacerbation, or reviewing a statistician's first table of p-values.
+**Read this if:** you are drafting a week-12 readout, comparing arms on FEV1 or exacerbation, or reviewing an analyst's first table of p-values.
 
 **Skip this if:** your question is repeated visits (→ [Part VIII](part-08-longitudinal-survival.md)), time-to-event (→ Ch 19), or omics hits (→ [Part VI](part-06-highdim-biology.md)). Still read **Ch 3** for Table 1 first.
 

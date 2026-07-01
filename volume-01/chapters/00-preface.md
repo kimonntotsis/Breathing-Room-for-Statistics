@@ -8,7 +8,7 @@ Respiratory research rests on incompatible data shapes in the same programme: sp
 
 ## Who this book is for
 
-Investigators, trialists, respiratory fellows, biostatisticians, and co-authors who need to match a research question to a defensible analysis. You do not need to run R to use the estimand sections, technique cards, and reporting templates. **CASTOR** is a single **COPD-oriented** synthetic cohort (spirometry, exacerbations, smoking, therapy) so examples stay comparable from Table 1 through survival and omics; the same methods apply to asthma trials, ICU studies, and programme research when the outcome type and design match.
+**Investigators** and **analysts** who need to match a research question to a defensible analysis. Investigators can use estimand sections, technique cards, and reporting templates without running R; analysts follow the same workflow with reproducible R on CASTOR. **CASTOR** is a single **COPD-oriented** synthetic cohort (spirometry, exacerbations, smoking, therapy) so examples stay comparable from Table 1 through survival and omics; the same methods apply to asthma trials, ICU studies, and programme research when the outcome type and design match.
 
 ## Cite this book {#cite-this-book}
 
@@ -51,7 +51,7 @@ Contributors who reviewed draft chapters using [REVIEWER_RUBRIC.md](../REVIEWER_
 
 ## How to use this handbook
 
-Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix H](../appendix-h-clinicians-route.md) gives a path without R. The [Welcome](../index.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
+Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix H](../appendix-h-clinicians-route.md) gives an **investigator** path without R. The [Welcome](../index.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
 
 **Signposts in the chapters:** **Why this chapter** (the mistake it prevents), **In practice** (sponsor or manuscript reality), **Before you open R** (estimand and one sensitivity), **Where this chapter leads**, **Practice read** (what would change the decision), and **Alternatives & extensions** when assumptions fail. The alternatives boxes are for defensible choice, not post hoc shopping.
 

@@ -13,7 +13,7 @@ PARTS = ROOT / "parts"
 WHY = {
     "01-statistical-thinking.md": """## Why this chapter
 
-Every later chapter assumes you can name the estimand before touching R. Trialists use this chapter to align with statisticians; analysts use it to push back when a protocol question is vague. If you skip straight to Chapter 4, you will still run code — but you may answer a question nobody meant to ask.
+Every later chapter assumes you can name the estimand before touching R. Investigators use this chapter to align with their analyst; analysts use it to push back when a protocol question is vague. If you skip straight to Chapter 4, you will still run code — but you may answer a question nobody meant to ask.
 
 """,
     "02-respiratory-data.md": """## Why this chapter
@@ -23,7 +23,7 @@ The wrong method usually starts with the wrong **outcome type**, not the wrong R
 """,
     "03-descriptive-analysis.md": """## Why this chapter
 
-Reviewers and co-authors meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
+Reviewers and investigators meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
 
 """,
     "04-comparing-groups.md": """## Why this chapter
@@ -131,7 +131,7 @@ Real spreadsheets mix litres and millilitres, duplicate IDs, and “exacerbation
 """,
     "03": """### In practice
 
-Table 1 is often drafted by a junior author while the statistician is busy elsewhere. Agree on variable definitions and missingness rules first; otherwise Table 1 and the model use different populations.
+Table 1 is often drafted by a junior author while the analyst is busy elsewhere. Agree on variable definitions and missingness rules first; otherwise Table 1 and the model use different populations.
 
 """,
     "04": """### In practice

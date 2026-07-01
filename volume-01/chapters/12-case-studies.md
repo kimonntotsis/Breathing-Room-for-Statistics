@@ -405,7 +405,7 @@ Before submitting any respiratory paper, verify:
 
 The **core path (Ch 1–12)** is complete when you can run the CASTOR pipeline yourself, including **Case E** (longitudinal + survival). The **advanced discovery path (Ch 13–17)** extends CASTOR-HD; **Part VIII (Ch 18–21)** completes the single-volume handbook for repeated measures, time-to-event, missing data, and causal framing [@harrell2015rms; @shmueli2010predict].
 
-Adapt CASTOR details to your cohort and have a statistician and protocol lead review the analysis plan before you submit.
+Adapt CASTOR details to your cohort and have an analyst and investigator review the analysis plan before you submit.
 
 ---
 

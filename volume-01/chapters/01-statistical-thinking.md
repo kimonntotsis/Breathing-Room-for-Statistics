@@ -29,7 +29,7 @@ None - start here. **Unfamiliar term?** See [Appendix C](../appendix-c-glossary.
 
 ## Why this chapter
 
-Later chapters presuppose a written estimand. Without it, even a correct *t*-test or Cox model answers the wrong question. This chapter is that gate.
+Later chapters presuppose a written estimand. Without it, even a correct *t*-test or Cox model answers the wrong question. Investigators use this chapter to align with their analyst; analysts use it to push back when a protocol question is vague.
 
 ## Opening question
 
@@ -59,7 +59,7 @@ Write the estimand in one sentence before opening [Appendix B](../appendix-b-qui
 
 **Precise language:** the estimand must be well-defined relative to the target population, intervention/exposure, and outcome measure [@celli2015copdresearch].
 
-**Practice read:** if the statistician analyses post-bronchodilator FEV1 but the trial protocol specifies pre-bronchodilator, the answer may not apply to your decision.
+**Practice read:** if the analyst analyses post-bronchodilator FEV1 but the trial protocol specifies pre-bronchodilator, the answer may not apply to your decision.
 
 | Layer | Question | Example error |
 |-------|----------|---------------|

@@ -7,14 +7,14 @@
 **Repository:** [github.com/kimonntotsis/Breathing-Room-for-Statistics](https://github.com/kimonntotsis/Breathing-Room-for-Statistics)  
 Chapters, appendices, datasets, and R scripts live here. The PDF is distributed separately; links inside the PDF point to these source files on GitHub.
 
-A single-volume handbook for clinicians, analysts, and researchers (Ch 0–21): classical statistics, prediction, dimension reduction and clustering, high-dimensional omics, and longitudinal/causal methods.
+A single-volume handbook for investigators and analysts (Ch 0–21): classical statistics, prediction, dimension reduction and clustering, high-dimensional omics, and longitudinal/causal methods.
 
 ## Handbook navigation
 
 | Start here | File |
 |------------|------|
 | **Preface → Welcome tour** | [Preface](volume-01/chapters/00-preface.md) → [Welcome](volume-01/index.md) |
-| **Path without R** | [Appendix H](volume-01/appendix-h-clinicians-route.md) |
+| **Investigator path (without R)** | [Appendix H](volume-01/appendix-h-clinicians-route.md) |
 | **Full chapter & file index** | [Appendix G](volume-01/appendix-g-handbook-navigation.md) |
 | **How to use the book** | [volume-01/HANDBOOK_GUIDE.md](volume-01/HANDBOOK_GUIDE.md) |
 | **Which test / which model** | [Appendix B](volume-01/appendix-b-quick-reference.md) |
