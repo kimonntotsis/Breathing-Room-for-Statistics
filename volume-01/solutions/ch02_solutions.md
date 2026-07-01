@@ -23,4 +23,4 @@ s <- read_csv("data/spirometry.csv", show_col_types = FALSE)
 ```
 **Outcome type:** continuous (`fev1`). **Unit:** one row per patient. **Pitfall:** analysing without age/sex adjustment when comparing groups; use regression ([Ch 5](../chapters/05-linear-models.md)) or descriptives by group ([Ch 3](../chapters/03-descriptive-analysis.md)).
 
-Route table: [QUICK_REFERENCE.md](../QUICK_REFERENCE.md).
+Route table: [appendix-b-quick-reference.md](../appendix-b-quick-reference.md).

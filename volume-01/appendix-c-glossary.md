@@ -205,4 +205,3 @@ Short entries for terms you may hear in respiratory research even when this hand
 
 ---
 
-*Repository copy:* [GLOSSARY.md](GLOSSARY.md) (points to this appendix).

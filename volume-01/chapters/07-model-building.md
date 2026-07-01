@@ -12,7 +12,7 @@
 | **R scripts** | `R/examples/ch07_model_building.R` |
 | **Exercises** | [ch07 exercises](../exercises/ch07_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE § Step 6](../QUICK_REFERENCE.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction)
+**Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction)
 ## Learning objectives
 
 1. Match model-building strategy to inference vs prediction goal.

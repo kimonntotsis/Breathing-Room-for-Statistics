@@ -236,7 +236,7 @@ draw_method_decision_tree <- function(path) {
     nodes, edges,
     title = "Method decision tree",
     subtitle = "After steps 1–3 of the CASTOR pipeline · pick test or model by outcome type",
-    caption = "QUICK_REFERENCE.md · METHOD_MAP.md · analysis_pipeline.png",
+    caption = "appendix-b-quick-reference.md · METHOD_MAP.md · analysis_pipeline.png",
     path = path, w_in = 7.2, h_in = 12.5
   )
 }
@@ -365,7 +365,7 @@ p_count <- tibble(
 p_panel <- p_cont / p_bin / p_count +
   plot_annotation(
     title = "Method comparison panel",
-    subtitle = "Full tables: volume-01/QUICK_REFERENCE.md"
+    subtitle = "Full tables: volume-01/appendix-b-quick-reference.md"
   )
 
 ggsave(file.path(fig_dir, "method_comparison_panel.png"), p_panel, width = 9, height = 8, dpi = 150)

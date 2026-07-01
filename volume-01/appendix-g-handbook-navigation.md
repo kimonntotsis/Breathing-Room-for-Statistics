@@ -11,10 +11,10 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | I need to… | Open |
 |------------|------|
 | **Install R and run scripts** | [Appendix A](appendix-a-r-setup.md) |
-| **Choose a test or model** | [Appendix B](appendix-b-quick-reference.md), [QUICK_REFERENCE](QUICK_REFERENCE.md) |
+| **Choose a test or model** | [Appendix B](appendix-b-quick-reference.md) |
 | **See all methods by chapter** | [METHOD_MAP](METHOD_MAP.md) |
 | **Find a figure** | [FIGURE_INDEX](FIGURE_INDEX.md) |
-| **Look up a term** | [Appendix C](appendix-c-glossary.md), [GLOSSARY](GLOSSARY.md) (pointer to C) |
+| **Look up a term** | [Appendix C](appendix-c-glossary.md) |
 | **Cite this handbook** | [Preface: Cite this book](chapters/00-preface.md#cite-this-book) |
 | **Cite a guideline or textbook** | [REFERENCES](REFERENCES.md), [references.qmd](references.qmd) |
 | **Follow CASTOR examples** | [RECURRING_COHORT](RECURRING_COHORT.md) |
@@ -44,10 +44,10 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 
 | Goal | Path |
 |------|------|
-| **Read without running R** | [Appendix H](appendix-h-clinicians-route.md) → [QUICK_REFERENCE](QUICK_REFERENCE.md) → chapter technique card |
+| **Read without running R** | [Appendix H](appendix-h-clinicians-route.md) → [Appendix B](appendix-b-quick-reference.md) → chapter technique card |
 | **Run analyses in R** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) → [METHOD_MAP](METHOD_MAP.md) |
 | **Teach or self-study** | [Preface](chapters/00-preface.md) → Core 1–12 + [exercises](exercises/README.md); optional 13–21 blocks |
-| **Write a manuscript** | [QUICK_REFERENCE](QUICK_REFERENCE.md) → [Ch 8 reporting](chapters/08-validation-reporting.md) → [REFERENCES](REFERENCES.md) |
+| **Write a manuscript** | [Appendix B](appendix-b-quick-reference.md) → [Ch 8 reporting](chapters/08-validation-reporting.md) → [REFERENCES](REFERENCES.md) |
 | **Omics / discovery** | [Ch 13](chapters/13-differential-analysis-fdr.md) → [Ch 14 batch](chapters/14-batch-effects.md) → [Ch 17 pipeline](chapters/17-integrated-castor-hd.md) |
 
 ## Eight parts

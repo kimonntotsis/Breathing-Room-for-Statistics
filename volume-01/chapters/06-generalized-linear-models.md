@@ -14,7 +14,7 @@
 | **Figures** | [logistic forest](../figures/ch06_logistic_forest.png), [Poisson RR](../figures/ch06_poisson_rate_ratio.png) |
 | **Exercises** | [Chapter 6 exercises](../exercises/ch06_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE § Step 3-5](../QUICK_REFERENCE.md), [Decision table](#decision-table-which-glm)
+**Also see:** [Appendix B § Step 3-5](../appendix-b-quick-reference.md), [Decision table](#decision-table-which-glm)
 ---
 
 ## Learning objectives
@@ -482,7 +482,7 @@ Non-nested: **AIC/BIC** - predictive/in-sample comparison, not formal test.
 | Count, varying follow-up | Poisson + offset | Overdispersion → NB + offset |
 | Ordinal (mMRC 0-4) | Ordinal logistic (Vol II) | - |
 
-See [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) for the full outcome → model table.
+See [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) for the full outcome → model table.
 
 ![Logistic regression forest plot](../figures/ch06_logistic_forest.png)
 

@@ -35,4 +35,4 @@
 - [ ] Named clinical/biostatistics sign-off (use REVIEWER_RUBRIC)
 - [ ] Deeper optional topics (competing risks, IV, full Bayesian workflows)
 
-**Navigation:** [HANDBOOK_GUIDE](volume-01/HANDBOOK_GUIDE.md) · [QUICK_REFERENCE](volume-01/QUICK_REFERENCE.md) · [METHOD_MAP](volume-01/METHOD_MAP.md)
+**Navigation:** [HANDBOOK_GUIDE](volume-01/HANDBOOK_GUIDE.md) · [Appendix B](volume-01/appendix-b-quick-reference.md) · [METHOD_MAP](volume-01/METHOD_MAP.md)

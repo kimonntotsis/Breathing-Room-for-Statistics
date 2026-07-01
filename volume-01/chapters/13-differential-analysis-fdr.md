@@ -15,7 +15,7 @@
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
 | **Exercises** | [Chapter 13 exercises](../exercises/ch13_exercises.md) |
 
-**Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md), [QUICK_REFERENCE §1b](../QUICK_REFERENCE.md)
+**Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md), [Appendix B §1b](../appendix-b-quick-reference.md)
 ## Learning objectives
 
 1. Understand why “\(p < 0.05\)” becomes meaningless when you test 1000+ features.

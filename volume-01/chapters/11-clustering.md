@@ -13,7 +13,7 @@
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch11_*.png` |
 | **Exercises** | [ch11](../exercises/ch11_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), Endotype ladder §11.6, [REFERENCES](../REFERENCES.md)
+**Also see:** [Appendix B](../appendix-b-quick-reference.md), Endotype ladder §11.6, [REFERENCES](../REFERENCES.md)
 ## Learning objectives
 
 1. Distinguish unsupervised clustering from supervised classification.

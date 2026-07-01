@@ -13,7 +13,7 @@
 | **Figures** | [residual diagnostics](../figures/ch05_residual_diagnostics.png), [adjusted means](../figures/ch05_fev1_by_smoking_adjusted.png) |
 | **Exercises** | [ch05](../exercises/ch05_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE § Step 5](../QUICK_REFERENCE.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#master-decision-table)
+**Also see:** [Appendix B § Step 5](../appendix-b-quick-reference.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#master-decision-table)
 ---
 
 ## Learning objectives

@@ -8,11 +8,11 @@ This volume is designed as a **working handbook**: choose a method, check assump
 
 | If you want to… | Start with | Then |
 |-----------------|------------|------|
-| **Read papers without running R** | [Appendix H](appendix-h-clinicians-route.md) → [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Technique card + Reporting template |
+| **Read papers without running R** | [Appendix H](appendix-h-clinicians-route.md) → [Appendix B](appendix-b-quick-reference.md) | Technique card + Reporting template |
 | **Analyse respiratory data in R** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) | [METHOD_MAP.md](METHOD_MAP.md) |
 | **Pick among similar methods** | [METHOD_MAP.md](METHOD_MAP.md) + [Ch 1 estimands](chapters/01-statistical-thinking.md) | Ch 4–6 technique cards; Ch 8 validation |
 | **Teach or self-study** | [Preface](chapters/00-preface.md) → [Welcome tour](index.md) → Core 1–12 + [exercises](exercises/) |
-| **Write a manuscript** | [QUICK_REFERENCE.md](QUICK_REFERENCE.md) | Reporting template in chapter + [Ch 8](chapters/08-validation-reporting.md) checklists |
+| **Write a manuscript** | [Appendix B](appendix-b-quick-reference.md) | Reporting template in chapter + [Ch 8](chapters/08-validation-reporting.md) checklists |
 
 ---
 
@@ -20,10 +20,10 @@ This volume is designed as a **working handbook**: choose a method, check assump
 
 | Tool | Purpose | When to open |
 |------|---------|--------------|
-| **[QUICK_REFERENCE.md](QUICK_REFERENCE.md)** | One-page tables: outcome → test → model | **Before any analysis** |
+| **[Appendix B](appendix-b-quick-reference.md)** | One-page tables: outcome → test → model | **Before any analysis** |
 | **[METHOD_MAP.md](METHOD_MAP.md)** | Full decision tree + technique inventory | Choosing among similar methods |
 | **[FIGURE_INDEX.md](FIGURE_INDEX.md)** | All plots and decision figures | Writing / teaching / slides |
-| **[GLOSSARY.md](GLOSSARY.md)** | Pointer to full glossary in Appendix C | Unfamiliar jargon |
+| **[Appendix C](appendix-c-glossary.md)** | Terms in plain and precise language | Unfamiliar jargon |
 | **[REFERENCES.md](REFERENCES.md)** | Curated bibliography by topic | Methods sentences, background reading |
 
 ---

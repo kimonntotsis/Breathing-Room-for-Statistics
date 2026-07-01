@@ -11,7 +11,7 @@
 | **Methods** | CI, bootstrap, multiplicity, CONSORT/STROBE/TRIPOD, sensitivity, reproducibility |
 | **Exercises** | [ch08](../exercises/ch08_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), [REFERENCES](../REFERENCES.md), Reporting checklists below
+**Also see:** [Appendix B](../appendix-b-quick-reference.md), [REFERENCES](../REFERENCES.md), Reporting checklists below
 ## Learning objectives
 
 1. Report estimates with uncertainty, not p-values alone.

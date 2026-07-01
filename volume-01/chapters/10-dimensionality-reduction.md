@@ -13,7 +13,7 @@
 | **Figures** | [ch10_scree](../figures/ch10_scree.png), [ch10_pca_biplot](../figures/ch10_pca_biplot.png) |
 | **Exercises** | [ch10](../exercises/ch10_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), Omics reporting: [@mcshane2011biomarker]
+**Also see:** [Appendix B](../appendix-b-quick-reference.md), Omics reporting: [@mcshane2011biomarker]
 ## Learning objectives
 
 1. Use PCA for exploratory summarisation of many correlated markers.

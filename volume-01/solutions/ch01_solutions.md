@@ -16,9 +16,9 @@
 (a) Cross-sectional cohort. (b) RCT. (c) Clustered (hospitals).
 
 ## E1.6
-**QUICK_REFERENCE**: choose test/model by outcome type. **METHOD_MAP**: full inventory. **HANDBOOK_GUIDE**: how to use the book by role.
+**Appendix B**: choose test/model by outcome type. **METHOD_MAP**: full inventory. **HANDBOOK_GUIDE**: how to use the book by role.
 
 ## Applied PICO
 **P:** Adults with COPD. **I:** Device A inhaler. **C:** Device B. **O:** Exacerbation rate per person-year. Route to Poisson GLM with offset ([Ch 6](../chapters/06-generalized-linear-models.md)).
 
-See [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) after writing the estimand.
+See [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) after writing the estimand.

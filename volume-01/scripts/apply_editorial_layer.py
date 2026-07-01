@@ -18,7 +18,7 @@ Every later chapter assumes you can name the estimand before touching R. Trialis
 """,
     "02-respiratory-data.md": """## Why this chapter
 
-The wrong method usually starts with the wrong **outcome type**, not the wrong R function. This chapter is where you classify continuous FEV1, binary exacerbation, counts, survival, and omics before opening a test. Keep [QUICK_REFERENCE](../QUICK_REFERENCE.md) closed until you can complete the checklist at the end of this chapter.
+The wrong method usually starts with the wrong **outcome type**, not the wrong R function. This chapter is where you classify continuous FEV1, binary exacerbation, counts, survival, and omics before opening a test. Keep [Appendix B](../appendix-b-quick-reference.md) closed until you can complete the checklist at the end of this chapter.
 
 """,
     "03-descriptive-analysis.md": """## Why this chapter
@@ -235,7 +235,7 @@ State the estimand, unit of analysis, data file, and one prespecified sensitivit
 BRIDGE = {
     "01": """## Where this chapter leads
 
-**Next:** [Chapter 2](02-respiratory-data.md) classifies CASTOR variables so [QUICK_REFERENCE](../QUICK_REFERENCE.md) routes you to the right method. Keep your estimand sentence from this chapter on hand.
+**Next:** [Chapter 2](02-respiratory-data.md) classifies CASTOR variables so [Appendix B](../appendix-b-quick-reference.md) routes you to the right method. Keep your estimand sentence from this chapter on hand.
 
 """,
     "02": """## Where this chapter leads
@@ -335,7 +335,7 @@ BRIDGE = {
 """,
     "21": """## Where this chapter leads
 
-You have completed the single-volume path (Ch 0–21). Return to [Chapter 12](12-case-studies.md) when writing integrated discussions, or to [QUICK_REFERENCE](../QUICK_REFERENCE.md) for day-to-day method choice.
+You have completed the single-volume path (Ch 0–21). Return to [Chapter 12](12-case-studies.md) when writing integrated discussions, or to [Appendix B](../appendix-b-quick-reference.md) for day-to-day method choice.
 
 """,
 }

@@ -15,7 +15,7 @@
 | **Figures** | [ch04_fev1_by_group](../figures/ch04_fev1_by_group.png), [paired BD](../figures/ch04_paired_bronchodilator.png), [comparison panel](../figures/method_comparison_panel.png) |
 | **Exercises** | [Chapter 4 exercises](../exercises/ch04_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE § Step 2-3](../QUICK_REFERENCE.md), [Master table](#master-decision-table)
+**Also see:** [Appendix B § Step 2-3](../appendix-b-quick-reference.md), [Master table](#master-decision-table)
 ---
 
 ## Learning objectives

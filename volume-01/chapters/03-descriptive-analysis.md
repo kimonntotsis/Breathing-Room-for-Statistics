@@ -12,7 +12,7 @@
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch03_*.png` |
 | **Exercises** | [ch03](../exercises/ch03_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE](../QUICK_REFERENCE.md), Describe before infer: [Ch 4-6](04-comparing-groups.md)
+**Also see:** [Appendix B](../appendix-b-quick-reference.md), Describe before infer: [Ch 4-6](04-comparing-groups.md)
 ## Learning objectives
 
 1. Choose summaries matched to variable type and distribution.

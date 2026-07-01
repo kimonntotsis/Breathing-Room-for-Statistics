@@ -279,7 +279,7 @@ When unmeasured confounding is plausible, E-values quantify how strong an unmeas
 
 ## Where this chapter leads
 
-You have completed the single-volume path (Ch 0–21). Return to [Chapter 12](12-case-studies.md) when writing integrated discussions, or to [QUICK_REFERENCE](../QUICK_REFERENCE.md) for day-to-day method choice.
+You have completed the single-volume path (Ch 0–21). Return to [Chapter 12](12-case-studies.md) when writing integrated discussions, or to [Appendix B](../appendix-b-quick-reference.md) for day-to-day method choice.
 
 ## Further reading
 

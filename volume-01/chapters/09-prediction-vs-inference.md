@@ -14,7 +14,7 @@
 | **Tables** | [ch09_model_comparison](../tables/ch09_model_comparison.csv) |
 | **Exercises** | [ch09](../exercises/ch09_exercises.md) |
 
-**Also see:** [QUICK_REFERENCE § Step 6](../QUICK_REFERENCE.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md), High-dimensional prediction: [Ch 17](17-integrated-castor-hd.md)
+**Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md), High-dimensional prediction: [Ch 17](17-integrated-castor-hd.md)
 
 ---
 

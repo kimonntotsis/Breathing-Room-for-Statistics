@@ -17,7 +17,7 @@ A single-volume handbook for clinicians, analysts, and researchers (Ch 0–21): 
 | **Path without R** | [Appendix H](volume-01/appendix-h-clinicians-route.md) |
 | **Full chapter & file index** | [Appendix G](volume-01/appendix-g-handbook-navigation.md) |
 | **How to use the book** | [volume-01/HANDBOOK_GUIDE.md](volume-01/HANDBOOK_GUIDE.md) |
-| **Which test / which model** | [volume-01/QUICK_REFERENCE.md](volume-01/QUICK_REFERENCE.md), PDF [Appendix B](volume-01/appendix-b-quick-reference.md) |
+| **Which test / which model** | [Appendix B](volume-01/appendix-b-quick-reference.md) |
 | **Install R and run code** | [volume-01/appendix-a-r-setup.md](volume-01/appendix-a-r-setup.md) |
 | **Full method inventory** | [volume-01/METHOD_MAP.md](volume-01/METHOD_MAP.md) |
 | **All figures** | [volume-01/FIGURE_INDEX.md](volume-01/FIGURE_INDEX.md) |

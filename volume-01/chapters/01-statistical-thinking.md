@@ -35,7 +35,7 @@ Later chapters presuppose a written estimand. Without it, even a correct *t*-tes
 
 *"Is FEV1 lower in smokers?"* is not yet an analysis. Three clarifications precede any software: what decision the answer would inform (clinical); the exact contrast and population (statistical estimand); and whether the data are cross-sectional, trial follow-up, or repeated visits with missingness (data). Methods from [Chapter 4](04-comparing-groups.md) onward assume this order [@harrell2015rms].
 
-Write the estimand in one sentence before opening [Appendix B](../appendix-b-quick-reference.md) or [QUICK_REFERENCE.md](../QUICK_REFERENCE.md).
+Write the estimand in one sentence before opening [Appendix B](../appendix-b-quick-reference.md).
 
 ---
 
@@ -101,7 +101,7 @@ The figure below expands the six letters into eight operational steps (descripti
 |---|---|
 | **Mistake** | Open software first; pick "Compare Means" from a menu |
 | **Why it fails** | Method follows question, not the reverse |
-| **Do instead** | Write estimand → check [QUICK_REFERENCE](../QUICK_REFERENCE.md) → then code |
+| **Do instead** | Write estimand → check [Appendix B](../appendix-b-quick-reference.md) → then code |
 
 ---
 
@@ -246,7 +246,7 @@ This handbook provides four linked tools:
 | Tool | Use when |
 |------|----------|
 | [figures/analysis_pipeline.png](../figures/analysis_pipeline.png) | You need the **full process** (question → report) |
-| [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) | You know outcome type; need test/model now |
+| [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) | You know outcome type; need test/model now |
 | [METHOD_MAP.md](../METHOD_MAP.md) | Full inventory and decision tree text |
 | [figures/method_decision_tree.png](../figures/method_decision_tree.png) | Visual routing by outcome type |
 
@@ -310,11 +310,11 @@ Always **describe** ([Ch 3](03-descriptive-analysis.md)) before **compare** ([Ch
 - Align clinical, statistical, and data layers before any test.
 - Write the **estimand** in one sentence; use PICO to frame the question.
 - Design limits causal language; reporting guidelines limit hidden flexibility.
-- Use [QUICK_REFERENCE](../QUICK_REFERENCE.md) after the estimand is clear - not before.
+- Use [Appendix B](../appendix-b-quick-reference.md) after the estimand is clear - not before.
 
 ## Where this chapter leads
 
-**Next:** [Chapter 2](02-respiratory-data.md) classifies CASTOR variables so [QUICK_REFERENCE](../QUICK_REFERENCE.md) routes you to the right method. Keep your estimand sentence from this chapter on hand.
+**Next:** [Chapter 2](02-respiratory-data.md) classifies CASTOR variables so [Appendix B](../appendix-b-quick-reference.md) routes you to the right method. Keep your estimand sentence from this chapter on hand.
 
 ## Further reading
 

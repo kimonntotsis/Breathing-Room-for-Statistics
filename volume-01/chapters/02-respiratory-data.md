@@ -7,11 +7,11 @@
 | | |
 |---|---|
 | **Focus** | Classify variables, outcomes, and study structures |
-| **Key idea** | Outcome type → method (see [QUICK_REFERENCE](../QUICK_REFERENCE.md)) |
+| **Key idea** | Outcome type → method (see [Appendix B](../appendix-b-quick-reference.md)) |
 | **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/*.csv` |
 | **Exercises** | [ch02](../exercises/ch02_exercises.md), [Solutions](../solutions/ch02_solutions.md) |
 
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [QUICK_REFERENCE](../QUICK_REFERENCE.md), [METHOD_MAP](../METHOD_MAP.md), [GLOSSARY](../GLOSSARY.md), [Decision tree](../figures/method_decision_tree.png)
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [Appendix C](../appendix-c-glossary.md), [Decision tree](../figures/method_decision_tree.png)
 ## Learning objectives
 
 1. Distinguish outcome, exposure, and covariate roles.
@@ -29,13 +29,13 @@
 
 ## Why this chapter
 
-The wrong method usually starts with the wrong **outcome type**, not the wrong R function. This chapter is where you classify continuous FEV1, binary exacerbation, counts, survival, and omics before opening a test. Keep [QUICK_REFERENCE](../QUICK_REFERENCE.md) closed until you can complete the checklist at the end of this chapter.
+The wrong method usually starts with the wrong **outcome type**, not the wrong R function. This chapter is where you classify continuous FEV1, binary exacerbation, counts, survival, and omics before opening a test. Keep [Appendix B](../appendix-b-quick-reference.md) closed until you can complete the checklist at the end of this chapter.
 
 ## Opening question
 
 You receive a spreadsheet with patient ID, age, smoking status, therapy, and FEV1. Is that enough to know which methods apply?
 
-**No.** You need the **outcome type**, **study design**, **unit of analysis**, and **research question**. This chapter classifies respiratory data so [QUICK_REFERENCE.md](../QUICK_REFERENCE.md) and Chapters 3-11 can match methods correctly.
+**No.** You need the **outcome type**, **study design**, **unit of analysis**, and **research question**. This chapter classifies respiratory data so [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) and Chapters 3-11 can match methods correctly.
 
 ---
 
@@ -47,7 +47,7 @@ You receive a spreadsheet with patient ID, age, smoking status, therapy, and FEV
 4. **Map design**: cross-sectional, paired, longitudinal, clustered, survival.
 5. **List roles**: exposure, confounders, mediators (do not fish).
 6. **QC**: ranges, IDs, missingness, units.
-7. **Route**: [QUICK_REFERENCE](../QUICK_REFERENCE.md) → chapter.
+7. **Route**: [Appendix B](../appendix-b-quick-reference.md) → chapter.
 
 ---
 
@@ -119,7 +119,7 @@ Choosing the wrong outcome type - treating a **count** as **binary**, or a **bin
 
 Start at the outcome node, not at “we always use a t-test”: the tree routes to the chapter that matches your estimand.
 
-**Handbook link:** full routing tables in [QUICK_REFERENCE.md](../QUICK_REFERENCE.md).
+**Handbook link:** full routing tables in [appendix-b-quick-reference.md](../appendix-b-quick-reference.md).
 
 ### Clinician "so what?"
 
@@ -195,7 +195,7 @@ Before any model:
 
 ## From question to data checklist
 
-Complete **before** opening [QUICK_REFERENCE](../QUICK_REFERENCE.md):
+Complete **before** opening [Appendix B](../appendix-b-quick-reference.md):
 
 | # | Question | If unclear → |
 |---|----------|--------------|
@@ -310,7 +310,7 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 - Classify **outcome type** and **data structure** before choosing any test.
 - Respiratory data require domain definitions (spirometry, exacerbations, omics).
 - Use the pre-analysis checklist (§2.6) every time.
-- Route to methods via [QUICK_REFERENCE.md](../QUICK_REFERENCE.md).
+- Route to methods via [appendix-b-quick-reference.md](../appendix-b-quick-reference.md).
 
 ## Where this chapter leads
 

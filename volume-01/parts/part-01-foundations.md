@@ -5,7 +5,3 @@ Part I supplies the vocabulary the rest of the handbook assumes: the estimand, t
 **Read this if** you are drafting or reviewing an analysis plan, or need a shared language with your statistician before results exist.
 
 **Skip this if** you only need a prespecified comparison table in [Appendix B](../appendix-b-quick-reference.md); still read the CASTOR section in [Chapter 1](../chapters/01-statistical-thinking.md) once.
-
-## CASTOR vignette: the new analyst's first week
-
-Models appear before the protocol is opened: a logistic regression on the wrong endpoint, a week-12 snapshot where the estimand is longitudinal. Part I is the correction: estimand in Ch 1, variable roles in Ch 2, then the method map, not the reverse.

@@ -1,6 +1,6 @@
 # Master method map: Statistical Methods for Respiratory Research
 
-> **Handbook navigation:** [QUICK_REFERENCE.md](QUICK_REFERENCE.md), [HANDBOOK_GUIDE.md](HANDBOOK_GUIDE.md), [Decision tree figure](figures/method_decision_tree.png), [FIGURE_INDEX.md](FIGURE_INDEX.md)
+> **Handbook navigation:** [Appendix B](appendix-b-quick-reference.md), [HANDBOOK_GUIDE.md](HANDBOOK_GUIDE.md), [Decision tree figure](figures/method_decision_tree.png), [FIGURE_INDEX.md](FIGURE_INDEX.md)
 
 Use this before opening any software. Start with the **scientific question**, not the menu of tests.
 

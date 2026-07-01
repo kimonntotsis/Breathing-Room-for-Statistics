@@ -10,10 +10,10 @@
 | **Format** | End-to-end narratives with caveats, wrong analyses, reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Cases** | A: RCT FEV1, B: Exacerbation logistic, C: PCA + clustering, D: CASTOR-HD (Ch 13–17), **E: Longitudinal + survival (Ch 18–19)** |
 | **R** | `R/examples/ch12_case_*.R` |
-| **Navigation** | [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [QUICK_REFERENCE](../QUICK_REFERENCE.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md) |
+| **Navigation** | [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md) |
 
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [QUICK_REFERENCE](../QUICK_REFERENCE.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [QUICK_REFERENCE](../QUICK_REFERENCE.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
 ---
 
 ## Learning objectives
@@ -50,7 +50,7 @@ This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_
 | 1 | Clinical question (one sentence) | 1 |
 | 2 | Estimand + population | 1-2 |
 | 3 | Describe sample (Table 1, plots) | 3 |
-| 4 | Choose method via [QUICK_REFERENCE](../QUICK_REFERENCE.md) | 4-11 |
+| 4 | Choose method via [Appendix B](../appendix-b-quick-reference.md) | 4-11 |
 | 5 | Fit model / test with R script | R/examples |
 | 6 | Diagnostics + sensitivity | 7-8 |
 | 7 | Report estimate + CI + limitations | 8 |
@@ -383,7 +383,7 @@ Before submitting any respiratory paper, verify:
 
 - [ ] Clinical question and estimand stated  
 - [ ] Table 1 and missingness [@schulz2010consort; @vonelm2007strobe]  
-- [ ] Method matches outcome type ([QUICK_REFERENCE](../QUICK_REFERENCE.md))  
+- [ ] Method matches outcome type ([Appendix B](../appendix-b-quick-reference.md))  
 - [ ] Effect size + 95% CI [@harrell2015rms]  
 - [ ] Event count / n  
 - [ ] Sensitivity analysis or limitation noted  
