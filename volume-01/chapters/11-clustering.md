@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) - `data/marker_panel.csv` |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/marker_panel.csv` |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Methods** | k-means, hierarchical, PAM, silhouette, bootstrap stability, validation ladder |
 | **R** | `R/examples/ch11_clustering.R` |
@@ -52,7 +52,7 @@ Clustering finds **structure in measured variables**. It does not, by itself, pr
 | **Typical claim** | “Exploratory subgroups” | “Predictor of outcome” |
 | **Validation** | Replication, stability, external cohort | Cross-validation, calibration, TRIPOD [@moons2015tripod] |
 
-**Clinician read:** clustering is hypothesis-generating. It does not replace a diagnostic label or a validated risk score.
+**Practice read:** clustering is hypothesis-generating. It does not replace a diagnostic label or a validated risk score.
 
 ---
 
@@ -77,7 +77,7 @@ Clustering finds **structure in measured variables**. It does not, by itself, pr
 
 **Precise language:** iterative relocation to a local minimum of within-cluster sum of squares; random starts (`nstart`) reduce bad local optima.
 
-**Clinician read:** useful for generating hypotheses about subgroups - not for changing care until replicated and linked to outcomes or treatment.
+**Practice read:** useful for generating hypotheses about subgroups - not for changing care until replicated and linked to outcomes or treatment.
 
 ### Precise math (optional)
 
@@ -122,7 +122,7 @@ Clusters that align perfectly with processing batch are a QC finding, not an end
 
 **Methods:** Thirty blood markers were *z*-scored. Exploratory k-means clustering (*k* = 2, 25 random starts) was applied. Mean silhouette width and bootstrap item stability (200 resamples) summarised cluster separation. External validation was not performed.
 
-**Results:** Two clusters were identified (mean silhouette = 0.25; mean item stability = 0.XX). Cluster profiles differed on M1-M5 (Figure). Agreement with hierarchical clustering was high in CASTOR (adjusted Rand index ≈ 1.0); agreement with processing batch was low (technical confounding not detected).
+**Results:** Two clusters were identified (mean silhouette = 0.25; mean item stability = 1.00). Cluster profiles differed on M1-M5 (Figure). Agreement with hierarchical clustering was high in CASTOR (adjusted Rand index ≈ 1.0); agreement with processing batch was low (technical confounding not detected).
 
 **Do not say:** “validated endotype”, “definitive subtype”, “precision medicine target” (from one cohort).
 
@@ -133,9 +133,9 @@ Clusters that align perfectly with processing batch are a QC finding, not an end
 source("R/examples/ch11_clustering.R")
 ```
 
-![k-means clusters coloured by true phenotype (teaching only)](../figures/ch11_kmeans_clusters.png)
+!k-means clusters coloured by true phenotype (teaching only) (`ch11_kmeans_clusters.png`)
 
-### Clinician “so what?”
+### Practice check
 
 **Would this change management today?** Almost always **no** - until clusters replicate elsewhere and predict treatment response in a trial. Treat as a research finding for hypothesis generation.
 
@@ -153,7 +153,7 @@ source("R/examples/ch11_clustering.R")
 | **R** | `hclust(dist(X), method = "ward.D2")`; `cutree(hc, k = k)` |
 | **Output** | Dendrogram - cut at height to obtain *k* groups |
 | **When to use** | Heatmaps; exploratory hierarchy; visualising nested structure |
-| **When NOT to use** | Large *n* (memory *O*(*n*²)); when you need soft/probabilistic membership |
+| **When NOT to use** | Large *n* (memory $O(n^2)$); when you need soft/probabilistic membership |
 | **Does NOT prove** | Optimal partition - early merges are irreversible |
 
 ### Dual interpretation
@@ -162,7 +162,7 @@ source("R/examples/ch11_clustering.R")
 
 **Precise language:** greedy agglomerative algorithm on pairwise distances; Ward minimises increase in within-cluster variance at each merge.
 
-**Clinician read:** dendrograms are excellent for exploration and heatmaps; the cut height is subjective - agree *k* or validation criteria in advance.
+**Practice read:** dendrograms are excellent for exploration and heatmaps; the cut height is subjective - agree *k* or validation criteria in advance.
 
 ### Precise math (optional)
 
@@ -190,7 +190,7 @@ Ward linkage merges clusters *A* and *B* that minimise the increase in total wit
 
 **Methods:** Pairwise Euclidean distances on *z*-scored markers; agglomerative clustering with Ward.D2 linkage. Dendrogram cut at *k* = 2 for comparison with k-means.
 
-**Results:** Hierarchical clustering yielded two groups (Figure: dendrogram). Adjusted Rand index vs k-means = 0.XX (partial agreement).
+**Results:** Hierarchical clustering yielded two groups (Figure: dendrogram). Adjusted Rand index vs k-means = 1.0 (high agreement).
 
 ### R lab
 
@@ -201,7 +201,7 @@ plot(hc, labels = FALSE); rect.hclust(hc, k = 2, border = "red")
 # See ch11_clustering.R - ch11_dendrogram.png
 ```
 
-![Ward.D2 dendrogram with k = 2 cut](../figures/ch11_dendrogram.png)
+!Ward.D2 dendrogram with k = 2 cut (`ch11_dendrogram.png`)
 
 The height at which branches merge guides *k*; unstable cuts across bootstrap resamples mean unstable clusters.
 
@@ -227,7 +227,7 @@ The height at which branches merge guides *k*; unstable cuts across bootstrap re
 
 **Precise language:** minimises sum of dissimilarities to nearest medoid (k-medoids); SWAP algorithm refines medoids.
 
-**Clinician read:** medoid patients can be shown as “prototypes” in talks - but they are data points, not clinical archetypes until validated.
+**Practice read:** medoid patients can be shown as “prototypes” in talks - but they are data points, not clinical archetypes until validated.
 
 ### Caveats box
 
@@ -273,7 +273,7 @@ For patient *i*, silhouette uses $(b_i - a_i) / \max(a_i, b_i)$ where $a_i$ is m
 
 **Precise language:** average point-wise silhouette; favours compact, separated clusters.
 
-**Clinician read:** a low silhouette (e.g. < 0.25) means groups overlap - do not force a crisp clinical narrative.
+**Practice read:** a low silhouette (e.g. < 0.25) means groups overlap - do not force a crisp clinical narrative.
 
 ### Caveats box
 
@@ -295,7 +295,7 @@ For patient *i*, silhouette uses $(b_i - a_i) / \max(a_i, b_i)$ where $a_i$ is m
 
 **Results:** Mean silhouette was 0.25 (*k* = 2), 0.15 (*k* = 3), …; *k* = 2 was retained per prespecified plan [or: exploratory comparison only].
 
-![Mean silhouette width by k](../figures/ch11_silhouette_k.png)
+!Mean silhouette width by k (`ch11_silhouette_k.png`)
 
 Silhouette peaks are a heuristic for *k*, not proof of biology: compare with batch-coloured plots.
 
@@ -315,9 +315,13 @@ This is the **governance framework** for respiratory phenotype papers. Most over
 
 **You may not use “endotype” in a title until rung 4-5 is credibly addressed.** Rung 1-2 alone → “exploratory clusters” [@wenzel2012asthma].
 
+### Other respiratory settings
+
+Unsupervised clusters in CASTOR-HD are **not** Th2-high asthma or emphysema-predominant COPD until validated on independent data and linked to outcomes. Asthma endotype labels (eosinophils, FeNO) and COPD imaging phenotypes often need variables outside a blood panel. Stay at “exploratory clusters” until the claim ladder in this chapter reaches replication.
+
 ### Respiratory phenotype vocabulary (clinical names vs clustering)
 
-Clinicians use rich labels; clustering may or may not recover them:
+Trial teams use rich labels; clustering may or may not recover them:
 
 | Clinical construct | Common markers / features | Clustering caveat |
 |--------------------|---------------------------|-------------------|
@@ -397,7 +401,7 @@ Clinicians use rich labels; clustering may or may not recover them:
 
 **Precise language:** reorder rows/columns by hierarchical clustering for visual coherence; structure may reflect technical artefacts.
 
-**Clinician read:** if colours align with processing site rather than diagnosis, stop - fix batch before interpreting biology.
+**Practice read:** if colours align with processing site rather than diagnosis, stop - fix batch before interpreting biology.
 
 ### Caveats box
 
@@ -494,9 +498,9 @@ When k-means is too brittle, escalate deliberately:
 
 **Results paragraph (template):**
 
-> Among 120 participants with 30 blood markers, exploratory k-means (*k* = 2) identified two clusters (mean silhouette 0.25; mean bootstrap item stability 0.XX). Cluster profiles differed on M1-M5 (Figure). Agreement with hierarchical clustering was high (adjusted Rand index ≈ 1.0). Clusters were not aligned with processing site (adjusted Rand index ≈ 0.0); external validation and outcome linkage were not performed.
+> Among 120 participants with 30 blood markers, exploratory k-means (*k* = 2) identified two clusters (mean silhouette 0.25; mean bootstrap item stability 1.00). Cluster profiles differed on M1-M5 (Figure). Agreement with hierarchical clustering was high (adjusted Rand index ≈ 1.0). Clusters were not aligned with processing site (adjusted Rand index ≈ 0.0); external validation and outcome linkage were not performed.
 
-![Mean marker levels by cluster (M1-M5)](../figures/ch11_cluster_profiles.png)
+!Mean marker levels by cluster (M1-M5) (`ch11_cluster_profiles.png`)
 
 Profile plots help name clusters for discussion; they do not validate that clusters generalise to new cohorts.
 

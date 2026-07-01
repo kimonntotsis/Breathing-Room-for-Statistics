@@ -11,7 +11,7 @@
 | **Tools** | PICO, method map, reporting frameworks |
 | **Exercises** | [ch01](../exercises/ch01_exercises.md), [Solutions](../solutions/ch01_solutions.md) |
 
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Pipeline figure](../figures/analysis_pipeline.png), [Appendix B](../appendix-b-quick-reference.md), [Appendix C glossary](../appendix-c-glossary.md), [METHOD_MAP](../METHOD_MAP.md), [Decision tree](../figures/method_decision_tree.png), [REFERENCES](../REFERENCES.md)
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), Pipeline figure (`analysis_pipeline.png`), [Appendix B](../appendix-b-quick-reference.md), [Appendix C glossary](../appendix-c-glossary.md), [METHOD_MAP](../METHOD_MAP.md), Decision tree (`method_decision_tree.png`), [REFERENCES](../REFERENCES.md)
 
 ## Learning objectives
 
@@ -55,11 +55,11 @@ Write the estimand in one sentence before opening [Appendix B](../appendix-b-qui
 
 ### Dual interpretation
 
-**Plain language:** make sure you are answering the question the clinician actually asked.
+**Plain language:** make sure you are answering the question the protocol actually asks.
 
 **Precise language:** the estimand must be well-defined relative to the target population, intervention/exposure, and outcome measure [@celli2015copdresearch].
 
-**Clinician read:** if the statistician analyses post-bronchodilator FEV1 but the trial protocol specifies pre-bronchodilator, the answer may not apply to your decision.
+**Practice read:** if the statistician analyses post-bronchodilator FEV1 but the trial protocol specifies pre-bronchodilator, the answer may not apply to your decision.
 
 | Layer | Question | Example error |
 |-------|----------|---------------|
@@ -87,11 +87,11 @@ Sponsor timelines compress analysis into a test name. The durable step is five m
 
 **R. Report limits.** State explicitly what the analysis did not establish (transport, causality, generalisation, multiplicity).
 
-The figure below expands the six letters into eight operational steps (description, diagnostics, written limits). Step 4 links to the [method decision tree](../figures/method_decision_tree.png) for outcome-specific choice; branches cover prediction, omics, and longitudinal designs.
+The figure below expands the six letters into eight operational steps (description, diagnostics, written limits). Step 4 links to the `method_decision_tree.png` for outcome-specific choice; branches cover prediction, omics, and longitudinal designs.
 
 ### The pipeline in eight steps
 
-![CASTOR analysis pipeline (eight steps) from question to report](../figures/analysis_pipeline.png){width=92%}
+!CASTOR analysis pipeline (eight steps) from question to report (`analysis_pipeline.png`){width=92%}
 
 *Same path for a Welch *t*-test on FEV1, a Cox model for time to exacerbation, or a batch-aware omics screen: question, data, method, estimate, limits.*
 
@@ -141,9 +141,9 @@ Write PICO **before** choosing software. PICO does not specify the test - it spe
 
 | Study | Estimand |
 |-------|----------|
-| COPD RCT | Mean difference in FEV₁ (L) at 12 weeks: intervention − control, ITT population |
-| Observational cohort | Adjusted odds ratio for ≥1 exacerbation comparing current smokers to never-smokers, conditional on age and FEV₁ % predicted |
-| Bronchodilator test | Mean change in FEV₁ (post − pre) on same visit |
+| COPD RCT | Mean difference in FEV1 (L) at 12 weeks: intervention − control, ITT population |
+| Observational cohort | Adjusted odds ratio for ≥1 exacerbation comparing current smokers to never-smokers, conditional on age and FEV1 % predicted |
+| Bronchodilator test | Mean change in FEV1 (post − pre) on same visit |
 | Prediction model (Ch 9) | 12-month exacerbation risk for a patient with specified covariates - **not** the same as an OR estimand |
 
 ### Dual interpretation
@@ -152,7 +152,7 @@ Write PICO **before** choosing software. PICO does not specify the test - it spe
 
 **Precise language:** under the ICH E9(R1) framework, estimands link treatment, population, variable, and intercurrent events - this handbook uses the plain-language version; trials should follow protocol definitions [@schulz2010consort].
 
-**Clinician read:** ask your analyst "what one number answers my question?" If they cannot say, pause.
+**Practice read:** ask your analyst "what one number answers my question?" If they cannot say, pause.
 
 ### Wrong analysis ⚠
 
@@ -189,7 +189,7 @@ Full data-structure detail: [Chapter 2](02-respiratory-data.md).
 
 Underpowered exacerbation studies produce **wide CIs** compatible with both null and clinically important effects [@harrell2015rms]. A non-significant p-value does **not** prove "no effect" - see [Ch 8 §8.7](08-validation-reporting.md).
 
-### Clinician "so what?"
+### Practice check
 
 If a trial has 60 patients and a soft endpoint, a "negative" result may mean **inconclusive**, not **futile**.
 
@@ -199,11 +199,11 @@ If a trial has 60 patients and a soft endpoint, a "negative" result may mean **i
 
 | Bias | Respiratory example | Mitigation |
 |------|---------------------|------------|
-| **Confounding** | Smoking distorts therapy-FEV₁ association | Adjust measured confounders; design (RCT) |
+| **Confounding** | Smoking distorts therapy–FEV1 association | Adjust measured confounders; design (RCT) |
 | **Selection** | Sicker patients drop out of follow-up spirometry | Report attrition; sensitivity analyses |
 | **Information** | Misclassified exacerbations (patient recall) | Standardised definitions [@hurst2010exacerbation] |
 | **Lead-time** | Screening detects mild disease earlier | Survival artefacts - Vol II |
-| **Measurement** | Mixed pre/post bronchodilator FEV₁ | Protocol standardisation [@graham2019spirometry] |
+| **Measurement** | Mixed pre/post bronchodilator FEV1 | Protocol standardisation [@graham2019spirometry] |
 
 ### Wrong analysis ⚠
 
@@ -245,10 +245,10 @@ This handbook provides four linked tools:
 
 | Tool | Use when |
 |------|----------|
-| [figures/analysis_pipeline.png](../figures/analysis_pipeline.png) | You need the **full process** (question → report) |
+| `analysis_pipeline.png` | You need the **full process** (question → report) |
 | [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) | You know outcome type; need test/model now |
 | [METHOD_MAP.md](../METHOD_MAP.md) | Full inventory and decision tree text |
-| [figures/method_decision_tree.png](../figures/method_decision_tree.png) | Visual routing by outcome type |
+| `method_decision_tree.png` | Visual routing by outcome type |
 
 **Workflow:** pipeline steps 1–3 → method decision tree (step 4) → chapter technique card → R script → report + limitations (steps 7–8).
 
@@ -290,15 +290,27 @@ source("R/00_setup.R")
 source("R/generate_data.R")
 library(tidyverse)
 
-spirometry <- read_csv(file.path(paths$data, "spirometry.csv"), show_col_types = FALSE)
+spirometry <- read_csv(
+  file.path(paths$data, "spirometry.csv"),
+  show_col_types = FALSE
+)
 
 # Describe before infer
 spirometry %>%
   group_by(group) %>%
-  summarise(n = n(), mean_fev1 = mean(fev1), sd_fev1 = sd(fev1), .groups = "drop")
+  summarise(
+    n = n(),
+    mean_fev1 = mean(fev1),
+    sd_fev1 = sd(fev1),
+    .groups = "drop"
+  )
 
 # Estimand: mean FEV1 difference by group - method justified in Ch 4
-t.test(fev1 ~ group, data = spirometry, var.equal = FALSE)
+t.test(
+  fev1 ~ group,
+  data = spirometry,
+  var.equal = FALSE
+)
 ```
 
 Always **describe** ([Ch 3](03-descriptive-analysis.md)) before **compare** ([Ch 4](04-comparing-groups.md)).

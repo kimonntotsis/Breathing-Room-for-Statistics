@@ -11,7 +11,7 @@
 | **Question** | When can we interpret an adjusted association as closer to a causal effect? |
 | **Core methods** | confounding diagram, target trial, associational vs causal estimands, introductory IPW |
 | **R** | `R/examples/ch21_causal_inference.R` |
-| **Figures** | [covariate balance](../figures/ch21_covariate_balance.png), [naive vs IPW OR](../figures/ch21_or_naive_vs_ipw.png) |
+| **Figures** | covariate balance (`ch21_covariate_balance.png`), naive vs IPW OR (`ch21_or_naive_vs_ipw.png`) |
 | **Links** | [Ch 6 logistic](06-generalized-linear-models.md), [Ch 12 Case B](12-case-studies.md) |
 | **Exercises** | [Chapter 21 exercises](../exercises/ch21_exercises.md) |
 
@@ -124,7 +124,7 @@ Smoking -----> Exacerbation (12m)
 
 **Precise language:** IPW estimates a marginal or appropriately weighted estimand under a structural model where conditioning on measured confounders blocks back-door paths; residual confounding remains if unmeasured common causes exist.
 
-**Clinician read:** "Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
+**Practice read:** "Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
 
 ### Worked example (CASTOR)
 
@@ -139,7 +139,9 @@ ORs are similar here because the toy weighting scheme is crude. The lesson is **
 
 ```r
 source("R/examples/ch21_causal_inference.R")
-or_tbl <- readr::read_csv("volume-01/tables/ch21_smoking_or_naive_vs_ipw.csv")
+or_tbl <- readr::read_csv(
+  "volume-01/tables/ch21_smoking_or_naive_vs_ipw.csv"
+)
 wt <- readr::read_csv("volume-01/tables/ch21_ipw_weight_summary.csv")
 ```
 
@@ -215,11 +217,11 @@ source("R/00_setup.R")
 source("R/examples/ch21_causal_inference.R")
 ```
 
-![FEV1 balance before vs after IPW (toy)](../figures/ch21_covariate_balance.png)
+!FEV1 balance before vs after IPW (toy) (`ch21_covariate_balance.png`)
 
 Check whether FEV1 % means are closer across smoking groups after weighting. Poor balance after weighting → revisit exposure model or overlap.
 
-![Smoking OR: naive vs IPW](../figures/ch21_or_naive_vs_ipw.png)
+!Smoking OR: naive vs IPW (`ch21_or_naive_vs_ipw.png`)
 
 Material movement between naive and IPW-adjusted ORs is a sensitivity flag, not proof of a causal smoking effect.
 
@@ -232,7 +234,11 @@ Full propensity score workflow: estimate `e(X) = P(smoking=1|X)`, check overlap,
 ```r
 # Illustrative only, not the teaching script:
 # library(WeightIt)
-# w <- weightit(smoking ~ fev1_percent_predicted + age, data = exac, method = "ps")
+# w <- weightit(
+#   smoking ~ fev1_percent_predicted + age,
+#   data = exac,
+#   method = "ps"
+# )
 # summary(w)
 ```
 

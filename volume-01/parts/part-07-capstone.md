@@ -1,10 +1,10 @@
-# Part VII: Integrated CASTOR-HD capstone
+# Part VII: Integrated CASTOR-HD capstone {.unnumbered}
 
 This part ties the high-dimensional biology chapters (13–16) into one end-to-end discovery workflow and introduces supervised \(p \gg n\) prediction with proper resampling.
 
 **Read this if:** you are integrating omics, flow, and screen hits into one manuscript thread after completing Ch 13–16.
 
-**Skip this if:** you have not read [Part VI](parts/part-06-highdim-biology.md) basics. Batch and FDR first.
+**Skip this if:** you have not read [Part VI](part-06-highdim-biology.md) basics. Batch and FDR first.
 
 ## CASTOR vignette: writing the integrated discussion
 

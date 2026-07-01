@@ -75,7 +75,7 @@ In `proteomics_olink_like.csv`, cases and controls appear in **both** batches. B
 | Covariate adjustment | **Defensible** as sensitivity: `y ~ group + batch + plate + covariates` |
 | Interpretation | Group effects are **conditional on measured technical variables**; still need replication |
 
-**Clinician read:** we can attempt to separate biology from lab process because both patient types were measured under multiple conditions.
+**Practice read:** we can attempt to separate biology from lab process because both patient types were measured under multiple conditions.
 
 **Teaching numbers** (`ch14_batch_mini_case_summary.csv`): with batch overlap, **3** proteomics discoveries at FDR *q* < 0.05 **with** batch adjustment and **3 without** in this synthetic run. Stability across adjustment is reassuring; a large flip (e.g. 50 → 0) would signal an unstable conclusion.
 
@@ -90,7 +90,7 @@ Imagine a study where **all controls** were run on Batch1 and **all cases** on B
 | Covariate adjustment | **Not identifiable**: `group` and `batch` are redundant |
 | Interpretation | You cannot claim a group effect "after adjusting for batch" |
 
-**Clinician read:** if disease status and lab day are inseparable, the analysis cannot tell you whether the signal is biology or processing.
+**Practice read:** if disease status and lab day are inseparable, the analysis cannot tell you whether the signal is biology or processing.
 
 ### Decision rule (use before any "ComBat" or covariate adjustment)
 
@@ -125,7 +125,7 @@ Imagine a study where **all controls** were run on Batch1 and **all cases** on B
 
 **Precise language:** we examined whether leading principal components correlate with batch variables; if so, batch explains a meaningful portion of variance.
 
-**Clinician read:** if batch drives the main variation, a "biomarker panel" is probably not real.
+**Practice read:** if batch drives the main variation, a "biomarker panel" is probably not real.
 
 ### Caveats box
 
@@ -191,13 +191,13 @@ This is the most defensible "first-line" strategy for **inference** when batch i
 
 **Precise language:** group effect is conditional on batch/plate indicators in a per-feature linear model; interpretability requires overlap in the group × batch table.
 
-**Clinician read:** this is a reasonable attempt to separate signal from process - but only if both groups were measured across batches.
+**Practice read:** this is a reasonable attempt to separate signal from process - but only if both groups were measured across batches.
 
-![PCA colored by batch (proteomics subset)](../figures/ch14_pca_proteomics_batch.png)
+!PCA colored by batch (proteomics subset) (`ch14_pca_proteomics_batch.png`)
 
 Separation along PC1 by colour (batch) means batch-aware models or redesign, not a raw hit list: come first.
 
-![Valid overlap vs confounded group × batch design](../figures/ch14_group_batch_overlap.png)
+!Valid overlap vs confounded group × batch design (`ch14_group_batch_overlap.png`)
 
 Only the left-hand pattern supports identifiable group effects after batch adjustment; the right-hand pattern is a stop/go gate.
 
@@ -237,7 +237,10 @@ The script produces:
 source("R/00_setup.R")
 library(tidyverse)
 
-prot <- readr::read_csv(file.path(paths$data, "proteomics_olink_like.csv"), show_col_types = FALSE)
+prot <- readr::read_csv(
+  file.path(paths$data, "proteomics_olink_like.csv"),
+  show_col_types = FALSE
+)
 table(prot$group, prot$batch)
 ```
 
@@ -250,11 +253,11 @@ If the *existence* of your main result depends on whether batch is included, say
 - **Group × batch overlap plot:** the fastest confounding check.
 - **PC1 variance explained by batch vs group:** quantifies whether technical structure dominates the leading axis.
 
-![Discoveries with vs without batch adjustment](../figures/ch14_batch_sensitivity_discoveries.png)
+!Discoveries with vs without batch adjustment (`ch14_batch_sensitivity_discoveries.png`)
 
 A large drop in hit count after batch adjustment means many “discoveries” were technical. Report both numbers.
 
-![PC1 variance explained by batch vs group](../figures/ch14_pc1_variance_explained.png)
+!PC1 variance explained by batch vs group (`ch14_pc1_variance_explained.png`)
 
 When batch explains more variance than group on PC1, prioritise batch QC over interpreting loadings.
 

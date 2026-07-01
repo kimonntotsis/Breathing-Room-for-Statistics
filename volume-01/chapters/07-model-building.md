@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Key methods** | Prespecification, LRT, AIC/BIC, LASSO, splines, missing-data overview |
 | **R scripts** | `R/examples/ch07_model_building.R` |
@@ -112,9 +112,17 @@ Stepwise selection after seeing results is still common in submitted manuscripts
 ### CASTOR example
 
 ```r
-reduced <- glm(exacerbation_12m ~ smoking + age, data = exac, family = binomial)
-full <- glm(exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations,
-            data = exac, family = binomial)
+reduced <- glm(
+  exacerbation_12m ~ smoking + age,
+  data = exac,
+  family = binomial
+)
+full <- glm(
+  exacerbation_12m ~ smoking + age +
+    fev1_percent_predicted + prior_exacerbations,
+  data = exac,
+  family = binomial
+)
 anova(reduced, full, test = "Chisq")
 ```
 
@@ -241,7 +249,8 @@ Missing FEV1 often sicker patients - MNAR. Do not silently complete-case without
 **Inference path (prespecified):**
 
 ```
-exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations
+exacerbation_12m ~ smoking + age +
+  fev1_percent_predicted + prior_exacerbations
 ```
 
 **Sensitivity:** add therapy class if not on causal path; Firth if separation.

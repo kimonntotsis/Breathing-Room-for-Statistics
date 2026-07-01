@@ -7,6 +7,14 @@ local function is_external(url)
   return url:match("^https?://") or url:match("^mailto:")
 end
 
+local function is_figure_asset(url)
+  return url:match("%.png$")
+      or url:match("%.pdf$")
+      or url:match("%.jpe?g$")
+      or url:match("%.svg$")
+      or url:match("%.gif$")
+end
+
 local function normalize_repo_path(target)
   local path, fragment = target:match("^([^#]+)#?(.*)$")
   if not path or path == "" then
@@ -39,6 +47,11 @@ function Link(el)
 
   if is_external(target) or target:match("^#") then
     return el
+  end
+
+  -- Figures are embedded in the PDF; file links add no value and confuse readers.
+  if is_figure_asset(target) then
+    return el.content
   end
 
   if target:match("%.md$")

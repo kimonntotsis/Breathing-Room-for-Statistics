@@ -6,11 +6,11 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) - `data/spirometry.csv` |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/spirometry.csv` |
 | **Question type** | How is FEV1 associated with predictors, adjusted for others? |
 | **Key methods** | SLR, MLR, interactions, ANCOVA, diagnostics, VIF |
 | **R scripts** | `R/examples/ch05_linear_models.R` |
-| **Figures** | [residual diagnostics](../figures/ch05_residual_diagnostics.png), [adjusted means](../figures/ch05_fev1_by_smoking_adjusted.png) |
+| **Figures** | residual diagnostics (`ch05_residual_diagnostics.png`), adjusted means (`ch05_fev1_by_smoking_adjusted.png`) |
 | **Exercises** | [ch05](../exercises/ch05_exercises.md) |
 
 **Also see:** [Appendix B § Step 5](../appendix-b-quick-reference.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#master-decision-table)
@@ -77,7 +77,7 @@ A t-test compares smokers vs non-smokers on FEV1 alone. Regression estimates the
 
 **Precise language:** the coefficient for smoking is the expected difference in mean FEV1 between smokers and non-smokers with other covariates held fixed; inference assumes linear model and independent homoscedastic errors.
 
-**Clinician read:** is ~0.4 L a meaningful gap given MCID (~0.1 L in many COPD contexts)? Possibly - but this is observational; unmeasured confounding may remain [@cazzola2008mcid].
+**Practice read:** is ~0.4 L a meaningful gap given MCID (~0.1 L in many COPD contexts)? Possibly - but this is observational; unmeasured confounding may remain [@cazzola2008mcid].
 
 ### Caveats box: MLR for FEV1
 
@@ -124,7 +124,7 @@ A t-test compares smokers vs non-smokers on FEV1 alone. Regression estimates the
 
 > In 400 participants, smoking was associated with 0.39 L lower mean FEV1 (95% CI −0.47 to −0.32; p < 0.001) after adjustment for age, sex, and height. Residuals showed no major departures from linear model assumptions.
 
-**Do not say:** "Smoking reduced FEV1" (causal); "R² = 0.68 proves good model" (R² is not primary evidence).
+**Do not say:** "Smoking reduced FEV1" (causal); "$R^2 = 0.68$ proves good model" ($R^2$ is not primary evidence).
 
 ### R lab
 
@@ -142,7 +142,10 @@ par(mfrow = c(2, 2)); plot(fit); par(mfrow = c(1, 1))
 **Sensitivity:** log(FEV1) if distribution heavily skewed; spline on age:
 
 ```r
-lm(fev1 ~ smoking + splines::ns(age, df = 3) + sex + height_cm, data = spirometry)
+lm(
+  fev1 ~ smoking + splines::ns(age, df = 3) + sex + height_cm,
+  data = spirometry
+)
 ```
 
 ---
@@ -180,7 +183,10 @@ spirometry$sex <- factor(spirometry$sex)  # reference: female
 
 ```r
 fit_int <- lm(fev1 ~ smoking * age + sex + height_cm, data = spirometry)
-anova(lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry), fit_int)
+anova(
+  lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry),
+  fit_int
+)
 ```
 
 ---
@@ -250,7 +256,7 @@ car::vif(fit)  # values > 5–10 warrant attention
 **Three-reader summary:**
 
 - **Statistician:** adjusted mean difference −0.39 L (95% CI −0.47 to −0.32); model assumptions reasonable.  
-- **Clinician:** ~400 mL lower FEV1 in smokers - clinically substantial if causal; observational design limits causal claim.  
+- **Practice:** ~400 mL lower FEV1 in smokers - clinically substantial if causal; observational design limits causal claim.  
 - **General reader:** smokers in this dataset have notably lower lung function even after accounting for age, sex, and height.
 
 ---

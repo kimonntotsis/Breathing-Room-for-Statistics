@@ -10,7 +10,7 @@
 | **Format** | End-to-end narrative + supervised \(p \gg n\) extension |
 | **Pipeline** | DE → batch QC → shortlist → flow summary → screen confirmation → reporting |
 | **R** | `R/examples/ch17_integrated_castor_hd.R`, `R/examples/ch17_elastic_net_proteomics.R` |
-| **Figures** | [volcano](../figures/ch13_volcano_proteomics.png), [batch PCA](../figures/ch14_pca_proteomics_batch.png), [flow props](../figures/ch15_flow_props_by_group.png), [screen threshold](../figures/ch16_threshold_sensitivity.png), [nested CV AUC](../figures/ch17_elastic_net_nested_cv.png) |
+| **Figures** | volcano (`ch13_volcano_proteomics.png`), batch PCA (`ch14_pca_proteomics_batch.png`), flow props (`ch15_flow_props_by_group.png`), screen threshold (`ch16_threshold_sensitivity.png`), nested CV AUC (`ch17_elastic_net_nested_cv.png`) |
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
 | **Exercises** | [Chapter 17 exercises](../exercises/ch17_exercises.md) |
 
@@ -102,11 +102,11 @@ Run differential analysis (Ch 13), then immediately run batch diagnostics (Ch 14
 | **Stopping rule** | If group and batch are perfectly confounded, report non-identifiability |
 | **Does NOT prove** | Clinical utility or causation |
 
-![Proteomics volcano (BH FDR)](../figures/ch13_volcano_proteomics.png)
+!Proteomics volcano (BH FDR) (`ch13_volcano_proteomics.png`)
 
 Volcano plots are **descriptive**; inference lives in the per-feature models and FDR.
 
-![PCA by batch, proteomics subset](../figures/ch14_pca_proteomics_batch.png)
+!PCA by batch, proteomics subset (`ch14_pca_proteomics_batch.png`)
 
 If colour tracks batch more than group, technical structure dominates.
 
@@ -138,7 +138,7 @@ Link immune phenotyping to the discovery story at the **participant** level (Ch 
 | **Wrong unit** | Pooled cells across patients |
 | **Figure role** | Proportions by group; compositional awareness |
 
-![Monocyte proportions by group](../figures/ch15_flow_props_by_group.png)
+!Monocyte proportions by group (`ch15_flow_props_by_group.png`)
 
 ---
 
@@ -155,7 +155,7 @@ Translate screen hits into confirmation PPV and stability tiers (Ch 16).
 | **Tiers** | Ranking stability across replicates |
 | **Does NOT prove** | In vivo neutralisation or treatment effect |
 
-![Threshold sensitivity: hits and PPV](../figures/ch16_threshold_sensitivity.png)
+!Threshold sensitivity: hits and PPV (`ch16_threshold_sensitivity.png`)
 
 Prespecify thresholds. Post-hoc threshold tuning inflates apparent PPV.
 
@@ -170,7 +170,7 @@ Use [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md):
 - **Template C** for flow proportions
 - **Template D** for antibody discovery
 
-**Clinician read:** one paragraph per modality; separate “discovery” from “confirmed binding.”
+**Practice read:** one paragraph per modality; separate “discovery” from “confirmed binding.”
 
 ### Example integrated Results paragraph (skeleton)
 
@@ -218,7 +218,7 @@ Integrated omics slides often show only the volcano. Decision-makers need the st
 source("R/examples/ch17_elastic_net_proteomics.R")
 ```
 
-![Nested CV AUC, elastic net on proteomics](../figures/ch17_elastic_net_nested_cv.png)
+!Nested CV AUC, elastic net on proteomics (`ch17_elastic_net_nested_cv.png`)
 
 Outer-fold AUC with variability across folds is the honest performance summary; training AUC is not shown here on purpose.
 

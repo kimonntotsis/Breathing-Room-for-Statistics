@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Methods** | CI, bootstrap, multiplicity, CONSORT/STROBE/TRIPOD, sensitivity, reproducibility |
 | **Exercises** | [ch08](../exercises/ch08_exercises.md) |
@@ -56,7 +56,7 @@ This chapter is about **how to report evidence** - intervals, validation, transp
 
 **Precise language:** 95% CI procedure; under repeated sampling, ~95% of such intervals cover the true estimand.
 
-**Clinician read:** is the entire CI below MCID? above MCID? straddling it? That drives interpretation more than p = 0.20 [@cazzola2008mcid].
+**Practice read:** is the entire CI below MCID? above MCID? straddling it? That drives interpretation more than p = 0.20 [@cazzola2008mcid].
 
 ### Caveats box
 
@@ -248,7 +248,7 @@ Run 12 models; report only the one with p < 0.05.
 **Interpretation:**
 
 - **Statistician:** compatible with null and with effects up to ~0.21 L.  
-- **Clinician:** if MCID = 0.10 L, CI includes values above MCID - inconclusive, not negative [@cazzola2008mcid].  
+- **Practice:** if MCID = 0.10 L, CI includes values above MCID - inconclusive, not negative [@cazzola2008mcid].  
 - **Wrong:** "trial failed" / "no benefit."
 
 **Sensitivity:** permutation p; bootstrap CI; ANCOVA on `spirometry_trial.csv`.

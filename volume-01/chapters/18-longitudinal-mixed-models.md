@@ -11,7 +11,7 @@
 | **Question** | How does FEV1 change over time, and does treatment modify that trajectory? |
 | **Core methods** | spaghetti plots, linear mixed models (`lmer`), random intercepts, GEE pointer |
 | **R** | `R/examples/ch18_longitudinal_mixed_models.R` |
-| **Figures** | [spaghetti](../figures/ch18_spaghetti_fev1.png), [fitted trajectories](../figures/ch18_mixed_model_fitted.png) |
+| **Figures** | spaghetti (`ch18_spaghetti_fev1.png`), fitted trajectories (`ch18_mixed_model_fitted.png`) |
 | **Exercises** | [Chapter 18 exercises](../exercises/ch18_exercises.md) |
 
 **Also see:** [Ch 4](04-comparing-groups.md) (independence), [Ch 20](20-missing-data.md) (dropout), [Ch 12 Case E](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation)
@@ -106,7 +106,7 @@ Every repeated-measures analysis should follow these steps:
 
 **Precise language:** we model FEV1 as a linear function of time and treatment with patient-specific random intercepts; the `weeks:group` interaction estimates differential mean change per week between arms, conditional on covariates.
 
-**Clinician read:** is the modelled gap at 52 weeks clinically meaningful (MCID ~0.1 L in many COPD contexts)? Trajectory matters more than a single visit snapshot [@cazzola2008mcid].
+**Practice read:** is the modelled gap at 52 weeks clinically meaningful (MCID ~0.1 L in many COPD contexts)? Trajectory matters more than a single visit snapshot [@cazzola2008mcid].
 
 ### Worked example (CASTOR extension)
 
@@ -222,11 +222,11 @@ source("R/00_setup.R")
 source("R/examples/ch18_longitudinal_mixed_models.R")
 ```
 
-![Spaghetti plot: FEV1 trajectories by participant](../figures/ch18_spaghetti_fev1.png)
+!Spaghetti plot: FEV1 trajectories by participant (`ch18_spaghetti_fev1.png`)
 
 Each line is one participant. Use this plot to spot outliers, dropout, and whether a linear trend is plausible before trusting the mixed model.
 
-![Mixed model fitted population trajectories](../figures/ch18_mixed_model_fitted.png)
+!Mixed model fitted population trajectories (`ch18_mixed_model_fitted.png`)
 
 Fitted lines are **population-level** predictions (random effects set to zero), not individual patient forecasts.
 
@@ -235,7 +235,9 @@ Fitted lines are **population-level** predictions (random effects set to zero), 
 ### Mini-lab: read the interaction
 
 ```r
-coefs <- readr::read_csv("volume-01/tables/ch18_mixed_model_coefficients.csv")
+coefs <- readr::read_csv(
+  "volume-01/tables/ch18_mixed_model_coefficients.csv"
+)
 coefs %>% filter(term == "weeks:groupintervention")
 ```
 
@@ -244,7 +246,9 @@ Ask: if the interaction is positive, does intervention **slow** or **accelerate*
 ### Mini-lab: week-52 shortcut vs mixed model
 
 ```r
-sens <- readr::read_csv("volume-01/tables/ch18_sensitivity_mixed_vs_fixed.csv")
+sens <- readr::read_csv(
+  "volume-01/tables/ch18_sensitivity_mixed_vs_fixed.csv"
+)
 sens
 ```
 
@@ -270,7 +274,7 @@ Compare `std.error` for `groupintervention` across models. Smaller SE in the cro
 
 **Precise language:** mixed models are **conditional** (subject-specific); GEE coefficients are **marginal** (population-averaged); they can differ when the link is non-identity [@harrell2015rms].
 
-**Clinician read:** for a parallel-group trial with linear FEV1 trends, both usually give **similar direction**; prespecify one primary approach in the SAP.
+**Practice read:** for a parallel-group trial with linear FEV1 trends, both usually give **similar direction**; prespecify one primary approach in the SAP.
 
 #### Wrong analysis ⚠
 

@@ -6,11 +6,11 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md), `data/exacerbation.csv` |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md), `data/exacerbation.csv` |
 | **Question type** | What is this patient's 12-month exacerbation risk? |
 | **Methods** | Logistic, LASSO, rpart, RF, gradient boosting (optional), AUC, Brier, calibration |
 | **R** | `R/examples/ch09_prediction.R` |
-| **Figures** | [ch09_calibration_logistic](../figures/ch09_calibration_logistic.png) |
+| **Figures** | ch09_calibration_logistic (`ch09_calibration_logistic.png`) |
 | **Tables** | [ch09_model_comparison](../tables/ch09_model_comparison.csv) |
 | **Exercises** | [ch09](../exercises/ch09_exercises.md) |
 
@@ -74,7 +74,7 @@ Use the same CASTOR habit as [Chapter 1](01-statistical-thinking.md), adapted fo
 
 For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV as in [Chapter 17](17-integrated-castor-hd.md); not a single 70/30 split on four clinical variables.
 
-![CASTOR analysis pipeline](../figures/analysis_pipeline.png){width=75%}
+!CASTOR analysis pipeline (`analysis_pipeline.png`){width=75%}
 
 *Prediction sits at steps 4–6: method choice, fit with validation discipline, report what you did not prove.*
 
@@ -103,7 +103,7 @@ For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV a
 | **Small event count** | CASTOR has ~18 events / 350; models overfit easily |
 | **EPV rule** | Aim ≥10–15 events per predictor; be skeptical below [@harrell2015rms] |
 | **Leakage** | Post-exacerbation labs must not enter baseline model |
-| **AUC alone** | High AUC with poor calibration misleads clinicians [@steyerberg2019clinical] |
+| **AUC alone** | High AUC with poor calibration misleads decision-makers [@steyerberg2019clinical] |
 | **Prevalence shift** | PPV/NPV change when applied to new populations |
 | **Transportability** | Model trained in one clinic may fail in another |
 
@@ -122,7 +122,7 @@ AUC of 0.85 on four events in the test set is not deployable. Report calibration
 
 ---
 
-## Questions to ask before trusting a model (clinician checklist)
+## Questions to ask before trusting a model
 
 1. **How many events in the test set?** (Not just total *n*.)
 2. **Was calibration shown**, not only AUC?
@@ -145,7 +145,7 @@ State these in every prediction Discussion:
 | **Validated clinical tool** | Internal test-set performance ≠ external validation [@moons2015tripod] |
 | **Superior biology** from RF importance | Importance reflects prediction, not mechanism |
 | **Safe deployment** | Threshold, calibration, and net benefit not established |
-| **Better than clinicians** | No comparator or decision-curve analysis |
+| **Better than expert judgment** | No comparator or decision-curve analysis |
 
 ---
 
@@ -199,7 +199,7 @@ source("R/examples/ch09_prediction.R")
 
 **Precise language:** penalized likelihood with L1 constraint; λ chosen by cross-validation minimizes prediction error on train [@james2023ISL].
 
-**Clinician read:** if LASSO drops all predictors, the data may be too sparse for variable selection; trust the simpler logistic model.
+**Practice read:** if LASSO drops all predictors, the data may be too sparse for variable selection; trust the simpler logistic model.
 
 #### Wrong analysis ⚠
 
@@ -226,7 +226,7 @@ source("R/examples/ch09_prediction.R")
 
 **Plain language:** a flowchart of if–then rules (e.g. prior exacerbations ≥ 2 → higher risk).
 
-**Clinician read:** one split often dominates; verify stability with bootstrap or larger *n*.
+**Practice read:** one split often dominates; verify stability with bootstrap or larger *n*.
 
 #### Caveats
 
@@ -250,7 +250,7 @@ High variance with sparse events; deep trees overfit. Prefer shallow trees (`cp`
 
 **Plain language:** many trees vote on risk; often good ranking, opaque mechanism.
 
-**Clinician read:** ask for calibration, not "the AI found smoking matters" from importance plots.
+**Practice read:** ask for calibration, not "the AI found smoking matters" from importance plots.
 
 #### Wrong analysis ⚠
 
@@ -299,7 +299,7 @@ High variance with sparse events; deep trees overfit. Prefer shallow trees (`cp`
 | **R** | `pROC::roc(y, pred); pROC::auc(roc)` |
 | **Does NOT tell you** | Absolute risk accuracy (need calibration) |
 
-**Clinician read:** good for triage ordering; not enough to trust the percentage shown to patients.
+**Practice read:** good for triage ordering; not enough to trust the percentage shown to patients.
 
 **Sparse events:** bootstrap AUC CIs may be wide or unstable (see `ch09_model_comparison.csv` when test events ≈ 4).
 
@@ -313,8 +313,8 @@ High variance with sparse events; deep trees overfit. Prefer shallow trees (`cp`
 |---|---|
 | **Answers** | Do predicted probabilities match observed event rates? |
 | **Method** | Risk bins (3–5 when events sparse); mean predicted vs observed |
-| **Figure** | [ch09_calibration_logistic.png](../figures/ch09_calibration_logistic.png) |
-| **Metric** | Brier = mean((y − p)²); lower is better [@steyerberg2019clinical] |
+| **Figure** | `ch09_calibration_logistic.png` |
+| **Metric** | Brier = mean($(y - \hat{p})^2$); lower is better [@steyerberg2019clinical] |
 
 ---
 
@@ -355,7 +355,7 @@ Run `source("R/examples/ch09_prediction.R")` and read [ch09_model_comparison.csv
 
 **Interpretation:** with so few events, **penalized and tree models may collapse to constant predictions** (AUC = 0.5). Logistic remains the defensible primary model; forest/boost may rank better but with **very wide** bootstrap intervals. This illustrates Harrell's EPV warning better than a synthetic "RF wins" story.
 
-**Calibration:** logistic decile plot ([figure](../figures/ch09_calibration_logistic.png)); inspect highest-risk bin event counts.
+**Calibration:** logistic decile plot (figure (`ch09_calibration_logistic.png`)); inspect highest-risk bin event counts.
 
 **Results paragraph (template filled):**
 

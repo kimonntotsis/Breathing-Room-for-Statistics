@@ -82,6 +82,7 @@ format:
   pdf:
     filters:
       - filters/remove_hr.lua
+      - filters/widen_label_tables.lua
       - filters/github_pdf_links.lua
     documentclass: scrreprt
     papersize: a4

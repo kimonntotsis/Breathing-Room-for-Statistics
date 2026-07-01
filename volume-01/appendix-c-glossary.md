@@ -14,18 +14,18 @@ Plain-language and precise definitions for terms used across Chapters 0–21. Fo
 
 ---
 
-## For clinicians: how to use this glossary
+## For readers without R: how to use this glossary
 
 When you see an unfamiliar word:
 
-1. **Read the middle column first** (“Plain language”). That is the clinician-facing meaning.
+1. **Read the middle column first** (“Plain language”). That is the everyday meaning used in the chapters.
 2. **Use the third column only if you are writing Methods** or reviewing analysis with a statistician.
 3. **Ask three questions** (same habit as Chapter 1):
    - What number are they actually estimating?
    - Who is in the population?
    - What would I **not** conclude from this term alone?
 
-Every major technique in the main chapters also has a **Clinician read** line in the technique card. Use this appendix when the word appears outside that chapter: in someone else’s abstract, a steering-committee deck, or an omics email.
+Every major technique in the main chapters also has a **Practice read** line in the technique card. Use this appendix when the word appears outside that chapter: in someone else’s abstract, a steering-committee deck, or an omics email.
 
 **If you are not running R:** skip [Appendix A](appendix-a-r-setup.md); you can still use this glossary and the statistical content in Chapters 1–21.
 
@@ -106,7 +106,7 @@ Short entries for terms you may hear in respiratory research even when this hand
 | **CONSORT** | Reporting checklist for RCTs | Consolidated Standards of Reporting Trials [@schulz2010consort] |
 | **STROBE** | Reporting checklist for observational studies | Strengthening the Reporting of Observational Studies [@vonelm2007strobe] |
 | **TRIPOD** | Reporting checklist for prediction models | Transparent Reporting of multivariable Prediction models [@moons2015tripod] |
-| **MCID** | Smallest change patients/clinicians care about | Minimum clinically important difference |
+| **MCID** | Smallest change patients and trial teams care about | Minimum clinically important difference |
 
 ---
 

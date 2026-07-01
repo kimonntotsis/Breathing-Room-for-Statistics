@@ -6,7 +6,7 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) - `data/spirometry.csv` |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/spirometry.csv` |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **R** | `R/examples/ch03_descriptive.R` |
 | **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch03_*.png` |
@@ -29,7 +29,7 @@ Chapters 1-2.
 
 ## Why this chapter
 
-Reviewers and clinicians meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
+Reviewers and co-authors meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
 
 ## Opening question (CASTOR)
 
@@ -70,7 +70,7 @@ Description is not optional preamble. It is how you catch errors and justify the
 
 **Precise language:** descriptive frequencies and summaries; between-group p-values are optional and not substitute for prespecified primary analysis.
 
-**Clinician read:** are groups similar enough that unadjusted comparison is plausible? Large imbalances → need adjustment (Ch 5-6).
+**Practice read:** are groups similar enough that unadjusted comparison is plausible? Large imbalances → need adjustment (Ch 5-6).
 
 ### Caveats box
 
@@ -154,7 +154,7 @@ Report mean (SD) for ICU length-of-stay with extreme outliers → use median [IQ
 
 **Plain language:** where do most patients' FEV1 values fall?
 
-**Clinician read:** bimodal or floor effects (severe obstruction cluster) suggest mean alone may mislead.
+**Practice read:** bimodal or floor effects (severe obstruction cluster) suggest mean alone may mislead.
 
 ### Caveats
 

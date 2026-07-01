@@ -6,6 +6,10 @@ number-sections: false
 
 Respiratory research rests on incompatible data shapes in the same programme: spirometry and symptom scores, exacerbation counts, imaging, biomarker panels, trial endpoints, ICU trajectories, and omics tables with more variables than patients. Textbooks and courses teach methods in isolation. Manuscripts still fail for recurring reasons: the wrong estimand, the wrong outcome family, missingness handled as an afterthought, discovery claims without multiplicity or batch discipline, prediction metrics without calibration. This handbook connects question, method, reporting, and reproducible R on one synthetic cohort so each step is visible in code you can rerun.
 
+## Who this book is for
+
+Investigators, trialists, respiratory fellows, biostatisticians, and co-authors who need to match a research question to a defensible analysis. You do not need to run R to use the estimand sections, technique cards, and reporting templates. **CASTOR** is a single **COPD-oriented** synthetic cohort (spirometry, exacerbations, smoking, therapy) so examples stay comparable from Table 1 through survival and omics; the same methods apply to asthma trials, ICU studies, and programme research when the outcome type and design match.
+
 ## Cite this book {#cite-this-book}
 
 **APA (7th ed.)**
@@ -43,19 +47,19 @@ We use the tidyverse for readability. Where base R is clearer, we use base R.
 
 ## Acknowledgements
 
-Draft reviewers from biostatistics and respiratory medicine will be named in a later edition.
+Contributors who reviewed draft chapters using [REVIEWER_RUBRIC.md](../REVIEWER_RUBRIC.md) will be named in a later edition. If you use this handbook in teaching or trial work and spot a clinical or statistical error, open an issue or pull request on the [GitHub repository](https://github.com/kimonntotsis/Breathing-Room-for-Statistics).
 
 ## How to use this handbook
 
-Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix H](../appendix-h-clinicians-route.md) gives a path without R. The [Welcome](../index.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, interpretation, caveats, common errors, reporting template, code.
+Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix H](../appendix-h-clinicians-route.md) gives a path without R. The [Welcome](../index.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
 
-**Signposts in the chapters:** **Why this chapter** (the mistake it prevents), **In practice** (sponsor or manuscript reality), **Before you open R** (estimand and one sensitivity), **Where this chapter leads**, and **Alternatives & extensions** when assumptions fail. The alternatives boxes are for defensible choice, not post hoc shopping.
+**Signposts in the chapters:** **Why this chapter** (the mistake it prevents), **In practice** (sponsor or manuscript reality), **Before you open R** (estimand and one sensitivity), **Where this chapter leads**, **Practice read** (what would change the decision), and **Alternatives & extensions** when assumptions fail. The alternatives boxes are for defensible choice, not post hoc shopping.
 
 ## What CASTOR means {#what-castor-means}
 
 **CASTOR** is the analysis sequence used throughout the book: **C**linical question, **A**ssess design and data, **S**elect method, **T**est and fit, **O**utput estimand, **R**eport limits. The letters are unpacked in [Chapter 1](01-statistical-thinking.md) with an eight-step pipeline figure and a method decision tree at the selection step.
 
-**CASTOR** also names the synthetic respiratory cohort reused from descriptive tables through omics capstones; **CASTOR-HD** extends the same patients to high-dimensional biology. The workflow is fixed; only the data file changes.
+**CASTOR** also names a **synthetic COPD-oriented cohort** (spirometry, exacerbations, smoking, therapy) reused from descriptive tables through omics capstones; **CASTOR-HD** extends the same patients to high-dimensional biology. The workflow is fixed; only the data file changes.
 
 ## About the data
 

@@ -18,6 +18,7 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **Cite this handbook** | [Preface: Cite this book](chapters/00-preface.md#cite-this-book) |
 | **Cite a guideline or textbook** | [REFERENCES](REFERENCES.md), [references.qmd](references.qmd) |
 | **Follow CASTOR examples** | [RECURRING_COHORT](RECURRING_COHORT.md) |
+| **Follow a narrative path (Cases A–E)** | [Welcome: reading paths](index.md), [Ch 12 capstone](chapters/12-case-studies.md) |
 | **Practice** | [Appendix F](appendix-f-exercises.md), [exercises/](exercises/), [solutions/](solutions/) |
 | **How to use the book** | [HANDBOOK_GUIDE](HANDBOOK_GUIDE.md) |
 
@@ -41,6 +42,16 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **Core path** | 1–12 | Trials, regression, prediction, CASTOR capstone (Cases A–E) |
 | **Advanced discovery** | 13–17 | Omics DE/FDR, batch, flow, antibody screens, integrated CASTOR-HD |
 | **Longitudinal & causal** | 18–21 | Repeated FEV1, time-to-event, missing data, IPW/DAGs |
+
+### Narrative spine (Chapter 12)
+
+Technique chapters are meant to be opened by outcome. If you want one continuous read on the same COPD-oriented CASTOR cohort, use these routes and finish in [Chapter 12](chapters/12-case-studies.md):
+
+| Role | Read first | Then | Capstone case |
+|------|------------|------|---------------|
+| **Trialist / protocol** | [Ch 1–2](chapters/01-statistical-thinking.md), [Ch 3–4](chapters/03-descriptive-analysis.md), [Ch 8](chapters/08-validation-reporting.md) | [Appendix B](appendix-b-quick-reference.md) for prespecification | [Case A](chapters/12-case-studies.md); [Case E](chapters/12-case-studies.md) if visits or survival are in the SAP |
+| **Analyst (R)** | [Ch 1–3](chapters/01-statistical-thinking.md), [Appendix B](appendix-b-quick-reference.md), [Ch 4–7](chapters/04-comparing-groups.md) as needed | [Ch 8–9](chapters/08-validation-reporting.md) if reporting or prediction | [Cases A & B](chapters/12-case-studies.md); [Ch 18–19](chapters/18-longitudinal-mixed-models.md) + Case E for trajectories |
+| **Omics / discovery** | [Ch 1–2](chapters/01-statistical-thinking.md), [Ch 10–11](chapters/10-dimensionality-reduction.md), [Ch 13–16](chapters/13-differential-analysis-fdr.md) | [Ch 17](chapters/17-integrated-castor-hd.md) integrated pipeline | [Cases C & D](chapters/12-case-studies.md) |
 
 | Goal | Path |
 |------|------|
@@ -192,7 +203,8 @@ See [RECURRING_COHORT](RECURRING_COHORT.md) for cohort description text and scie
 Full install guide: **[Appendix A](appendix-a-r-setup.md)**. Minimal first session:
 
 ```r
-setwd("/path/to/Breathing-Room-for-Statistics")  # or open as Posit project
+setwd("/path/to/Breathing-Room-for-Statistics")
+# or open as Posit project
 source("R/00_setup.R")
 source("R/generate_data.R")
 source("R/examples/generate_figures.R")  # all handbook figures

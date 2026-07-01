@@ -12,7 +12,7 @@ Ch 10 and Ch 11 include “alternatives menus” so you can choose methods based
 
 **Read this if:** you have a marker panel or unsupervised clustering result and need stability, batch checks, and honest “hypothesis-generating” language.
 
-**Skip this if:** your paper is a conventional RCT with FEV1 primary endpoint (→ [Parts II–IV](parts/part-02-describe-compare.md)); return here when biomarker subgroups appear.
+**Skip this if:** your paper is a conventional RCT with FEV1 primary endpoint (→ [Parts II–IV](part-02-describe-compare.md)); return here when biomarker subgroups appear.
 
 ## CASTOR vignette: the marker panel meeting
 

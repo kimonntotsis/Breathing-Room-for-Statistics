@@ -6,14 +6,14 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) - full workflow |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - full workflow |
 | **Format** | End-to-end narratives with caveats, wrong analyses, reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Cases** | A: RCT FEV1, B: Exacerbation logistic, C: PCA + clustering, D: CASTOR-HD (Ch 13–17), **E: Longitudinal + survival (Ch 18–19)** |
 | **R** | `R/examples/ch12_case_*.R` |
 | **Navigation** | [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md) |
 
 **Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
+
 ---
 
 ## Learning objectives
@@ -31,19 +31,19 @@ Chapters 1-11.
 
 ## Why this chapter
 
-Technique cards teach atoms; case studies teach **workflow**. You will walk four complete CASTOR narratives (trial, cohort, discovery, omics pipeline, longitudinal/survival) and practice saying what each analysis does **not** prove. This is the chapter to read before your first manuscript discussion section.
+Technique cards teach atoms; case studies teach **workflow**. You will walk **five** complete CASTOR narratives (Cases A–E: trial FEV1, cohort logistic, marker clustering, CASTOR-HD bridge, longitudinal + survival) and practice saying what each analysis does **not** prove. This is the chapter to read before your first manuscript discussion section.
 
 ## Opening question
 
 *How do the CASTOR analyses from Chapters 3–11 fit together in **five publishable-style case reports** (Cases A–E)?*
 
-This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), five complete narratives (core trial/cohort/discovery through longitudinal/survival), and explicit limits on what each analysis proves.
+This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), five complete narratives (Cases A–E), and explicit limits on what each analysis proves. Role-based reading paths: [Welcome](../index.md) and [Appendix G](../appendix-g-handbook-navigation.md).
 
 ---
 
 ## Master workflow (every CASTOR analysis)
 
-![CASTOR analysis pipeline](../figures/analysis_pipeline.png){width=85%}
+!CASTOR analysis pipeline (`analysis_pipeline.png`){width=85%}
 
 | Step | Action | Chapter |
 |------|--------|---------|
@@ -106,7 +106,7 @@ source("R/examples/ch12_case_a_trial.R")
 | Reader | Takeaway |
 |--------|----------|
 | **Statistician** | CI includes null; non-significant p does not prove equivalence [@harrell2015rms] |
-| **Clinician** | Cannot claim benefit or futility without MCID/power context |
+| **Practice** | Cannot claim benefit or futility without MCID/power context |
 | **General** | Trial did not show clear average improvement; more data or larger effect needed |
 
 ### Caveats
@@ -164,7 +164,7 @@ source("R/examples/ch12_case_b_exacerbation.R")
 | Reader | Takeaway |
 |--------|----------|
 | **Statistician** | EPV low; wide CIs; associative not causal [@vonelm2007strobe] |
-| **Clinician** | Prior history matters most; smoking signal uncertain here |
+| **Practice** | Prior history matters most; smoking signal uncertain here |
 | **General** | Past flare-ups predict future ones; smoking link not confirmed in this sample |
 
 ### Caveats
@@ -224,7 +224,7 @@ source("R/examples/ch12_case_c_phenotypes.R")
 | Reader | Takeaway |
 |--------|----------|
 | **Statistician** | Hypothesis-generating; multiplicity uncontrolled |
-| **Clinician** | Do not change care based on these clusters |
+| **Practice** | Do not change care based on these clusters |
 | **General** | Possible groups in data - needs replication |
 
 ### Caveats
@@ -284,7 +284,7 @@ source("R/examples/ch17_integrated_castor_hd.R")
 | Reader | Takeaway |
 |--------|----------|
 | **Statistician** | Multiplicity controlled per modality; batch and stability audited |
-| **Clinician** | No diagnostic or treatment claims from this pipeline alone |
+| **Practice** | No diagnostic or treatment claims from this pipeline alone |
 | **General** | Hypothesis list for targeted follow-up, not a validated signature |
 
 ### Wrong analysis ⚠ (Case D)
@@ -345,7 +345,7 @@ source("R/examples/ch12_case_e_longitudinal_survival.R")
 | Reader | Takeaway |
 |--------|----------|
 | **Statistician** | Correct units: patients for trajectories; events + censoring for survival |
-| **Clinician** | Trajectory answers “lung function over time”; survival answers “how soon exacerbation” |
+| **Practice** | Trajectory answers “lung function over time”; survival answers “how soon exacerbation” |
 | **General** | Two related but distinct questions: do not merge into one headline |
 
 ### Wrong analysis ⚠ (Case E)
@@ -405,7 +405,7 @@ Before submitting any respiratory paper, verify:
 
 The **core path (Ch 1–12)** is complete when you can run the CASTOR pipeline yourself, including **Case E** (longitudinal + survival). The **advanced discovery path (Ch 13–17)** extends CASTOR-HD; **Part VIII (Ch 18–21)** completes the single-volume handbook for repeated measures, time-to-event, missing data, and causal framing [@harrell2015rms; @shmueli2010predict].
 
-Adapt CASTOR details to your cohort and have a statistician and clinician review the analysis plan before you submit.
+Adapt CASTOR details to your cohort and have a statistician and protocol lead review the analysis plan before you submit.
 
 ---
 

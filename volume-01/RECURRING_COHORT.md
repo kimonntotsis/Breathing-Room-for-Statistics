@@ -1,6 +1,6 @@
 # The CASTOR cohort: recurring example across the handbook
 
-**CASTOR** names two things in this book. First, the **workflow**: *Clinical question → Assess design and data → Select method → Test and fit → Output estimand → Report limits* ([Chapter 1](chapters/01-statistical-thinking.md)). Second, the **CASTOR cohort** below: a **synthetic** dataset used consistently from Chapter 3 through Chapter 12 (and extended in Ch 18–19). It is not real patient data; it is designed so every method connects to the same story while you practice that sequence.
+**CASTOR** names two things in this book. First, the **workflow**: *Clinical question → Assess design and data → Select method → Test and fit → Output estimand → Report limits* ([Chapter 1](chapters/01-statistical-thinking.md)). Second, the **CASTOR cohort** below: a **synthetic COPD-oriented** dataset used consistently from Chapter 3 through Chapter 12 (and extended in Ch 18–19). It is not real patient data; it is designed so every method connects to the same story while you practice that sequence.
 
 **CASTOR-HD** (Ch 13–17) adds high-dimensional omics, flow, and antibody-screen datasets on a parallel synthetic case–control cohort: the same workflow, richer tables.
 
@@ -8,7 +8,7 @@
 
 ## Cohort description (for Methods sections)
 
-> We analysed synthetic respiratory cohort data (CASTOR) comprising adults with spirometry, smoking status, therapy class, and exacerbation outcomes. FEV1 was measured in litres; exacerbations were defined as binary (≥1 event), count endpoints, or time-to-first-event with censoring. Longitudinal FEV1 was measured at weeks 0, 12, 24, and 52 in a trial extension. All examples are reproducible from `data/*.csv`.
+> We analysed synthetic COPD-oriented cohort data (CASTOR) comprising adults with spirometry, smoking status, therapy class, and exacerbation outcomes. FEV1 was measured in litres; exacerbations were defined as binary (≥1 event), count endpoints, or time-to-first-event with censoring. Longitudinal FEV1 was measured at weeks 0, 12, 24, and 52 in a trial extension. All examples are reproducible from `data/*.csv`.
 
 ---
 

@@ -16,9 +16,21 @@ You may have opened this book with a concrete problem in mind. That is how it is
 
 - **Teaching or self-study.** Work through Ch 1–12 with [Appendix F](appendix-f-exercises.md); add Ch 13–17 for omics blocks or Ch 18–21 for longitudinal and causal material.
 
+## Suggested reading paths
+
+These are linear routes through the same CASTOR cohort. Technique chapters stay reference-first; the **narrative spine** is [Chapter 12](chapters/12-case-studies.md) (Cases A–E).
+
+| Path | Chapters (in order) | Capstone in Ch 12 |
+|------|---------------------|-------------------|
+| **Trialist / protocol writer** | [Preface](chapters/00-preface.md) → [Ch 1–2](chapters/01-statistical-thinking.md) → [Ch 3–4](chapters/03-descriptive-analysis.md) → [Ch 8](chapters/08-validation-reporting.md) | [Case A](chapters/12-case-studies.md) (RCT FEV1); add [Case E](chapters/12-case-studies.md) if visits or survival matter |
+| **Analyst in R** | [Ch 1–2](chapters/01-statistical-thinking.md) → [Ch 3](chapters/03-descriptive-analysis.md) → outcome chapter via [Appendix B](appendix-b-quick-reference.md) → [Ch 5–7](chapters/05-linear-models.md) or [Ch 6](chapters/06-generalized-linear-models.md) as needed | [Cases A & B](chapters/12-case-studies.md); [Ch 18–19](chapters/18-longitudinal-mixed-models.md) + Case E for repeated measures |
+| **Omics / discovery** | [Ch 1–2](chapters/01-statistical-thinking.md) → [Ch 10–11](chapters/10-dimensionality-reduction.md) → [Ch 13–16](chapters/13-differential-analysis-fdr.md) → [Ch 17](chapters/17-integrated-castor-hd.md) | [Cases C & D](chapters/12-case-studies.md) before or after Part VI |
+
+Full path tables and file lists: [Appendix G](appendix-g-handbook-navigation.md).
+
 **What holds the volume together**
 
-Every example uses the same synthetic patients (**CASTOR**; omics extensions in **CASTOR-HD**), so a Table 1 in [Chapter 3](chapters/03-descriptive-analysis.md) reappears in regression, survival, and discovery chapters. R code is there to reproduce each step; you can read the argument without running it. The workflow (question first, limits last) is spelled out in [Chapter 1](chapters/01-statistical-thinking.md).
+Every example uses the same synthetic patients (**CASTOR**, a COPD-oriented teaching cohort; omics extensions in **CASTOR-HD**), so a Table 1 in [Chapter 3](chapters/03-descriptive-analysis.md) reappears in regression, survival, and discovery chapters. R code is there to reproduce each step; you can read the argument without running it. The workflow (question first, limits last) is spelled out in [Chapter 1](chapters/01-statistical-thinking.md).
 
 **How the eight parts fit**
 

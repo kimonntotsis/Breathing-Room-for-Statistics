@@ -6,11 +6,11 @@
 
 | | |
 |---|---|
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) - `data/marker_panel.csv` |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/marker_panel.csv` |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Methods** | PCA + alternatives menu (PLS, sparse/robust PCA, MCA/FAMD, logistic PCA), scree, loadings, biplots |
 | **R** | `R/examples/ch10_pca.R` |
-| **Figures** | [ch10_scree](../figures/ch10_scree.png), [ch10_pca_biplot](../figures/ch10_pca_biplot.png) |
+| **Figures** | ch10_scree (`ch10_scree.png`), ch10_pca_biplot (`ch10_pca_biplot.png`) |
 | **Exercises** | [ch10](../exercises/ch10_exercises.md) |
 
 **Also see:** [Appendix B](../appendix-b-quick-reference.md), Omics reporting: [@mcshane2011biomarker]
@@ -90,7 +90,7 @@ Use this menu first, then read the relevant technique section.
 
 **Precise language:** eigenvector of covariance/correlation matrix; scores are projections; components uncorrelated [@jolliffe2016pca].
 
-**Clinician read:** a statistical summary axis - name it only after independent validation.
+**Practice read:** a statistical summary axis - name it only after independent validation.
 
 ### Caveats box
 
@@ -189,7 +189,7 @@ Still not validation of biology.
 
 ## Technique: Biplot
 
-Joint plot of patients (scores) and variables (loadings). Useful for CASTOR `true_phenotype` visual check - teaching only; real studies lack truth labels. See [ch10_pca_biplot.png](../figures/ch10_pca_biplot.png).
+Joint plot of patients (scores) and variables (loadings). Useful for CASTOR `true_phenotype` visual check - teaching only; real studies lack truth labels. See `ch10_pca_biplot.png`.
 
 ---
 

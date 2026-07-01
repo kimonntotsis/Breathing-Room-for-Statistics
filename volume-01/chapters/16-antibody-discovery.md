@@ -103,7 +103,7 @@ Recompute top-20 lists using replicate 1, 2, and 3 separately. Assign each clone
 | **Tier 3** | Top 20 in **1 of 3** replicates | Exploratory only |
 | **Below tier** | Never top 20 in any replicate | Do not emphasise in main text |
 
-**Clinician read:** tiers are like "high / medium / low confidence shortlist" - more honest than pretending rank #7 is meaningfully better than rank #9.
+**Practice read:** tiers are like "high / medium / low confidence shortlist" - more honest than pretending rank #7 is meaningfully better than rank #9.
 
 ### Decision rule (screen to confirmation)
 
@@ -137,7 +137,7 @@ Recompute top-20 lists using replicate 1, 2, and 3 separately. Assign each clone
 
 **Precise language:** the screen defines a ranking/threshold; confirmation defines the target endpoint. Screen utility is summarised by PPV and stability of the shortlist under replicate noise.
 
-**Clinician read:** a screen is like a triage test: useful if it reliably enriches true positives, but it is not the final diagnosis.
+**Practice read:** a screen is like a triage test: useful if it reliably enriches true positives, but it is not the final diagnosis.
 
 ### Caveats box
 
@@ -200,11 +200,11 @@ A single threshold is not enough for transparency. Report a **sensitivity curve*
 
 If PPV collapses when you move the threshold slightly, your shortlist is fragile.
 
-![Replicate agreement (AgA screen)](../figures/ch16_screen_replicate_agreement.png)
+!Replicate agreement (AgA screen) (`ch16_screen_replicate_agreement.png`)
 
 Low replicate correlation flags unstable hits before you spend confirmation budget.
 
-![Threshold sensitivity: hits and PPV vs cutoff](../figures/ch16_threshold_sensitivity.png)
+!Threshold sensitivity: hits and PPV vs cutoff (`ch16_threshold_sensitivity.png`)
 
 A cliff edge in PPV means the shortlist is threshold-dependent: show the curve, not one lucky cutoff.
 
@@ -236,7 +236,10 @@ A cliff edge in PPV means the shortlist is threshold-dependent: show the curve, 
 ### Mini-lab: control-normalised screen signal
 
 ```r
-screen <- readr::read_csv(file.path(paths$data, "antibody_screen.csv"), show_col_types = FALSE)
+screen <- readr::read_csv(
+  file.path(paths$data, "antibody_screen.csv"),
+  show_col_types = FALSE
+)
 # Teaching: z-score within antigen across clones (exploratory)
 screen %>% group_by(antigen) %>%
   mutate(z = as.numeric(scale(signal_mean))) %>%
@@ -267,8 +270,14 @@ Outputs:
 source("R/00_setup.R")
 library(tidyverse)
 
-screen <- readr::read_csv(file.path(paths$data, "antibody_screen.csv"), show_col_types = FALSE)
-conf <- readr::read_csv(file.path(paths$data, "antibody_confirmation.csv"), show_col_types = FALSE)
+screen <- readr::read_csv(
+  file.path(paths$data, "antibody_screen.csv"),
+  show_col_types = FALSE
+)
+conf <- readr::read_csv(
+  file.path(paths$data, "antibody_confirmation.csv"),
+  show_col_types = FALSE
+)
 ```
 
 ### Sensitivity (minimum)
@@ -276,11 +285,11 @@ conf <- readr::read_csv(file.path(paths$data, "antibody_confirmation.csv"), show
 - Vary threshold over a prespecified grid; show PPV and hit count.
 - Report stability tiers and restrict main claims to Tier 1 (and optionally Tier 2).
 
-![Stability tiers and PPV by tier (AgA)](../figures/ch16_stability_tiers.png)
+!Stability tiers and PPV by tier (AgA) (`ch16_stability_tiers.png`)
 
 Tier 1 clones are the only defensible primary shortlist; lower tiers belong in supplementary exploration.
 
-![Top-20 overlap across replicate pairs](../figures/ch16_ranking_stability.png)
+!Top-20 overlap across replicate pairs (`ch16_ranking_stability.png`)
 
 Low overlap between replicate top-20 lists means ranking noise, not biology.
 

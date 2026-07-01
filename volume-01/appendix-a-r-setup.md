@@ -72,7 +72,8 @@ From the **project root** in R:
 ```r
 source("R/00_setup.R")              # paths + package check
 source("R/generate_data.R")         # rebuild CASTOR CSV files in data/
-source("R/examples/generate_figures.R")  # optional: all handbook figures
+source("R/examples/generate_figures.R")
+# optional: all handbook figures
 ```
 
 `00_setup.R` finds the project root automatically if you opened the folder as a project. It prints the path and stops with a clear message if a package is missing.

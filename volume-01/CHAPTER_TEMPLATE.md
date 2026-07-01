@@ -50,7 +50,7 @@ One sentence a co-author or patient advocate understands.
 
 **Precise language:** one sentence for statisticians (estimand, link, assumptions).
 
-**Clinician read:** what would change in practice if the estimate were true?
+**Practice read:** what would change in practice if the estimate were true?
 
 ---
 

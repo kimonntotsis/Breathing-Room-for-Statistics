@@ -7,11 +7,11 @@
 | | |
 |---|---|
 | **Question type** | What factors are associated with binary/count outcomes? |
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Key methods** | Logistic, Firth, log-binomial, Poisson, NB, zero-inflated, offset |
 | **R scripts** | `R/examples/ch06_glm.R` |
-| **Figures** | [logistic forest](../figures/ch06_logistic_forest.png), [Poisson RR](../figures/ch06_poisson_rate_ratio.png) |
+| **Figures** | logistic forest (`ch06_logistic_forest.png`), Poisson RR (`ch06_poisson_rate_ratio.png`) |
 | **Exercises** | [Chapter 6 exercises](../exercises/ch06_exercises.md) |
 
 **Also see:** [Appendix B § Step 3-5](../appendix-b-quick-reference.md), [Decision table](#decision-table-which-glm)
@@ -43,7 +43,7 @@ Exacerbation yes/no, exacerbation counts, and ordinal symptoms do not belong on 
 
 The outcome is **binary**. Fitting `lm(exacerbation ~ ...)` predicts values outside [0,1] and wrong variance structure. We need a **GLM** [@hosmer2013applied].
 
-We continue with **[CASTOR](RECURRING_COHORT.md)** - `data/exacerbation.csv`.
+We continue with **[CASTOR](../RECURRING_COHORT.md)** - `data/exacerbation.csv`.
 
 ---
 
@@ -99,7 +99,8 @@ Estimation: **maximum likelihood** (iteratively reweighted least squares for man
 
 ```r
 logit_fit <- glm(
-  exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations,
+  exacerbation_12m ~ smoking + age +
+    fev1_percent_predicted + prior_exacerbations,
   data = exac,
   family = binomial
 )
@@ -112,7 +113,7 @@ broom::tidy(logit_fit, conf.int = TRUE, exponentiate = TRUE)
 
 **Precise language:** adjusted odds ratio for prior_exacerbations = exp(β); conditions on other linear predictors; assumes logit link and independent observations.
 
-**Clinician read:** history of exacerbations is among the strongest predictors - consistent with clinical practice. OR is not the same as "X% more likely" unless events are rare.
+**Practice read:** history of exacerbations is among the strongest predictors - consistent with clinical practice. OR is not the same as "X% more likely" unless events are rare.
 
 #### Caveats box: logistic regression
 
@@ -135,7 +136,16 @@ mMRC dyspnoea (0–4) and CAT scores are **ordered categories**, not continuous 
 
 ### In practice (common events)
 
-When exacerbation rates exceed ~10–15%, odds ratios from logistic regression exaggerate relative to risk ratios. Ask for **risk differences** or log-binomial **rate ratios** for the clinical read.
+When exacerbation rates exceed ~10–15%, odds ratios from logistic regression exaggerate relative to risk ratios. Ask for **risk differences** or log-binomial **rate ratios** for the practice read.
+
+### Other respiratory settings
+
+Logistic and Poisson models in CASTOR target **COPD exacerbations**. The model family follows the outcome type; the event definition follows the protocol:
+
+- **Asthma:** Severe exacerbations (steroid bursts, ED visits) are often **counts**; mMRC and ACQ need **ordinal** methods (above), not linear regression on 0–4 scores.
+- **TB:** Culture conversion, smear clearance, or death during treatment are typical endpoints. Use Ch 6 count models or Ch 19 survival with those definitions; spirometry is usually secondary.
+
+Report absolute risks or rate differences when events are common.
 
 #### Wrong analysis ⚠
 
@@ -201,7 +211,8 @@ When a predictor perfectly predicts outcome in a category (**complete separation
 
 ```r
 logistf::logistf(
-  exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations,
+  exacerbation_12m ~ smoking + age +
+    fev1_percent_predicted + prior_exacerbations,
   data = exac
 )
 ```
@@ -243,14 +254,18 @@ Report Firth OR with narrow causal language and no event count.
 | **Problem** | Convergence failures → modified Poisson + robust SE |
 
 ```r
-glm(exacerbation_12m ~ smoking + age, data = exac, family = binomial(link = "log"))
+glm(
+  exacerbation_12m ~ smoking + age,
+  data = exac,
+  family = binomial(link = "log")
+)
 ```
 
 #### Dual interpretation
 
 **Plain language:** smokers have RR × exp(β) times the risk of exacerbation, adjusted.
 
-**Clinician read:** RR often closer to "percent increase in risk" than OR when events common.
+**Practice read:** RR often closer to "percent increase in risk" than OR when events common.
 
 #### Caveats box
 
@@ -272,7 +287,7 @@ Report logistic OR as RR when 30% event rate → log-binomial or marginal RD.
 |-------|----------------|------|
 | Logistic | OR | Rare outcome; case-control |
 | Log-binomial | RR | Cohort/trial, common outcome |
-| Marginal predictions | RD | Absolute risk for clinicians |
+| Marginal predictions | RD | Absolute risk for steering committees |
 
 ### Technique: Probit regression
 
@@ -287,7 +302,7 @@ Probit and logistic usually rank predictors similarly; coefficients not directly
 
 #### Caveats
 
-Interpretation less intuitive than OR for clinicians.
+Interpretation less intuitive than OR for many readers.
 
 ---
 
@@ -336,7 +351,7 @@ broom::tidy(pois_fit, conf.int = TRUE, exponentiate = TRUE)
 | | |
 |---|---|
 | **Mistake** | Poisson without checking dispersion |
-| **Do instead** | Check Pearson χ²/df; use NB if > 1 |
+| **Do instead** | Check Pearson $\chi^2$/df; use NB if > 1 |
 
 #### Reporting template
 
@@ -358,8 +373,12 @@ $$
 $$
 
 ```r
-glm(exacerbations_12m ~ smoking + ics_adherence + offset(log(person_years)),
-    data = counts, family = poisson)
+glm(
+  exacerbations_12m ~ smoking + ics_adherence +
+    offset(log(person_years)),
+  data = counts,
+  family = poisson
+)
 ```
 
 #### Dual interpretation
@@ -465,7 +484,7 @@ Non-nested: **AIC/BIC** - predictive/in-sample comparison, not formal test.
 
 | Context | Tool |
 |---------|------|
-| Inference | Residual deviance, Pearson χ², careful interpretation |
+| Inference | Residual deviance, Pearson $\chi^2$, careful interpretation |
 | Prediction | Calibration plot, Brier score (Ch 9) |
 | Count | Check overdispersion; compare Poisson vs NB |
 
@@ -484,7 +503,7 @@ Non-nested: **AIC/BIC** - predictive/in-sample comparison, not formal test.
 
 See [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) for the full outcome → model table.
 
-![Logistic regression forest plot](../figures/ch06_logistic_forest.png)
+!Logistic regression forest plot (`ch06_logistic_forest.png`)
 
 Odds ratios above 1 increase odds of the outcome; check CIs that cross 1 and whether OR language matches the clinical estimand (risk vs odds).
 
@@ -505,7 +524,7 @@ Always state **event count and n**.
 1. Firth logistic if separation / sparse events  
 2. Log-binomial if OR would mislead (common outcome)  
 3. NB instead of Poisson if overdispersed  
-4. Marginal risks for clinicians (`emmeans`)
+4. Marginal risks for practice reporting (`emmeans`)
 
 ---
 
@@ -560,7 +579,7 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 
 **Precise language:** proportional odds logistic model estimates cumulative log-odds of being in category *j* or below [@agresti2018introduction].
 
-**Clinician read:** “OR 1.4 per mMRC point” is hard to interpret clinically; pair with **proportions in each category** or median shift.
+**Practice read:** “OR 1.4 per mMRC point” is hard to interpret clinically; pair with **proportions in each category** or median shift.
 
 #### Wrong analysis ⚠
 
@@ -584,7 +603,7 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 | Goal / nuance | Alternative | Why / note |
 |---|---|---|
 | Want **risk ratio** (not OR) | Log-binomial or modified Poisson | OR can mislead when outcome common |
-| Need absolute risks | Marginal risks / risk differences | Often more clinician-friendly |
+| Need absolute risks | Marginal risks / risk differences | Often easier to interpret than OR alone |
 | Complementary hazard-type interpretation | complementary log-log link | [Ch 19](19-survival-analysis.md) |
 | Clustered binary outcomes | GEE / mixed logistic | [Ch 18](18-longitudinal-mixed-models.md) |
 

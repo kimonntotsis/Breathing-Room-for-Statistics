@@ -15,7 +15,7 @@ The goal is not “run a model,” but:
 
 **Read this if:** your outcome is continuous, binary, or count and you need adjusted associations (smoking, FEV1 % predicted, therapy line).
 
-**Skip this if:** you only need an unadjusted arm comparison (→ [Part II](parts/part-02-describe-compare.md) Ch 4) or a prediction model with validation metrics (→ [Part IV](parts/part-04-validation-prediction.md) Ch 9).
+**Skip this if:** you only need an unadjusted arm comparison (→ [Part II](part-02-describe-compare.md) Ch 4) or a prediction model with validation metrics (→ [Part IV](part-04-validation-prediction.md) Ch 9).
 
 ## CASTOR vignette: the exacerbation endpoint
 

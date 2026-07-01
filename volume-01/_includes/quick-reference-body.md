@@ -1,5 +1,9 @@
 ## Step 0. Write the estimand
 
+```{=latex}
+\footnotesize
+```
+
 *What number would change your decision?* Example: mean FEV1 difference at 12 weeks (intervention − control).
 
 If you cannot write this sentence, stop. See [Chapter 1](chapters/01-statistical-thinking.md).
@@ -53,7 +57,7 @@ See Chapters [13](chapters/13-differential-analysis-fdr.md)–[17](chapters/17-i
 | 2 independent groups | **Welch *t*-test** | Mann–Whitney if very skew + small *n* |
 | 2 paired measurements (pre/post BD) | **Paired *t*-test** | Wilcoxon signed-rank |
 | 3+ independent groups | **One-way ANOVA** + prespecified contrasts | Kruskal–Wallis |
-| Adjust for baseline FEV1 in trial | **ANCOVA** (linear model) |, |
+| Adjust for baseline FEV1 in trial | **ANCOVA** (linear model) | Change score (if prespecified in SAP) |
 
 **Remember:** Wilcoxon tests **ranks**, not means. Report mean difference (CI) **and** median difference if they disagree.
 
@@ -93,7 +97,7 @@ See Chapters [13](chapters/13-differential-analysis-fdr.md)–[17](chapters/17-i
 | Continuous FEV1 | **Linear (Gaussian)** | `lm(y ~ x, data)` | Normal / identity |
 | Binary | **Logistic** | `glm(y ~ x, family = binomial)` | Binomial / logit |
 | Count | **Poisson / NB** | `glm(..., family = poisson)` or `MASS::glm.nb` | Poisson or NB / log |
-| Predict risk (Ch 9) | Logistic + validation | + AUC, calibration |, |
+| Predict risk (Ch 9) | Logistic + validation | `glm(..., family = binomial)` + hold-out metrics | Binomial / logit; AUC, calibration |
 
 ---
 
@@ -117,7 +121,7 @@ See Chapters [13](chapters/13-differential-analysis-fdr.md)–[17](chapters/17-i
 |---------|----------------------|------------------|-----------|-------------------|
 | Continuous | Welch *t* | Paired *t* | ANOVA | Linear / ANCOVA |
 | Binary | Fisher / chi-square | McNemar | Chi-square | Logistic |
-| Count | Poisson/NB GLM |, | Poisson/NB GLM | Poisson/NB GLM |
+| Count | Poisson/NB GLM | Rare; use paired design with care | Poisson/NB GLM | Poisson/NB GLM |
 
 ---
 
@@ -152,10 +156,10 @@ Details: [Chapter 8](chapters/08-validation-reporting.md) and [References](refer
 
 **Process first** (eight steps), then **method choice** (outcome type):
 
-![CASTOR analysis pipeline: question to report](figures/analysis_pipeline.png){width=92%}
+!CASTOR analysis pipeline: question to report (`analysis_pipeline.png`){width=92%}
 
 ## Visual decision tree
 
-![Method decision tree: start from outcome type](figures/method_decision_tree.png){width=88%}
+!Method decision tree: start from outcome type (`method_decision_tree.png`){width=88%}
 
 Regenerate from the project root: `source("R/examples/generate_figures.R")` after [Appendix A](appendix-a-r-setup.md) setup.

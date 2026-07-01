@@ -3,7 +3,7 @@
 Use this form for a **one-pass** clinical or biostatistical review of a single chapter. Priority chapters: **4, 6, 13, 18, 20** (highest traffic for inference, GLMs, omics, longitudinal, missing data).
 
 **Reviewer:** ___________________  
-**Role:** [ ] Respiratory clinician  [ ] Trialist  [ ] Biostatistician  [ ] Omics analyst  
+**Role:** [ ] Respiratory investigator  [ ] Trialist  [ ] Biostatistician  [ ] Omics analyst  
 **Chapter:** ___________________  
 **Date:** ___________________
 
@@ -35,7 +35,7 @@ Use this form for a **one-pass** clinical or biostatistical review of a single c
 
 ## 3. Plain vs precise language (1–5)
 
-Is the **clinician read** accurate? Is the **precise language** fair (not overclaiming causation)?
+Is the **practice read** accurate? Is the **precise language** fair (not overclaiming causation)?
 
 **Comments:**
 

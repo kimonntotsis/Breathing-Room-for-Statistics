@@ -11,7 +11,7 @@
 | **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/*.csv` |
 | **Exercises** | [ch02](../exercises/ch02_exercises.md), [Solutions](../solutions/ch02_solutions.md) |
 
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [Appendix C](../appendix-c-glossary.md), [Decision tree](../figures/method_decision_tree.png)
+**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [Appendix C](../appendix-c-glossary.md), Decision tree (`method_decision_tree.png`)
 ## Learning objectives
 
 1. Distinguish outcome, exposure, and covariate roles.
@@ -85,7 +85,7 @@ The same variable **changes role by question**. *Therapy* is an **exposure** in 
 
 **Precise language:** causal diagrams ([Ch 21](21-causal-inference.md)) formalise which variables must be adjusted; earlier chapters use subject-matter knowledge and protocol [@harrell2015rms].
 
-**Clinician read:** if you adjust for a variable **caused by** the exposure (a mediator), you may hide a real effect - discuss with your analyst.
+**Practice read:** if you adjust for a variable **caused by** the exposure (a mediator), you may hide a real effect - discuss with your analyst.
 
 ### In practice
 
@@ -115,13 +115,22 @@ Choosing the wrong outcome type - treating a **count** as **binary**, or a **bin
 | **High-dimensional** | Proteomics, transcriptomics | PCA, clustering, penalized ML | Ch 10–17 |
 | **Proportions (bounded)** | Flow cell-type % | Participant-level models | Ch 15 |
 
-![Method decision tree - start from outcome type](../figures/method_decision_tree.png)
+!Method decision tree - start from outcome type (`method_decision_tree.png`)
 
 Start at the outcome node, not at “we always use a t-test”: the tree routes to the chapter that matches your estimand.
 
 **Handbook link:** full routing tables in [appendix-b-quick-reference.md](../appendix-b-quick-reference.md).
 
-### Clinician "so what?"
+### Other respiratory settings
+
+CASTOR is a **COPD-oriented** teaching cohort (FEV1, exacerbations, smoking, triple therapy). The routing table still applies elsewhere if you relabel the outcome:
+
+- **Asthma trials** often prioritise exacerbation counts, oral steroid bursts, or ordinal symptom scores (ACQ, mMRC) alongside FEV1. Prespecify the primary endpoint before unblinding.
+- **TB programme research** more often uses microbiological conversion, treatment completion, or mortality at fixed follow-up. Use the same chapter routes (proportions, counts, survival in Ch 4, 6, 19); FEV1 is rarely primary.
+
+One estimand per analysis. Do not swap endpoints after seeing the tables.
+
+### Practice check
 
 If the protocol defines exacerbations as a **count** but the analyst runs a *t*-test on raw counts, the p-value may be wrong and the effect size uninterpretable → insist on Poisson/NB models ([Ch 6](06-generalized-linear-models.md)).
 
@@ -132,12 +141,12 @@ If the protocol defines exacerbations as a **count** but the analyst runs a *t*-
 | Structure | Definition | Unit of analysis | Handbook note |
 |-----------|------------|------------------|---------------|
 | **Cross-sectional** | One row per person, one time point | Patient | Independence assumed in Ch 4-6 |
-| **Longitudinal** | Repeated measures per person | Patient-visit | Mixed models | [Ch 18](18-longitudinal-mixed-models.md) |
-| **Survival** | Time to event with censoring | Patient | Kaplan-Meier, Cox | [Ch 19](19-survival-analysis.md) |
-| **Clustered** | Units nested (patients in hospitals) | Patient (with cluster adjustment) | Cluster-robust SE / mixed models | [Ch 18](18-longitudinal-mixed-models.md) |
+| **Longitudinal** | Repeated measures per person | Patient-visit | Mixed models ([Ch 18](chapters/18-longitudinal-mixed-models.md)) |
+| **Survival** | Time to event with censoring | Patient | Kaplan-Meier, Cox ([Ch 19](chapters/19-survival-analysis.md)) |
+| **Clustered** | Units nested (patients in hospitals) | Patient (with cluster adjustment) | Cluster-robust SE / mixed models ([Ch 18](chapters/18-longitudinal-mixed-models.md)) |
 | **Case-control** | Sample enriched for cases | Case or control | OR natural; incidence not estimable [@agresti2018introduction] |
-| **Paired** | Two measurements same subject | Patient | Paired *t*, McNemar | [Ch 4](04-comparing-groups.md) |
-| **Per-cell omics/flow** | Many rows per person | **Not** independent patients | Summarise to participant first | [Ch 15](15-flow-cytometry.md) |
+| **Paired** | Two measurements same subject | Patient | Paired *t*, McNemar ([Ch 4](chapters/04-comparing-groups.md)) |
+| **Per-cell omics/flow** | Many rows per person | **Not** independent patients | Summarise to participant first ([Ch 15](chapters/15-flow-cytometry.md)) |
 
 ### Dual interpretation
 
@@ -152,11 +161,11 @@ If the protocol defines exacerbations as a **count** but the analyst runs a *t*-
 | Domain | Common variables | Pitfalls | Reference |
 |--------|------------------|----------|-----------|
 | **Spirometry** | FEV1, FVC, FEV1/FVC, % predicted | Pre- vs post-bronchodilator; quality grades | [@graham2019spirometry] |
-| **Symptoms** | CAT, SGRQ, ACT | Patient-reported missingness; ordinal nature |
+| **Symptoms** | CAT, SGRQ, ACT | Patient-reported missingness; ordinal nature | — |
 | **Exacerbations** | Binary, count, severity | Definition varies by trial | [@hurst2010exacerbation] |
-| **Imaging** | Emphysema fraction, airway wall area | High dimensionality; segmentation error |
+| **Imaging** | Emphysema fraction, airway wall area | High dimensionality; segmentation error | — |
 | **Omics** | Thousands of markers | *p* >> *n*; batch effects | [@mcshane2011biomarker] |
-| **ICU / ventilation** | Waveforms, ventilator settings | Missing not at random; high frequency |
+| **ICU / ventilation** | Waveforms, ventilator settings | Missing not at random; high frequency | — |
 
 Always document **definitions** in Methods. An exacerbation in one COPD trial is not necessarily the same in another [@hurst2010exacerbation].
 
@@ -281,9 +290,18 @@ source("R/00_setup.R")
 source("R/generate_data.R")
 library(tidyverse)
 
-spirometry <- read_csv(file.path(paths$data, "spirometry.csv"), show_col_types = FALSE)
-exacerbation <- read_csv(file.path(paths$data, "exacerbation.csv"), show_col_types = FALSE)
-counts <- read_csv(file.path(paths$data, "exacerbation_counts.csv"), show_col_types = FALSE)
+spirometry <- read_csv(
+  file.path(paths$data, "spirometry.csv"),
+  show_col_types = FALSE
+)
+exacerbation <- read_csv(
+  file.path(paths$data, "exacerbation.csv"),
+  show_col_types = FALSE
+)
+counts <- read_csv(
+  file.path(paths$data, "exacerbation_counts.csv"),
+  show_col_types = FALSE
+)
 
 glimpse(spirometry)
 summary(spirometry$fev1)

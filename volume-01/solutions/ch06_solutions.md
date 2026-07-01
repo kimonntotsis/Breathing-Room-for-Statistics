@@ -38,27 +38,44 @@ Simulate overdispersed counts; compare Poisson vs NB CI coverage for rate ratio.
 
 ```r
 # install.packages("logistf")
-logistf::logistf(exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations,
-                 data = exac)
+logistf::logistf(
+  exacerbation_12m ~ smoking + age +
+    fev1_percent_predicted + prior_exacerbations,
+  data = exac
+)
 ```
 
 ## Log-binomial (RR)
 
 ```r
-glm(exacerbation_12m ~ smoking + age, data = exac, family = binomial(link = "log"))
+glm(
+  exacerbation_12m ~ smoking + age,
+  data = exac,
+  family = binomial(link = "log")
+)
 # exp(coef) = risk ratios if model converges
 ```
 
 ## Zero-inflated
 
 ```r
-zi <- read_csv("data/exacerbation_zero_inflated.csv", show_col_types = FALSE)
+zi <- read_csv(
+  "data/exacerbation_zero_inflated.csv",
+  show_col_types = FALSE
+)
 pscl::zeroinfl(exacerbations_12m ~ smoking | smoking, data = zi)
 ```
 
 ## Offset example
 
 ```r
-counts <- read_csv("data/exacerbation_counts.csv", show_col_types = FALSE)
-glm(exacerbations_12m ~ smoking + offset(log(person_years)), data = counts, family = poisson)
+counts <- read_csv(
+  "data/exacerbation_counts.csv",
+  show_col_types = FALSE
+)
+glm(
+  exacerbations_12m ~ smoking + offset(log(person_years)),
+  data = counts,
+  family = poisson
+)
 ```

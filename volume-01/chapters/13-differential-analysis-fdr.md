@@ -11,7 +11,7 @@
 | **Primary goal** | Estimate per-feature effects **and** control false discoveries |
 | **Core methods** | per-feature models, Benjamini–Hochberg FDR, volcano plot (descriptive), sensitivity checks |
 | **R** | `R/examples/ch13_differential_fdr.R` |
-| **Figures** | [volcano panel](../figures/ch13_volcano_panel.png), [missingness](../figures/ch13_proteomics_missingness_by_group.png), [RNA MA](../figures/ch13_rnaseq_ma_plot.png) |
+| **Figures** | volcano panel (`ch13_volcano_panel.png`), missingness (`ch13_proteomics_missingness_by_group.png`), RNA MA (`ch13_rnaseq_ma_plot.png`) |
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
 | **Exercises** | [Chapter 13 exercises](../exercises/ch13_exercises.md) |
 
@@ -95,7 +95,7 @@ CASTOR-HD includes ~**150 participants** (case/control) and **~1000 proteins** o
 
 **Precise language:** for each feature \(j\) we fit a model to estimate \(\beta_j\) for group; we then applied Benjamini–Hochberg to control the expected false discovery proportion among features called significant.
 
-**Clinician read:** FDR protects you from a “shopping list of biomarkers” that will not replicate. It does not tell you which marker is clinically useful.
+**Practice read:** FDR protects you from a “shopping list of biomarkers” that will not replicate. It does not tell you which marker is clinically useful.
 
 ### Worked example (CASTOR-HD proteomics)
 
@@ -103,8 +103,8 @@ From `ch13_proteomics_top_table.csv` (teaching run, batch-adjusted):
 
 | Protein | Effect (control − case) | 95% CI | *p* | *q* |
 |---------|-------------------------|--------|-----|-----|
-| Prot_0127 | −0.89 | −1.33 to −0.44 | 1.3×10⁻⁴ | 0.11 |
-| Prot_0147 | −0.85 | −1.32 to −0.38 | 4.4×10⁻⁴ | 0.11 |
+| Prot_0127 | −0.89 | −1.33 to −0.44 | $1.3 \times 10^{-4}$ | 0.11 |
+| Prot_0147 | −0.85 | −1.32 to −0.38 | $4.4 \times 10^{-4}$ | 0.11 |
 
 **Read:** cases have **lower** abundance on this scale (negative effect = control − case). Nominal *p* is small, but **no protein passes BH *q* < 0.05** in this run after batch adjustment. That is a **valid scientific result**: “no FDR-controlled discoveries,” not a failed analysis.
 
@@ -169,7 +169,7 @@ Use this as a pre-submission audit. If any row describes your workflow, rewrite.
 
 Use Template A in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md).
 
-![Volcano plots: proteomics and RNA differential analysis (BH FDR)](../figures/ch13_volcano_panel.png)
+!Volcano plots: proteomics and RNA differential analysis (BH FDR) (`ch13_volcano_panel.png`)
 
 Points in the upper corners are large effects with small q-values; the grey band is the non-significant region after BH: empty corners are as informative as hits.
 
@@ -211,12 +211,22 @@ When \(p \gg n\), dense PCA loadings are noisy. For exploratory views only, try 
 
 ```r
 # After source("R/examples/ch13_differential_fdr.R"), or inline:
-prot <- readr::read_csv(file.path(paths$data, "proteomics_olink_like.csv"), show_col_types = FALSE)
-prot %>% mutate(miss = rowMeans(is.na(dplyr::select(., starts_with("Prot_"))))) %>%
-  ggplot(aes(group, miss, fill = group)) + geom_boxplot() + theme_minimal()
+prot <- readr::read_csv(
+  file.path(paths$data, "proteomics_olink_like.csv"),
+  show_col_types = FALSE
+)
+prot %>%
+  mutate(
+    miss = rowMeans(
+      is.na(dplyr::select(., starts_with("Prot_")))
+    )
+  ) %>%
+  ggplot(aes(group, miss, fill = group)) +
+  geom_boxplot() +
+  theme_minimal()
 ```
 
-![Proteomics missingness by group (LOD-style)](../figures/ch13_proteomics_missingness_by_group.png)
+!Proteomics missingness by group (LOD-style) (`ch13_proteomics_missingness_by_group.png`)
 
 Unequal missingness between groups can create artificial DE before any biology is tested: fix or model LOD, do not impute silently.
 
@@ -243,7 +253,10 @@ The script writes a copy-ready top-table to `volume-01/tables/`.
 source("R/00_setup.R")
 library(tidyverse)
 
-prot <- readr::read_csv(file.path(paths$data, "proteomics_olink_like.csv"), show_col_types = FALSE)
+prot <- readr::read_csv(
+  file.path(paths$data, "proteomics_olink_like.csv"),
+  show_col_types = FALSE
+)
 prot %>% count(group)
 ```
 
@@ -253,18 +266,21 @@ For RNA counts, use a **count model** (negative binomial), not a Gaussian model 
 
 ```r
 library(MASS)
-rna <- readr::read_csv(file.path(paths$data, "rnaseq_counts.csv"), show_col_types = FALSE)
+rna <- readr::read_csv(
+  file.path(paths$data, "rnaseq_counts.csv"),
+  show_col_types = FALSE
+)
 # Per gene: glm.nb(count ~ group + batch + offset(log(library_size)))
 # Then BH FDR across genes; see R/examples/ch13_differential_fdr.R
 ```
 
 **Teaching note:** CASTOR-HD synthetic RNA includes a global expression shift, so many genes can pass FDR in this demo. In real studies, interpret discovery counts alongside MA plots and batch QC.
 
-![RNA MA plot (NB log-fold-change teaching output)](../figures/ch13_rnaseq_ma_plot.png)
+!RNA MA plot (NB log-fold-change teaching output) (`ch13_rnaseq_ma_plot.png`)
 
 Systematic curvature or a cloud of outliers at low counts signals model or normalization stress, not a list of genes to chase.
 
-![Proteomics q-value distribution (BH)](../figures/ch13_proteomics_qvalue_hist.png)
+!Proteomics q-value distribution (BH) (`ch13_proteomics_qvalue_hist.png`)
 
 A spike near zero with a flat tail suggests real signal mixed with null features; an all-flat histogram suggests underpower or QC failure.
 

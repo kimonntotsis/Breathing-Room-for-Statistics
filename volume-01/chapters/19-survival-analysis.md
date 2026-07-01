@@ -11,7 +11,7 @@
 | **Question** | Who reaches first exacerbation sooner, accounting for censoring? |
 | **Core methods** | Kaplan-Meier, log-rank test, Cox proportional hazards |
 | **R** | `R/examples/ch19_survival_analysis.R` |
-| **Figures** | [KM by smoking](../figures/ch19_km_by_smoking.png), [Cox forest](../figures/ch19_cox_forest.png) |
+| **Figures** | KM by smoking (`ch19_km_by_smoking.png`), Cox forest (`ch19_cox_forest.png`) |
 | **Exercises** | [Chapter 19 exercises](../exercises/ch19_exercises.md) |
 
 **Also see:** [Ch 6](06-generalized-linear-models.md) (rates), [Ch 18](18-longitudinal-mixed-models.md), [Ch 12 Case E](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation)
@@ -32,7 +32,16 @@ Chapters 4, 6 (rates and GLM intuition); Ch 8 (reporting).
 
 ## Why this chapter
 
-Sponsors often ask “exacerbation yes/no at 12 months” when dates of event and censoring are already in the database. Survival methods use follow-up time properly. This chapter also teaches when a hazard ratio is not enough for clinicians.
+Sponsors often ask “exacerbation yes/no at 12 months” when dates of event and censoring are already in the database. Survival methods use follow-up time properly. This chapter also teaches when a hazard ratio is not enough on its own.
+
+### Other respiratory settings
+
+CASTOR uses time to **first COPD exacerbation** with one-year censoring. The same Kaplan-Meier and Cox workflow applies when the event is redefined:
+
+- **Asthma:** Time to first severe exacerbation or first oral steroid course (match the protocol definition).
+- **TB:** Time to culture conversion or treatment completion; deaths and loss to follow-up may need competing-risk methods in programme trials.
+
+Report event counts, censoring reasons, and absolute risks at fixed times, not hazard ratios alone.
 
 ## Opening question (CASTOR extension)
 
@@ -88,7 +97,7 @@ In the CASTOR extension cohort, **52 of 320** patients have a first exacerbation
 
 **Precise language:** Kaplan-Meier estimates the survival function \(S(t) = P(T > t)\) with right-censored data using the product-limit estimator.
 
-**Clinician read:** read off event-free probability at 6 and 12 months; compare arms visually before trusting a single *p*-value.
+**Practice read:** read off event-free probability at 6 and 12 months; compare arms visually before trusting a single *p*-value.
 
 ### Worked example (CASTOR extension)
 
@@ -131,7 +140,7 @@ summary(fit_km, times = c(180, 365))
 
 **Precise language:** the Cox model estimates hazard ratios as multiplicative shifts in the instantaneous event rate, holding other covariates fixed, under proportional hazards and independent censoring.
 
-**Clinician read:** HR > 1 for smoking means higher **rate** of first exacerbation, not necessarily a specific absolute risk difference. Report events and person-time.
+**Practice read:** HR > 1 for smoking means higher **rate** of first exacerbation, not necessarily a specific absolute risk difference. Report events and person-time.
 
 ### Worked example (CASTOR extension)
 
@@ -146,7 +155,8 @@ The smoking HR is **associational** in this observational extension. Wide CI ref
 
 ```r
 fit_cox <- coxph(
-  Surv(time_days, event) ~ smoking + fev1_percent_predicted + therapy + age,
+  Surv(time_days, event) ~ smoking +
+    fev1_percent_predicted + therapy + age,
   data = surv
 )
 summary(fit_cox)
@@ -216,26 +226,27 @@ source("R/00_setup.R")
 source("R/examples/ch19_survival_analysis.R")
 ```
 
-![Kaplan-Meier curves by smoking status](../figures/ch19_km_by_smoking.png)
+!Kaplan-Meier curves by smoking status (`ch19_km_by_smoking.png`)
 
 The y-axis is zoomed to the observed event-free range so curve separation is visible; with only ~50 events in 320 patients a full 0–100% scale would look nearly flat.
 
-![Cox model hazard ratios](../figures/ch19_cox_forest.png)
+!Cox model hazard ratios (`ch19_cox_forest.png`)
 
-Hazard ratios compare instantaneous event rates between groups holding covariates fixed; translate to absolute risks if clinicians will act on the result.
+Hazard ratios compare instantaneous event rates between groups holding covariates fixed; translate to absolute risks if the trial team will act on the result.
 
 **Tables:** `ch19_events_by_smoking.csv`, `ch19_cox_hazard_ratios.csv`, `ch19_cox_ph_test.csv`
 
 ### Mini-lab: absolute risk at 12 months
 
-Clinicians often need absolute risks, not only HRs.
+Trial teams often need absolute risks, not only HRs.
 
 ```r
 library(survival)
 surv <- readr::read_csv("data/time_to_exacerbation.csv")
 fit <- survfit(Surv(time_days, event) ~ smoking, data = surv)
 summary(fit, times = 365)
-# Event-free probability at 365 d → 1 - S(365) ≈ cumulative event probability
+# Event-free probability at 365 d:
+# 1 - S(365) ≈ cumulative event probability
 ```
 
 Report absolute risk difference between groups at 365 days alongside the smoking HR.
@@ -268,7 +279,7 @@ If global *p* is small, consider stratified Cox or time-varying coefficients (ad
 
 **Precise language:** standard Cox estimates **hazard of exacerbation** among survivors; Fine–Gray targets **subdistribution** relevant for prognosis when death competes [@harrell2015rms].
 
-**Clinician read:** ask for **cumulative incidence curves** by arm, not only hazard ratios, when death rates differ.
+**Practice read:** ask for **cumulative incidence curves** by arm, not only hazard ratios, when death rates differ.
 
 #### Wrong analysis ⚠
 
@@ -299,7 +310,7 @@ If global *p* is small, consider stratified Cox or time-varying coefficients (ad
 
 **E19.1** What does censoring mean at 365 days without an event?
 
-**E19.2** When is a hazard ratio misleading for clinicians?
+**E19.2** When is a hazard ratio misleading on its own?
 
 **E19.3** What does a log-rank test compare?
 

@@ -11,7 +11,7 @@
 | **Question** | How does missing FEV1 affect regression coefficients, and what should we report? |
 | **Core methods** | MCAR/MAR/MNAR framing, complete-case, median sensitivity, **MICE + Rubin pooling** |
 | **R** | `R/examples/ch20_missing_data.R` (`install.packages("mice")` for full demo) |
-| **Figures** | [missingness pattern](../figures/ch20_missingness_pattern.png), [coef sensitivity](../figures/ch20_smoking_coef_sensitivity.png), [MICE diagnostic](../figures/ch20_mice_density.png) |
+| **Figures** | missingness pattern (`ch20_missingness_pattern.png`), coef sensitivity (`ch20_smoking_coef_sensitivity.png`), MICE diagnostic (`ch20_mice_density.png`) |
 | **Links** | [Ch 8 reporting](08-validation-reporting.md), [Ch 13 LOD](13-differential-analysis-fdr.md), [Ch 18 dropout](18-longitudinal-mixed-models.md), [Appendix D checklists](../appendix-d-missing-data-checklists.md) |
 | **Exercises** | [Chapter 20 exercises](../exercises/ch20_exercises.md) |
 
@@ -164,7 +164,7 @@ DAPs should state LOD handling **separately** from MAR/MNAR discussion. Sensitiv
 
 **Precise language:** under MAR, valid inference requires either a correctly specified likelihood/model integrating missingness or multiple imputation from a model predicting missing values from observed covariates; complete-case analysis is unbiased only under stronger assumptions (often MCAR or MAR with missingness independent of outcome given covariates in the analysis model).
 
-**Clinician read:** if sicker patients are missing spirometry, "complete-case FEV1" may describe **healthier** subsets, not the enrolled trial population.
+**Practice read:** if sicker patients are missing spirometry, "complete-case FEV1" may describe **healthier** subsets, not the enrolled trial population.
 
 ### Worked example (CASTOR)
 
@@ -181,7 +181,9 @@ Both naive approaches show smokers lower FEV1, but the **magnitude** shifts. **M
 ```r
 source("R/examples/ch20_missing_data.R")
 flow <- readr::read_csv("volume-01/tables/ch20_enrollment_flow.csv")
-miss <- readr::read_csv("volume-01/tables/ch20_missingness_by_diagnosis.csv")
+miss <- readr::read_csv(
+  "volume-01/tables/ch20_missingness_by_diagnosis.csv"
+)
 ```
 
 ### Technique: MICE (production workflow)
@@ -319,11 +321,11 @@ source("R/00_setup.R")
 source("R/examples/ch20_missing_data.R")
 ```
 
-![Missing FEV1 fraction by obstruction severity](../figures/ch20_missingness_pattern.png)
+!Missing FEV1 fraction by obstruction severity (`ch20_missingness_pattern.png`)
 
 Higher missingness in severe obstruction supports MAR-like missingness tied to observed severity, not random noise.
 
-![Smoking coefficient: complete-case vs median imputation](../figures/ch20_smoking_coef_sensitivity.png)
+!Smoking coefficient: complete-case vs median imputation (`ch20_smoking_coef_sensitivity.png`)
 
 A large shift between complete-case and single imputation suggests the missingness mechanism matters. Report both, not only the nicer estimate.
 
@@ -346,26 +348,39 @@ library(tidyverse)
 library(mice)
 library(broom)
 
-spirometry <- readr::read_csv("data/spirometry.csv", show_col_types = FALSE)
+spirometry <- readr::read_csv(
+  "data/spirometry.csv",
+  show_col_types = FALSE
+)
 set.seed(20250618)
 spirometry_miss <- spirometry %>%
   mutate(
-    missing_fev1 = rbinom(n(), 1, prob = plogis(-2 + 0.8 * (diagnosis != "no_obstruction"))) == 1,
+    missing_fev1 = rbinom(
+      n(), 1,
+      prob = plogis(-2 + 0.8 * (diagnosis != "no_obstruction"))
+    ) == 1,
     fev1_obs = if_else(missing_fev1, NA_real_, fev1),
     diagnosis = factor(diagnosis),
     sex = factor(sex),
     smoking = factor(smoking)
   )
 
-imp_df <- spirometry_miss %>% select(fev1_obs, age, sex, smoking, diagnosis)
-imp <- mice(imp_df, m = 20, maxit = 5, printFlag = FALSE, seed = 20250618)
+imp_df <- spirometry_miss %>%
+  select(fev1_obs, age, sex, smoking, diagnosis)
+imp <- mice(
+  imp_df,
+  m = 20,
+  maxit = 5,
+  printFlag = FALSE,
+  seed = 20250618
+)
 pooled <- mice::pool(with(imp, lm(fev1_obs ~ smoking + age + sex)))
 summary(pooled)
 ```
 
 Use an imputation model that includes predictors of missingness (e.g. `diagnosis`) but avoid outcome leakage per study protocol.
 
-![MICE diagnostic: observed vs imputed FEV1](../figures/ch20_mice_density.png)
+!MICE diagnostic: observed vs imputed FEV1 (`ch20_mice_density.png`)
 
 Imputed draws should spread across a plausible FEV1 range: a single spike at the median signals a too-simple imputation rule.
 

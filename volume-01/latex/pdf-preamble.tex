@@ -8,15 +8,19 @@
 \newunicodechar{α}{\ensuremath{\alpha}}
 \newunicodechar{β}{\ensuremath{\beta}}
 \newunicodechar{μ}{\ensuremath{\mu}}
-\newunicodechar{≫}{\ensuremath{\gg}}
+\newunicodechar{₀}{\ensuremath{_0}}
+\newunicodechar{₁}{\ensuremath{_1}}
+\newunicodechar{₂}{\ensuremath{_2}}
+\newunicodechar{²}{\ensuremath{^2}}
+\newunicodechar{⁻}{\ensuremath{^{-}}}
 
 % Figures: fit line width; allow slight shrink for tall pipeline art
 \setkeys{Gin}{width=0.92\linewidth,keepaspectratio}
 
-% Dense tables (appendices, routing): smaller type, wrapped columns
+% Dense tables: wrapped columns; normal body size (appendix tables use footnotesize locally)
 \usepackage{makecell}
-\AtBeginEnvironment{longtable}{\footnotesize\setlength{\tabcolsep}{4pt}}
-\AtBeginEnvironment{table}{\footnotesize\setlength{\tabcolsep}{4pt}}
+\AtBeginEnvironment{longtable}{\setlength{\tabcolsep}{6pt}}
+\AtBeginEnvironment{table}{\setlength{\tabcolsep}{6pt}}
 
 % Allow URLs and long words to break in tables
 \usepackage{xurl}

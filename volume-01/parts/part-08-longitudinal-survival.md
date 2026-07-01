@@ -1,10 +1,10 @@
-# Part VIII: Longitudinal, survival, and causal inference
+# Part VIII: Longitudinal, survival, and causal inference {.unnumbered}
 
 These chapters complete the single-volume handbook: data structures that break independence assumptions in Ch 4–7, plus principled handling of missing data and confounding.
 
 **Read this if:** patients contribute **multiple visits**, follow-up ends at **censoring**, **dropout** is common, or you are tempted to use causal language in observational COPD cohorts.
 
-**Skip this if:** your analysis is a single cross-sectional comparison with complete data (→ [Part II](parts/part-02-describe-compare.md)). Read **Ch 20** if missingness exceeds ~5%.
+**Skip this if:** your analysis is a single cross-sectional comparison with complete data (→ [Part II](part-02-describe-compare.md)). Read **Ch 20** if missingness exceeds ~5%.
 
 ## CASTOR vignette: the extension analysis plan
 

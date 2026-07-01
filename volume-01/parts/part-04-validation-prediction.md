@@ -12,7 +12,7 @@ This part provides those standards:
 
 **Read this if:** you are writing Discussion, responding to reviewers, or deciding whether a model is for **inference** (Ch 8) or **prediction** (Ch 9).
 
-**Skip this if:** you have not yet chosen the primary method (→ [Part II–III](parts/part-02-describe-compare.md) first).
+**Skip this if:** you have not yet chosen the primary method (→ [Part II–III](part-02-describe-compare.md) first).
 
 ## CASTOR vignette: the prediction manuscript review
 

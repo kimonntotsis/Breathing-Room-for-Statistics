@@ -366,7 +366,7 @@ Practice problems for Chapters 1–21. **Solutions** (repository only): `volume-
 
 **E19.1** What does censoring mean at 365 days without an event?
 
-**E19.2** When is a hazard ratio misleading for clinicians?
+**E19.2** When is a hazard ratio misleading on its own?
 
 **E19.3** What does a log-rank test compare?
 

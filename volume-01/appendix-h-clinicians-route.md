@@ -34,7 +34,7 @@ Use [Appendix B](appendix-b-quick-reference.md) as a one-page router. Typical re
 | Missing spirometry / dropout | [Ch 20](chapters/20-missing-data.md) | Complete-case is a choice, not a default |
 | Observational smoking/therapy comparison | [Ch 21](chapters/21-causal-inference.md) | Association ≠ causation |
 
-In each chapter: **Why this chapter** → **Clinician read** / plain language → **Wrong analysis** → **Reporting template**.
+In each chapter: **Why this chapter** → **Practice read** / plain language → **Wrong analysis** → **Reporting template**.
 
 **One full narrative:** [Chapter 12, Case A](chapters/12-case-studies.md) (randomised trial, FEV1 at 12 weeks).
 

@@ -23,7 +23,7 @@ The wrong method usually starts with the wrong **outcome type**, not the wrong R
 """,
     "03-descriptive-analysis.md": """## Why this chapter
 
-Reviewers and clinicians meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
+Reviewers and co-authors meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
 
 """,
     "04-comparing-groups.md": """## Why this chapter
@@ -83,7 +83,7 @@ Batch effects are the default in proteomics, RNA, and flow — not the exception
 """,
     "15-flow-cytometry.md": """## Why this chapter
 
-Flow data are beautiful and easy to mis-analyse. A stunning UMAP is not evidence; pooling cells as if they were patients is pseudo-replication. This chapter keeps immune phenotyping at the **participant** level where clinicians can interpret it.
+Flow data are beautiful and easy to mis-analyse. A stunning UMAP is not evidence; pooling cells as if they were patients is pseudo-replication. This chapter keeps immune phenotyping at the **participant** level where results can be interpreted in plain language.
 
 """,
     "16-antibody-discovery.md": """## Why this chapter
@@ -103,7 +103,7 @@ Repeated FEV1 visits carry more information than a single timepoint; a week-52 t
 """,
     "19-survival-analysis.md": """## Why this chapter
 
-Sponsors often ask “exacerbation yes/no at 12 months” when dates of event and censoring are already in the database. Survival methods use follow-up time properly. This chapter also teaches when a hazard ratio is not enough for clinicians.
+Sponsors often ask “exacerbation yes/no at 12 months” when dates of event and censoring are already in the database. Survival methods use follow-up time properly. This chapter also teaches when a hazard ratio is not enough on its own.
 
 """,
     "20-missing-data.md": """## Why this chapter

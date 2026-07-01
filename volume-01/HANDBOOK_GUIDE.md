@@ -11,8 +11,16 @@ This volume is designed as a **working handbook**: choose a method, check assump
 | **Read papers without running R** | [Appendix H](appendix-h-clinicians-route.md) → [Appendix B](appendix-b-quick-reference.md) | Technique card + Reporting template |
 | **Analyse respiratory data in R** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) | [METHOD_MAP.md](METHOD_MAP.md) |
 | **Pick among similar methods** | [METHOD_MAP.md](METHOD_MAP.md) + [Ch 1 estimands](chapters/01-statistical-thinking.md) | Ch 4–6 technique cards; Ch 8 validation |
-| **Teach or self-study** | [Preface](chapters/00-preface.md) → [Welcome tour](index.md) → Core 1–12 + [exercises](exercises/) |
+| **Teach or self-study** | [Preface](chapters/00-preface.md) → [Welcome tour](index.md) → Core 1–12 | [Exercises](exercises/) + [solutions](solutions/) |
 | **Write a manuscript** | [Appendix B](appendix-b-quick-reference.md) | Reporting template in chapter + [Ch 8](chapters/08-validation-reporting.md) checklists |
+
+### Narrative spine (Chapter 12)
+
+For a continuous read on one CASTOR cohort, follow a role path on the [Welcome](index.md) page or [Appendix G](appendix-g-handbook-navigation.md), then open the matching case study:
+
+- **Trial / protocol:** Ch 1–2 → 3–4 → 8 → [Case A](chapters/12-case-studies.md) (and Case E if the SAP includes visits or survival)
+- **Analyst:** Ch 1–3 → Appendix B → 4–7 → [Cases A & B](chapters/12-case-studies.md)
+- **Omics:** Ch 1–2 → 10–11 → 13–17 → [Cases C & D](chapters/12-case-studies.md)
 
 ---
 
@@ -64,7 +72,7 @@ Each method in Ch 4–11 and major techniques in Ch 13–21 follows [CHAPTER_TEM
 
 1. Clinical question  
 2. Technique card (when to use / when NOT)  
-3. Dual interpretation (plain / precise / clinician)  
+3. Dual interpretation (plain / precise / practice)  
 4. Caveats box  
 5. Wrong analysis ⚠  
 6. Reporting template  
@@ -88,7 +96,13 @@ source("R/run_all_examples.R")                # optional: full chapter scripts
 
 ## CASTOR recurring cohort
 
-The workflow above applies to every analysis. The **CASTOR cohort** is where you run it: one synthetic respiratory dataset from Ch 3→12; **CASTOR-HD** extends through Ch 13–17. See [RECURRING_COHORT.md](RECURRING_COHORT.md).
+The workflow above applies to every analysis. The **CASTOR cohort** is where you run it: one **COPD-oriented** synthetic dataset from Ch 3→12; **CASTOR-HD** extends through Ch 13–17. See [RECURRING_COHORT.md](RECURRING_COHORT.md).
+
+---
+
+## Peer review before you rely on a chapter
+
+Priority chapters for external read: **4, 6, 13, 18, 20**. Use [REVIEWER_RUBRIC.md](REVIEWER_RUBRIC.md) with one respiratory investigator and one biostatistician. [INSTRUCTOR_PACK.md](INSTRUCTOR_PACK.md) suggests a teaching sequence.
 
 ---
 

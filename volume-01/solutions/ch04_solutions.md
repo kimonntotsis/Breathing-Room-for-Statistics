@@ -70,7 +70,12 @@ Look up COPD FEV1 MCID (~100 mL often cited). Compare CI bounds from E4.6 to 0.1
 
 ```r
 trial <- read_csv("data/spirometry_trial.csv", show_col_types = FALSE)
-summary(lm(fev1_followup ~ group + fev1_baseline + age + sex, data = trial))
+summary(
+  lm(
+    fev1_followup ~ group + fev1_baseline + age + sex,
+    data = trial
+  )
+)
 ```
 
 ## Permutation extension
@@ -81,5 +86,10 @@ See `R/examples/ch04_comparing_groups.R`; permutation p printed.
 
 ```r
 # install.packages("pwr")
-pwr::pwr.t.test(d = 0.25, power = 0.8, sig.level = 0.05, type = "two.sample")
+pwr::pwr.t.test(
+  d = 0.25,
+  power = 0.8,
+  sig.level = 0.05,
+  type = "two.sample"
+)
 ```

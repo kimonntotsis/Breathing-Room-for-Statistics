@@ -13,9 +13,11 @@ FILE_ANCHOR_NUM = re.compile(r"\.md#([0-9]+)([a-z0-9-]*)")
 
 
 def fix_dashes(line: str) -> str:
+    if line.startswith("|") and re.search(r"\|\s*[—–-]\s*\|", line):
+        return line
     if line.startswith("#"):
         return line.replace(" — ", ": ").replace("—", ":")
-  # prose / tables / code comments outside fences handled line-wise
+    # prose / tables / code comments outside fences handled line-wise
     line = line.replace(" — ", " - ")
     line = line.replace("—", "-")
     line = line.replace("–", "-")

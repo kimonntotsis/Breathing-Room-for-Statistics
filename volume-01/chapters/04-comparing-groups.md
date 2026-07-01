@@ -8,11 +8,11 @@
 |---|---|
 | **Question type** | Are groups different? By how much? |
 | **Typical outcomes** | FEV1, FVC, exacerbation Y/N, exacerbation counts |
-| **Recurring cohort** | [CASTOR](RECURRING_COHORT.md) |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) |
 | **Key methods** | t-tests, ANOVA, nonparametric, chi-square, Fisher, ANCOVA, permutation, power |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **R scripts** | `R/examples/ch04_comparing_groups.R` |
-| **Figures** | [ch04_fev1_by_group](../figures/ch04_fev1_by_group.png), [paired BD](../figures/ch04_paired_bronchodilator.png), [comparison panel](../figures/method_comparison_panel.png) |
+| **Figures** | ch04_fev1_by_group (`ch04_fev1_by_group.png`), paired BD (`ch04_paired_bronchodilator.png`), comparison panel (`method_comparison_panel.png`) |
 | **Exercises** | [Chapter 4 exercises](../exercises/ch04_exercises.md) |
 
 **Also see:** [Appendix B § Step 2-3](../appendix-b-quick-reference.md), [Master table](#master-decision-table)
@@ -49,7 +49,7 @@ A second study asks: *Does the proportion of patients with ≥1 exacerbation dif
 
 These are both **comparison** questions, but they require **different methods** [@stoltzfus2019biostatistics]. This chapter is the reference for that choice.
 
-We use the **[CASTOR cohort](RECURRING_COHORT.md)** throughout - same patients you described in Chapters 3 and will model in Chapters 5-9.
+We use the **[CASTOR cohort](../RECURRING_COHORT.md)** throughout - same patients you described in Chapters 3 and will model in Chapters 5-9.
 
 ---
 
@@ -94,7 +94,7 @@ Every group comparison follows five steps:
 
 **Plain language:** compare average lung function between two groups.
 
-**Precise language:** test H₀: μ₁ = μ₂ with CI for μ₁ − μ₂; robust to unequal variances (Welch-Satterthwaite df) [@welch1947t].
+**Precise language:** test $H_0$: $\mu_1 = \mu_2$ with CI for $\mu_1 - \mu_2$; robust to unequal variances (Welch-Satterthwaite df) [@welch1947t].
 
 **Clinical relevance:** ask whether the mean difference exceeds the **MCID** (minimum clinically important difference) for that outcome - literature-based, disease-specific [@cazzola2008mcid].
 
@@ -102,13 +102,22 @@ Every group comparison follows five steps:
 t.test(fev1 ~ group, data = spirometry, var.equal = FALSE)
 ```
 
+### Other respiratory settings
+
+CASTOR uses COPD-style FEV1 trials. When you interpret a mean difference or CI:
+
+- **Asthma:** MCID for FEV1 differs from COPD. Biologic trials may prespecify exacerbation reduction even when FEV1 moves modestly. Compare the CI to the margin in your protocol.
+- **Mixed airways disease:** Match pre- and post-bronchodilator timing between arms before any group comparison or ANCOVA.
+
+Fix the primary estimand in the SAP before unblinding.
+
 #### Dual interpretation (CASTOR trial arms)
 
 **Plain language:** is average FEV1 higher or lower in the intervention group?
 
 **Precise language:** estimate of μ_intervention − μ_standard with 95% CI; Welch test does not assume equal variances.
 
-**Clinician read:** is the mean difference (e.g. 0.09 L) large enough to matter given MCID (~0.10 L in many COPD trials)? The CI answers that as well as p-values [@cazzola2008mcid].
+**Practice read:** is the mean difference (e.g. 0.09 L) large enough to matter given MCID (~0.10 L in many COPD trials)? The CI answers that as well as p-values [@cazzola2008mcid].
 
 #### Caveats box: Welch t-test
 
@@ -189,7 +198,7 @@ wilcox.test(fev1 ~ group, data = spirometry)
 
 **Precise language:** tests whether distributions differ; null differs from equal means unless distributions are symmetric shifts [@mann1947test].
 
-**Clinician read:** if t-test and Mann-Whitney disagree, report both estimates (mean diff and median diff).
+**Practice read:** if t-test and Mann-Whitney disagree, report both estimates (mean diff and median diff).
 
 #### Caveats box
 
@@ -215,7 +224,7 @@ Use Mann-Whitney then report mean difference only → report median [IQR] or bot
 
 | | |
 |---|---|
-| **Answers** | Is mean outcome different from a reference value μ₀? |
+| **Answers** | Is mean outcome different from a reference value $\mu_0$? |
 | **CASTOR use** | Compare cohort mean FEV1 to protocol benchmark (with caution) |
 | **R** | `t.test(fev1, mu = 2.5)` |
 | **Does NOT prove** | That reference is clinically appropriate for this population |
@@ -247,7 +256,10 @@ Compare clinic mean to textbook "normal" FEV1 without age/sex/height standardiza
 | **Avoid when** | Order effects in crossover; independent groups |
 
 ```r
-bronchodilator <- read_csv("data/bronchodilator_paired.csv", show_col_types = FALSE)
+bronchodilator <- read_csv(
+  "data/bronchodilator_paired.csv",
+  show_col_types = FALSE
+)
 t.test(bronchodilator$fev1_pre, bronchodilator$fev1_post, paired = TRUE)
 ```
 
@@ -257,7 +269,7 @@ t.test(bronchodilator$fev1_pre, bronchodilator$fev1_post, paired = TRUE)
 
 **Precise language:** tests mean of pairwise differences; assumes approximate normality of differences.
 
-**Clinician read:** mean change ~0.25 L - compare to MCID for bronchodilator response in relevant disease [@cazzola2008mcid].
+**Practice read:** mean change ~0.25 L - compare to MCID for bronchodilator response in relevant disease [@cazzola2008mcid].
 
 #### Caveats box
 
@@ -292,7 +304,7 @@ For skewed paired differences: `wilcox.test(pre, post, paired = TRUE)`.
 |---|---|
 | **Answers** | Do any group means differ? |
 | **CASTOR example** | FEV1 by `diagnosis` (no/moderate/severe obstruction) |
-| **H₀** | All group means equal |
+| **$H_0$** | All group means equal |
 | **R** | `aov(fev1 ~ diagnosis)` + `TukeyHSD` |
 | **Follow-up** | Prespecified contrasts only |
 
@@ -396,7 +408,7 @@ fisher.test(tab, simulate.p.value = TRUE, B = 10000)  # large tables
 
 **Precise language:** tests independence in 2×2 table; Fisher exact valid for small expected counts [@agresti2018introduction].
 
-**Clinician read:** report **risk difference** (absolute %) alongside p-value - "2.9% more events" is clearer than p alone.
+**Practice read:** report **risk difference** (absolute %) alongside p-value - "2.9% more events" is clearer than p alone.
 
 #### Caveats box: Fisher / chi-square for binary outcomes
 
@@ -435,7 +447,7 @@ fisher.test(tab, simulate.p.value = TRUE, B = 10000)  # large tables
 
 **Plain language:** risk difference tells you how many more patients per 100 experience the event.
 
-**Precise language:** RD = p₁ − p₂; RR = p₁/p₂; OR = [p₁/(1−p₁)] / [p₂/(1−p₂)].
+**Precise language:** RD = $p_1 - p_2$; RR = $p_1/p_2$; OR = $[p_1/(1-p_1)] / [p_2/(1-p_2)]$, where $p_1$ and $p_2$ are event risks in the two groups.
 
 ```r
 prop.test(
@@ -487,8 +499,14 @@ For **exacerbation counts** between groups, Poisson or negative binomial regress
 Quick two-group comparison (equal follow-up):
 
 ```r
-counts <- read_csv("data/exacerbation_counts.csv", show_col_types = FALSE)
-wilcox.test(exacerbations_12m ~ factor(smoking), data = counts)  # descriptive
+counts <- read_csv(
+  "data/exacerbation_counts.csv",
+  show_col_types = FALSE
+)
+wilcox.test(
+  exacerbations_12m ~ factor(smoking),
+  data = counts
+)  # descriptive
 # Inferential: Poisson GLM (Ch 6)
 ```
 
@@ -506,7 +524,9 @@ where $s_p$ is pooled SD.
 
 ```r
 cohen_d <- function(x, g) {
-  stats <- tapply(x, g, function(v) c(mean = mean(v), sd = sd(v), n = length(v)))
+  stats <- tapply(x, g, function(v) {
+    c(mean = mean(v), sd = sd(v), n = length(v))
+  })
   m1 <- stats[[1]]["mean"]; m2 <- stats[[2]]["mean"]
   s1 <- stats[[1]]["sd"];  s2 <- stats[[2]]["sd"]
   n1 <- stats[[1]]["n"];   n2 <- stats[[2]]["n"]
@@ -550,7 +570,7 @@ lm(fev1_followup ~ group + fev1_baseline + age + sex, data = trial)
 
 **Plain language:** after accounting for starting FEV1, is follow-up lung function different by arm?
 
-**Clinician read:** often increases precision in RCT; does not replace intention-to-treat primary unless prespecified.
+**Practice read:** often increases precision in RCT; does not replace intention-to-treat primary unless prespecified.
 
 #### Caveats box
 
@@ -588,7 +608,7 @@ Use change scores without checking correlation baseline-follow-up → ANCOVA oft
 
 When distributional assumptions are doubtful or as a **robustness check**, permutation tests simulate the null by shuffling group labels.
 
-**Idea:** if groups were exchangeable under H₀, relabelling should not produce larger differences than observed.
+**Idea:** if groups were exchangeable under $H_0$, relabelling should not produce larger differences than observed.
 
 ```r
 set.seed(101)
@@ -631,12 +651,17 @@ Power analysis belongs **before** data collection.
 
 ```r
 # install.packages("pwr")
-pwr::pwr.t.test(d = 0.25, power = 0.8, sig.level = 0.05, type = "two.sample")
+pwr::pwr.t.test(
+  d = 0.25,
+  power = 0.8,
+  sig.level = 0.05,
+  type = "two.sample"
+)
 ```
 
 **Plain language:** how many patients per arm to have a fair chance of detecting a clinically meaningful difference?
 
-**Precise language:** under specified alternative d, probability of rejecting H₀ at level α.
+**Precise language:** under specified alternative $d$, probability of rejecting $H_0$ at level $\alpha$.
 
 **Respiratory trials:** anchor d or mean difference on published MCID, not only statistical tradition [@cazzola2008mcid; @harrell2015rms].
 
@@ -679,16 +704,16 @@ Testing FEV1, FVC, symptoms, and exacerbations without adjustment inflates false
 | Continuous | 2 paired measurements | Wilcoxon signed-rank |
 | Continuous | 3+ independent groups | Kruskal-Wallis |
 | Binary | 2 independent groups | Logistic regression (adjusted) |
-| Binary | 2 paired measurements |, |
-| Count | 2+ independent groups |, |
+| Binary | 2 paired measurements | Logistic GEE (adjust covariates) |
+| Count | 2+ independent groups | Negative binomial; Wilcoxon sensitivity |
 
-Full map: [METHOD_MAP.md](../METHOD_MAP.md); Visual: [method_decision_tree.png](../figures/method_decision_tree.png)
+Full map: [METHOD_MAP.md](../METHOD_MAP.md); Visual: `method_decision_tree.png`
 
-![FEV1 by group](../figures/ch04_fev1_by_group.png)
+!FEV1 by group (`ch04_fev1_by_group.png`)
 
 Overlapping distributions warn against reading a small mean difference as clinically certain without the CI and sample size.
 
-![Method comparison panel](../figures/method_comparison_panel.png)
+!`method_comparison_panel.png`
 
 Side-by-side panels show how the same CASTOR subset looks under different comparison choices; use this to sanity-check pairing and outcome type before picking a test.
 
@@ -704,7 +729,7 @@ Side-by-side panels show how the same CASTOR subset looks under different compar
 
 > Mean FEV1 was 3.85 L (SD 0.64) in the intervention arm and 3.76 L (SD 0.64) in standard care (n = 198 and 202). The mean difference was 0.09 L (95% CI −0.04 to 0.21; Welch t, p = 0.20). The difference is compatible with no effect and with clinically small benefits; this trial was not powered for a prespecified MCID of 0.10 L.
 
-**Clinician read:** not statistically significant; CI includes values that may or may not matter clinically.  
+**Practice read:** not statistically significant; CI includes values that may or may not matter clinically.  
 **Statistician read:** non-significant p does not prove no effect - interval estimation preferred [@harrell2015rms].
 
 ---
@@ -782,7 +807,7 @@ Standard Ch 4 tests assume **independent** observations. Respiratory studies oft
 
 **Precise language:** ignore clustering → anti-conservative SEs and inflated significance [@harrell2015rms].
 
-**Clinician read:** “n = 400 patients” may hide “8 wards”; ask how many **units** were randomised.
+**Practice read:** “n = 400 patients” may hide “8 wards”; ask how many **units** were randomised.
 
 #### Wrong analysis ⚠
 
@@ -806,9 +831,9 @@ Standard Ch 4 tests assume **independent** observations. Respiratory studies oft
 
 **Plain language:** same patient, two manoeuvres; use a **paired** test, not two independent groups.
 
-**Clinician read:** ATS/ERS BD reversibility uses within-patient change; do not split pre and post into fictional “groups.”
+**Practice read:** ATS/ERS BD reversibility uses within-patient change; do not split pre and post into fictional “groups.”
 
-CASTOR paired example: `R/examples/ch04_comparing_groups.R` and [Figure](../figures/ch04_paired_bronchodilator.png).
+CASTOR paired example: `R/examples/ch04_comparing_groups.R` and Figure (`ch04_paired_bronchodilator.png`).
 
 ### Technique: Non-inferiority and equivalence trials {#technique-non-inferiority-and-equivalence-trials}
 
@@ -825,7 +850,7 @@ CASTOR paired example: `R/examples/ch04_comparing_groups.R` and [Figure](../figu
 
 **Plain language:** “Not significantly different” ≠ “equivalent.” You must prespecify how much worse is acceptable.
 
-**Clinician read:** device and inhaler NI trials live or die on the **margin**, not the *p*-value from a superiority test.
+**Practice read:** device and inhaler NI trials live or die on the **margin**, not the *p*-value from a superiority test.
 
 #### Reporting template (non-inferiority, continuous FEV1)
 

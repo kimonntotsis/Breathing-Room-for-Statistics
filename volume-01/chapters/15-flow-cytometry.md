@@ -32,7 +32,7 @@ Ch 4 (comparisons), Ch 5 (linear models), Ch 13 (multiplicity), Ch 14 (batch/dri
 
 ## Why this chapter
 
-Flow data are beautiful and easy to mis-analyse. A stunning UMAP is not evidence; pooling cells as if they were patients is pseudo-replication. This chapter keeps immune phenotyping at the **participant** level where clinicians can interpret it.
+Flow data are beautiful and easy to mis-analyse. A stunning UMAP is not evidence; pooling cells as if they were patients is pseudo-replication. This chapter keeps immune phenotyping at the **participant** level where results can be interpreted in plain language.
 
 ## Opening question
 
@@ -70,7 +70,7 @@ The chapter script compares two analysis units on the same CASTOR-HD toy per-cel
 | 4 | Adjust for drift (run day/batch) when measured |
 | **n in CASTOR-HD** | 120 participants in `flowcytometry_summary.csv` |
 
-**Clinician read:** "Among 120 people, cases had a higher median monocyte fraction" - this is the claim you can defend.
+**Practice read:** "Among 120 people, cases had a higher median monocyte fraction" - this is the claim you can defend.
 
 ### Worked example (CASTOR-HD participant models)
 
@@ -94,7 +94,7 @@ Report **participant *n***, not cell event counts. The pseudo-replication demo i
 | 3 | Report **n = thousands of cells** and tiny p-values |
 | **Why it fails** | Cells from the same person are correlated; SEs are far too small |
 
-**Clinician read:** "We studied 6,000 cells" sounds impressive but does **not** mean 6,000 independent patients.
+**Practice read:** "We studied 6,000 cells" sounds impressive but does **not** mean 6,000 independent patients.
 
 ### Teaching demonstration (script output)
 
@@ -138,7 +138,7 @@ The pseudo-replication model will show a much smaller p-value and misleading pre
 
 **Precise language:** we modelled participant-level proportions, accounting for drift, and reported effect sizes with uncertainty.
 
-**Clinician read:** these summaries are interpretable (e.g., "higher monocyte fraction"), but they are not a replacement for validated immunophenotyping.
+**Practice read:** these summaries are interpretable (e.g., "higher monocyte fraction"), but they are not a replacement for validated immunophenotyping.
 
 ### Caveats box
 
@@ -216,11 +216,11 @@ Embeddings (UMAP/t-SNE) and clustering can help you **see** structure and check 
 
 **Rule:** if you show an embedding, also show participant-level summaries that support the claim.
 
-![Cell-type proportions by group (participant-level)](../figures/ch15_flow_props_by_group.png)
+!Cell-type proportions by group (participant-level) (`ch15_flow_props_by_group.png`)
 
 Bars are participant means: the level at which group comparisons belong in a respiratory paper.
 
-![Pseudo-replication: participant vs pooled-cell p-values](../figures/ch15_pseudoreplication_demo.png)
+!Pseudo-replication: participant vs pooled-cell p-values (`ch15_pseudoreplication_demo.png`)
 
 Inflated significance when cells are pooled is the reason flow claims must stay at participant *n*.
 
@@ -265,7 +265,10 @@ Outputs:
 source("R/00_setup.R")
 library(tidyverse)
 
-flow <- readr::read_csv(file.path(paths$data, "flowcytometry_summary.csv"), show_col_types = FALSE)
+flow <- readr::read_csv(
+  file.path(paths$data, "flowcytometry_summary.csv"),
+  show_col_types = FALSE
+)
 table(flow$group, flow$batch)
 ```
 
@@ -279,11 +282,11 @@ table(flow$group, flow$batch)
 - **Stacked compositional bars** by group (are shifts global rebalancing?)
 - **Pseudo-replication contrast** (participant n vs cell n for the same comparison)
 
-![Compositional structure: proportions sum to 1](../figures/ch15_compositional_stacked.png)
+!Compositional structure: proportions sum to 1 (`ch15_compositional_stacked.png`)
 
 Shifts in one population often accompany opposite shifts elsewhere because proportions are bounded.
 
-![Drift check: proportions by batch/day](../figures/ch15_flow_props_by_batch.png)
+!Drift check: proportions by batch/day (`ch15_flow_props_by_batch.png`)
 
 Batch-separated bars mean immunology and processing are confounded until drift is modelled or redesigned.
 

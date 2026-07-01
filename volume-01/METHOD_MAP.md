@@ -1,6 +1,6 @@
 # Master method map: Statistical Methods for Respiratory Research
 
-> **Handbook navigation:** [Appendix B](appendix-b-quick-reference.md), [HANDBOOK_GUIDE.md](HANDBOOK_GUIDE.md), [Decision tree figure](figures/method_decision_tree.png), [FIGURE_INDEX.md](FIGURE_INDEX.md)
+> **Handbook navigation:** [Appendix B](appendix-b-quick-reference.md), [HANDBOOK_GUIDE.md](HANDBOOK_GUIDE.md), Decision tree figure (`method_decision_tree.png`), [FIGURE_INDEX.md](FIGURE_INDEX.md)
 
 Use this before opening any software. Start with the **scientific question**, not the menu of tests.
 
@@ -66,7 +66,7 @@ If you cannot write this sentence, stop and clarify the question.
 
 ## Decision tree (simplified)
 
-See also the visual figure: [figures/method_decision_tree.png](figures/method_decision_tree.png) and [method_comparison_panel.png](figures/method_comparison_panel.png).
+See also the visual figure: `method_decision_tree.png` and `method_comparison_panel.png`.
 
 ```
 OUTCOME?
@@ -223,13 +223,13 @@ LONGITUDINAL / SURVIVAL / CAUSAL (Ch 18–21)
 
 | Analysis | Minimum report | Guideline |
 |----------|----------------|-----------|
-| t-test | Mean difference, 95% CI, n, test used |, |
-| ANOVA | Omnibus test + prespecified contrasts |, |
+| t-test | Mean difference, 95% CI, n, test used | STROBE [@vonelm2007strobe] |
+| ANOVA | Omnibus test + prespecified contrasts | STROBE [@vonelm2007strobe] |
 | Logistic | OR or adjusted risk with 95% CI, n, events | STROBE [@vonelm2007strobe] |
-| Poisson/NB | Rate ratio with 95% CI, offset stated |, |
-| Regression | Coefficients, CI, n, R² optional |, |
+| Poisson/NB | Rate ratio with 95% CI, offset stated | STROBE [@vonelm2007strobe] |
+| Regression | Coefficients, CI, n, $R^2$ optional | STROBE [@vonelm2007strobe] |
 | Prediction | AUC + calibration; training vs test stated | TRIPOD [@moons2015tripod] |
-| PCA/cluster | n, scaling, k/components chosen, stability note |, |
+| PCA/cluster | n, scaling, k/components chosen, stability note | REMARK / omics reporting [@mcshane2011biomarker] |
 | RCT | Primary estimand, CONSORT flow | CONSORT [@schulz2010consort] |
 
 Full bibliography: [REFERENCES.md](REFERENCES.md); `references.bib`
