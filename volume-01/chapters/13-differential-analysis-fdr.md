@@ -16,6 +16,40 @@
 | **Exercises** | [Chapter 13 exercises](../exercises/ch13_exercises.md) |
 
 **Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md), [Appendix B §1b](../appendix-b-quick-reference.md)
+
+---
+
+## Investigator path (≈20 min)
+
+You do not need this entire chapter on first pass. Read in order:
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — volcano plots are triage, not treatment decisions
+2. [The differential analysis workflow](#the-differential-analysis-workflow) — QC, model, FDR, sensitivity, claim discipline
+3. [Method choice at a glance](#method-choice-at-a-glance) — proteomics vs RNA; Practice read on FDR
+4. [Reporting template](#reporting-template) — discovery list wording for Methods/Results
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-omics-discovery) — batch overlap and overclaiming stops
+
+**Analyst read:** per-feature models, R lab, and decision details below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Per-feature linear model (proteomics)** | Olink-like continuous abundance; adjust group + covariates | Teaching default for log-scale proteins; check LOD missingness |
+| **NB GLM + library offset (RNA-seq)** | Gene count data; varying library size | Counts need offset; overdispersion common |
+| **Benjamini–Hochberg FDR** | Any high-dimensional screen (100s–1000s of features) | Controls expected false discovery rate across the family of tests |
+| **Volcano plot** | Exploratory prioritisation after modelling | Descriptive only; not proof of biology |
+| **Batch as covariate** | Batch measured; partial group × batch overlap | Reduces technical confounding ([Ch 14](14-batch-effects.md)) |
+| **Sensitivity: with vs without batch** | Any DE hit list before follow-up spend | If hits disappear after batch, result is unstable |
+| **Complete-case vs simple imputation (LOD)** | Proteomics below detection limit | Imputation can fabricate group differences |
+| **Shrinkage / empirical Bayes (conceptual)** | Very small *n*; unstable per-feature estimates | Stabilises rankings; specialist pipelines |
+
+**Extensions** (sparse PCA, prediction): [Alternatives & extensions](#alternatives--extensions-choose-by-goal) at chapter end.
+
+---
+
 ## Learning objectives
 
 1. Understand why “\(p < 0.05\)” becomes meaningless when you test 1000+ features.
@@ -171,11 +205,24 @@ Use Template A in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES
 
 !Volcano plots: proteomics and RNA differential analysis (BH FDR) (`ch13_volcano_panel.png`)
 
+Volcanoes are **triage slides**, not proof of treatment effect. Pair every volcano with missingness QC and an effect table with *n* used.
+
+### Figure hygiene: volcano without QC context
+
+| Slide mistake | What it masks | Pair with |
+|---------------|-------------|-----------|
+| Volcano-only hero figure | LOD missingness, batch overlap, low *n* per group | `ch13_proteomics_missingness_by_group.png`, batch PCA ([Ch 14](14-batch-effects.md)) |
+| Colour by significance only | Effect size and CI for shortlisted features | Top table with estimate + 95% CI + q-value |
+
+Router: [Appendix I](../appendix-i-figure-hygiene.md).
+
 Points in the upper corners are large effects with small q-values; the grey band is the non-significant region after BH: empty corners are as informative as hits.
 
 ---
 
 ## Decision table: proteomics vs RNA-seq
+
+*Modality contrast. For method **when/why** in one view, see [Method choice at a glance](#method-choice-at-a-glance) above.*
 
 | Feature | Proteomics (Olink-like) | RNA-seq counts |
 |---------|-------------------------|----------------|

@@ -12,10 +12,47 @@
 | **Key methods** | t-tests, ANOVA, nonparametric, chi-square, Fisher, ANCOVA, permutation, power |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **R scripts** | `R/examples/ch04_comparing_groups.R` |
-| **Figures** | ch04_fev1_by_group (`ch04_fev1_by_group.png`), paired BD (`ch04_paired_bronchodilator.png`), comparison panel (`method_comparison_panel.png`) |
+| **Figures** | ch04_fev1_by_group (`ch04_fev1_by_group.png`), paired BD (`ch04_paired_bronchodilator.png`), comparison panel (`method_comparison_panel.png`); **figure hygiene:** `viz_pair_ch04_continuous.png`, `viz_pair_ch04_paired.png` |
 | **Exercises** | [Chapter 4 exercises](../exercises/ch04_exercises.md) |
 
 **Also see:** [Appendix B § Step 2-3](../appendix-b-quick-reference.md), [Master table](#master-decision-table)
+
+---
+
+## Investigator path (≈20 min)
+
+You do not need this entire chapter on first pass. Read in order:
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — MCID, pairing, proportion vs count
+2. [The comparison workflow](#the-comparison-workflow) — write the estimand in one sentence
+3. [Method choice at a glance](#method-choice-at-a-glance) — pick the test by outcome and design
+4. [Worked example: COPD trial FEV1](#worked-example-copd-trial-fev1) — Practice read and reporting wording
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-comparison-chapter) — before protocol or manuscript sign-off
+
+**Analyst read:** technique cards, R lab, and extensions in the sections below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Welch *t*-test** | 2 independent groups; continuous FEV1 (or similar) | Default for unequal variances; report mean difference + 95% CI |
+| **Paired *t*-test** | 2 measurements per patient (pre/post BD, crossover) | Accounts for within-person pairing |
+| **One-way ANOVA + contrasts** | 3+ independent groups; continuous outcome | Omnibus test; prespecify which contrasts matter |
+| **One-sample *t*-test** | Continuous vs prespecified reference (e.g. % predicted) | Single-group comparison to norm or threshold |
+| **ANCOVA / linear model** | RCT with baseline FEV1; adjust for covariates | Often more efficient than change scores; prespecify in SAP |
+| **Chi-square / Fisher** | 2+ independent groups; binary outcome (2×*k* table) | Fisher when sparse expected counts |
+| **McNemar** | Same patients; binary before/after | Paired proportions, not independent arms |
+| **Mann–Whitney / Wilcoxon** | Very skew; small *n*; sensitivity to *t*-test | Compares ranks; report median difference if means mislead |
+| **Kruskal–Wallis** | 3+ groups; nonparametric sensitivity | Extension of rank-based comparison |
+| **Logistic regression (adjusted)** | Binary outcome; need covariate adjustment | OR/RR with CI; route to [Ch 6](06-generalized-linear-models.md) for full GLM |
+| **Poisson / NB GLM** | Count exacerbations; varying follow-up | Models **rates** with offset; not a *t*-test on counts ([Ch 6](06-generalized-linear-models.md)) |
+| **Mixed model / GEE** | Clustered centres or wards; repeated visits | Independence assumed in rows above fails ([Ch 18](18-longitudinal-mixed-models.md)) |
+| **Permutation test** | Small *n*; robustness check for RCT | Minimal distributional assumptions; prespecify statistic |
+
+**Extensions** (cluster crossover, NI margins, multiplicity): [Alternatives & extensions](#alternatives--extensions-choose-by-data-and-design) at chapter end. Full router: [METHOD_MAP](../METHOD_MAP.md), [Appendix B](../appendix-b-quick-reference.md).
+
 ---
 
 ## Learning objectives
@@ -683,6 +720,8 @@ Testing FEV1, FVC, symptoms, and exacerbations without adjustment inflates false
 
 ## Master decision table
 
+*Quick lookup by outcome × design. For **when** and **why**, see [Method choice at a glance](#method-choice-at-a-glance) above.*
+
 **Primary test by outcome and design**
 
 | Outcome | Design | Primary method |
@@ -712,6 +751,28 @@ Full map: [METHOD_MAP.md](../METHOD_MAP.md); Visual: `method_decision_tree.png`
 !FEV1 by group (`ch04_fev1_by_group.png`)
 
 Overlapping distributions warn against reading a small mean difference as clinically certain without the CI and sample size.
+
+### Figure hygiene: continuous comparison (mean bar vs distribution)
+
+!Right vs wrong: FEV1 by trial arm (`viz_pair_ch04_continuous.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Mean bar heights only | Spread, outliers, per-arm *n* on the plot |
+| **Right** | Boxplot + jitter + mean diamond | — (pair with Welch *t* CI in text) |
+
+**Practice read:** would a sponsor infer “clear separation” from the wrong panel alone? The right panel should match the overlap in your 95% CI.
+
+### Figure hygiene: paired bronchodilator (independence vs pairing)
+
+!Right vs wrong: paired bronchodilator response (`viz_pair_ch04_paired.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Pre and post as two independent boxplots | Within-person correlation; paired estimand |
+| **Right** | Lines linking each patient’s pre/post | — (supports paired *t* / Wilcoxon signed-rank) |
+
+Router: [Appendix I](../appendix-i-figure-hygiene.md).
 
 !`method_comparison_panel.png`
 

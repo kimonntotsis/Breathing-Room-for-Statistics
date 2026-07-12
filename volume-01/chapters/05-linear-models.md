@@ -10,10 +10,40 @@
 | **Question type** | How is FEV1 associated with predictors, adjusted for others? |
 | **Key methods** | SLR, MLR, interactions, ANCOVA, diagnostics, VIF |
 | **R scripts** | `R/examples/ch05_linear_models.R` |
-| **Figures** | residual diagnostics (`ch05_residual_diagnostics.png`), adjusted means (`ch05_fev1_by_smoking_adjusted.png`) |
+| **Figures** | residual diagnostics (`ch05_residual_diagnostics.png`), adjusted means (`ch05_fev1_by_smoking_adjusted.png`); **figure hygiene:** `viz_pair_ch05_residuals.png` |
 | **Exercises** | [ch05](../exercises/ch05_exercises.md) |
 
-**Also see:** [Appendix B § Step 5](../appendix-b-quick-reference.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#master-decision-table)
+**Also see:** [Appendix B § Step 5](../appendix-b-quick-reference.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#method-choice-at-a-glance)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [When linear regression is the right tool](#when-linear-regression-is-the-right-tool) — continuous outcome + adjustment
+2. [Method choice at a glance](#method-choice-at-a-glance) — SLR, MLR, ANCOVA
+3. First **Practice read** under main technique — MCID and confounding
+4. [Reporting template](#reporting-template) in worked section
+5. [Alternatives & extensions](#alternatives--extensions-choose-by-data) — skew, repeated visits
+
+**Analyst read:** diagnostics, VIF, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Simple linear regression (SLR)** | One predictor; continuous FEV1 | Baseline adjusted association; one coefficient to report |
+| **Multiple linear regression (MLR)** | Several covariates; continuous outcome | Adjusted mean differences; standard for observational spirometry |
+| **ANCOVA (baseline in model)** | RCT; baseline FEV1 measured | Often more efficient than change score; prespecify |
+| **Interaction terms** | Effect differs by subgroup (prespecified) | Tests modification; not post hoc fishing |
+| **Robust / Huber regression** | Outliers in biomarkers or LOS | Sensitivity to leverage points |
+| **Log-transform outcome** | Strong right skew; multiplicative effects | Changes estimand; report on original scale if needed |
+| **Splines / GAM** | Non-linear age–FEV1 (prespecified) | Flexible curvature; avoid p-hacking ([Ch 7](07-model-building.md)) |
+| **Mixed model** | Repeated FEV1 visits | `lm()` on stacked rows is wrong ([Ch 18](18-longitudinal-mixed-models.md)) |
+
+**Extensions:** gamma GLM, quantile regression in [Alternatives & extensions](#alternatives--extensions-choose-by-data).
+
 ---
 
 ## Learning objectives
@@ -276,6 +306,15 @@ car::vif(fit)  # values > 5–10 warrant attention
 ```r
 source("R/examples/ch05_linear_models.R")
 ```
+
+### Figure hygiene: smooth line vs residuals
+
+!Right vs wrong: linear model diagnostics (`viz_pair_ch05_residuals.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Age–FEV1 smooth line only | Non-linearity, outliers, leverage |
+| **Right** | Residuals vs fitted | Pattern suggesting wrong functional form |
 
 ---
 

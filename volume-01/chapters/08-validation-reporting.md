@@ -12,6 +12,38 @@
 | **Exercises** | [ch08](../exercises/ch08_exercises.md) |
 
 **Also see:** [Appendix B](../appendix-b-quick-reference.md), [REFERENCES](../REFERENCES.md), Reporting checklists below
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — evidence quality for sign-off
+2. [Method choice at a glance](#method-choice-at-a-glance) — CONSORT/STROBE/TRIPOD routing
+3. [Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)](#technique-reporting-guidelines-consort--strobe--tripod) — pick your guideline
+4. **Practice read** on MCID and CIs vs *p*-values
+5. [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit)
+
+**Analyst read:** bootstrap, multiplicity, R examples below.
+
+---
+
+## Method choice at a glance
+
+| Method / framework | When to use | Why |
+|-------------------|-------------|-----|
+| **95% confidence interval** | Any primary estimate | Shows precision; preferred over “NS” |
+| **Bootstrap CI** | Small *n*; skew; nonstandard estimators | Resampling when formulas are doubtful |
+| **CONSORT flow + checklist** | Randomised trials | Standard for enrolment, follow-up, analysis sets |
+| **STROBE** | Observational cohorts and case-control | Transparency on selection, confounding, missingness |
+| **TRIPOD** | Prediction model papers | Discrimination, calibration, validation stated |
+| **Multiplicity adjustment** | Secondary endpoints; omics screens | Controls false positives across families of tests |
+| **Prespecified sensitivity analyses** | MAR, batch, model form | Shows stability; not post hoc rescue |
+| **REMARK / omics reporting** | Biomarker discovery lists | Effect size + q + validation plan |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit) at chapter end.
+
+---
+
 ## Learning objectives
 
 1. Report estimates with uncertainty, not p-values alone.
@@ -167,6 +199,8 @@ Test 20 biomarkers at α = 0.05; publish the three "significant" ones without co
 | **CONSORT** | RCT | Flow diagram, randomisation, primary outcome | [@schulz2010consort] |
 | **STROBE** | Observational | Eligibility, confounding, missing data | [@vonelm2007strobe] |
 | **TRIPOD** | Prediction | Validation, calibration, model specification | [@moons2015tripod] |
+
+**Figure hygiene:** CONSORT/STROBE flow diagrams and TRIPOD calibration figures are part of evidence quality. Right vs wrong plot pairs: [Appendix I](../appendix-i-figure-hygiene.md), [Ch 3](03-descriptive-analysis.md#plot-choice-by-estimand).
 
 ### Dual interpretation
 

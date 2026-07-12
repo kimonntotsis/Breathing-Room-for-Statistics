@@ -11,6 +11,9 @@ These blocks sit **outside** the technique cards. They do not replace assumption
 | Block | Where | Purpose |
 |-------|--------|---------|
 | **Why this chapter** | After prerequisites, before opening question | 3–5 sentences: who needs this, what mistake it prevents |
+| **Investigator path (≈20 min)** | After At a glance | Layered read: estimand, method table, Practice read, reporting |
+| **Method choice at a glance** | After Investigator path | **Method \| When to use \| Why** — canonical routing for the chapter |
+| **Figure hygiene** | Once per chapter (or cross-ref Appendix I) | Right vs wrong plot pair on same CASTOR data; what the wrong panel masks |
 | **In practice** | Once per chapter, before first Wrong analysis | Sponsor meeting / manuscript reality check |
 | **Before you open R** | Immediately before `## R lab` or `### R lab` | Estimand + unit + file + one sensitivity: then code |
 | **Where this chapter leads** | Before Further reading / Exercises | Two sentences linking to the next chapter(s) |

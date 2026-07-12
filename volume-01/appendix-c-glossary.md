@@ -202,6 +202,7 @@ Short entries for terms you may hear in respiratory research even when this hand
 | **COPD** | Chronic obstructive pulmonary disease | Obstructive lung disease context for many CASTOR examples |
 | **CASTOR** | Analysis workflow (**C**linical question → **A**ssess → **S**elect → **T**est → **O**utput → **R**eport limits) and synthetic teaching cohort | Mnemonic for question-first analysis; spelled out in [Preface](chapters/00-preface.md#what-castor-means) and [Ch 1](chapters/01-statistical-thinking.md); data in [RECURRING_COHORT](RECURRING_COHORT.md) |
 | **CASTOR-HD** | Synthetic omics extension | Proteomics, RNA, flow, and antibody teaching datasets (Ch 13–17) |
+| **APATE** | Greek *Apate* (Ἀπάτη), personification of deceit; handbook **prose-only** messy-registry vignette | Contrasts with clean CASTOR; no `data/*.csv` — [APATE_VIGNETTE](APATE_VIGNETTE.md) |
 
 ---
 

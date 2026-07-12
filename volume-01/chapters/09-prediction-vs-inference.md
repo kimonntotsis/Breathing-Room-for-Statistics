@@ -10,11 +10,41 @@
 | **Question type** | What is this patient's 12-month exacerbation risk? |
 | **Methods** | Logistic, LASSO, rpart, RF, gradient boosting (optional), AUC, Brier, calibration |
 | **R** | `R/examples/ch09_prediction.R` |
-| **Figures** | ch09_calibration_logistic (`ch09_calibration_logistic.png`) |
+| **Figures** | ch09_calibration_logistic (`ch09_calibration_logistic.png`); **figure hygiene:** `viz_pair_ch09_prediction.png` |
 | **Tables** | [ch09_model_comparison](../tables/ch09_model_comparison.csv) |
 | **Exercises** | [ch09](../exercises/ch09_exercises.md) |
 
 **Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md), High-dimensional prediction: [Ch 17](17-integrated-castor-hd.md)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Inference vs prediction: choose your lane](#inference-vs-prediction-choose-your-lane) — pick the goal first
+2. [Method choice at a glance](#method-choice-at-a-glance) — logistic, LASSO, trees
+3. [Technique: Binary prediction model](#technique-binary-prediction-model-general) — Practice read on calibration
+4. [Reporting template](#reporting-template) — TRIPOD-style wording
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-prediction-chapter) — train AUC in abstract
+
+**Analyst read:** model shootout, R lab, validation extensions below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Logistic regression** | Few predictors; interpretable risk model | Baseline for binary prediction; coefficients have meaning |
+| **LASSO / elastic net** | Many predictors; moderate *n* | Penalisation; nested CV when tuning ([Ch 7](07-model-building.md)) |
+| **Classification trees (rpart)** | Nonlinear thresholds; explainability | Simple rules; unstable without CV |
+| **Random forest / boosting** | Flexible boundaries; prediction focus | Often higher AUC; harder to interpret |
+| **Train/test split** | Initial model comparison | Simple; unstable with small event counts |
+| **Bootstrap / k-fold CV** | Small *n*; unstable single split | More stable performance estimate |
+| **Nested CV** | p ≫ n omics prediction ([Ch 17](17-integrated-castor-hd.md)) | Tuning without leakage |
+| **Calibration plot + Brier** | Any risk model for clinical use | Discrimination (AUC) ≠ calibrated probabilities |
+| **External validation** | Deployment or multi-site claims | Required by TRIPOD for transportability |
+
+**Extensions:** DCA, recalibration in [Alternatives & extensions](#alternatives--extensions-prediction-reporting-and-validation).
 
 ---
 
@@ -314,7 +344,19 @@ High variance with sparse events; deep trees overfit. Prefer shallow trees (`cp`
 | **Answers** | Do predicted probabilities match observed event rates? |
 | **Method** | Risk bins (3–5 when events sparse); mean predicted vs observed |
 | **Figure** | `ch09_calibration_logistic.png` |
+| **Pair** | `viz_pair_ch09_prediction.png` (AUC shootout vs calibration) |
 | **Metric** | Brier = mean($(y - \hat{p})^2$); lower is better [@steyerberg2019clinical] |
+
+### Figure hygiene: AUC hero vs calibration
+
+!Right vs wrong: prediction performance (`viz_pair_ch09_prediction.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Model AUC bar chart shootout | Whether predicted **risks** match observed event rates |
+| **Right** | Calibration plot on test set | Discrimination (AUC) if shown without calibration |
+
+**Practice read:** TRIPOD expects calibration or strong justification when a model informs treatment thresholds [@steyerberg2019clinical]. High AUC alone does not tell a pulmonologist whether “20% risk” means 20% or 5%.
 
 ---
 

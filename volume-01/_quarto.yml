@@ -4,13 +4,15 @@ project:
   render:
     - index.md
     - chapters/*.md
-    - appendix-a-r-setup.md
+    - appendix-g-handbook-navigation.md
+    - appendix-j-investigator-minimum-path.md
+    - appendix-h-clinicians-route.md
+    - appendix-i-figure-hygiene.md
     - appendix-b-quick-reference.md
+    - appendix-a-r-setup.md
     - appendix-c-glossary.md
     - appendix-d-missing-data-checklists.md
     - appendix-f-exercises.md
-    - appendix-g-handbook-navigation.md
-    - appendix-h-clinicians-route.md
     - references.qmd
 
 filters:
@@ -58,13 +60,15 @@ book:
     - chapters/19-survival-analysis.md
     - chapters/20-missing-data.md
     - chapters/21-causal-inference.md
-    - appendix-a-r-setup.md
+    - appendix-g-handbook-navigation.md
+    - appendix-j-investigator-minimum-path.md
+    - appendix-h-clinicians-route.md
+    - appendix-i-figure-hygiene.md
     - appendix-b-quick-reference.md
+    - appendix-a-r-setup.md
     - appendix-c-glossary.md
     - appendix-d-missing-data-checklists.md
     - appendix-f-exercises.md
-    - appendix-g-handbook-navigation.md
-    - appendix-h-clinicians-route.md
     - references.qmd
 
 bibliography: ../references.bib

@@ -9,10 +9,44 @@
 | **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/spirometry.csv` |
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **R** | `R/examples/ch03_descriptive.R` |
-| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch03_*.png` |
+| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch03_*.png`, `viz_plot_router.png`, `viz_pair_ch03_scale_trap.png` |
 | **Exercises** | [ch03](../exercises/ch03_exercises.md) |
 
 **Also see:** [Appendix B](../appendix-b-quick-reference.md), Describe before infer: [Ch 4-6](04-comparing-groups.md)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — Table 1 before any test
+2. [Plot choice by estimand](#plot-choice-by-estimand) — router + right vs wrong pairs
+3. [Method choice at a glance](#method-choice-at-a-glance) — summaries and plots by variable type
+4. [Technique: Table 1](#technique-table-1-baseline-characteristics) — what reviewers see first
+5. [Alternatives & extensions](#alternatives--extensions-choose-by-data) — SMD, robust summaries
+
+**Analyst read:** distribution plots, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Mean ± SD** | Approximately normal continuous (FEV1 litres) | Standard; pair with n and units |
+| **Median [IQR]** | Skewed outcomes (LOS, costs, some biomarkers) | Robust centre and spread |
+| **Count (% )** | Binary and categorical variables | Clear for exacerbation history, smoking |
+| **Histogram / density** | Check skew, bimodality before *t*-tests | Informs Ch 4–6 method choice |
+| **Q–Q plot** | Formal normality check (sensitivity) | Supports or challenges Gaussian methods |
+| **Boxplot / violin by group** | Visual arm comparison before inference | Shows overlap and outliers |
+| **Scatter (FEV1 vs age)** | Bivariate relationships | Motivates adjustment in Ch 5 |
+| **Table 1** | Baseline characteristics by arm | Required before comparative claims |
+| **Missingness table / plot** | Any variable with &gt;0% missing | Documents who is excluded later |
+| **SMD instead of Table 1 *p*-values** | Describe balance without hypothesis tests | *p*-values confound balance with sample size |
+
+**Extensions:** ECDF, ridgeline plots in [Alternatives & extensions](#alternatives--extensions-choose-by-data).
+
+---
+
 ## Learning objectives
 
 1. Choose summaries matched to variable type and distribution.
@@ -46,6 +80,39 @@ Description is not optional preamble. It is how you catch errors and justify the
 3. **Visualise** - distributions and relationships  
 4. **Decide** - symmetric → mean/t-test path; skewed → median/nonparametric  
 5. **Report** - before primary analysis  
+
+---
+
+## Plot choice by estimand
+
+Description is where **figure choice** meets **method choice**. The plot must show the same quantity you will test: spread for a mean difference, pairing for pre/post, denominators for proportions, uncertainty for adjusted effects.
+
+!Plot choice by estimand — prefer vs avoid (`viz_plot_router.png`){width=96%}
+
+Full router and regeneration: [Appendix I](../appendix-i-figure-hygiene.md).
+
+### Figure hygiene: axis truncation
+
+Steering decks often crop the *y*-axis so a small mean difference looks decisive. The pair below uses the same CASTOR FEV1 by arm.
+
+!Right vs wrong: axis truncation masks overlap (`viz_pair_ch03_scale_trap.png`)
+
+| Panel | Shows | Masks if used alone |
+|-------|--------|---------------------|
+| **Wrong (left)** | Mean bars on a truncated scale (3.72–3.92 L) | Full distribution, outliers, clinical overlap |
+| **Right (right)** | Violin + box + points + mean diamond on full scale | Nothing critical if *n* is in the caption |
+
+**Practice read:** if the right panel were your only slide, would you still sign off the primary analysis? If not, the figure is doing its job.
+
+**Caption template:** “FEV1 (L) by randomised arm; box = IQR, points = participants, diamond = mean; *n* = … per arm.”
+
+### Wrong analysis ⚠ (visual)
+
+| | |
+|---|---|
+| **Mistake** | Truncate axes, drop points, or show means without *n* |
+| **Why it fails** | Readers infer separation that CIs and overlap contradict |
+| **Do instead** | Full-scale distribution plot; pair with Table 1 and prespecified test ([Ch 4](04-comparing-groups.md)) |
 
 ---
 

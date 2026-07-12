@@ -15,6 +15,37 @@
 | **Exercises** | [Chapter 14 exercises](../exercises/ch14_exercises.md) |
 
 **Also see:** [Ch 13 DE](13-differential-analysis-fdr.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — batch vs biology
+2. [Method choice at a glance](#method-choice-at-a-glance) — diagnose before you adjust
+3. [Wrong analysis](#wrong-analysis-) — confounded group × batch is a stop rule
+4. [Reporting template](#reporting-template) — discoveries with vs without batch
+
+**Analyst read:** R lab, ComBat caveats, and extensions below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **PCA coloured by batch** | First QC on any omics matrix | Fast visual: does technical structure dominate? |
+| **Group × batch table** | Before any DE or ML | Empty cells → group effect not identifiable after batch adjustment |
+| **Batch as covariate in DE model** | Batch measured; valid overlap design | Adjusts technical signal while estimating group ([Ch 13](13-differential-analysis-fdr.md)) |
+| **Sensitivity: DE with vs without batch** | Any hit list going to validation | Unstable hits should not drive spend |
+| **ComBat / SVA (specialist)** | Measured batch; not fully confounded | Can help; never skip overlap checks; not automatic |
+| **Blocked redesign / re-run** | Batch perfectly confounded with group | Statistics cannot fix confounding; redesign |
+| **Batch correction inside CV folds** | Prediction on omics ([Ch 9](09-prediction-vs-inference.md)) | Prevents leakage from global correction |
+| **Do not remove “site” blindly** | Multi-site biology may be real | Site can be effect modifier, not nuisance |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions-when-covariates-are-not-enough) at chapter end.
+
+---
+
 ## Learning objectives
 
 1. Recognise when "discoveries" are likely technical.
@@ -196,6 +227,17 @@ This is the most defensible "first-line" strategy for **inference** when batch i
 !PCA colored by batch (proteomics subset) (`ch14_pca_proteomics_batch.png`)
 
 Separation along PC1 by colour (batch) means batch-aware models or redesign, not a raw hit list: come first.
+
+### Figure hygiene: group-coloured PCA vs batch-first QC
+
+!Right vs wrong: proteomics PCA (`viz_pair_ch14_batch_pca.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | PCA coloured by case/control only | Plate/batch structure driving PC1 |
+| **Right** | PCA coloured by batch, shape = group | — (QC before DE list) |
+
+**Practice read:** if the wrong panel were your omics slide, would a biologist call it “a disease axis”? Check batch colour before naming biology.
 
 !Valid overlap vs confounded group × batch design (`ch14_group_batch_overlap.png`)
 

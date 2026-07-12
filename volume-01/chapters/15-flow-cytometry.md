@@ -15,6 +15,37 @@
 | **Exercises** | [Chapter 15 exercises](../exercises/ch15_exercises.md) |
 
 **Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — participant-level inference
+2. [Method choice at a glance](#method-choice-at-a-glance) — proportions vs cells
+3. **Practice read** on pseudo-replication
+4. [Wrong analysis](#wrong-analysis-) — modelling cells as patients
+5. [Alternatives & extensions](#alternatives--extensions)
+
+**Analyst read:** compositional plots, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Participant-level proportions** | Compare arms on cell-type fractions | One row per person; defensible inference |
+| **Median / mean proportion by group** | Simple arm comparison | Clear estimand; report n participants |
+| **Linear model on proportions** | Adjust for covariates | Watch compositional constraint (sum to 1) |
+| **Compositional (log-ratio) transforms** | Formal compositional data analysis | Accounts for closure; specialist |
+| **Per-cell mixed models** | Rare; cells nested in patients | Harder to interpret than summaries |
+| **Drift plot by batch/run** | QC before biology | Technical drift mimics disease ([Ch 14](14-batch-effects.md)) |
+| **UMAP / PCA on cells** | Exploratory gating QC | Descriptive only; not primary inference |
+
+**Extensions:** Dirichlet models in [Alternatives & extensions](#alternatives--extensions).
+
+---
+
 ## Learning objectives
 
 1. Choose the correct **unit of analysis**: participant-level summaries vs cells.
@@ -219,6 +250,13 @@ Embeddings (UMAP/t-SNE) and clustering can help you **see** structure and check 
 !Cell-type proportions by group (participant-level) (`ch15_flow_props_by_group.png`)
 
 Bars are participant means: the level at which group comparisons belong in a respiratory paper.
+
+### Figure hygiene: participant vs cell-level inference
+
+| Panel / figure | Right use | Wrong use |
+|----------------|-----------|-----------|
+| `ch15_flow_props_by_group.png` | Participant-level proportions by arm | — |
+| `ch15_pseudoreplication_demo.png` | Teaching: why pooling cells inflates *p* | Inference at cell *n* |
 
 !Pseudo-replication: participant vs pooled-cell p-values (`ch15_pseudoreplication_demo.png`)
 

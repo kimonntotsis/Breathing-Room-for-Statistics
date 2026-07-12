@@ -15,6 +15,37 @@
 | **Links** | [Ch 8 reporting](08-validation-reporting.md), [Ch 13 LOD](13-differential-analysis-fdr.md), [Ch 18 dropout](18-longitudinal-mixed-models.md), [Appendix D checklists](../appendix-d-missing-data-checklists.md) |
 | **Exercises** | [Chapter 20 exercises](../exercises/ch20_exercises.md) |
 
+---
+
+## Investigator path (≈20 min)
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — MCAR/MAR/MNAR in plain language
+2. [Method choice at a glance](#method-choice-at-a-glance) — complete-case vs MI vs sensitivity
+3. [Reporting template](#reporting-template) — enrolled vs analysed *n*
+4. [Catalog of wrong analyses](#catalog-of-wrong-analyses-missing-data) — listwise deletion by default
+5. [Appendix D](../appendix-d-missing-data-checklists.md) checklists
+
+**Analyst read:** MICE workflow, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Complete-case analysis** | &lt;5% missing; MCAR plausible; sensitivity only | Simple; can bias if missingness relates to severity |
+| **Median / single imputation (sensitivity)** | Quick robustness check | Shows whether coefficient is stable; not production default |
+| **Multiple imputation (MICE) + pool** | MAR plausible; regression inference | Rubin pooling gives valid SEs if model is correct |
+| **Pattern-mixture / tipping point** | MNAR suspected (sicker patients miss visits) | Stress-tests how extreme dropout would need to be |
+| **Mixed model (no explicit MI)** | Longitudinal MAR dropout | Uses all observed visits under MAR ([Ch 18](18-longitudinal-mixed-models.md)) |
+| **IPW for dropout** | Informative missingness modelled | Weights complete cases; sensitivity to model |
+| **MI inside CV folds** | Prediction with missing predictors ([Ch 9](09-prediction-vs-inference.md)) | Prevents leakage |
+| **Per-feature rules (omics)** | Platform LOD / detection limits | Do not MI 1000+ features blindly ([Ch 13](13-differential-analysis-fdr.md)) |
+
+**Extensions:** [Decision table](#decision-table) and [Alternatives & extensions](#alternatives--extensions) below.
+
+---
+
 ## Learning objectives
 
 1. Distinguish MCAR, MAR, and MNAR in plain language with respiratory examples.
@@ -292,6 +323,8 @@ If conclusions **change materially**, report that uncertainty explicitly: do not
 
 ## Decision table
 
+*Quick lookup. For **when** and **why**, see [Method choice at a glance](#method-choice-at-a-glance) above.*
+
 | Situation | Approach | Chapter |
 |-----------|----------|---------|
 | Structural missing (subgroup assay) | Define eligible *n*; no cohort-wide imputation | This chapter; [Appendix D](../appendix-d-missing-data-checklists.md) |
@@ -324,6 +357,17 @@ source("R/examples/ch20_missing_data.R")
 !Missing FEV1 fraction by obstruction severity (`ch20_missingness_pattern.png`)
 
 Higher missingness in severe obstruction supports MAR-like missingness tied to observed severity, not random noise.
+
+### Figure hygiene: analysed *n* vs missingness pattern
+
+!Right vs wrong: missing spirometry (`viz_pair_ch20_missingness.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Enrolled vs analysed *n* bars only | **Who** is missing and whether pattern clusters |
+| **Right** | Missingness strip by diagnosis × arm | — (informs MAR/MNAR scepticism) |
+
+**Practice read:** if analysed *n* drops mainly in severe obstruction, complete-case regression is not a neutral default.
 
 !Smoking coefficient: complete-case vs median imputation (`ch20_smoking_coef_sensitivity.png`)
 

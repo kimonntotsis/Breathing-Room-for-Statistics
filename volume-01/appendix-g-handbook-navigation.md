@@ -14,6 +14,10 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **Choose a test or model** | [Appendix B](appendix-b-quick-reference.md) |
 | **See all methods by chapter** | [METHOD_MAP](METHOD_MAP.md) |
 | **Find a figure** | [FIGURE_INDEX](FIGURE_INDEX.md) |
+| **Right vs wrong plots (slides)** | [Appendix I](appendix-i-figure-hygiene.md) |
+| **Investigator minimum path (~2 h)** | [Appendix J](appendix-j-investigator-minimum-path.md) |
+| **APATE vignette (messy registry, no data)** | [APATE_VIGNETTE](APATE_VIGNETTE.md) |
+| **Edition / citation status** | [HANDBOOK_STATUS](HANDBOOK_STATUS.md) |
 | **Look up a term** | [Appendix C](appendix-c-glossary.md) |
 | **Cite this handbook** | [Preface: Cite this book](chapters/00-preface.md#cite-this-book) |
 | **Cite a guideline or textbook** | [REFERENCES](REFERENCES.md), [references.qmd](references.qmd) |
@@ -24,16 +28,24 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 
 ## Appendices in this volume
 
-| Appendix | Content |
-|----------|---------|
-| **A** | [R environment](appendix-a-r-setup.md) |
-| **B** | [Quick reference](appendix-b-quick-reference.md) |
-| **C** | [Glossary](appendix-c-glossary.md) |
-| **D** | [Missing data checklists](appendix-d-missing-data-checklists.md) |
-| **F** | [Exercises](appendix-f-exercises.md) |
-| **G** | [Handbook navigation](appendix-g-handbook-navigation.md) (this index; includes topic index below) |
-| **H** | [Investigator path (without R)](appendix-h-clinicians-route.md) |
-| **References** | [Bibliography](references.qmd) |
+**Letters are stable IDs** (cite “Appendix B” anywhere). **PDF order** follows reader importance below, not A→Z.
+
+| Read order | Appendix | Content | Primary audience |
+|:----------:|:--------:|---------|------------------|
+| 1 | **G** | [Handbook navigation](appendix-g-handbook-navigation.md) (this index) | Everyone |
+| 2 | **J** | [Investigator minimum path (~2 h)](appendix-j-investigator-minimum-path.md) | Investigator |
+| 3 | **H** | [Investigator path (without R)](appendix-h-clinicians-route.md) | Investigator |
+| 4 | **I** | [Figure hygiene (right vs wrong)](appendix-i-figure-hygiene.md) | Investigator, slides |
+| 5 | **B** | [Quick reference](appendix-b-quick-reference.md) | Everyone |
+| 6 | **A** | [R environment](appendix-a-r-setup.md) | Analyst |
+| 7 | **C** | [Glossary](appendix-c-glossary.md) | Lookup |
+| 8 | **D** | [Missing data checklists](appendix-d-missing-data-checklists.md) | Analyst, DMC |
+| 9 | **F** | [Exercises](appendix-f-exercises.md) | Fellow, instructor |
+| — | **Refs** | [Bibliography](references.qmd) | Citation |
+
+**Analyst fast path:** G → A → B → (chapters) → F. **Investigator fast path:** G → J → H → I → B → Ch 12 Case A.
+
+Related (not lettered appendices): [APATE_VIGNETTE](APATE_VIGNETTE.md), [HANDBOOK_STATUS](HANDBOOK_STATUS.md), [RECURRING_COHORT](RECURRING_COHORT.md).
 
 ## Reader paths
 

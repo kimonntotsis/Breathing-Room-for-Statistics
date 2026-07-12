@@ -14,6 +14,34 @@
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
 | **Exercises** | [Chapter 17 exercises](../exercises/ch17_exercises.md) |
 
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — pipeline stop/go gates
+2. [Method choice at a glance](#method-choice-at-a-glance) — step order and what each proves
+3. [The discovery claim ladder](#the-discovery-claim-ladder) — what each step may claim
+4. [Step 6: Reporting (integrated)](#step-6-reporting-integrated) — one paragraph per modality
+5. [Pipeline failure modes](#pipeline-failure-modes-what-to-report-honestly) — stop/go gates
+
+**Analyst read:** elastic net nested CV, R scripts below.
+
+---
+
+## Method choice at a glance
+
+| Step / method | When to use | Why |
+|---------------|-------------|-----|
+| **DE + FDR (proteomics/RNA)** | First biology screen | Per-feature effects with multiplicity control ([Ch 13](13-differential-analysis-fdr.md)) |
+| **Batch QC before DE** | Any multi-site omics | Prevents funding false hits ([Ch 14](14-batch-effects.md)) |
+| **Flow participant summaries** | Immune phenotyping arm | Inference at person level ([Ch 15](15-flow-cytometry.md)) |
+| **Antibody screen tiers** | Hybridoma / phage triage | PPV and confirmation ([Ch 16](16-antibody-discovery.md)) |
+| **Elastic net + nested CV** | p ≫ n prediction on proteins | Tuning without leakage ([Ch 9](09-prediction-vs-inference.md)) |
+| **Stop if batch = group** | Confounded design | No amount of stats replaces redesign |
+| **Separate discovery vs confirmation prose** | Manuscript writing | Different claim strength per modality |
+
+---
+
 ## Learning objectives
 
 1. Execute a coherent discovery workflow across omics, flow, and antibody data.

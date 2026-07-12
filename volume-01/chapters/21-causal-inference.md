@@ -11,9 +11,40 @@
 | **Question** | When can we interpret an adjusted association as closer to a causal effect? |
 | **Core methods** | confounding diagram, target trial, associational vs causal estimands, introductory IPW |
 | **R** | `R/examples/ch21_causal_inference.R` |
-| **Figures** | covariate balance (`ch21_covariate_balance.png`), naive vs IPW OR (`ch21_or_naive_vs_ipw.png`) |
+| **Figures** | covariate balance (`ch21_covariate_balance.png`), naive vs IPW OR (`ch21_or_naive_vs_ipw.png`); **figure hygiene:** `viz_pair_ch21_causal.png` |
 | **Links** | [Ch 6 logistic](06-generalized-linear-models.md), [Ch 12 Case B](12-case-studies.md) |
 | **Exercises** | [Chapter 21 exercises](../exercises/ch21_exercises.md) |
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — association ≠ causation
+2. [Method choice at a glance](#method-choice-at-a-glance) — IPW vs adjusted regression
+3. [Technique: IPW](#technique-inverse-probability-weighting-ipw-toy) — balance and weights
+4. [Reporting template](#reporting-template) — associational vs causal wording
+5. [Alternatives & extensions](#alternatives--extensions)
+
+**Analyst read:** DAGs, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Adjusted logistic / Cox (associational)** | Observational; report adjusted OR/HR | Controls measured confounders; still not RCT |
+| **IPW (propensity weights)** | Treatment/exposure imbalance; overlap adequate | Reweights to pseudo-population with balance |
+| **Propensity score matching** | Want comparable treated/untreated pairs | Visual overlap; reduces model dependence |
+| **Target trial emulation** | Framing observational analysis | Aligns time zero, eligibility, treatment strategies |
+| **DAG + confounder set** | Planning adjustment | Separates confounders from mediators/colliders |
+| **E-value / sensitivity** | Unmeasured confounding concern | Quantifies how strong hidden bias would need to be |
+| **No causal adjustment** | RCT primary analysis | Randomisation supports causal contrast ([Case A](12-case-studies.md)) |
+| **Do not adjust mediators** | Total effect estimand | Blocks part of causal path |
+
+**Extensions:** MSM, matching details in [Alternatives & extensions](#alternatives--extensions).
+
+---
 
 ## Learning objectives
 
@@ -220,6 +251,15 @@ source("R/examples/ch21_causal_inference.R")
 !FEV1 balance before vs after IPW (toy) (`ch21_covariate_balance.png`)
 
 Check whether FEV1 % means are closer across smoking groups after weighting. Poor balance after weighting → revisit exposure model or overlap.
+
+### Figure hygiene: naive OR vs balance check
+
+!Right vs wrong: observational smoking effect (`viz_pair_ch21_causal.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Adjusted OR bar (causal wording) | Covariate overlap, weight diagnostics |
+| **Right** | Balance before vs after IPW | Whether weighting achieved exchangeability |
 
 !Smoking OR: naive vs IPW (`ch21_or_naive_vs_ipw.png`)
 

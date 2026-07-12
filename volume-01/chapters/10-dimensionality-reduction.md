@@ -10,10 +10,39 @@
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Methods** | PCA + alternatives menu (PLS, sparse/robust PCA, MCA/FAMD, logistic PCA), scree, loadings, biplots |
 | **R** | `R/examples/ch10_pca.R` |
-| **Figures** | ch10_scree (`ch10_scree.png`), ch10_pca_biplot (`ch10_pca_biplot.png`) |
+| **Figures** | ch10_scree (`ch10_scree.png`), ch10_pca_biplot (`ch10_pca_biplot.png`); **figure hygiene:** `viz_pair_ch10_pca.png` |
 | **Exercises** | [ch10](../exercises/ch10_exercises.md) |
 
 **Also see:** [Appendix B](../appendix-b-quick-reference.md), Omics reporting: [@mcshane2011biomarker]
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — summarise before clustering
+2. [Method choice at a glance](#method-choice-at-a-glance) — PCA vs alternatives
+3. Scree plot + **Practice read** — how many components?
+4. [Catalog of wrong analyses](#catalog-of-wrong-analyses) — batch-coloured PCA without check
+
+**Analyst read:** loadings, biplots, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **PCA (scaled)** | Many correlated continuous markers; exploration | Unsupervised variance summary; not hypothesis test |
+| **Scree / variance explained** | Choose number of components | Defensible truncation; avoid eyeballing only |
+| **Sparse PCA** | p ≫ n; want interpretable loadings | Fewer noisy loadings; still exploratory |
+| **PLS** | Have outcome Y and many X (supervised reduction) | Maximises covariance with Y; not unsupervised PCA |
+| **FAMD / MCA** | Mixed numeric + categorical blocks | Extends PCA to heterogeneous columns |
+| **Biplot** | Visualise patients and variables together | Teaching QC; check batch colouring first |
+
+**Extensions:** robust PCA, logistic PCA in chapter alternatives.
+
+---
+
 ## Learning objectives
 
 1. Use PCA for exploratory summarisation of many correlated markers.
@@ -298,6 +327,15 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 4. **Conclusion:** separation visible in simulation; would require replication in real omics.
 
 **Sensitivity:** correlation vs covariance PCA; compare scree.
+
+### Figure hygiene: 2D hero plot vs scree
+
+!Right vs wrong: PCA exploration (`viz_pair_ch10_pca.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | PC1 vs PC2 labelled “disease axis” | How many components matter; batch QC |
+| **Right** | Scree / variance explained | Arbitrary 2D storytelling |
 
 ---
 

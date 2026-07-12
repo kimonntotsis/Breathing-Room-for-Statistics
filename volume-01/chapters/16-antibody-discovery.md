@@ -11,11 +11,41 @@
 | **Core idea** | treat screening as triage; confirmation is where claims begin |
 | **Primary tools** | replicate agreement, prespecified thresholds, PPV, stability tiers |
 | **R** | `R/examples/ch16_antibody_screening.R` |
-| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch16_*.png` |
+| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch16_*.png`; **figure hygiene:** `viz_pair_ch16_screen.png` |
 | **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
 | **Exercises** | [Chapter 16 exercises](../exercises/ch16_exercises.md) |
 
 **Also see:** [Ch 13 FDR](13-differential-analysis-fdr.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — screen is triage, not truth
+2. [Method choice at a glance](#method-choice-at-a-glance) — thresholds, PPV, tiers
+3. **Practice read** on rank #7 vs #9
+4. [Reporting template](#reporting-template) — Tier 1 clones wording
+5. [Alternatives & extensions](#alternatives--extensions)
+
+**Analyst read:** replicate agreement, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Prespecified hit threshold** | Primary screen analysis | Avoids post hoc cutoff on ranked list |
+| **Replicate agreement** | Two screen runs available | Separates signal from noise before confirmation |
+| **PPV at threshold** | Budget for validation | Expected true positives among called hits |
+| **Stability tiers (high/med/low)** | Prioritise confirmation spend | Honest triage; not all hits equal |
+| **Confirmation assay** | Before binding/clinical claims | Screen OR ≠ validated reagent |
+| **Ranking stability across replicates** | Avoid storytelling on small rank shifts | Top-20 overlap more informative than #7 vs #9 |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions) at chapter end.
+
+---
+
 ## Learning objectives
 
 1. Combine replicates and quantify replicate agreement before hit calling.
@@ -252,6 +282,15 @@ screen %>% group_by(antigen) %>%
 ## R lab: Antibody screening on CASTOR-HD
 
 **Script:** `R/examples/ch16_antibody_screening.R`
+
+### Figure hygiene: rank bar vs PPV
+
+!Right vs wrong: antibody screen (`viz_pair_ch16_screen.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Top screen ranks only | Confirmation PPV, tier stability |
+| **Right** | PPV among hits by antigen | Validation budget reality |
 
 Outputs:
 

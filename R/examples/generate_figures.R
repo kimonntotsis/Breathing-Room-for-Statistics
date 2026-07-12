@@ -545,3 +545,5 @@ if (requireNamespace("factoextra", quietly = TRUE)) {
 
 message("Handbook figures saved to ", fig_dir)
 message("See volume-01/FIGURE_INDEX.md for the full list.")
+
+source(file.path(paths$r, "examples", "generate_viz_pairs.R"))

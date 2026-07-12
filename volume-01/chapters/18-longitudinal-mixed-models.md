@@ -15,6 +15,41 @@
 | **Exercises** | [Chapter 18 exercises](../exercises/ch18_exercises.md) |
 
 **Also see:** [Ch 4](04-comparing-groups.md) (independence), [Ch 20](20-missing-data.md) (dropout), [Ch 12 Case E](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation)
+
+---
+
+## Investigator path (≈20 min)
+
+You do not need this entire chapter on first pass. Read in order:
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — level vs slope estimand; missed visits
+2. [The longitudinal workflow](#the-longitudinal-workflow) — prespecify what you are estimating
+3. [Method choice at a glance](#method-choice-at-a-glance) — mixed model vs shortcuts
+4. [Technique: Linear mixed model (random intercept)](#technique-linear-mixed-model-random-intercept) — Practice read and MCID
+5. [Reporting template](#reporting-template) — participant *n*, visits, and fixed effects
+6. [Catalog of wrong analyses](#catalog-of-wrong-analyses-longitudinal-fev1) — pooled visits and pseudo-replication
+
+**Analyst read:** mixed model details, GEE comparison, R lab, and extensions below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Linear mixed model (random intercept)** | Repeated continuous FEV1; ≥2 visits per patient | Accounts for within-person correlation; uses all visits |
+| **Random intercept + slope** | Heterogeneous decline rates across patients | Allows individual trajectories; needs enough visits |
+| **GEE** | Population-averaged marginal effects; robust SE focus | Alternative estimand to subject-specific mixed model |
+| **Cross-sectional *t* at one visit** | Prespecified single timepoint only (e.g. week 52) | Simpler but discards other visits; prespecify in SAP |
+| **`lm()` on stacked visits** | Never as primary analysis | Pseudo-replication; SEs too small |
+| **ANCOVA with baseline** | One follow-up visit + baseline FEV1 | Alternative to change score when one post-randomisation visit |
+| **Spline in time** | Non-linear decline suspected | Prespecify; avoid post hoc curvature hunting ([Ch 7](07-model-building.md)) |
+| **Cluster-robust SE / `(1 \| centre)`** | Multi-centre trials | Patients nested in sites |
+
+**Extensions** (LOCF, per-visit ANOVA): [Alternatives & extensions](#alternatives--extensions) at chapter end.
+
+---
+
 ## Learning objectives
 
 1. Recognise when repeated measures violate independence (Ch 4–5).
@@ -203,6 +238,8 @@ One analyst proposes GEE; another fits `lmer`. Both can be correct; they answer 
 
 ## Decision table: which longitudinal method?
 
+*Quick lookup. For **when** and **why**, see [Method choice at a glance](#method-choice-at-a-glance) above.*
+
 | Situation | Primary method | Chapter |
 |-----------|----------------|---------|
 | RCT, continuous FEV1, 2+ visits | Mixed model, random intercept | This chapter |
@@ -225,6 +262,17 @@ source("R/examples/ch18_longitudinal_mixed_models.R")
 !Spaghetti plot: FEV1 trajectories by participant (`ch18_spaghetti_fev1.png`)
 
 Each line is one participant. Use this plot to spot outliers, dropout, and whether a linear trend is plausible before trusting the mixed model.
+
+### Figure hygiene: week-52 snapshot vs full trajectories
+
+!Right vs wrong: longitudinal FEV1 (`viz_pair_ch18_longitudinal.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Boxplot at week 52 only | Earlier visits, dropout, heterogeneous slopes |
+| **Right** | Spaghetti across scheduled visits | — (motivates mixed model / GEE) |
+
+**Practice read:** a week-52 *t*-test figure should not be your only longitudinal slide if the estimand is change over time.
 
 !Mixed model fitted population trajectories (`ch18_mixed_model_fitted.png`)
 

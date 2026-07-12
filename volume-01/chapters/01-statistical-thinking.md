@@ -13,6 +13,46 @@
 
 **Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), Pipeline figure (`analysis_pipeline.png`), [Appendix B](../appendix-b-quick-reference.md), [Appendix C glossary](../appendix-c-glossary.md), [METHOD_MAP](../METHOD_MAP.md), Decision tree (`method_decision_tree.png`), [REFERENCES](../REFERENCES.md)
 
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — estimand before software
+2. [Method choice at a glance](#method-choice-at-a-glance) — which part of the book to open
+3. [Three layers of every analysis](#three-layers-of-every-analysis) — clinical / statistical / data
+4. [What CASTOR means](#what-castor-means) + pipeline figure — eight-step workflow
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-thinking-chapter) — question–method mismatch
+
+**Shortest investigator route (~2 h total):** [Appendix J](../appendix-j-investigator-minimum-path.md). **Messy registry vignette (no data):** [APATE](../APATE_VIGNETTE.md).
+
+---
+
+## Method choice at a glance
+
+*This table routes you to **chapters**, not statistical tests. For tests, use [Appendix B](../appendix-b-quick-reference.md) after you write the estimand.*
+
+| Your question type | Open first | Do not skip |
+|--------------------|------------|-------------|
+| **Who is in the study?** | [Ch 3](03-descriptive-analysis.md) | Table 1, missingness |
+| **Are groups different?** (FEV1, proportions, counts) | [Ch 4](04-comparing-groups.md) | Estimand + pairing |
+| **Adjusted continuous association** | [Ch 5](05-linear-models.md) | Diagnostics |
+| **Binary / count outcomes** | [Ch 6](06-generalized-linear-models.md) | OR vs RR, offset |
+| **Many predictors / model building** | [Ch 7](07-model-building.md) | Prespecification |
+| **Reporting / CONSORT** | [Ch 8](08-validation-reporting.md) | Limits section |
+| **Prediction** | [Ch 9](09-prediction-vs-inference.md) | Calibration |
+| **Subgroups / omics exploration** | [Ch 10–11](10-dimensionality-reduction.md) | Claim ladder only |
+| **Full worked narratives** | [Ch 12](12-case-studies.md) | Sign-off checklist |
+| **Proteomics / screens** | [Ch 13–17](13-differential-analysis-fdr.md) | Batch + FDR |
+| **Repeated visits** | [Ch 18](18-longitudinal-mixed-models.md) | Not week-52 *t*-test |
+| **Time to event** | [Ch 19](19-survival-analysis.md) | Censoring |
+| **Missing data** | [Ch 20](20-missing-data.md) | Pattern + sensitivity |
+| **Observational confounding** | [Ch 21](21-causal-inference.md) | Association ≠ causation |
+| **Messy registry (no data)** | [APATE vignette](../APATE_VIGNETTE.md) | Before real Methods sign-off |
+
+**Figure hygiene (all designs):** [Appendix I](../appendix-i-figure-hygiene.md).
+
+---
+
 ## Learning objectives
 
 1. Separate clinical, statistical, and data layers of an analysis.
@@ -74,6 +114,8 @@ Sponsor timelines compress analysis into a test name. The durable step is five m
 ## What CASTOR means
 
 **CASTOR** names both the working sequence in this book and the synthetic cohort that carries the examples. The sequence is fixed; the data file grows from core trial variables to omics in **CASTOR-HD** ([RECURRING_COHORT](../RECURRING_COHORT.md)).
+
+**Real registries deceive if you analyse them like CASTOR.** CASTOR omits site clustering, spirometry QC failures, and protocol deviations on purpose. **APATE** (Greek *Apate*, deceit) is the handbook’s prose-only vignette of that mess — read [APATE_VIGNETTE](../APATE_VIGNETTE.md) before signing off real Methods.
 
 **C. Clinical question.** One sentence on what would change in practice if the answer were known. Endpoints and estimands follow from that sentence, not from a software menu.
 

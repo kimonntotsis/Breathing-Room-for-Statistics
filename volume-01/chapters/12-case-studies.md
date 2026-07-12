@@ -16,7 +16,31 @@
 
 ---
 
-## Learning objectives
+## Investigator path (≈20 min)
+
+1. [Master workflow](#master-workflow-every-castor-analysis) — eight steps every case follows
+2. [Method choice at a glance](#method-choice-at-a-glance) — which case matches your study
+3. [Investigator sign-off checklist](#investigator-sign-off-checklist) — before submission
+4. [Case A](#case-study-a-randomised-trial-fev1-comparison) — RCT FEV1 (minimum read)
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-case-studies) — published-style traps
+
+**Minimum path (~2 h):** [Appendix J](../appendix-j-investigator-minimum-path.md). **APATE vignette (no CSV):** [APATE_VIGNETTE](../APATE_VIGNETTE.md).
+
+---
+
+## Method choice at a glance
+
+| Your study looks like… | Read case | Chapters to open |
+|------------------------|-----------|------------------|
+| Parallel RCT, continuous FEV1 | **Case A** | 3 → 4 → 8 |
+| Cohort, binary exacerbation | **Case B** | 3 → 6 → 21 (if observational) |
+| Marker subgroups (unsupervised) | **Case C** | 10 → 11 |
+| CASTOR-HD omics pipeline | **Case D** | 13 → 14 → 15 → 16 → 17 |
+| Repeated FEV1 + time to event | **Case E** | 18 → 19 → 20 |
+
+**Sign-off figure:** `viz_signoff_checklist.png` ([below](#investigator-sign-off-checklist)).
+
+---
 
 1. Execute the full analysis pipeline from question to report.
 2. Apply the [METHOD_MAP](../METHOD_MAP.md) to real CASTOR scenarios.
@@ -57,6 +81,26 @@ This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_
 | 8 | State what was **not** proven | All |
 
 Reporting frameworks by design: CONSORT (RCT) [@schulz2010consort]; STROBE (cohort) [@vonelm2007strobe]; TRIPOD (prediction) [@moons2015tripod]; biomarker discovery [@mcshane2011biomarker].
+
+---
+
+## Investigator sign-off checklist
+
+Before protocol lock, steering committee, or journal submission, walk the seven gates on the same CASTOR workflow:
+
+!CASTOR investigator sign-off checklist (`viz_signoff_checklist.png`){width=78%}
+
+| Gate | Question | If no → |
+|------|----------|---------|
+| 1 | Is the estimand one sentence? | [Ch 1](01-statistical-thinking.md) |
+| 2 | Table 1 + missingness done? | [Ch 3](03-descriptive-analysis.md) |
+| 3 | Method matches outcome type? | [Appendix B](../appendix-b-quick-reference.md) |
+| 4 | Does Figure 1 match the estimand? | [Appendix I](../appendix-i-figure-hygiene.md) |
+| 5 | Effect + CI + *n*/events reported? | [Ch 8](08-validation-reporting.md) |
+| 6 | At least one sensitivity named? | Chapter technique / [Ch 20](20-missing-data.md) |
+| 7 | Limits (“not proven”) written? | Case narratives below |
+
+**Real cohorts:** add site clustering, QC exclusions, and protocol deviations — see [APATE](../APATE_VIGNETTE.md) for the checklist CASTOR does not model.
 
 ### In practice
 
@@ -379,7 +423,7 @@ That improving FEV1 trajectory prevents exacerbations (different endpoints); cau
 
 ## Handbook synthesis checklist
 
-Before submitting any respiratory paper, verify:
+The sign-off figure above is the visual version of this list:
 
 - [ ] Clinical question and estimand stated  
 - [ ] Table 1 and missingness [@schulz2010consort; @vonelm2007strobe]  

@@ -10,10 +10,41 @@
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Methods** | k-means, hierarchical, PAM, silhouette, bootstrap stability, validation ladder |
 | **R** | `R/examples/ch11_clustering.R` |
-| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch11_*.png` |
+| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch11_*.png`; **figure hygiene:** `viz_pair_ch11_clustering.png` |
 | **Exercises** | [ch11](../exercises/ch11_exercises.md) |
 
 **Also see:** [Appendix B](../appendix-b-quick-reference.md), Endotype ladder §11.6, [REFERENCES](../REFERENCES.md)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Why this chapter](#why-this-chapter) — clustering is hypothesis-generating
+2. [Method choice at a glance](#method-choice-at-a-glance) — k-means vs hierarchical vs PAM
+3. [The endotype claim ladder](#the-endotype-claim-ladder) — what you may claim at each rung
+4. **Practice read** on silhouette and stability
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-respiratory-specific)
+
+**Analyst read:** bootstrap stability, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **k-means** | Spherical clusters; prespecified *k* | Fast; needs scaling; unstable without stability checks |
+| **Hierarchical (Ward)** | Explore merge structure; dendrogram | No single *k* upfront; cut height is subjective |
+| **PAM (k-medoids)** | Want robust cluster representatives | Less sensitive to outliers than k-means means |
+| **Silhouette width** | Compare candidate *k* | Describes separation; low values → overlap |
+| **Bootstrap item stability** | Before naming subgroups | Quantifies whether assignments replicate |
+| **Adjusted Rand vs batch** | QC technical confounding | Clusters tracking batch ≠ biology |
+| **External validation** | Before “endotype” language | Requires replication or outcome linkage |
+
+**Extensions:** consensus clustering, gap statistic in chapter body.
+
+---
+
 ## Learning objectives
 
 1. Distinguish unsupervised clustering from supervised classification.
@@ -298,6 +329,15 @@ For patient *i*, silhouette uses $(b_i - a_i) / \max(a_i, b_i)$ where $a_i$ is m
 !Mean silhouette width by k (`ch11_silhouette_k.png`)
 
 Silhouette peaks are a heuristic for *k*, not proof of biology: compare with batch-coloured plots.
+
+### Figure hygiene: named endotypes vs silhouette
+
+!Right vs wrong: clustering claims (`viz_pair_ch11_clustering.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | “Endotype A/B” on first k-means run | Stability, batch alignment, claim ladder |
+| **Right** | Mean silhouette by *k* | Low separation; need bootstrap stability |
 
 ---
 

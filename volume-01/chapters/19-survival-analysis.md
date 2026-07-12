@@ -15,6 +15,37 @@
 | **Exercises** | [Chapter 19 exercises](../exercises/ch19_exercises.md) |
 
 **Also see:** [Ch 6](06-generalized-linear-models.md) (rates), [Ch 18](18-longitudinal-mixed-models.md), [Ch 12 Case E](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — event, censoring, competing death
+2. [Method choice at a glance](#method-choice-at-a-glance) — KM vs Cox vs logistic shortcut
+3. [Technique: Kaplan-Meier](#technique-kaplan-meier) — Practice read on absolute risks
+4. [Reporting template](#reporting-template) — events, person-time, HR + CI
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-time-to-exacerbation) — censoring treated as cure
+
+**Analyst read:** Cox diagnostics, R lab, competing risks below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Kaplan-Meier + log-rank** | Compare time-to-first-event curves between groups | Uses all follow-up; handles censoring nonparametrically |
+| **Cox proportional hazards** | Adjust for covariates; report hazard ratios | Standard for time-to-event with censoring; check PH assumption |
+| **Logistic at fixed horizon (12 mo)** | Equal follow-up; only care about event Y/N at one date | Simpler; loses timing information |
+| **Fine–Gray / competing risks** | Death prevents future exacerbations; mortality differs by arm | Standard Cox censors death; may overstate event risk |
+| **Cause-specific Cox** | Distinct biological processes for competing events | Separates hazard of each event type |
+| **Stratified Cox** | Non-proportional hazards across subgroups | When PH fails for a covariate |
+| **Andersen-Gill / PWP** | **Recurrent** exacerbations (not first event only) | First-event Cox is wrong for repeats |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions) at chapter end.
+
+---
+
 ## Learning objectives
 
 1. Define event, time origin, and censoring for respiratory endpoints.
@@ -229,6 +260,17 @@ source("R/examples/ch19_survival_analysis.R")
 !Kaplan-Meier curves by smoking status (`ch19_km_by_smoking.png`)
 
 The y-axis is zoomed to the observed event-free range so curve separation is visible; with only ~50 events in 320 patients a full 0–100% scale would look nearly flat.
+
+### Figure hygiene: event bar vs Kaplan-Meier
+
+!Right vs wrong: time to exacerbation (`viz_pair_ch19_survival.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Bar chart of ever/never event % | When events occur; censored follow-up |
+| **Right** | KM curve with time on *x* | — (censoring explicit on step plot) |
+
+**Practice read:** treating censored patients as “no event” inflates the wrong bar; KM keeps them on the risk set until censoring.
 
 !Cox model hazard ratios (`ch19_cox_forest.png`)
 

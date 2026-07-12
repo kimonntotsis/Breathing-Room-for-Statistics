@@ -8,10 +8,55 @@
 |---|---|
 | **Focus** | Classify variables, outcomes, and study structures |
 | **Key idea** | Outcome type → method (see [Appendix B](../appendix-b-quick-reference.md)) |
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/*.csv` |
+| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) (`data/*.csv`); messy reality → [APATE](../APATE_VIGNETTE.md) (prose only) |
 | **Exercises** | [ch02](../exercises/ch02_exercises.md), [Solutions](../solutions/ch02_solutions.md) |
 
 **Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [Appendix C](../appendix-c-glossary.md), Decision tree (`method_decision_tree.png`)
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Outcome types: the master routing table](#outcome-types-the-master-routing-table) — binary vs count vs time-to-event
+2. [Teaching datasets: CASTOR, CASTOR-HD, and APATE](#teaching-datasets-castor-castor-hd-and-apate) — what has CSV files
+3. [Method choice at a glance](#method-choice-at-a-glance) — route to the right chapter
+4. [Data structures](#data-structures) — independence and unit of analysis
+5. Decision tree figure — visual router
+6. [Alternatives & extensions](#alternatives--extensions-data-structures-that-change-the-method)
+
+**Analyst read:** CASTOR files, quality checks below.
+
+---
+
+## Method choice at a glance
+
+| Outcome / structure | When you see it | Route to |
+|--------------------|-----------------|----------|
+| **Continuous FEV1** | Spirometry litres; cross-section or one visit | [Ch 4](04-comparing-groups.md), [Ch 5](05-linear-models.md) |
+| **Binary exacerbation** | Any vs none in follow-up | [Ch 4](04-comparing-groups.md), [Ch 6](06-generalized-linear-models.md) |
+| **Count exacerbations** | Events per person-time | [Ch 6](06-generalized-linear-models.md) |
+| **Repeated FEV1 visits** | Same patient, multiple rows | [Ch 18](18-longitudinal-mixed-models.md) |
+| **Time to first event** | Dates + censoring | [Ch 19](19-survival-analysis.md) |
+| **Proteomics / RNA / flow** | Thousands of features | [Ch 13](13-differential-analysis-fdr.md)–[17](17-integrated-castor-hd.md) |
+| **Clustered (wards, centres)** | Nested units | [Ch 4](04-comparing-groups.md), [Ch 18](18-longitudinal-mixed-models.md) |
+| **Observational exposure** | No randomisation | [Ch 5](05-linear-models.md)–[6](06-generalized-linear-models.md); causal [Ch 21](21-causal-inference.md) |
+
+Full router: [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md).
+
+---
+
+## Teaching datasets: CASTOR, CASTOR-HD, and APATE
+
+| Name | Files in `data/`? | Used for |
+|------|-------------------|----------|
+| **CASTOR** | Yes — spirometry, exacerbation, markers, longitudinal, survival | Learn and reproduce methods (Ch 3–12, 18–21) |
+| **CASTOR-HD** | Yes — proteomics, RNA, flow, antibody screens | Omics discovery pipeline (Ch 13–17) |
+| **APATE** | **No** — vignette text only | **Apate** (Greek deceit): fictional messy registry; CASTOR vs reality table; sign-off questions before real data |
+
+CASTOR is clean **on purpose**. APATE describes the illusions real registries create (perfect visit tables, hidden QC drops, batch masquerading as biology). Details: [APATE_VIGNETTE](../APATE_VIGNETTE.md), [RECURRING_COHORT](../RECURRING_COHORT.md).
+
+---
+
 ## Learning objectives
 
 1. Distinguish outcome, exposure, and covariate roles.

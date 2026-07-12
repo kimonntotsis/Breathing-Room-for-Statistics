@@ -11,10 +11,43 @@
 | **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
 | **Key methods** | Logistic, Firth, log-binomial, Poisson, NB, zero-inflated, offset |
 | **R scripts** | `R/examples/ch06_glm.R` |
-| **Figures** | logistic forest (`ch06_logistic_forest.png`), Poisson RR (`ch06_poisson_rate_ratio.png`) |
+| **Figures** | logistic forest (`ch06_logistic_forest.png`), Poisson RR (`ch06_poisson_rate_ratio.png`); **figure hygiene:** `viz_pair_ch06_forest.png` |
 | **Exercises** | [Chapter 6 exercises](../exercises/ch06_exercises.md) |
 
 **Also see:** [Appendix B § Step 3-5](../appendix-b-quick-reference.md), [Decision table](#decision-table-which-glm)
+
+---
+
+## Investigator path (≈20 min)
+
+You do not need this entire chapter on first pass. Read in order:
+
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — OR vs RR, binary vs count, varying follow-up
+2. [Opening question](#opening-question) — confirm the outcome is binary or count, not continuous
+3. [Method choice at a glance](#method-choice-at-a-glance) — pick logistic, Poisson, or NB
+4. [Worked example: exacerbation logistic model](#worked-example-exacerbation-logistic-model) — Practice read and reporting pattern
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-glm-chapter) — especially `lm()` on 0/1 outcomes
+
+**Analyst read:** technique cards, GLM framework, R lab, and extensions in the sections below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Logistic regression** | Binary outcome (exacerbation Y/N); adjust covariates | Correct variance for 0/1; OR or predicted risks + CI |
+| **Firth penalized logistic** | Sparse events; separation (coefficients → ∞) | Stabilises MLE when tables are sparse |
+| **Log-binomial / modified Poisson** | Common binary outcome; want **risk ratio** | OR overstates when events are frequent |
+| **Poisson GLM** | Count exacerbations; equal follow-up | Models event counts; check overdispersion |
+| **Poisson + offset(log person-time)** | Count outcomes; **varying** follow-up | Converts counts to rates; required when exposure time differs |
+| **Negative binomial** | Count data; variance >> mean (overdispersion) | Default sensitivity to Poisson |
+| **Zero-inflated Poisson/NB** | Excess zeros beyond sampling | Separates “structural zero” from count process |
+| **Ordinal logistic** | Ordered categories (mMRC 0–4, CAT bands) | Respects ordering; not `lm()` on 0–4 |
+| **GEE / mixed logistic** | Clustered binary (centres, wards) | Correlated outcomes need cluster-aware SEs ([Ch 18](18-longitudinal-mixed-models.md)) |
+
+**Extensions** (hurdle models, complementary log-log): [Alternatives & extensions](#alternatives--extensions-choose-by-outcome-nuance) at chapter end.
+
 ---
 
 ## Learning objectives
@@ -494,6 +527,8 @@ Non-nested: **AIC/BIC** - predictive/in-sample comparison, not formal test.
 
 ## Decision table: which GLM?
 
+*Quick lookup. For **when** and **why**, see [Method choice at a glance](#method-choice-at-a-glance) above.*
+
 | Outcome | First choice | If problem |
 |---------|--------------|------------|
 | Binary | Logistic | Separation → Firth; common outcome → consider RR model |
@@ -506,6 +541,17 @@ See [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) for the fu
 !Logistic regression forest plot (`ch06_logistic_forest.png`)
 
 Odds ratios above 1 increase odds of the outcome; check CIs that cross 1 and whether OR language matches the clinical estimand (risk vs odds).
+
+### Figure hygiene: forest plot vs OR bars
+
+!Right vs wrong: adjusted odds ratios (`viz_pair_ch06_forest.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | OR point estimates as bars | 95% CI, null at OR = 1, log-scale context |
+| **Right** | Forest plot with horizontal CIs | — (matches Methods/Results table) |
+
+**Practice read:** would you rank “strongest predictor” from the wrong panel? Forest plots force uncertainty into the slide.
 
 ---
 

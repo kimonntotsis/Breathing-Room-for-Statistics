@@ -20,7 +20,7 @@ Respiratory research rests on incompatible data shapes in the same programme: sp
 
 **In-text:** (Ntotsis, 2026)
 
-For a fixed edition, cite a tagged release URL rather than the default branch.
+For a fixed edition, cite a tagged release URL rather than the default branch. Edition and living-document notes: [HANDBOOK_STATUS](../HANDBOOK_STATUS.md).
 
 ## Why question-first?
 
@@ -51,9 +51,9 @@ Contributors who reviewed draft chapters using [REVIEWER_RUBRIC.md](../REVIEWER_
 
 ## How to use this handbook
 
-Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix H](../appendix-h-clinicians-route.md) gives an **investigator** path without R. The [Welcome](../index.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
+Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix J](../appendix-j-investigator-minimum-path.md) is the **shortest investigator path (~2 h)**; [Appendix H](../appendix-h-clinicians-route.md) expands endpoint routing without R. In the PDF, appendices appear in **reader-importance order** (G → J → H → I → B → …); letters stay fixed for citations. The [Welcome](../index.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
 
-**Signposts in the chapters:** **Why this chapter** (the mistake it prevents), **In practice** (sponsor or manuscript reality), **Before you open R** (estimand and one sensitivity), **Where this chapter leads**, **Practice read** (what would change the decision), and **Alternatives & extensions** when assumptions fail. The alternatives boxes are for defensible choice, not post hoc shopping.
+**Signposts in the chapters:** **Why this chapter** (the mistake it prevents), **Investigator path (≈20 min)** (layered read without the full chapter), **Method choice at a glance** (Method | When | Why), **Figure hygiene** (right vs wrong plots on the same data; [Appendix I](../appendix-i-figure-hygiene.md)), **In practice** (sponsor or manuscript reality), **Before you open R** (estimand and one sensitivity), **Where this chapter leads**, **Practice read** (what would change the decision), and **Alternatives & extensions** for edge cases only.
 
 ## What CASTOR means {#what-castor-means}
 

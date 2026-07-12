@@ -1,6 +1,16 @@
 # The CASTOR cohort: recurring example across the handbook
 
+This volume uses **three teaching names**. Only two have data files.
+
+| Name | Type | Purpose |
+|------|------|---------|
+| **CASTOR** | Synthetic cohort (`data/*.csv`) | Reproducible methods from Table 1 through survival (Ch 3–12, 18–21) |
+| **CASTOR-HD** | Synthetic omics extension | High-dimensional biology pipeline (Ch 13–17) |
+| **APATE** | **Prose-only vignette** ([APATE_VIGNETTE](APATE_VIGNETTE.md)) | Greek *Apate* (deceit): fictional messy registry story — **no CSV** — lists what real studies hide |
+
 **CASTOR** names two things in this book. First, the **workflow**: *Clinical question → Assess design and data → Select method → Test and fit → Output estimand → Report limits* ([Chapter 1](chapters/01-statistical-thinking.md)). Second, the **CASTOR cohort** below: a **synthetic COPD-oriented** dataset used consistently from Chapter 3 through Chapter 12 (and extended in Ch 18–19). It is not real patient data; it is designed so every method connects to the same story while you practice that sequence.
+
+**APATE** is the deliberate opposite: a **narrative** of visit slippage, QC failures, site clustering, and batch confounding. Read it before you sign off a real Methods section — do not look for `apate.csv`. Full meaning and use: [APATE_VIGNETTE](APATE_VIGNETTE.md).
 
 **CASTOR-HD** (Ch 13–17) adds high-dimensional omics, flow, and antibody-screen datasets on a parallel synthetic case–control cohort: the same workflow, richer tables.
 

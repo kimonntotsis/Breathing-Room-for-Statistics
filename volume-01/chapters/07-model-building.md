@@ -11,9 +11,40 @@
 | **Key methods** | Prespecification, LRT, AIC/BIC, LASSO, splines, missing-data overview |
 | **R scripts** | `R/examples/ch07_model_building.R` |
 | **Exercises** | [ch07 exercises](../exercises/ch07_exercises.md) |
+| **Figure hygiene** | `viz_pair_ch07_model_building.png` |
 
 **Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction)
-## Learning objectives
+
+---
+
+## Investigator path (≈20 min)
+
+1. [Three model-building modes](#three-model-building-modes-choose-first) — confirmatory vs exploratory vs prediction
+2. [Method choice at a glance](#method-choice-at-a-glance) — prespecification vs LASSO vs splines
+3. **Practice read** on stepwise selection
+4. [Reporting template](#reporting-template) if present in main technique
+5. [Alternatives & extensions](#alternatives--extensions-model-building-menus)
+
+**Analyst read:** LRT, LASSO, R lab below.
+
+---
+
+## Method choice at a glance
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Prespecified covariate set** | Confirmatory trial or observational inference | Subject-matter confounders; avoids p-hacking |
+| **Likelihood ratio test (nested)** | Prespecified extra term | Valid comparison of nested models |
+| **AIC / BIC** | Exploratory ranking; prediction focus | In-sample; not for confirmatory p-values |
+| **LASSO / ridge / elastic net** | Many predictors; prediction goal ([Ch 9](09-prediction-vs-inference.md)) | Penalisation; use with CV |
+| **Splines for age/FEV1** | Non-linearity prespecified | Flexible; limit df to avoid overfit |
+| **Stepwise selection** | Avoid in confirmatory work | Inflates optimism; invalid CIs |
+| **Complete-case vs MI** | Predictors have missing values | MI inside resampling for prediction ([Ch 20](20-missing-data.md)) |
+| **EPV rule (events per variable)** | Logistic with few events | &lt;10–15 events per coefficient is fragile |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions-model-building-menus) at chapter end.
+
+---
 
 1. Match model-building strategy to inference vs prediction goal.
 2. Select confounders by subject-matter knowledge, not p-hacking.
@@ -283,6 +314,15 @@ exacerbation_12m ~ smoking + age +
 ```r
 source("R/examples/ch07_model_building.R")
 ```
+
+### Figure hygiene: stepwise AIC vs prespecification
+
+!Right vs wrong: model building (`viz_pair_ch07_model_building.png`)
+
+| Panel | Shows | Masks |
+|-------|--------|-------|
+| **Wrong** | Lowest-AIC model from stepwise shopping | Optimism, invalid confirmatory CIs |
+| **Right** | Prespecified covariate set | One SAP-aligned model |
 
 ---
 
