@@ -55,19 +55,19 @@ Chapters 1-11.
 
 ## Why this chapter
 
-Technique cards teach atoms; case studies teach **workflow**. You will walk **five** complete CASTOR narratives (Cases A–E: trial FEV1, cohort logistic, marker clustering, CASTOR-HD bridge, longitudinal + survival) and practice saying what each analysis does **not** prove. This is the chapter to read before your first manuscript discussion section.
+Technique cards teach atoms; case studies teach **workflow**. You will walk **five** complete CASTOR narratives (Cases A–E) with **In the room** notes — fictional steering comments, reviewer lines, and lab emails that mirror what pulmonary teams actually hear. Practice saying what each analysis does **not** prove before your first manuscript discussion section.
 
 ## Opening question
 
 *How do the CASTOR analyses from Chapters 3–11 fit together in **five publishable-style case reports** (Cases A–E)?*
 
-This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), five complete narratives (Cases A–E), and explicit limits on what each analysis proves. Role-based reading paths: [Welcome](../index.md) and [Appendix G](../appendix-g-handbook-navigation.md).
+This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), five complete narratives (Cases A–E), and explicit limits on what each analysis proves. Role-based reading paths: [Welcome](../chapters/00-welcome.md) and [Appendix G](../appendix-g-handbook-navigation.md).
 
 ---
 
 ## Master workflow (every CASTOR analysis)
 
-!CASTOR analysis pipeline (`analysis_pipeline.png`){width=85%}
+![CASTOR analysis pipeline](../figures/analysis_pipeline.png){width=85%}
 
 | Step | Action | Chapter |
 |------|--------|---------|
@@ -88,7 +88,7 @@ Reporting frameworks by design: CONSORT (RCT) [@schulz2010consort]; STROBE (coho
 
 Before protocol lock, steering committee, or journal submission, walk the seven gates on the same CASTOR workflow:
 
-!CASTOR investigator sign-off checklist (`viz_signoff_checklist.png`){width=78%}
+![CASTOR investigator sign-off checklist](../figures/viz_signoff_checklist.png){width=78%}
 
 | Gate | Question | If no → |
 |------|----------|---------|
@@ -110,6 +110,9 @@ Manuscripts often mix discovery language (omics hits) with confirmatory language
 
 # Case study A: Randomised trial: FEV1 comparison
 
+> **In the room (steering committee):** *"The intervention arm looks better on the forest plot snippet. Can we call this a win? p is 0.20."*  
+> **Response:** Report mean difference and 95% CI against the prespecified MCID (0.10 L). Non-significant superiority is **inconclusive**, not proof of equivalence. ANCOVA with baseline FEV1 was prespecified as supportive — not as a post hoc rescue.
+
 ### Clinical question
 
 Does intervention improve mean FEV1 at 12 weeks compared with standard care in CASTOR?
@@ -130,6 +133,7 @@ Parallel RCT; independent groups; continuous outcome [@schulz2010consort].
 | Histogram / QQ FEV1 | Ch 3 |
 | Welch t-test (prespecified primary) | Ch 4 [@welch1947t] |
 | ANCOVA sensitivity (`spirometry_trial.csv`) | Ch 4-5 |
+| Secondary endpoints (FVC, CAT) in Holm family | Ch 4, 8 |
 | Bootstrap CI | Ch 8 [@efron1993bootstrap] |
 | Power note (if negative) | Ch 4, 8 |
 
@@ -172,6 +176,9 @@ Causal effect in broader population; long-term FEV1 decline; symptom benefit.
 ---
 
 # Case study B: Observational cohort: exacerbation risk
+
+> **In the room (Reviewer #2):** *"Smoking is your exposure, but you adjusted for FEV1 % predicted — doesn't that block the effect?"*  
+> **Response:** FEV1 is a prespecified confounder on the causal path smoking → lung function → exacerbation risk; report adjusted OR as primary and crude proportions in supplementary. Associational language only ([Ch 8](08-validation-reporting.md)).
 
 ### Clinical question
 
@@ -231,6 +238,9 @@ Causal effect of smoking; prediction model performance (see Case C / Ch 9).
 ---
 
 # Case study C: Multi-marker panel: PCA + clustering
+
+> **In the room (PI email):** *"Cluster 1 separates well — can we call it the Th2-high endotype in the grant renewal?"*  
+> **Response:** Unsupervised k-means on 30 markers is **exploratory**; batch colouring and stability checks come first ([Ch 11](11-clustering.md)). Name subgroups only after external replication and outcome linkage.
 
 ### Clinical question
 
@@ -292,6 +302,9 @@ Biological subtypes; treatment response groups; diagnostic categories.
 
 # Case study D: CASTOR-HD discovery bridge (Ch 13–17)
 
+> **In the room (lab manager):** *"The CRO sent 47 'significant' proteins and a volcano PDF — no plate map. Can we add it beside the week-12 FEV1 figure for the primary paper?"*  
+> **Response:** No batch metadata → stop at QC gate ([Ch 14](14-batch-effects.md)). Discovery results get a **separate** paragraph and limitations; they do not upgrade the trial primary endpoint ([Ch 17](17-integrated-castor-hd.md)).
+
 ### Clinical question
 
 In the CASTOR-HD extension, which molecular and immune readouts support a coherent discovery story from proteomics through confirmation assays?
@@ -349,6 +362,9 @@ Causal mechanisms; clinical utility; transportability; antibody therapeutic pote
 ---
 
 # Case study E: Longitudinal FEV1 + time to exacerbation
+
+> **In the room (CRA):** *"We already have week-52 FEV1 — why fit a mixed model on four visits?"*  
+> **Response:** Pooling visits as independent rows inflates precision ([Ch 18](18-longitudinal-mixed-models.md)). Prespecified primary uses mixed model; week-52 *t*-test is **sensitivity** only (Case E table).
 
 ### Clinical question
 

@@ -15,6 +15,8 @@
 
 **Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction)
 
+> **Sounds like your lab?** [Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) — only 24 events but tempted to add predictors? → [Technique: Prespecified confounder adjustment](#technique-prespecified-confounder-adjustment).
+
 ---
 
 ## Investigator path (≈20 min)
@@ -317,7 +319,7 @@ source("R/examples/ch07_model_building.R")
 
 ### Figure hygiene: stepwise AIC vs prespecification
 
-!Right vs wrong: model building (`viz_pair_ch07_model_building.png`)
+![Right vs wrong: model building](../figures/viz_pair_ch07_model_building.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|

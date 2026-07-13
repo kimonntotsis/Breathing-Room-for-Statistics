@@ -247,7 +247,7 @@ Embeddings (UMAP/t-SNE) and clustering can help you **see** structure and check 
 
 **Rule:** if you show an embedding, also show participant-level summaries that support the claim.
 
-!Cell-type proportions by group (participant-level) (`ch15_flow_props_by_group.png`)
+![Cell-type proportions by group (participant-level)](../figures/ch15_flow_props_by_group.png)
 
 Bars are participant means: the level at which group comparisons belong in a respiratory paper.
 
@@ -258,7 +258,7 @@ Bars are participant means: the level at which group comparisons belong in a res
 | `ch15_flow_props_by_group.png` | Participant-level proportions by arm | — |
 | `ch15_pseudoreplication_demo.png` | Teaching: why pooling cells inflates *p* | Inference at cell *n* |
 
-!Pseudo-replication: participant vs pooled-cell p-values (`ch15_pseudoreplication_demo.png`)
+![Pseudo-replication: participant vs pooled-cell p-values](../figures/ch15_pseudoreplication_demo.png)
 
 Inflated significance when cells are pooled is the reason flow claims must stay at participant *n*.
 
@@ -320,11 +320,11 @@ table(flow$group, flow$batch)
 - **Stacked compositional bars** by group (are shifts global rebalancing?)
 - **Pseudo-replication contrast** (participant n vs cell n for the same comparison)
 
-!Compositional structure: proportions sum to 1 (`ch15_compositional_stacked.png`)
+![Compositional structure: proportions sum to 1](../figures/ch15_compositional_stacked.png)
 
 Shifts in one population often accompany opposite shifts elsewhere because proportions are bounded.
 
-!Drift check: proportions by batch/day (`ch15_flow_props_by_batch.png`)
+![Drift check: proportions by batch/day](../figures/ch15_flow_props_by_batch.png)
 
 Batch-separated bars mean immunology and processing are confounded until drift is modelled or redesigned.
 

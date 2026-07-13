@@ -10,6 +10,8 @@ This volume uses **three teaching names**. Only two have data files.
 
 **CASTOR** names two things in this book. First, the **workflow**: *Clinical question → Assess design and data → Select method → Test and fit → Output estimand → Report limits* ([Chapter 1](chapters/01-statistical-thinking.md)). Second, the **CASTOR cohort** below: a **synthetic COPD-oriented** dataset used consistently from Chapter 3 through Chapter 12 (and extended in Ch 18–19). It is not real patient data; it is designed so every method connects to the same story while you practice that sequence.
 
+> **Who CASTOR is for.** The examples read as **COPD** (spirometry, exacerbations, inhaled therapy) so one cohort carries every chapter. The workflow applies across **chronic lung disease (CLD)** and to much of broader pulmonary research — asthma trials, bronchiectasis programmes, mixed clinic cohorts — whenever your **estimand, outcome type, and design** match (FEV1 arms, binary or count exacerbations, longitudinal visits, time-to-event, omics discovery). Classify the **question**, not only the disease label on the consent form. CASTOR is a **starting point**; [APATE](APATE_VIGNETTE.md) reminds you what real registries look like when no bioinformatics core is on the email thread.
+
 **APATE** is the deliberate opposite: a **narrative** of visit slippage, QC failures, site clustering, and batch confounding. Read it before you sign off a real Methods section — do not look for `apate.csv`. Full meaning and use: [APATE_VIGNETTE](APATE_VIGNETTE.md).
 
 **CASTOR-HD** (Ch 13–17) adds high-dimensional omics, flow, and antibody-screen datasets on a parallel synthetic case–control cohort: the same workflow, richer tables.

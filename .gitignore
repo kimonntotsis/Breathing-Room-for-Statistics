@@ -10,9 +10,17 @@ Rplots.pdf
 # Quarto
 volume-01/.quarto/
 volume-01/**/.quarto/
+volume-01/index_files/
 **/*.quarto_ipynb
 
-# Optional: exclude built PDF from git (attach to releases separately)
+# Cover exploration drafts (archived locally; README kept)
+volume-01/figures/archive/cover-explorations/*.png
+
+# Built book output (PDF attached to GitHub releases)
 /Breathing-Room-for-Statistics.pdf
 volume-01/_book/
+
+# Root artifacts not for version control
+ChatGPT Image*
+*.merged.pdf
 cover-art-draft*

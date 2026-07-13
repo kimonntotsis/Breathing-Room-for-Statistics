@@ -57,6 +57,8 @@ Chapters 3, 5.
 
 ---
 
+*A collaborator emails: “Here is PCA on the 30-marker panel — two clear clusters.” You open the plot: points separate, but colour by processing batch shows the same split. **This chapter** is how you summarise markers without mistaking batch for biology.*
+
 ## Why this chapter
 
 Marker panels and omics produce too many correlated columns to inspect by eye. PCA and related tools help you **see** structure without pretending every axis is a new biomarker. Use this chapter for exploration; use Ch 13+ when the goal is formal differential analysis.
@@ -185,6 +187,10 @@ Many rules disagree; components are retained for **description**, not hypothesis
 
 Keep components until outcome regression is significant → circular.
 
+![Scree plot: variance explained by component](../figures/ch10_scree.png)
+
+Use the scree elbow with domain judgment — not as a standalone stopping rule.
+
 ---
 
 ## Technique: Loadings and scores
@@ -218,7 +224,11 @@ Still not validation of biology.
 
 ## Technique: Biplot
 
-Joint plot of patients (scores) and variables (loadings). Useful for CASTOR `true_phenotype` visual check - teaching only; real studies lack truth labels. See `ch10_pca_biplot.png`.
+Joint plot of patients (scores) and variables (loadings). Useful for CASTOR `true_phenotype` visual check - teaching only; real studies lack truth labels.
+
+![PCA biplot: CASTOR marker panel](../figures/ch10_pca_biplot.png)
+
+Colour by batch before phenotype when reviewing omics-style panels (Ch 14).
 
 ---
 
@@ -330,7 +340,7 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 
 ### Figure hygiene: 2D hero plot vs scree
 
-!Right vs wrong: PCA exploration (`viz_pair_ch10_pca.png`)
+![Right vs wrong: PCA exploration](../figures/viz_pair_ch10_pca.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|

@@ -15,6 +15,8 @@
 
 **Also see:** [Appendix B § Step 5](../appendix-b-quick-reference.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#method-choice-at-a-glance)
 
+> **Sounds like your lab?** [Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) — FEV1 compared with a *t*-test but baseline never adjusted? → [ANCOVA: follow-up FEV1 adjusting baseline](#ancova-follow-up-fev1-adjusting-baseline).
+
 ---
 
 ## Investigator path (≈20 min)
@@ -257,6 +259,10 @@ plot(cooks.distance(fit), type = "h", main = "Cook's distance")
 
 Investigate data errors before removing points. One patient with FEV1 = 0.1 L may be entry error.
 
+![Residual diagnostics: CASTOR smoking model](../figures/ch05_residual_diagnostics.png)
+
+Check pattern in residuals before trusting the adjusted smoking coefficient.
+
 ---
 
 ## Multicollinearity (VIF)
@@ -289,6 +295,10 @@ car::vif(fit)  # values > 5–10 warrant attention
 - **Practice:** ~400 mL lower FEV1 in smokers - clinically substantial if causal; observational design limits causal claim.  
 - **General reader:** smokers in this dataset have notably lower lung function even after accounting for age, sex, and height.
 
+![Adjusted mean FEV1 by smoking (emmeans-style)](../figures/ch05_fev1_by_smoking_adjusted.png)
+
+Report the interval on this scale; the plot supports the coefficient table, not replaces it.
+
 ---
 
 ## What linear regression does NOT do
@@ -309,7 +319,7 @@ source("R/examples/ch05_linear_models.R")
 
 ### Figure hygiene: smooth line vs residuals
 
-!Right vs wrong: linear model diagnostics (`viz_pair_ch05_residuals.png`)
+![Right vs wrong: linear model diagnostics](../figures/viz_pair_ch05_residuals.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|

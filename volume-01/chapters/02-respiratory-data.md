@@ -49,11 +49,31 @@ Full router: [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../MET
 
 | Name | Files in `data/`? | Used for |
 |------|-------------------|----------|
-| **CASTOR** | Yes — spirometry, exacerbation, markers, longitudinal, survival | Learn and reproduce methods (Ch 3–12, 18–21) |
+| **CASTOR** | Yes — spirometry, exacerbation, markers, longitudinal, survival | Learn and reproduce methods (Ch 3–12, 18–21). **COPD-flavoured** data; workflow applies to **CLD** and broader pulmonary research when endpoints and design match |
 | **CASTOR-HD** | Yes — proteomics, RNA, flow, antibody screens | Omics discovery pipeline (Ch 13–17) |
 | **APATE** | **No** — vignette text only | **Apate** (Greek deceit): fictional messy registry; CASTOR vs reality table; sign-off questions before real data |
 
 CASTOR is clean **on purpose**. APATE describes the illusions real registries create (perfect visit tables, hidden QC drops, batch masquerading as biology). Details: [APATE_VIGNETTE](../APATE_VIGNETTE.md), [RECURRING_COHORT](../RECURRING_COHORT.md).
+
+> **CLD note:** CASTOR’s synthetic patients are labelled COPD-style, but the handbook targets **chronic lung disease (CLD)** and mixed pulmonary cohorts. If you measure FEV1, exacerbations, or omics on a defined population, you are in scope — regardless of whether your protocol says COPD, asthma, or CLD.
+
+---
+
+## Worked vignette: asthma biologic trial (same routing, different estimand)
+
+CASTOR data are COPD-flavoured; **asthma programmes** use the same outcome families with different primary estimands. Example protocol sentence:
+
+> *Among adults with severe eosinophilic asthma on background ICS/LABA, what is the difference in mean post-BD FEV1 (L) at week 12 between biologic and placebo, in the intention-to-treat population?*
+
+| Decision | Asthma-specific nuance | Handbook route |
+|----------|------------------------|----------------|
+| Primary endpoint | Often exacerbation rate **or** FEV1 — pick **one** before unblinding | [Ch 4](04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [Ch 8](08-validation-reporting.md) |
+| MCID | Asthma FEV1 margins differ from COPD; use protocol margin | [Ch 4](04-comparing-groups.md) |
+| Exacerbation secondary | Count or time-to-first event — not interchangeable | [Ch 6](06-generalized-linear-models.md), [Ch 19](19-survival-analysis.md) |
+| Biomarker subgroup | Eosinophil stratum is **prespecified**, not post hoc clustering | [Ch 11](11-clustering.md) claim ladder |
+| Airway + omics | Same patient, two **families** of tests (clinical vs discovery) | [Ch 13–17](13-differential-analysis-fdr.md) |
+
+**Practice read:** if the grant promises “multi-omics endotypes” but the SAP has only FEV1, resolve that mismatch **before** samples are assayed — not in the Discussion.
 
 ---
 
@@ -108,6 +128,8 @@ Same CASTOR columns (`patient_id`, `age`, `sex`, `smoking`, `therapy`, `fev1`): 
 
 **Wrong:** run all three and report whichever has the smallest *p*-value.
 
+**Related story:** [Story 1 — one export, every column gets a t-test](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test); [Story 3 — `lm()` on 0/1](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation).
+
 ---
 
 ## Variables: outcome, exposure, covariate
@@ -160,7 +182,7 @@ Choosing the wrong outcome type - treating a **count** as **binary**, or a **bin
 | **High-dimensional** | Proteomics, transcriptomics | PCA, clustering, penalized ML | Ch 10–17 |
 | **Proportions (bounded)** | Flow cell-type % | Participant-level models | Ch 15 |
 
-!Method decision tree - start from outcome type (`method_decision_tree.png`)
+![Method decision tree - start from outcome type](../figures/method_decision_tree.png)
 
 Start at the outcome node, not at “we always use a t-test”: the tree routes to the chapter that matches your estimand.
 

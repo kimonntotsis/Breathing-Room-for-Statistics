@@ -18,7 +18,9 @@ These blocks sit **outside** the technique cards. They do not replace assumption
 | **Before you open R** | Immediately before `## R lab` or `### R lab` | Estimand + unit + file + one sensitivity: then code |
 | **Where this chapter leads** | Before Further reading / Exercises | Two sentences linking to the next chapter(s) |
 
-Part intros may include a **CASTOR vignette** (short narrative hook). See `parts/part-*.md`.
+Part intros include an **In the room** vignette (short narrative hook: meeting, email, review). See `parts/part-*.md`. Method chapters may open with a one-paragraph scene before **Why this chapter** — use when it grounds the mistake the chapter prevents.
+
+**Humane tone:** prefer specific situations (steering committee, reviewer line, vendor PDF) over generic “researchers often…” prose. First-person author voice belongs in the [Preface](chapters/00-preface.md), not in every technique card.
 
 ---
 
@@ -49,9 +51,9 @@ One sentence an investigator understands.
 
 ## Block 3: Dual interpretation
 
-**Plain language:** one sentence for non-specialists.
+**Default (Ch 4–8):** **Plain language** + **Precise language** + **Practice read**.
 
-**Precise language:** one sentence for analysts (estimand, link, assumptions).
+**Ch 10–21:** use a single **Takeaway** line when the technique card already states the estimand; keep **Practice read** for decision-changing interpretation. Drop redundant Plain/Precise pairs that repeat the card verbatim.
 
 **Practice read:** what would change in practice if the estimate were true?
 

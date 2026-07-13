@@ -65,6 +65,8 @@ Chapters 4–5 (group comparisons, linear models); Ch 8 (reporting).
 
 ---
 
+*The CRA exports 640 rows from 160 patients and suggests a week-52 t-test “because that is the protocol visit.” You notice four visits per patient in the same file. **This chapter** is why stacking visits without a mixed model overstates precision.*
+
 ## Why this chapter
 
 Repeated FEV1 visits carry more information than a single timepoint; a week-52 *t*-test discards most of that structure. This chapter is for extension trials and observational spirometry trajectories where the same patient appears more than once.
@@ -259,13 +261,13 @@ source("R/00_setup.R")
 source("R/examples/ch18_longitudinal_mixed_models.R")
 ```
 
-!Spaghetti plot: FEV1 trajectories by participant (`ch18_spaghetti_fev1.png`)
+![Spaghetti plot: FEV1 trajectories by participant](../figures/ch18_spaghetti_fev1.png)
 
 Each line is one participant. Use this plot to spot outliers, dropout, and whether a linear trend is plausible before trusting the mixed model.
 
 ### Figure hygiene: week-52 snapshot vs full trajectories
 
-!Right vs wrong: longitudinal FEV1 (`viz_pair_ch18_longitudinal.png`)
+![Right vs wrong: longitudinal FEV1](../figures/viz_pair_ch18_longitudinal.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -274,7 +276,7 @@ Each line is one participant. Use this plot to spot outliers, dropout, and wheth
 
 **Practice read:** a week-52 *t*-test figure should not be your only longitudinal slide if the estimand is change over time.
 
-!Mixed model fitted population trajectories (`ch18_mixed_model_fitted.png`)
+![Mixed model fitted population trajectories](../figures/ch18_mixed_model_fitted.png)
 
 Fitted lines are **population-level** predictions (random effects set to zero), not individual patient forecasts.
 

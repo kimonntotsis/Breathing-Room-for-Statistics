@@ -152,9 +152,7 @@ Imagine a study where **all controls** were run on Batch1 and **all cases** on B
 
 ### Dual interpretation
 
-**Plain language:** we checked whether samples cluster by lab process rather than disease.
-
-**Precise language:** we examined whether leading principal components correlate with batch variables; if so, batch explains a meaningful portion of variance.
+**Takeaway:** check whether samples cluster by lab process (batch) rather than disease before trusting group colours on a PCA plot.
 
 **Practice read:** if batch drives the main variation, a "biomarker panel" is probably not real.
 
@@ -224,13 +222,13 @@ This is the most defensible "first-line" strategy for **inference** when batch i
 
 **Practice read:** this is a reasonable attempt to separate signal from process - but only if both groups were measured across batches.
 
-!PCA colored by batch (proteomics subset) (`ch14_pca_proteomics_batch.png`)
+![PCA colored by batch (proteomics subset)](../figures/ch14_pca_proteomics_batch.png)
 
 Separation along PC1 by colour (batch) means batch-aware models or redesign, not a raw hit list: come first.
 
 ### Figure hygiene: group-coloured PCA vs batch-first QC
 
-!Right vs wrong: proteomics PCA (`viz_pair_ch14_batch_pca.png`)
+![Right vs wrong: proteomics PCA](../figures/viz_pair_ch14_batch_pca.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -239,7 +237,7 @@ Separation along PC1 by colour (batch) means batch-aware models or redesign, not
 
 **Practice read:** if the wrong panel were your omics slide, would a biologist call it “a disease axis”? Check batch colour before naming biology.
 
-!Valid overlap vs confounded group × batch design (`ch14_group_batch_overlap.png`)
+![Valid overlap vs confounded group × batch design](../figures/ch14_group_batch_overlap.png)
 
 Only the left-hand pattern supports identifiable group effects after batch adjustment; the right-hand pattern is a stop/go gate.
 
@@ -295,11 +293,11 @@ If the *existence* of your main result depends on whether batch is included, say
 - **Group × batch overlap plot:** the fastest confounding check.
 - **PC1 variance explained by batch vs group:** quantifies whether technical structure dominates the leading axis.
 
-!Discoveries with vs without batch adjustment (`ch14_batch_sensitivity_discoveries.png`)
+![Discoveries with vs without batch adjustment](../figures/ch14_batch_sensitivity_discoveries.png)
 
 A large drop in hit count after batch adjustment means many “discoveries” were technical. Report both numbers.
 
-!PC1 variance explained by batch vs group (`ch14_pc1_variance_explained.png`)
+![PC1 variance explained by batch vs group](../figures/ch14_pc1_variance_explained.png)
 
 When batch explains more variance than group on PC1, prioritise batch QC over interpreting loadings.
 

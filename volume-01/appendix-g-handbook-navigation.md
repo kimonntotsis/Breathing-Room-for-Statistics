@@ -4,7 +4,7 @@ number-sections: false
 
 # Appendix G: Handbook navigation {.unnumbered}
 
-Reference index for the PDF and web edition: where to find tools, chapters, datasets, and R commands. For a narrative tour of the volume, start with the [Welcome](index.md) page; for philosophy and CASTOR, see the [Preface](chapters/00-preface.md).
+Reference index for the PDF and web edition: where to find tools, chapters, datasets, and R commands. For a narrative tour of the volume, start with the [Welcome](chapters/00-welcome.md) page; for philosophy and CASTOR, see the [Preface](chapters/00-preface.md).
 
 ## Quick links
 
@@ -16,13 +16,21 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **Find a figure** | [FIGURE_INDEX](FIGURE_INDEX.md) |
 | **Right vs wrong plots (slides)** | [Appendix I](appendix-i-figure-hygiene.md) |
 | **Investigator minimum path (~2 h)** | [Appendix J](appendix-j-investigator-minimum-path.md) |
+| **In the room — short stories** | [Appendix K](appendix-k-in-the-room-stories.md) |
 | **APATE vignette (messy registry, no data)** | [APATE_VIGNETTE](APATE_VIGNETTE.md) |
 | **Edition / citation status** | [HANDBOOK_STATUS](HANDBOOK_STATUS.md) |
 | **Look up a term** | [Appendix C](appendix-c-glossary.md) |
 | **Cite this handbook** | [Preface: Cite this book](chapters/00-preface.md#cite-this-book) |
+| **Why I wrote this / humane aim** | [Preface](chapters/00-preface.md#why-i-wrote-this) |
+| **Without bioinformatics collaborator** | [Preface](chapters/00-preface.md#without-a-dedicated-bioinformatics-collaborator), [Ch 13](chapters/13-differential-analysis-fdr.md#working-without-a-bioinformatics-collaborator) |
+| **Asthma estimand (CLD routing)** | [Ch 2 vignette](chapters/02-respiratory-data.md#worked-vignette-asthma-biologic-trial-same-routing-different-estimand) |
+| **Composite endpoint example** | [Ch 4](chapters/04-comparing-groups.md#worked-example-composite-primary-fictional-pulmonary-sap) |
+| **Sample size (investigator)** | [Appendix B Step 0b](appendix-b-quick-reference.md) |
+| **In the room vignettes** | Part intros `parts/part-*.md`; [Ch 12](chapters/12-case-studies.md) cases A–E |
+| **Short stories (why this book)** | [Appendix K](appendix-k-in-the-room-stories.md) — mixed variables, prediction traps |
 | **Cite a guideline or textbook** | [REFERENCES](REFERENCES.md), [references.qmd](references.qmd) |
 | **Follow CASTOR examples** | [RECURRING_COHORT](RECURRING_COHORT.md) |
-| **Follow a narrative path (Cases A–E)** | [Welcome: reading paths](index.md), [Ch 12 capstone](chapters/12-case-studies.md) |
+| **Follow a narrative path (Cases A–E)** | [Welcome: reading paths](chapters/00-welcome.md), [Ch 12 capstone](chapters/12-case-studies.md) |
 | **Practice** | [Appendix F](appendix-f-exercises.md), [exercises/](exercises/), [solutions/](solutions/) |
 | **How to use the book** | [HANDBOOK_GUIDE](HANDBOOK_GUIDE.md) |
 
@@ -34,16 +42,17 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 |:----------:|:--------:|---------|------------------|
 | 1 | **G** | [Handbook navigation](appendix-g-handbook-navigation.md) (this index) | Everyone |
 | 2 | **J** | [Investigator minimum path (~2 h)](appendix-j-investigator-minimum-path.md) | Investigator |
-| 3 | **H** | [Investigator path (without R)](appendix-h-clinicians-route.md) | Investigator |
-| 4 | **I** | [Figure hygiene (right vs wrong)](appendix-i-figure-hygiene.md) | Investigator, slides |
-| 5 | **B** | [Quick reference](appendix-b-quick-reference.md) | Everyone |
-| 6 | **A** | [R environment](appendix-a-r-setup.md) | Analyst |
-| 7 | **C** | [Glossary](appendix-c-glossary.md) | Lookup |
-| 8 | **D** | [Missing data checklists](appendix-d-missing-data-checklists.md) | Analyst, DMC |
-| 9 | **F** | [Exercises](appendix-f-exercises.md) | Fellow, instructor |
+| 3 | **K** | [In the room — short stories](appendix-k-in-the-room-stories.md) | Everyone (relatable entry) |
+| 4 | **H** | [Investigator path (without R)](appendix-h-clinicians-route.md) | Investigator |
+| 5 | **I** | [Figure hygiene (right vs wrong)](appendix-i-figure-hygiene.md) | Investigator, slides |
+| 6 | **B** | [Quick reference](appendix-b-quick-reference.md) | Everyone |
+| 7 | **A** | [R environment](appendix-a-r-setup.md) | Analyst |
+| 8 | **C** | [Glossary](appendix-c-glossary.md) | Lookup |
+| 9 | **D** | [Missing data checklists](appendix-d-missing-data-checklists.md) | Analyst, DMC |
+| 10 | **F** | [Exercises](appendix-f-exercises.md) | Fellow, instructor |
 | — | **Refs** | [Bibliography](references.qmd) | Citation |
 
-**Analyst fast path:** G → A → B → (chapters) → F. **Investigator fast path:** G → J → H → I → B → Ch 12 Case A.
+**Analyst fast path:** G → A → B → (chapters) → F. **Investigator fast path:** G → J → **K** (one story) → H → I → B → Ch 12 Case A.
 
 Related (not lettered appendices): [APATE_VIGNETTE](APATE_VIGNETTE.md), [HANDBOOK_STATUS](HANDBOOK_STATUS.md), [RECURRING_COHORT](RECURRING_COHORT.md).
 
@@ -156,7 +165,8 @@ Alphabetical guide to **where** topics appear. For definitions see [Appendix C](
 | MICE / multiple imputation | [Ch 20](chapters/20-missing-data.md), [Appendix D](appendix-d-missing-data-checklists.md) |
 | Missing data checklists | [Appendix D](appendix-d-missing-data-checklists.md) |
 | Model building / selection | [Ch 7](chapters/07-model-building.md) |
-| Multiplicity / FDR | [Ch 8](chapters/08-validation-reporting.md), [Ch 13](chapters/13-differential-analysis-fdr.md) |
+| Multiplicity / FDR | [Ch 4](chapters/04-comparing-groups.md#multiplicity), [Ch 8](chapters/08-validation-reporting.md), [Ch 13](chapters/13-differential-analysis-fdr.md) |
+| Unadjusted vs adjusted | [Ch 4](chapters/04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [Appendix B Step 1a](appendix-b-quick-reference.md) |
 | Negative binomial | [Ch 6](chapters/06-generalized-linear-models.md) |
 | Non-inferiority / equivalence | [Ch 4](chapters/04-comparing-groups.md#technique-non-inferiority-and-equivalence-trials), [Ch 8](chapters/08-validation-reporting.md) |
 | Nonparametric tests | [Ch 4](chapters/04-comparing-groups.md) |

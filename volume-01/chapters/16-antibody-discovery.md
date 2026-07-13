@@ -230,11 +230,11 @@ A single threshold is not enough for transparency. Report a **sensitivity curve*
 
 If PPV collapses when you move the threshold slightly, your shortlist is fragile.
 
-!Replicate agreement (AgA screen) (`ch16_screen_replicate_agreement.png`)
+![Replicate agreement (AgA screen)](../figures/ch16_screen_replicate_agreement.png)
 
 Low replicate correlation flags unstable hits before you spend confirmation budget.
 
-!Threshold sensitivity: hits and PPV vs cutoff (`ch16_threshold_sensitivity.png`)
+![Threshold sensitivity: hits and PPV vs cutoff](../figures/ch16_threshold_sensitivity.png)
 
 A cliff edge in PPV means the shortlist is threshold-dependent: show the curve, not one lucky cutoff.
 
@@ -285,7 +285,7 @@ screen %>% group_by(antigen) %>%
 
 ### Figure hygiene: rank bar vs PPV
 
-!Right vs wrong: antibody screen (`viz_pair_ch16_screen.png`)
+![Right vs wrong: antibody screen](../figures/viz_pair_ch16_screen.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -324,11 +324,11 @@ conf <- readr::read_csv(
 - Vary threshold over a prespecified grid; show PPV and hit count.
 - Report stability tiers and restrict main claims to Tier 1 (and optionally Tier 2).
 
-!Stability tiers and PPV by tier (AgA) (`ch16_stability_tiers.png`)
+![Stability tiers and PPV by tier (AgA)](../figures/ch16_stability_tiers.png)
 
 Tier 1 clones are the only defensible primary shortlist; lower tiers belong in supplementary exploration.
 
-!Top-20 overlap across replicate pairs (`ch16_ranking_stability.png`)
+![Top-20 overlap across replicate pairs](../figures/ch16_ranking_stability.png)
 
 Low overlap between replicate top-20 lists means ranking noise, not biology.
 

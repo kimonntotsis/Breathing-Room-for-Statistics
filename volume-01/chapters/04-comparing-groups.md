@@ -17,6 +17,8 @@
 
 **Also see:** [Appendix B § Step 2-3](../appendix-b-quick-reference.md), [Master table](#master-decision-table)
 
+> **Sounds like your lab?** [Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) (a *t*-test loop on every column) → start at [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints).
+
 ---
 
 ## Investigator path (≈20 min)
@@ -25,9 +27,10 @@ You do not need this entire chapter on first pass. Read in order:
 
 1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — MCID, pairing, proportion vs count
 2. [The comparison workflow](#the-comparison-workflow) — write the estimand in one sentence
-3. [Method choice at a glance](#method-choice-at-a-glance) — pick the test by outcome and design
-4. [Worked example: COPD trial FEV1](#worked-example-copd-trial-fev1) — Practice read and reporting wording
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-comparison-chapter) — before protocol or manuscript sign-off
+3. [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints) — crude vs covariate-adjusted; link outcomes in the SAP
+4. [Method choice at a glance](#method-choice-at-a-glance) — pick the test by outcome and design
+5. [Worked example: COPD trial FEV1](#worked-example-copd-trial-fev1) — Practice read and reporting wording
+6. [Catalog of wrong analyses](#catalog-of-wrong-analyses-comparison-chapter) — before protocol or manuscript sign-off
 
 **Analyst read:** technique cards, R lab, and extensions in the sections below.
 
@@ -111,6 +114,86 @@ Every group comparison follows five steps:
 3. **Outcome type** - continuous, binary, count?
 4. **Method** - matched to 1-3 with stated assumptions
 5. **Report** - effect estimate, 95% CI, n, test/ model, limitations
+
+---
+
+## Unadjusted, adjusted, and multiple endpoints
+
+Sponsor slides often mix three distinct decisions: a **crude arm difference**, a **covariate-adjusted** effect, and **several lung endpoints on one page**. Treat each as its own estimand with its own reporting rule.
+
+### Unadjusted vs adjusted
+
+| Analysis | Estimand (plain) | When it is primary | Report with |
+|----------|------------------|--------------------|-------------|
+| **Unadjusted** | Raw mean or proportion difference between groups | Balanced RCT with prespecified simple comparison; Table 1 shows acceptable balance ([Ch 3](03-descriptive-analysis.md)) | Point estimate + 95% CI + **n** (and **events** for binary outcomes) |
+| **Adjusted** | Difference **holding prespecified covariates fixed** (age, sex, baseline FEV1, centre, …) | Observational cohorts; baseline imbalance; pulmonary RCTs using ANCOVA | Same + **list covariates**; residual checks ([Ch 5](05-linear-models.md)) |
+
+**RCT rule:** prespecify in the SAP whether the primary analysis is unadjusted ITT, **ANCOVA with baseline FEV1**, or a prespecified change score. Do not run all three and promote the smallest *p*.
+
+**Observational rule:** adjusted logistic or linear models are the main analysis; unadjusted comparisons are **sensitivity** analyses that show how much confounding matters—not proof of effect ([Ch 21](21-causal-inference.md)).
+
+**Wording:** unadjusted → “mean difference between groups”; adjusted → “associated with … after adjustment for …” unless the design supports stronger causal language.
+
+**Practice read:** [Case B in Ch 12](12-case-studies.md) shows crude proportions beside an adjusted exacerbation model—mirror that pattern when baseline imbalance or confounding is plausible.
+
+#### Wrong analysis ⚠
+
+| | |
+|---|---|
+| **Mistake** | Report a Fisher odds ratio or Welch mean difference as “adjusted” without covariates |
+| **Do instead** | Label unadjusted explicitly; route adjustment to regression ([Ch 5](05-linear-models.md), [Ch 6](06-generalized-linear-models.md)) |
+
+| | |
+|---|---|
+| **Mistake** | Change covariates after seeing results |
+| **Do instead** | Prespecify confounders in the SAP ([Ch 7](07-model-building.md)); sensitivity only |
+
+### Linking multiple clinical outcomes
+
+FEV1, FVC, symptom scores, and exacerbation rate are **clinically related** but **statistically separate**. Link them in the **protocol**, not by running many primary *p*-values.
+
+| Layer | Rule | Handbook home |
+|-------|------|---------------|
+| **One primary** | Single estimand drives sample size and trial success | CONSORT primary endpoint ([Ch 8](08-validation-reporting.md)) |
+| **Secondaries in a family** | Prespecify order; **Holm** or gatekeeping across the family | [Multiplicity](#multiplicity) below; [Ch 8](08-validation-reporting.md) |
+| **Exploratory** | Hypothesis-generating; honest labelling | Ch 8, [Ch 12](12-case-studies.md) |
+| **Omics / biomarkers** | Separate testing family from clinical endpoints; FDR, not Holm on FEV1 | Ch 13–17 |
+| **Unsupervised clusters** | Not linked to outcomes until externally validated | [Ch 11](11-clustering.md) |
+
+**Composite endpoints** (e.g. FEV1 responder **and** no exacerbation): define components, missing-data rules, and whether components are co-primary **before** data lock. This handbook does not treat composite construction in depth — borrow from trial-statistics references and freeze the **winning definition** in the SAP.
+
+#### Worked example: composite primary (fictional pulmonary SAP)
+
+A CLD trial team debates a single primary endpoint. They freeze this **before** database lock:
+
+| Element | Prespecification |
+|---------|------------------|
+| **Composite name** | “Dual responder at week 12” |
+| **Component A** | Post-BD FEV1 ≥100 mL above baseline at week 12 (ATS-acceptable manoeuvre) |
+| **Component B** | No moderate/severe exacerbation from randomisation through week 12 |
+| **Composite rule** | Responder = **both** A and B |
+| **Missing data** | If week-12 spirometry missing → not a responder for primary ITT; sensitivity with multiple imputation prespecified |
+| **Analysis** | Risk difference in responder proportion (intervention − control) + 95% CI; Fisher or logistic with covariates as supportive |
+| **Secondaries** | FEV1 (continuous), exacerbation rate, CAT — **Holm family**, separate from composite test |
+| **Not allowed** | Switching to FEV1 alone if composite p = 0.06 |
+
+**Methods snippet:**
+
+> *The primary endpoint was dual responder status at week 12 (FEV1 increase ≥0.10 L and no moderate/severe exacerbation). The estimand was the risk difference in responder proportion (intervention − standard care) in the intention-to-treat population. Secondary endpoints (FEV1 litres, annualised exacerbation rate, CAT) were tested in a prespecified order with Holm adjustment within the clinical family.*
+
+**Practice read:** composites simplify steering narratives but complicate missing spirometry — write the missing-data rule **with** the composite, not after.
+
+#### Wrong analysis ⚠
+
+| | |
+|---|---|
+| **Mistake** | FEV1, FVC, symptoms, exacerbations—four primary *p*-values on one slide |
+| **Do instead** | One primary; secondaries in a prespecified family; exploratory labelled |
+
+| | |
+|---|---|
+| **Mistake** | Omics volcano beside week-12 FEV1 as one confirmatory package |
+| **Do instead** | Separate paragraphs and limitations: discovery vs confirmatory ([Ch 12](12-case-studies.md), [Ch 17](17-integrated-castor-hd.md)) |
 
 ---
 
@@ -706,13 +789,14 @@ pwr::pwr.t.test(
 
 ## Multiplicity
 
-Testing FEV1, FVC, symptoms, and exacerbations without adjustment inflates false positives [@benjamini1995fdr].
+Testing FEV1, FVC, symptoms, and exacerbations without a plan inflates false positives [@benjamini1995fdr]. See [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints) for how to **link** clinical outcomes in the SAP.
 
 **Strategies:**
 
 - One **prespecified primary endpoint** [@schulz2010consort]
-- Holm or Bonferroni for secondary endpoints
-- Gatekeeping procedures in trials
+- Holm or Bonferroni for **secondary endpoints in the same family**
+- **Gatekeeping** when later endpoints are tested only if earlier ones succeed
+- **Separate families** for omics screens (FDR; [Ch 13](13-differential-analysis-fdr.md)) vs pulmonary function endpoints
 
 **Do not:** run many tests and report only significant ones.
 
@@ -748,13 +832,13 @@ Testing FEV1, FVC, symptoms, and exacerbations without adjustment inflates false
 
 Full map: [METHOD_MAP.md](../METHOD_MAP.md); Visual: `method_decision_tree.png`
 
-!FEV1 by group (`ch04_fev1_by_group.png`)
+![FEV1 by group](../figures/ch04_fev1_by_group.png)
 
 Overlapping distributions warn against reading a small mean difference as clinically certain without the CI and sample size.
 
 ### Figure hygiene: continuous comparison (mean bar vs distribution)
 
-!Right vs wrong: FEV1 by trial arm (`viz_pair_ch04_continuous.png`)
+![Right vs wrong: FEV1 by trial arm](../figures/viz_pair_ch04_continuous.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -765,7 +849,7 @@ Overlapping distributions warn against reading a small mean difference as clinic
 
 ### Figure hygiene: paired bronchodilator (independence vs pairing)
 
-!Right vs wrong: paired bronchodilator response (`viz_pair_ch04_paired.png`)
+![Right vs wrong: paired bronchodilator response](../figures/viz_pair_ch04_paired.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -774,7 +858,7 @@ Overlapping distributions warn against reading a small mean difference as clinic
 
 Router: [Appendix I](../appendix-i-figure-hygiene.md).
 
-!`method_comparison_panel.png`
+![method comparison panel](../figures/method_comparison_panel.png)
 
 Side-by-side panels show how the same CASTOR subset looks under different comparison choices; use this to sanity-check pairing and outcome type before picking a test.
 

@@ -1,0 +1,43 @@
+name: Handbook PDF
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify-figures:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Verify figure markdown
+        run: python3 volume-01/scripts/verify_figure_markdown.py
+
+  build-pdf:
+    runs-on: ubuntu-latest
+    needs: verify-figures
+    steps:
+      - uses: actions/checkout@v4
+      - uses: quarto-dev/quarto-actions/setup@v2
+      - name: Install TinyTeX
+        uses: r-lib/actions/setup-tinytex@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Build handbook PDF
+        run: ./build-handbook-pdf.sh
+      - name: Verify PDF build
+        run: |
+          pip install pypdf
+          python3 volume-01/scripts/verify_pdf_build.py
+      - name: Upload PDF artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Breathing-Room-for-Statistics
+          path: Breathing-Room-for-Statistics.pdf
+          if-no-files-found: error

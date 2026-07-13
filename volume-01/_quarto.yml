@@ -6,6 +6,7 @@ project:
     - chapters/*.md
     - appendix-g-handbook-navigation.md
     - appendix-j-investigator-minimum-path.md
+    - appendix-k-in-the-room-stories.md
     - appendix-h-clinicians-route.md
     - appendix-i-figure-hygiene.md
     - appendix-b-quick-reference.md
@@ -26,11 +27,11 @@ book:
   subtitle: "A statistical handbook for respiratory research: from trials to omics and prediction"
   author: "Kimon Ntotsis"
   date: today
-  cover-image: figures/book-cover-castor.png
-  cover-image-alt: "Illustration of a beaver in a lab coat with statistical notation: a mascot for the CASTOR workflow (question first, limits last) and the synthetic teaching cohort."
+  cover-image: figures/book-cover-pearl-streams.png
+  cover-image-alt: "Stylized lungs formed from statistical plots, formulas, and data streams on a dark pearl-grey background."
   chapters:
     - chapters/00-preface.md
-    - index.md
+    - chapters/00-welcome.md
     - parts/part-01-foundations.md
     - chapters/01-statistical-thinking.md
     - chapters/02-respiratory-data.md
@@ -62,6 +63,7 @@ book:
     - chapters/21-causal-inference.md
     - appendix-g-handbook-navigation.md
     - appendix-j-investigator-minimum-path.md
+    - appendix-k-in-the-room-stories.md
     - appendix-h-clinicians-route.md
     - appendix-i-figure-hygiene.md
     - appendix-b-quick-reference.md
@@ -82,7 +84,7 @@ format:
     toc: true
     number-sections: true
     citeproc: true
-    cover-image: figures/book-cover-castor.png
+    cover-image: figures/book-cover-pearl-streams.png
   pdf:
     filters:
       - filters/remove_hr.lua
@@ -107,6 +109,9 @@ format:
         \usepackage{amsmath}
         \usepackage{amssymb}
         \usepackage{graphicx}
+        \usepackage{xcolor}
+        \usepackage{tikz}
+        \usetikzlibrary{calc}
         \usepackage{float}
         \usepackage{booktabs}
         \usepackage{longtable}

@@ -6,7 +6,7 @@ number-sections: false
 
 You do **not** need 21 chapters to review a COPD trial analysis plan or a Methods section. This appendix is the **shortest defensible route** for investigators who will not run R.
 
-Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Role-based welcome: [Welcome](index.md). Endpoint router: [Appendix H](appendix-h-clinicians-route.md).
+Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Role-based welcome: [Welcome](chapters/00-welcome.md). Endpoint router: [Appendix H](appendix-h-clinicians-route.md).
 
 ---
 
@@ -14,14 +14,15 @@ Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Role-based wel
 
 | Step | Read | Time | You can sign off on… |
 |------|------|------|---------------------|
-| 1 | [Preface](chapters/00-preface.md) (Who / question-first) | 10 min | Why estimands come first |
+| 1 | [Preface](chapters/00-preface.md) (Who / **Why I wrote this** / without bioinformatics) | 10 min | Why estimands come first |
+| 1b | [Appendix K](appendix-k-in-the-room-stories.md) — **one** story that matches your week | 10 min | Why this handbook exists for your situation |
 | 2 | [Ch 1: Investigator path](chapters/01-statistical-thinking.md#investigator-path-20-min) + pipeline figure | 20 min | One-sentence estimand |
 | 3 | [Ch 2: Outcome routing table](chapters/02-respiratory-data.md#outcome-types-the-master-routing-table) | 15 min | Continuous vs binary vs count vs time-to-event |
 | 4 | [Appendix B](appendix-b-quick-reference.md) | 15 min | Prespecified primary method |
-| 5 | [Ch 4: Investigator path](chapters/04-comparing-groups.md#investigator-path-20-min) + figure hygiene pairs | 20 min | Group comparison + slide traps |
+| 5 | [Ch 4: Investigator path](chapters/04-comparing-groups.md#investigator-path-20-min) — especially [unadjusted vs adjusted](chapters/04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints) + figure hygiene pairs | 20 min | Group comparison + slide traps |
 | 6 | [Appendix I](appendix-i-figure-hygiene.md) router | 10 min | Figure 1 matches estimand |
 | 7 | [Ch 12 Case A](chapters/12-case-studies.md#case-study-a-randomised-trial-fev1-comparison) + sign-off checklist | 15 min | Full trial narrative |
-| 8 | [Ch 8: CONSORT/STROBE pointer](chapters/08-validation-reporting.md#technique-reporting-guidelines-consort--strobe--tripod) | 10 min | Reporting checklist |
+| 8 | [Ch 8: Multiplicity + CONSORT](chapters/08-validation-reporting.md#technique-multiplicity-control) | 10 min | Primary vs secondary families |
 
 **Capstone figure:** `viz_signoff_checklist.png` in [Ch 12](chapters/12-case-studies.md#investigator-sign-off-checklist).
 
@@ -37,7 +38,7 @@ Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Role-based wel
 | Time to exacerbation | [Ch 19 investigator path](chapters/19-survival-analysis.md#investigator-path-20-min) | Cox algebra |
 | Missing spirometry | [Ch 20 investigator path](chapters/20-missing-data.md#investigator-path-20-min) + [Appendix D](appendix-d-missing-data-checklists.md) | MICE code |
 | Observational therapy comparison | [Ch 21 investigator path](chapters/21-causal-inference.md#investigator-path-20-min) | DAG proofs |
-| Proteomics / screen | [Ch 13](chapters/13-differential-analysis-fdr.md#investigator-path-20-min) → [Ch 17](chapters/17-integrated-castor-hd.md#investigator-path-20-min) | Elastic net details |
+| Proteomics / screen | [Ch 13](chapters/13-differential-analysis-fdr.md#working-without-a-bioinformatics-collaborator) → [Ch 17](chapters/17-integrated-castor-hd.md#investigator-path-20-min) | Elastic net details |
 
 ---
 
@@ -65,5 +66,5 @@ CASTOR is clean on purpose. Before signing off a **real** registry or multi-site
 ## Where this path leads
 
 - **Analyst handoff:** [Appendix A](appendix-a-r-setup.md) + outcome chapter R lab  
-- **Teaching / fellowship:** [Welcome: Fellow path](index.md) → Ch 1–12 + [Appendix F](appendix-f-exercises.md)  
+- **Teaching / fellowship:** [Welcome: Fellow path](chapters/00-welcome.md) → Ch 1–12 + [Appendix F](appendix-f-exercises.md)
 - **Living handbook status:** [HANDBOOK_STATUS](HANDBOOK_STATUS.md)

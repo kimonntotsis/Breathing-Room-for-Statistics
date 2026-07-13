@@ -61,6 +61,8 @@ Chapters 4, 6 (rates and GLM intuition); Ch 8 (reporting).
 
 ---
 
+*The steering slide shows 12-month exacerbation proportions: 18% vs 22%. A statistician asks for dates of first event and censoring. The export has them. **This chapter** is why “any exacerbation Y/N” and “time to first exacerbation” are different estimands.*
+
 ## Why this chapter
 
 Sponsors often ask “exacerbation yes/no at 12 months” when dates of event and censoring are already in the database. Survival methods use follow-up time properly. This chapter also teaches when a hazard ratio is not enough on its own.
@@ -257,13 +259,13 @@ source("R/00_setup.R")
 source("R/examples/ch19_survival_analysis.R")
 ```
 
-!Kaplan-Meier curves by smoking status (`ch19_km_by_smoking.png`)
+![Kaplan-Meier curves by smoking status](../figures/ch19_km_by_smoking.png)
 
 The y-axis is zoomed to the observed event-free range so curve separation is visible; with only ~50 events in 320 patients a full 0–100% scale would look nearly flat.
 
 ### Figure hygiene: event bar vs Kaplan-Meier
 
-!Right vs wrong: time to exacerbation (`viz_pair_ch19_survival.png`)
+![Right vs wrong: time to exacerbation](../figures/viz_pair_ch19_survival.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -272,7 +274,7 @@ The y-axis is zoomed to the observed event-free range so curve separation is vis
 
 **Practice read:** treating censored patients as “no event” inflates the wrong bar; KM keeps them on the risk set until censoring.
 
-!Cox model hazard ratios (`ch19_cox_forest.png`)
+![Cox model hazard ratios](../figures/ch19_cox_forest.png)
 
 Hazard ratios compare instantaneous event rates between groups holding covariates fixed; translate to absolute risks if the trial team will act on the result.
 

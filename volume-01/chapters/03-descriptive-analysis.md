@@ -87,7 +87,7 @@ Description is not optional preamble. It is how you catch errors and justify the
 
 Description is where **figure choice** meets **method choice**. The plot must show the same quantity you will test: spread for a mean difference, pairing for pre/post, denominators for proportions, uncertainty for adjusted effects.
 
-!Plot choice by estimand — prefer vs avoid (`viz_plot_router.png`){width=96%}
+![Plot choice by estimand — prefer vs avoid](../figures/viz_plot_router.png){width=96%}
 
 Full router and regeneration: [Appendix I](../appendix-i-figure-hygiene.md).
 
@@ -95,7 +95,7 @@ Full router and regeneration: [Appendix I](../appendix-i-figure-hygiene.md).
 
 Steering decks often crop the *y*-axis so a small mean difference looks decisive. The pair below uses the same CASTOR FEV1 by arm.
 
-!Right vs wrong: axis truncation masks overlap (`viz_pair_ch03_scale_trap.png`)
+![Right vs wrong: axis truncation masks overlap](../figures/viz_pair_ch03_scale_trap.png)
 
 | Panel | Shows | Masks if used alone |
 |-------|--------|---------------------|
@@ -227,6 +227,10 @@ Report mean (SD) for ICU length-of-stay with extreme outliers → use median [IQ
 
 Overlapping histograms by group need clear colours; bin width affects appearance.
 
+![FEV1 distribution (CASTOR)](../figures/ch03_fev1_histogram.png)
+
+The histogram shows where most CASTOR FEV1 values fall before you choose mean vs median summaries.
+
 ### Wrong analysis ⚠
 
 Use bar chart with only mean ± SE for n < 30 without showing raw data.
@@ -248,6 +252,10 @@ Use bar chart with only mean ± SE for n < 30 without showing raw data.
 ### Caveats
 
 Outliers may be real severe patients - investigate before deleting. Jitter reveals sample size visually.
+
+![FEV1 by trial arm (violin + boxplot)](../figures/ch03_fev1_violin.png)
+
+Compare spread between arms, not only central tendency — this is the figure reviewers expect beside Table 1.
 
 ---
 
@@ -276,6 +284,10 @@ Mild tail deviation may be acceptable with large n (CLT) [@harrell2015rms]. QQ o
 
 Reject t-test solely because Shapiro p < 0.05 with n = 500 - consider Welch t and effect size.
 
+![Normality check: FEV1 QQ plot](../figures/ch03_fev1_qq.png)
+
+Mild tail deviation is common in spirometry; pair this visual with sample size and the planned test (Ch 4).
+
 ---
 
 ## Technique: Scatterplot and correlation
@@ -298,6 +310,10 @@ Correlation ≠ causation. Influential points drive r. Smoking colour on scatter
 
 Correlate binary smoking (0/1) with FEV1 and call it "effect" - use regression (Ch 5) for adjusted statement.
 
+![FEV1 vs age, coloured by smoking](../figures/ch03_fev1_scatter.png)
+
+Association in the scatter motivates adjusted models; it does not prove causation.
+
 ---
 
 ## Missing data in descriptives
@@ -309,7 +325,7 @@ Report n for each variable. Note if complete-case n drops. Missing FEV1 in spiro
 ## CASTOR worked example
 
 **Step 1:** Table 1 by `group`.  
-**Step 2:** Histogram and violin of FEV1.  
+**Step 2:** Histogram and violin of FEV1 (figures above).  
 **Step 3:** QQ plot → roughly symmetric → Welch t reasonable (Ch 4) [@welch1947t].  
 **Step 4:** Scatter FEV1 vs age, coloured by smoking → motivates adjusted regression (Ch 5).
 

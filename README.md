@@ -5,27 +5,31 @@
 *With reproducible R examples*
 
 **Repository:** [github.com/kimonntotsis/Breathing-Room-for-Statistics](https://github.com/kimonntotsis/Breathing-Room-for-Statistics)  
-Chapters, appendices, datasets, and R scripts live here. The PDF is distributed separately; links inside the PDF point to these source files on GitHub.
+**Latest release (PDF):** [v1.0.0](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.0.0)  
+Chapters, appendices, datasets, and R scripts live here. The PDF is attached to GitHub releases; links inside the PDF point to these source files on GitHub.
 
-A single-volume handbook for investigators and analysts (Ch 0–21): classical statistics, prediction, dimension reduction and clustering, high-dimensional omics, and longitudinal/causal methods.
+A single-volume handbook for **early- and mid-career** respiratory investigators and analysts — and **senior clinicians** who want statistics and R **on purpose**, not as a second degree in math or computer science.
+
+**Aim:** match your question to a defensible method; know alternatives, assumptions, reporting, and limits — especially when high-dimensional data arrives **without** a bioinformatics collaborator. [Preface — Why I wrote this](volume-01/chapters/00-preface.md#why-i-wrote-this).
 
 ## Start here (by role)
 
 | Role | Open first |
 |------|------------|
-| **Investigator (no R)** | [Welcome](volume-01/index.md) → [Appendix J (~2 h)](volume-01/appendix-j-investigator-minimum-path.md) → [Appendix H](volume-01/appendix-h-clinicians-route.md) |
+| **Investigator (no R)** | [Preface](volume-01/chapters/00-preface.md) → [Welcome](volume-01/chapters/00-welcome.md) → [Appendix J (~2 h)](volume-01/appendix-j-investigator-minimum-path.md) → [Appendix K (one story)](volume-01/appendix-k-in-the-room-stories.md) → [Appendix H](volume-01/appendix-h-clinicians-route.md) |
 | **Analyst (R)** | [Appendix A](volume-01/appendix-a-r-setup.md) → [Appendix B](volume-01/appendix-b-quick-reference.md) → outcome chapter |
 | **Anyone lost** | [Appendix G — navigation](volume-01/appendix-g-handbook-navigation.md) |
 
-**Teaching names:** **CASTOR** / **CASTOR-HD** = synthetic CSV cohorts; **APATE** = prose-only messy-registry vignette ([APATE_VIGNETTE](volume-01/APATE_VIGNETTE.md), no data files).
+**Teaching names:** **CASTOR** / **CASTOR-HD** = COPD-flavoured synthetic CSV cohorts (methods apply to **CLD** when endpoints match); **APATE** = prose-only messy-registry vignette ([APATE_VIGNETTE](volume-01/APATE_VIGNETTE.md), no data files); **Appendix K** = six fictional but feasible “in the room” stories ([appendix-k-in-the-room-stories.md](volume-01/appendix-k-in-the-room-stories.md)).
 
 ## Handbook navigation
 
 | Start here | File |
 |------------|------|
-| **Preface → Welcome tour** | [Preface](volume-01/chapters/00-preface.md) → [Welcome](volume-01/index.md) |
+| **Preface → Welcome tour** | [Preface](volume-01/chapters/00-preface.md) → [Welcome](volume-01/chapters/00-welcome.md) |
 | **Appendix index (read order)** | [Appendix G](volume-01/appendix-g-handbook-navigation.md) |
 | **Investigator minimum path (~2 h)** | [Appendix J](volume-01/appendix-j-investigator-minimum-path.md) |
+| **In the room — short stories** | [Appendix K](volume-01/appendix-k-in-the-room-stories.md) |
 | **Investigator path (without R)** | [Appendix H](volume-01/appendix-h-clinicians-route.md) |
 | **Figure hygiene (right vs wrong)** | [Appendix I](volume-01/appendix-i-figure-hygiene.md) |
 | **Which test / which model** | [Appendix B](volume-01/appendix-b-quick-reference.md) |
@@ -38,6 +42,7 @@ A single-volume handbook for investigators and analysts (Ch 0–21): classical s
 | **Edition / citation** | [volume-01/HANDBOOK_STATUS.md](volume-01/HANDBOOK_STATUS.md) |
 | **Instructor pack** | [volume-01/INSTRUCTOR_PACK.md](volume-01/INSTRUCTOR_PACK.md), exercises in Appendix F |
 | **Reviewer rubric** | [volume-01/REVIEWER_RUBRIC.md](volume-01/REVIEWER_RUBRIC.md) |
+| **External review request** | [REVIEW_REQUEST.md](REVIEW_REQUEST.md) |
 | **Cite this handbook** | [Preface: Cite this book](volume-01/chapters/00-preface.md#cite-this-book) (APA 7th ed.) |
 | **References** | [volume-01/REFERENCES.md](volume-01/REFERENCES.md) |
 
@@ -86,9 +91,13 @@ PDF output:
 
 ```bash
 ./build-handbook-pdf.sh          # render + copy to repo root
+python3 volume-01/scripts/verify_figure_markdown.py
+pip install pypdf && python3 volume-01/scripts/verify_pdf_build.py
 # or:
 cd volume-01 && quarto render --to pdf
 ```
+
+CI runs the same checks on every push to `main` (see [`.github/workflows/handbook-pdf.yml`](.github/workflows/handbook-pdf.yml)).
 
 ## Scope (one volume)
 
@@ -100,4 +109,4 @@ cd volume-01 && quarto render --to pdf
 
 ## License
 
-Text and code: CC BY 4.0 (suggested). Confirm license text before distributing a tagged release.
+Text and code: [CC BY 4.0](LICENSE). Synthetic CASTOR data are for teaching only.

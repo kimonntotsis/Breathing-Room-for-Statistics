@@ -41,6 +41,7 @@ These appear constantly in respiratory papers and meetings. The plain-language c
 | **Not significant** | No effect / treatments are equal | Data are inconclusive; equivalence needs a prespecified margin and power |
 | **Trend** | Benefit is probably there | Unless a **prespecified** trend test was planned, avoid the word |
 | **Adjusted** | Confounding removed; causal effect | Association conditional on measured covariates; unmeasured confounding may remain |
+| **Unadjusted** | “Raw” comparison with no covariates | Crude mean or proportion difference; label explicitly; observational unadjusted ≠ main analysis |
 | **Multivariate** | Many variables in one model | Often misused; in papers, check whether they mean **multivariable** (several predictors, one outcome) |
 | **AI / machine learning** | Objective, deployable tool | Often a fitted model needing validation, calibration, and governance; see Ch 9 |
 | **Signature** | Validated biomarker panel ready for clinic | Usually a **discovery list** needing replication and batch QC (Ch 13–17) |
@@ -89,6 +90,8 @@ Short entries for terms you may hear in respiratory research even when this hand
 | **Effect size** | How big the difference is, not just whether it is “significant” | Magnitude on the scale of the estimand (mean difference, OR, HR, etc.) with CI |
 | **Sensitivity analysis** | Check whether the conclusion survives reasonable alternatives | Repeat analysis under alternate defensible assumptions or methods |
 | **Multiplicity** | Many tests inflate false positives | Multiple-comparison problem; requires prespecification or adjustment (e.g. FDR) |
+| **Gatekeeping** | Test B only if A succeeded | Prespecified endpoint hierarchy in trials; controls family-wise error |
+| **Composite endpoint** | One outcome combining several measures | e.g. FEV1 responder **and** no exacerbation; define components and missing-data rules before lock |
 
 ---
 
@@ -199,7 +202,8 @@ Short entries for terms you may hear in respiratory research even when this hand
 | **Exacerbation** | Worsening episode requiring treatment | Endpoint may be binary (any Y/N), count (number per year), or time-to-first |
 | **6MWD** | Six-minute walk distance | Continuous functional outcome (metres) |
 | **mMRC** | Dyspnoea scale 0–4 | Ordinal symptom measure |
-| **COPD** | Chronic obstructive pulmonary disease | Obstructive lung disease context for many CASTOR examples |
+| **COPD** | Chronic obstructive pulmonary disease | Obstructive context for many CASTOR examples |
+| **CLD** | Chronic lung disease (umbrella term in registries and programmes) | CASTOR is COPD-flavoured in the data; methods transfer to CLD when outcome type and design match |
 | **CASTOR** | Analysis workflow (**C**linical question → **A**ssess → **S**elect → **T**est → **O**utput → **R**eport limits) and synthetic teaching cohort | Mnemonic for question-first analysis; spelled out in [Preface](chapters/00-preface.md#what-castor-means) and [Ch 1](chapters/01-statistical-thinking.md); data in [RECURRING_COHORT](RECURRING_COHORT.md) |
 | **CASTOR-HD** | Synthetic omics extension | Proteomics, RNA, flow, and antibody teaching datasets (Ch 13–17) |
 | **APATE** | Greek *Apate* (Ἀπάτη), personification of deceit; handbook **prose-only** messy-registry vignette | Contrasts with clean CASTOR; no `data/*.csv` — [APATE_VIGNETTE](APATE_VIGNETTE.md) |

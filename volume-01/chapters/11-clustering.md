@@ -104,9 +104,7 @@ Clustering finds **structure in measured variables**. It does not, by itself, pr
 
 ### Dual interpretation
 
-**Plain language:** split patients into *k* subgroups with the most similar marker profiles.
-
-**Precise language:** iterative relocation to a local minimum of within-cluster sum of squares; random starts (`nstart`) reduce bad local optima.
+**Takeaway:** k-means splits patients into *k* subgroups with similar marker profiles (formal: iterative relocation minimizing within-cluster sum of squares; use multiple random starts).
 
 **Practice read:** useful for generating hypotheses about subgroups - not for changing care until replicated and linked to outcomes or treatment.
 
@@ -164,7 +162,7 @@ Clusters that align perfectly with processing batch are a QC finding, not an end
 source("R/examples/ch11_clustering.R")
 ```
 
-!k-means clusters coloured by true phenotype (teaching only) (`ch11_kmeans_clusters.png`)
+![k-means clusters coloured by true phenotype (teaching only)](../figures/ch11_kmeans_clusters.png)
 
 ### Practice check
 
@@ -232,7 +230,7 @@ plot(hc, labels = FALSE); rect.hclust(hc, k = 2, border = "red")
 # See ch11_clustering.R - ch11_dendrogram.png
 ```
 
-!Ward.D2 dendrogram with k = 2 cut (`ch11_dendrogram.png`)
+![Ward.D2 dendrogram with k = 2 cut](../figures/ch11_dendrogram.png)
 
 The height at which branches merge guides *k*; unstable cuts across bootstrap resamples mean unstable clusters.
 
@@ -300,9 +298,7 @@ For patient *i*, silhouette uses $(b_i - a_i) / \max(a_i, b_i)$ where $a_i$ is m
 
 ### Dual interpretation
 
-**Plain language:** measures how well each patient fits their cluster vs the next-nearest cluster.
-
-**Precise language:** average point-wise silhouette; favours compact, separated clusters.
+**Takeaway:** silhouette scores how well each patient fits their cluster vs the next-nearest; low values mean overlapping groups.
 
 **Practice read:** a low silhouette (e.g. < 0.25) means groups overlap - do not force a crisp clinical narrative.
 
@@ -326,13 +322,13 @@ For patient *i*, silhouette uses $(b_i - a_i) / \max(a_i, b_i)$ where $a_i$ is m
 
 **Results:** Mean silhouette was 0.25 (*k* = 2), 0.15 (*k* = 3), …; *k* = 2 was retained per prespecified plan [or: exploratory comparison only].
 
-!Mean silhouette width by k (`ch11_silhouette_k.png`)
+![Mean silhouette width by k](../figures/ch11_silhouette_k.png)
 
 Silhouette peaks are a heuristic for *k*, not proof of biology: compare with batch-coloured plots.
 
 ### Figure hygiene: named endotypes vs silhouette
 
-!Right vs wrong: clustering claims (`viz_pair_ch11_clustering.png`)
+![Right vs wrong: clustering claims](../figures/viz_pair_ch11_clustering.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -385,9 +381,7 @@ Trial teams use rich labels; clustering may or may not recover them:
 
 ### Dual interpretation
 
-**Plain language:** a cluster is only “real” if it shows up again and makes a difference clinically.
-
-**Precise language:** unsupervised discovery requires out-of-sample replication and pre-specified validation endpoints - analogous to TRIPOD discipline for prediction models [@moons2015tripod; @hennig2007cluster].
+**Takeaway:** a cluster earns a clinical name only after replication and outcome linkage (formal: out-of-sample stability and prespecified validation endpoints).
 
 **Statistician read:** report stability coefficients, not only pretty heatmaps [@hennig2007cluster].
 
@@ -540,7 +534,7 @@ When k-means is too brittle, escalate deliberately:
 
 > Among 120 participants with 30 blood markers, exploratory k-means (*k* = 2) identified two clusters (mean silhouette 0.25; mean bootstrap item stability 1.00). Cluster profiles differed on M1-M5 (Figure). Agreement with hierarchical clustering was high (adjusted Rand index ≈ 1.0). Clusters were not aligned with processing site (adjusted Rand index ≈ 0.0); external validation and outcome linkage were not performed.
 
-!Mean marker levels by cluster (M1-M5) (`ch11_cluster_profiles.png`)
+![Mean marker levels by cluster (M1-M5)](../figures/ch11_cluster_profiles.png)
 
 Profile plots help name clusters for discussion; they do not validate that clusters generalise to new cohorts.
 

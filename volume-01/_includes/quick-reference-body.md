@@ -37,6 +37,36 @@ If you cannot write this sentence, stop. See [Chapter 1](chapters/01-statistical
 
 ---
 
+## Step 1a. Unadjusted vs adjusted; linking outcomes
+
+| Question | Rule of thumb | Chapter |
+|----------|---------------|---------|
+| **Crude arm difference?** | Welch *t*, Fisher, etc. — label **unadjusted**; report CI + *n* (+ events) | [4](chapters/04-comparing-groups.md) |
+| **Adjust for baseline / confounders?** | Linear, logistic, Poisson GLM — list **prespecified** covariates | [4](chapters/04-comparing-groups.md), [5](chapters/05-linear-models.md), [6](chapters/06-generalized-linear-models.md) |
+| **RCT primary** | Freeze unadjusted ITT **or** ANCOVA **or** change score in SAP — not all three | [4](chapters/04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [5](chapters/05-linear-models.md) |
+| **Observational main analysis** | Adjusted model; unadjusted = sensitivity for confounding | [21](chapters/21-causal-inference.md) |
+| **FEV1 + FVC + symptoms + exacerbations** | **One primary**; secondaries in a **family** (Holm / gatekeeping) | [4](chapters/04-comparing-groups.md#multiplicity), [8](chapters/08-validation-reporting.md) |
+| **Omics + clinical endpoint** | **Separate families** — FDR for features; clinical hierarchy unchanged | [8](chapters/08-validation-reporting.md), [13](chapters/13-differential-analysis-fdr.md) |
+
+**Never:** call an unadjusted OR “adjusted”; never put four primary *p*-values on one slide.
+
+---
+
+## Step 0b. Sample size (before recruitment)
+
+You do not need to derive power formulas. You **do** need to align sample size with the **prespecified estimand** and MCID (or risk difference for binary endpoints).
+
+| Endpoint type | Inputs to discuss with your statistician | CASTOR pointer |
+|---------------|------------------------------------------|----------------|
+| **Continuous FEV1** | Expected mean difference (e.g. MCID), SD, α, power (80%), design | [Ch 4 power section](chapters/04-comparing-groups.md#technique-power-analysis-for-continuous-outcomes) |
+| **Binary / composite** | Baseline event rate, minimally important risk difference, α, power | Protocol + clinician judgment; not post hoc |
+| **Time-to-event** | Event rate, hazard ratio, follow-up length, censoring | [Ch 19](chapters/19-survival-analysis.md) |
+| **Omics discovery** | Usually **not** powered like a trial endpoint | Prespecify FDR and validation budget ([Ch 13](chapters/13-differential-analysis-fdr.md)) |
+
+**Practice read:** “We enrolled 120 because feasible” is not a power argument. If the trial is negative, the CI relative to MCID matters more than p > 0.05 ([Ch 8](chapters/08-validation-reporting.md)).
+
+---
+
 ## Step 1b. High-dimensional biology
 
 | If your data look like... | Typical goal | First methods | Core warnings |
@@ -137,6 +167,8 @@ See Chapters [13](chapters/13-differential-analysis-fdr.md)–[17](chapters/17-i
 | Week-52 *t*-test on last visit only | Mixed model | 18 |
 | “Endotype” from one k-means run | Endotype claim ladder | 11 |
 | p-value only, no CI | Always report CI | 8 |
+| Unadjusted OR called “adjusted” | Label crude; prespecify covariate model | 4, 5, 6 |
+| Four lung endpoints, four primaries | One primary; Holm / gatekeeping on secondaries | 4, 8 |
 
 ---
 
@@ -156,10 +188,10 @@ Details: [Chapter 8](chapters/08-validation-reporting.md) and [References](refer
 
 **Process first** (eight steps), then **method choice** (outcome type):
 
-!CASTOR analysis pipeline: question to report (`analysis_pipeline.png`){width=92%}
+![CASTOR analysis pipeline: question to report](figures/analysis_pipeline.png){width=92%}
 
 ## Visual decision tree
 
-!Method decision tree: start from outcome type (`method_decision_tree.png`){width=88%}
+![Method decision tree: start from outcome type](figures/method_decision_tree.png){width=88%}
 
 Regenerate from the project root: `source("R/examples/generate_figures.R")` after [Appendix A](appendix-a-r-setup.md) setup.

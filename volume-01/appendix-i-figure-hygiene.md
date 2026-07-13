@@ -12,7 +12,7 @@ Plots are not decoration. They are **compressed evidence**. A slide can look dec
 
 ## One-page router
 
-!Plot choice by estimand — prefer vs avoid (`viz_plot_router.png`){width=100%}
+![Plot choice by estimand — prefer vs avoid](figures/viz_plot_router.png){width=100%}
 
 | If your estimand is… | Prefer | Avoid | Wrong plot often hides |
 |----------------------|--------|-------|------------------------|

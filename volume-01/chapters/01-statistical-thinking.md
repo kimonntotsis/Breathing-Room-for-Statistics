@@ -23,7 +23,7 @@
 4. [What CASTOR means](#what-castor-means) + pipeline figure — eight-step workflow
 5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-thinking-chapter) — question–method mismatch
 
-**Shortest investigator route (~2 h total):** [Appendix J](../appendix-j-investigator-minimum-path.md). **Messy registry vignette (no data):** [APATE](../APATE_VIGNETTE.md).
+**Shortest investigator route (~2 h total):** [Appendix J](../appendix-j-investigator-minimum-path.md). **Messy registry vignette (no data):** [APATE](../APATE_VIGNETTE.md). **Six “in the room” stories (mixed data, prediction traps):** [Appendix K](../appendix-k-in-the-room-stories.md).
 
 ---
 
@@ -75,6 +75,8 @@ Later chapters presuppose a written estimand. Without it, even a correct *t*-tes
 
 *"Is FEV1 lower in smokers?"* is not yet an analysis. Three clarifications precede any software: what decision the answer would inform (clinical); the exact contrast and population (statistical estimand); and whether the data are cross-sectional, trial follow-up, or repeated visits with missingness (data). Methods from [Chapter 4](04-comparing-groups.md) onward assume this order [@harrell2015rms].
 
+> **In the room ([Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test)):** a registry CSV with FEV1, exacerbation Y/N, exacerbation counts, and symptom scores — and a loop of Welch *t*-tests on every column. Same patients, six *p*-values, no estimand sentence. That is why outcome **type** comes before software.
+
 Write the estimand in one sentence before opening [Appendix B](../appendix-b-quick-reference.md).
 
 ---
@@ -115,6 +117,8 @@ Sponsor timelines compress analysis into a test name. The durable step is five m
 
 **CASTOR** names both the working sequence in this book and the synthetic cohort that carries the examples. The sequence is fixed; the data file grows from core trial variables to omics in **CASTOR-HD** ([RECURRING_COHORT](../RECURRING_COHORT.md)).
 
+> **Chronic lung disease (CLD) and beyond.** CASTOR is **COPD-flavoured** in the synthetic data so examples stay comparable. The same CASTOR path applies to **CLD** and to other pulmonary work when endpoints align — spirometry, exacerbation rates, longitudinal follow-up, survival — not only when the protocol says “COPD.” Match **estimand and design** first; swap disease wording in your Methods.
+
 **Real registries deceive if you analyse them like CASTOR.** CASTOR omits site clustering, spirometry QC failures, and protocol deviations on purpose. **APATE** (Greek *Apate*, deceit) is the handbook’s prose-only vignette of that mess — read [APATE_VIGNETTE](../APATE_VIGNETTE.md) before signing off real Methods.
 
 **C. Clinical question.** One sentence on what would change in practice if the answer were known. Endpoints and estimands follow from that sentence, not from a software menu.
@@ -133,7 +137,7 @@ The figure below expands the six letters into eight operational steps (descripti
 
 ### The pipeline in eight steps
 
-!CASTOR analysis pipeline (eight steps) from question to report (`analysis_pipeline.png`){width=92%}
+![CASTOR analysis pipeline (eight steps) from question to report](../figures/analysis_pipeline.png){width=92%}
 
 *Same path for a Welch *t*-test on FEV1, a Cox model for time to exacerbation, or a batch-aware omics screen: question, data, method, estimate, limits.*
 

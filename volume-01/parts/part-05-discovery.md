@@ -14,8 +14,8 @@ Ch 10 and Ch 11 include “alternatives menus” so you can choose methods based
 
 **Skip this if:** your paper is a conventional RCT with FEV1 primary endpoint (→ [Parts II–IV](part-02-describe-compare.md)); return here when biomarker subgroups appear.
 
-## CASTOR vignette: the marker panel meeting
+## In the room: the marker panel meeting
 
-A postdoc presents PCA and k-means on CASTOR’s 30-marker panel. Clusters separate beautifully: but colour by `processing_batch` shows the same separation. **Part V** is how you turn a pretty slide into a defensible discovery story: reduce dimensions honestly (Ch 10), cluster with stability checks (Ch 11), and write what Case C in Ch 12 does *not* prove.
+A postdoc presents PCA and k-means on CASTOR’s 30-marker panel. Clusters separate beautifully — but colour by `processing_batch` shows the same separation. **Part V** is how you turn a pretty slide into a defensible discovery story: reduce dimensions honestly (Ch 10), cluster with stability checks (Ch 11), and write what Case C in Ch 12 does *not* prove.
 
 

@@ -4,7 +4,7 @@ number-sections: false
 
 # Appendix H: Investigator path (without R) {.unnumbered}
 
-Endpoint router for **investigators** who review protocols, Methods, and Results but do not run R. Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Welcome tour: [Welcome](index.md).
+Endpoint router for **investigators** who review protocols, Methods, and Results but do not run R. Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Welcome tour: [Welcome](chapters/00-welcome.md).
 
 ---
 

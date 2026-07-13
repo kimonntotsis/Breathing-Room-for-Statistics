@@ -14,6 +14,6 @@ This part provides those standards:
 
 **Skip this if:** you have not yet chosen the primary method (→ [Part II–III](part-02-describe-compare.md) first).
 
-## CASTOR vignette: the prediction manuscript review
+## In the room: the prediction manuscript review
 
-A journal reviewer asks for calibration plots and external validation; the submission has training-set AUC only. **Part IV** separates inference reporting (Ch 8) from prediction standards (Ch 9) so CASTOR risk models are not oversold.
+A journal reviewer asks for calibration plots and external validation; the submission has training-set AUC only. **Part IV** separates inference reporting (Ch 8) from prediction standards (Ch 9) so CASTOR risk models are not oversold. *(See [Story 4](../appendix-k-in-the-room-stories.md#story-4--training-set-auc-for-the-icu-board-slide).)*

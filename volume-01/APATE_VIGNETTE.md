@@ -6,7 +6,7 @@
 
 | Name | What it is | In the repo |
 |------|------------|-------------|
-| **CASTOR** | Synthetic **COPD-oriented teaching cohort** with CSV files + R scripts | `data/*.csv`, Ch 3–12 |
+| **CASTOR** | Synthetic **COPD-flavoured** teaching cohort with CSV files + R scripts | `data/*.csv`, Ch 3–12; workflow applies to **CLD** when estimand/design match |
 | **CASTOR-HD** | Synthetic **omics extension** (proteomics, RNA, flow, screens) | `data/proteomics_*.csv`, etc., Ch 13–17 |
 | **APATE** | **Prose-only vignette** of a messy multi-site registry | **This file only** — no CSV, no R lab |
 

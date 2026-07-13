@@ -248,20 +248,20 @@ source("R/00_setup.R")
 source("R/examples/ch21_causal_inference.R")
 ```
 
-!FEV1 balance before vs after IPW (toy) (`ch21_covariate_balance.png`)
+![FEV1 balance before vs after IPW (toy)](../figures/ch21_covariate_balance.png)
 
 Check whether FEV1 % means are closer across smoking groups after weighting. Poor balance after weighting → revisit exposure model or overlap.
 
 ### Figure hygiene: naive OR vs balance check
 
-!Right vs wrong: observational smoking effect (`viz_pair_ch21_causal.png`)
+![Right vs wrong: observational smoking effect](../figures/viz_pair_ch21_causal.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | Adjusted OR bar (causal wording) | Covariate overlap, weight diagnostics |
 | **Right** | Balance before vs after IPW | Whether weighting achieved exchangeability |
 
-!Smoking OR: naive vs IPW (`ch21_or_naive_vs_ipw.png`)
+![Smoking OR: naive vs IPW](../figures/ch21_or_naive_vs_ipw.png)
 
 Material movement between naive and IPW-adjusted ORs is a sensitivity flag, not proof of a causal smoking effect.
 

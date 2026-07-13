@@ -191,9 +191,7 @@ DAPs should state LOD handling **separately** from MAR/MNAR discussion. Sensitiv
 
 ### Dual interpretation
 
-**Plain language:** we compared results using only participants with observed FEV1 versus filling missing FEV1 with a typical value; if conclusions change, missingness matters.
-
-**Precise language:** under MAR, valid inference requires either a correctly specified likelihood/model integrating missingness or multiple imputation from a model predicting missing values from observed covariates; complete-case analysis is unbiased only under stronger assumptions (often MCAR or MAR with missingness independent of outcome given covariates in the analysis model).
+**Takeaway:** compare complete-case vs imputed FEV1; if conclusions change, missingness is driving the story (formal: MAR/MNAR assumptions matter for valid inference).
 
 **Practice read:** if sicker patients are missing spirometry, "complete-case FEV1" may describe **healthier** subsets, not the enrolled trial population.
 
@@ -354,13 +352,13 @@ source("R/00_setup.R")
 source("R/examples/ch20_missing_data.R")
 ```
 
-!Missing FEV1 fraction by obstruction severity (`ch20_missingness_pattern.png`)
+![Missing FEV1 fraction by obstruction severity](../figures/ch20_missingness_pattern.png)
 
 Higher missingness in severe obstruction supports MAR-like missingness tied to observed severity, not random noise.
 
 ### Figure hygiene: analysed *n* vs missingness pattern
 
-!Right vs wrong: missing spirometry (`viz_pair_ch20_missingness.png`)
+![Right vs wrong: missing spirometry](../figures/viz_pair_ch20_missingness.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
@@ -369,7 +367,7 @@ Higher missingness in severe obstruction supports MAR-like missingness tied to o
 
 **Practice read:** if analysed *n* drops mainly in severe obstruction, complete-case regression is not a neutral default.
 
-!Smoking coefficient: complete-case vs median imputation (`ch20_smoking_coef_sensitivity.png`)
+![Smoking coefficient: complete-case vs median imputation](../figures/ch20_smoking_coef_sensitivity.png)
 
 A large shift between complete-case and single imputation suggests the missingness mechanism matters. Report both, not only the nicer estimate.
 
@@ -424,7 +422,7 @@ summary(pooled)
 
 Use an imputation model that includes predictors of missingness (e.g. `diagnosis`) but avoid outcome leakage per study protocol.
 
-!MICE diagnostic: observed vs imputed FEV1 (`ch20_mice_density.png`)
+![MICE diagnostic: observed vs imputed FEV1](../figures/ch20_mice_density.png)
 
 Imputed draws should spread across a plausible FEV1 range: a single spike at the median signals a too-simple imputation rule.
 

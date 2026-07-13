@@ -17,6 +17,6 @@ The goal is not “run a model,” but:
 
 **Skip this if:** you only need an unadjusted arm comparison (→ [Part II](part-02-describe-compare.md) Ch 4) or a prediction model with validation metrics (→ [Part IV](part-04-validation-prediction.md) Ch 9).
 
-## CASTOR vignette: the exacerbation endpoint
+## In the room: the exacerbation endpoint
 
 The protocol labels exacerbations as a **count**, but the first draft manuscript reports a logistic “any exacerbation” model because the PI prefers odds ratios. **Part III** is where the team picks the GLM family that matches the estimand (Ch 6) and resists stepwise fishing (Ch 7).

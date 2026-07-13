@@ -16,6 +16,8 @@
 
 **Also see:** [Appendix B § Step 3-5](../appendix-b-quick-reference.md), [Decision table](#decision-table-which-glm)
 
+> **Sounds like your lab?** [Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) (`lm()` on 0/1 exacerbation) → [Binary outcomes: logistic regression](#binary-outcomes-logistic-regression).
+
 ---
 
 ## Investigator path (≈20 min)
@@ -390,6 +392,10 @@ broom::tidy(pois_fit, conf.int = TRUE, exponentiate = TRUE)
 
 **Results:** In Poisson regression, ICS adherence was associated with lower exacerbation rate (rate ratio 0.28 per unit adherence scale, 95% CI …). Pearson dispersion 1.09 suggested mild overdispersion; negative binomial sensitivity gave similar inference.
 
+![Poisson rate ratios (exacerbation counts)](../figures/ch06_poisson_rate_ratio.png)
+
+Rate ratios belong on a multiplicative scale; pair with dispersion checks before signing off Poisson inference.
+
 ### Technique: Poisson offset (person-time)
 
 | | |
@@ -538,13 +544,13 @@ Non-nested: **AIC/BIC** - predictive/in-sample comparison, not formal test.
 
 See [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) for the full outcome → model table.
 
-!Logistic regression forest plot (`ch06_logistic_forest.png`)
+![Logistic regression forest plot](../figures/ch06_logistic_forest.png)
 
 Odds ratios above 1 increase odds of the outcome; check CIs that cross 1 and whether OR language matches the clinical estimand (risk vs odds).
 
 ### Figure hygiene: forest plot vs OR bars
 
-!Right vs wrong: adjusted odds ratios (`viz_pair_ch06_forest.png`)
+![Right vs wrong: adjusted odds ratios](../figures/viz_pair_ch06_forest.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|

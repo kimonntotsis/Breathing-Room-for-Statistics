@@ -17,6 +17,8 @@
 
 **Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md), [Appendix B §1b](../appendix-b-quick-reference.md)
 
+> **Sounds like your lab?** [Story 5](../appendix-k-in-the-room-stories.md#story-5--can-we-predict-endotype-and-prove-the-biologic-works) (proteomics + clusters + FEV1 in one paper) → [Working without a bioinformatics collaborator](#working-without-a-bioinformatics-collaborator).
+
 ---
 
 ## Investigator path (≈20 min)
@@ -65,6 +67,8 @@ Chapter 8 (reporting and multiplicity) and Chapters 10–11 (high-dimensional in
 
 ---
 
+*Monday inbox: “Attached: 1,000 proteins, 200 significant (p < 0.05).” No batch column, no effect sizes. **This chapter** is what to ask before approving validation spend.*
+
 ## Why this chapter
 
 Omics generates thousands of p-values. Without FDR and effect sizes, you will chase false proteins and genes. This chapter is for anyone with a volcano plot in a manuscript or team readout who cannot yet explain what q = 0.11 means for follow-up budget.
@@ -79,6 +83,22 @@ In omics, the two most common failure modes are:
 2. **Underreporting uncertainty**: listing q-values without effect sizes.
 
 CASTOR-HD includes ~**150 participants** (case/control) and **~1000 proteins** or **~1200 genes** per modality. That is classic \(p \gg n\) discovery: rankings are noisy and multiplicity control is mandatory.
+
+## Working without a bioinformatics collaborator
+
+This chapter is for pulmonary investigators who receive a **proteomics or RNA export** and must decide what to fund next — often **without** a dedicated bioinformatics group in the lab.
+
+| Situation | What goes wrong | What this chapter gives you |
+|-----------|-----------------|------------------------------|
+| Vendor delivers a volcano PDF | Batch hidden; *n* per group unclear | Ask for plate map + per-feature table with effect and q ([Reporting template](#reporting-template)) |
+| Trainee runs “DE” in Excel | 1,000 uncorrected p-values | FDR vocabulary to **review** any deliverable |
+| PI wants hits in the primary trial paper | Discovery mixed with confirmatory FEV1 | Separate families ([Ch 4](04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [Ch 12 Case D](12-case-studies.md)) |
+| No one knows what LOD means | Fabricated group differences after imputation | Missingness plot + sensitivity |
+| “We’ll validate top 5 proteins” | Budget before stability check | With/without batch sensitivity ([Ch 14](14-batch-effects.md)) |
+
+**You do not need to code pipelines.** You need to **sign off** on: unit of analysis (patient, not well), multiplicity control, batch audit, effect sizes, and an honest label (**hypothesis-generating**).
+
+**Escalate** when: sample identity is uncertain, single-cell or raw FASTQ work is required, or a registrational biomarker claim is on the table.
 
 ---
 
@@ -203,7 +223,7 @@ Use this as a pre-submission audit. If any row describes your workflow, rewrite.
 
 Use Template A in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md).
 
-!Volcano plots: proteomics and RNA differential analysis (BH FDR) (`ch13_volcano_panel.png`)
+![Volcano plots: proteomics and RNA differential analysis (BH FDR)](../figures/ch13_volcano_panel.png)
 
 Volcanoes are **triage slides**, not proof of treatment effect. Pair every volcano with missingness QC and an effect table with *n* used.
 
@@ -273,7 +293,7 @@ prot %>%
   theme_minimal()
 ```
 
-!Proteomics missingness by group (LOD-style) (`ch13_proteomics_missingness_by_group.png`)
+![Proteomics missingness by group (LOD-style)](../figures/ch13_proteomics_missingness_by_group.png)
 
 Unequal missingness between groups can create artificial DE before any biology is tested: fix or model LOD, do not impute silently.
 
@@ -323,11 +343,11 @@ rna <- readr::read_csv(
 
 **Teaching note:** CASTOR-HD synthetic RNA includes a global expression shift, so many genes can pass FDR in this demo. In real studies, interpret discovery counts alongside MA plots and batch QC.
 
-!RNA MA plot (NB log-fold-change teaching output) (`ch13_rnaseq_ma_plot.png`)
+![RNA MA plot (NB log-fold-change teaching output)](../figures/ch13_rnaseq_ma_plot.png)
 
 Systematic curvature or a cloud of outliers at low counts signals model or normalization stress, not a list of genes to chase.
 
-!Proteomics q-value distribution (BH) (`ch13_proteomics_qvalue_hist.png`)
+![Proteomics q-value distribution (BH)](../figures/ch13_proteomics_qvalue_hist.png)
 
 A spike near zero with a flat tail suggests real signal mixed with null features; an all-flat histogram suggests underpower or QC failure.
 

@@ -11,10 +11,11 @@
 
 | Item | Status |
 |------|--------|
-| **Volume** | Single volume (Ch 1–21 + appendices A–J; PDF order G → J → H → I → B → A → C → D → F) |
+| **Release** | **v1.0.0** (2026-06-28) — [GitHub release](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.0.0) with PDF |
+| **Volume** | Single volume (Ch 1–21 + appendices A–K; PDF order G → J → **K** → H → I → B → A → C → D → F) |
 | **Data** | Synthetic CASTOR / CASTOR-HD (`data/*.csv`) |
-| **PDF** | Built locally via `build-handbook-pdf.sh` (not always committed) |
-| **Peer review** | Not a commercial press title; community / self-review via repo issues |
+| **PDF** | `./build-handbook-pdf.sh`; CI verifies figure markdown + page/figure counts ([`.github/workflows/handbook-pdf.yml`](../.github/workflows/handbook-pdf.yml)) |
+| **Peer review** | Targeted external read — [REVIEW_REQUEST.md](../REVIEW_REQUEST.md), [REVIEWER_RUBRIC](REVIEWER_RUBRIC.md) |
 | **Living document** | Chapters and figures update with the repository; cite a **release tag** for fixed editions |
 
 This is a **living handbook**: prefer tagged releases for citations in grants and protocols. See [Preface: Cite this book](chapters/00-preface.md#cite-this-book).
@@ -45,7 +46,7 @@ Documented in [APATE_VIGNETTE](APATE_VIGNETTE.md):
 
 **APA 7 (handbook):** Ntotsis, K. (2026). *Breathing room for statistics: A statistical handbook for respiratory research: from trials to omics and prediction* [Open handbook]. GitHub. `https://github.com/kimonntotsis/Breathing-Room-for-Statistics`
 
-**Release pin:** `https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/vX.Y.Z`
+**Release pin:** `https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.0.0`
 
 ---
 
@@ -53,6 +54,8 @@ Documented in [APATE_VIGNETTE](APATE_VIGNETTE.md):
 
 ```bash
 ./build-handbook-pdf.sh
+python3 volume-01/scripts/verify_figure_markdown.py
+pip install pypdf && python3 volume-01/scripts/verify_pdf_build.py
 ```
 
 ```r

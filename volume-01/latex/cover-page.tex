@@ -1,25 +1,44 @@
-% Single custom cover: CASTOR beaver prominent, then title block from _quarto.yml
-\begingroup
-\thispagestyle{empty}
+% Full-bleed integrated cover via overlay — keeps normal page geometry for TOC
+\definecolor{coverbg}{HTML}{0C0D12}
+\definecolor{covertext}{HTML}{E8EDF2}
+\definecolor{covermuted}{HTML}{9AA8B5}
 
-\vspace*{1.2cm}
-\begin{center}
-\noindent\includegraphics[width=0.44\textwidth,keepaspectratio]{figures/book-cover-castor.png}
-
-\vspace{1.4cm}
 \makeatletter
-{\fontsize{24}{29}\selectfont\bfseries \@title\par}
-\vspace{0.65cm}
-{\fontsize{12.5}{16}\selectfont\itshape \@subtitle\par}
-\vspace{0.5cm}
-{\fontsize{11}{14}\selectfont With reproducible R examples\par}
-\vspace{1.3cm}
-{\fontsize{13}{16}\selectfont \@author\par}
-\vspace{0.35cm}
-{\fontsize{10}{12}\selectfont \the\year\par}
-\makeatother
-\end{center}
+\begin{titlepage}
+  \thispagestyle{empty}
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[
+      anchor=center,
+      inner sep=0pt
+    ] at (current page.center) {%
+      \includegraphics[width=\paperwidth, height=\paperheight]{figures/book-cover-pearl-streams-page.png}%
+    };
 
-\vfill
+    \node[
+      anchor=north,
+      text width=0.88\paperwidth,
+      align=center,
+      inner sep=0pt
+    ] at ($(current page.north) + (0, -2.2cm)$) {%
+      {\color{covertext}\fontsize{27}{32}\selectfont\bfseries\@title\par}
+      \vspace{0.55cm}
+      {\color{covermuted}\fontsize{11.5}{15}\selectfont\itshape\@subtitle\par}
+      \vspace{0.4cm}
+      {\color{covermuted}\fontsize{10}{13}\selectfont With reproducible R examples\par}
+    };
+
+    \node[
+      anchor=south,
+      text width=0.88\paperwidth,
+      align=center,
+      inner sep=0pt
+    ] at ($(current page.south) + (0, 2.0cm)$) {%
+      {\color{covertext}\fontsize{13}{16}\selectfont\@author\par}
+      \vspace{0.35cm}
+      {\color{covermuted}\fontsize{10}{12}\selectfont\the\year\par}
+    };
+  \end{tikzpicture}
+  \null
+\end{titlepage}
 \clearpage
-\endgroup
+\makeatother

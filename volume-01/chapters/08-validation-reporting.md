@@ -13,6 +13,8 @@
 
 **Also see:** [Appendix B](../appendix-b-quick-reference.md), [REFERENCES](../REFERENCES.md), Reporting checklists below
 
+> **Sounds like your lab?** [Story 4](../appendix-k-in-the-room-stories.md#story-4--training-set-auc-for-the-icu-board-slide) (training-set AUC on a governance slide) → [Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)](#technique-reporting-guidelines-consort--strobe--tripod) and [Technique: Multiplicity control](#technique-multiplicity-control).
+
 ---
 
 ## Investigator path (≈20 min)
@@ -20,8 +22,9 @@
 1. [Why this chapter](#why-this-chapter) — evidence quality for sign-off
 2. [Method choice at a glance](#method-choice-at-a-glance) — CONSORT/STROBE/TRIPOD routing
 3. [Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)](#technique-reporting-guidelines-consort--strobe--tripod) — pick your guideline
-4. **Practice read** on MCID and CIs vs *p*-values
-5. [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit)
+4. [Technique: Multiplicity control](#technique-multiplicity-control) — endpoint families; unadjusted vs adjusted in the SAP
+5. **Practice read** on MCID and CIs vs *p*-values
+6. [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit)
 
 **Analyst read:** bootstrap, multiplicity, R examples below.
 
@@ -176,17 +179,38 @@ Bootstrap on 15 patients and treat as definitive → report wide CI honestly.
 | **CASTOR context** | FEV1, FVC, symptoms, exacerbations - pick one primary |
 | **Does NOT mean** | Never run secondary analyses |
 
+### Linking clinical outcomes (endpoint families)
+
+Pulmonary trials rarely have a single number of interest, but they should have **one primary estimand**. Related outcomes belong in a **prespecified hierarchy**, not on equal footing by default.
+
+| Structure | Example | Analysis rule |
+|-----------|---------|---------------|
+| **Primary** | Week-12 FEV1 (L), intervention − control | Powers the trial; unadjusted or ANCOVA per SAP ([Ch 4](04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints)) |
+| **Key secondaries** | FVC, CAT, exacerbation proportion | Test in **prespecified order** with Holm or gatekeeping within one **clinical family** |
+| **Exploratory** | Post hoc subgroup, biomarker subset | Label hypothesis-generating; no success claim |
+| **Omics family** | ~1000 proteins | **Separate** from clinical endpoints; BH FDR ([Ch 13](13-differential-analysis-fdr.md)) |
+| **Composite** | Responder on FEV1 **and** no exacerbation | Define components and missing-data rules **before** lock; not covered in depth here |
+
+**Practice read:** a steering-committee deck is not a statistical analysis plan. If four lung endpoints each carry α = 0.05, expect at least one false positive by chance. Prespecify which endpoint would change the label claim.
+
+**Unadjusted vs adjusted in the same table:** report both only when prespecified—e.g. unadjusted ITT mean difference as primary, ANCOVA with baseline FEV1 as supported secondary. Do not switch roles post hoc.
+
 ### Caveats
 
-Bonferroni conservative; Holm less conservative. Exploratory analyses must be labelled.
+Bonferroni conservative; Holm less conservative. Exploratory analyses must be labelled. Composite endpoints need explicit rules for partial missingness (e.g. FEV1 missing but exacerbation observed).
 
 ### Wrong analysis ⚠
 
 Test 20 biomarkers at α = 0.05; publish the three "significant" ones without correction.
 
+| | |
+|---|---|
+| **Mistake** | Re-rank secondary endpoints after unblinding |
+| **Do instead** | Freeze hierarchy in SAP; exploratory = labelled |
+
 ### Reporting template
 
-**Methods:** The primary endpoint was 12-week FEV1. Secondary endpoints were pre-specified with Holm adjustment. Exploratory biomarker analyses were unadjusted and hypothesis-generating.
+**Methods:** The primary endpoint was 12-week FEV1 (unadjusted mean difference). Secondary endpoints (FVC, CAT, exacerbation proportion) were prespecified in that order with Holm adjustment within the clinical family. ANCOVA adjusting for baseline FEV1 was a prespecified supportive analysis. Exploratory proteomics used BH FDR and were hypothesis-generating.
 
 ---
 

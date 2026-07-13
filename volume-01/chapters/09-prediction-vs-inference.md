@@ -63,6 +63,8 @@ Chapters 6–8.
 
 ---
 
+> **In the room ([Story 2](../appendix-k-in-the-room-stories.md#story-2--just-run-random-forest--it-handles-mixed-data)):** 214 asthma patients, mixed baseline predictors, steroid-burst outcome. Random forest, AUC 0.81, no calibration — and a PI who asks both *“probability for this patient?”* and *“does ICS work?”* Two questions; one script. **This chapter** separates prediction from inference before you tune a forest.
+
 ## Why this chapter
 
 Prediction models are everywhere in respiratory research: admission risk, exacerbation scores, classifier AUCs, but they answer a different question than association. This chapter stops you from reporting an odds ratio when the clinical need is calibrated risk, and stops you from reporting training-set AUC when the clinical need is honest validation.
@@ -104,7 +106,7 @@ Use the same CASTOR habit as [Chapter 1](01-statistical-thinking.md), adapted fo
 
 For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV as in [Chapter 17](17-integrated-castor-hd.md); not a single 70/30 split on four clinical variables.
 
-!CASTOR analysis pipeline (`analysis_pipeline.png`){width=75%}
+![CASTOR analysis pipeline](../figures/analysis_pipeline.png){width=75%}
 
 *Prediction sits at steps 4–6: method choice, fit with validation discipline, report what you did not prove.*
 
@@ -349,7 +351,7 @@ High variance with sparse events; deep trees overfit. Prefer shallow trees (`cp`
 
 ### Figure hygiene: AUC hero vs calibration
 
-!Right vs wrong: prediction performance (`viz_pair_ch09_prediction.png`)
+![Right vs wrong: prediction performance](../figures/viz_pair_ch09_prediction.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
