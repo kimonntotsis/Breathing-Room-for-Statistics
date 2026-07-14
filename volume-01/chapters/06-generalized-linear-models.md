@@ -20,15 +20,15 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
 You do not need this entire chapter on first pass. Read in order:
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — OR vs RR, binary vs count, varying follow-up
-2. [Opening question](#opening-question) — confirm the outcome is binary or count, not continuous
-3. [Method choice at a glance](#method-choice-at-a-glance) — pick logistic, Poisson, or NB
-4. [Worked example: exacerbation logistic model](#worked-example-exacerbation-logistic-model) — Practice read and reporting pattern
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-glm-chapter) — especially `lm()` on 0/1 outcomes
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): OR vs RR, binary vs count, varying follow-up
+2. [Opening question](#opening-question): confirm the outcome is binary or count, not continuous
+3. [Method choice at a glance](#method-choice-at-a-glance): pick logistic, Poisson, or NB
+4. [Worked example: exacerbation logistic model](#worked-example-exacerbation-logistic-model): Practice read and reporting pattern
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-glm-chapter): especially `lm()` on 0/1 outcomes
 
 **Analyst read:** technique cards, GLM framework, R lab, and extensions in the sections below.
 
@@ -134,10 +134,10 @@ Estimation: **maximum likelihood** (iteratively reweighted least squares for man
 
 ```r
 logit_fit <- glm(
-  exacerbation_12m ~ smoking + age +
-    fev1_percent_predicted + prior_exacerbations,
-  data = exac,
-  family = binomial
+ exacerbation_12m ~ smoking + age +
+ fev1_percent_predicted + prior_exacerbations,
+ data = exac,
+ family = binomial
 )
 broom::tidy(logit_fit, conf.int = TRUE, exponentiate = TRUE)
 ```
@@ -223,7 +223,7 @@ When events are common, OR exaggerates RR. Consider log-binomial or reporting **
 ```r
 # Adjusted predicted probabilities by smoking (conceptual)
 if (requireNamespace("emmeans", quietly = TRUE)) {
-  emmeans::emmeans(logit_fit, ~ smoking, type = "response")
+ emmeans::emmeans(logit_fit, ~ smoking, type = "response")
 }
 ```
 
@@ -246,9 +246,9 @@ When a predictor perfectly predicts outcome in a category (**complete separation
 
 ```r
 logistf::logistf(
-  exacerbation_12m ~ smoking + age +
-    fev1_percent_predicted + prior_exacerbations,
-  data = exac
+ exacerbation_12m ~ smoking + age +
+ fev1_percent_predicted + prior_exacerbations,
+ data = exac
 )
 ```
 
@@ -290,9 +290,9 @@ Report Firth OR with narrow causal language and no event count.
 
 ```r
 glm(
-  exacerbation_12m ~ smoking + age,
-  data = exac,
-  family = binomial(link = "log")
+ exacerbation_12m ~ smoking + age,
+ data = exac,
+ family = binomial(link = "log")
 )
 ```
 
@@ -356,7 +356,7 @@ Interpretation less intuitive than OR for many readers.
 
 ```r
 pois_fit <- glm(exacerbations_12m ~ smoking + ics_adherence,
-                data = counts, family = poisson)
+ data = counts, family = poisson)
 broom::tidy(pois_fit, conf.int = TRUE, exponentiate = TRUE)
 ```
 
@@ -413,10 +413,10 @@ $$
 
 ```r
 glm(
-  exacerbations_12m ~ smoking + ics_adherence +
-    offset(log(person_years)),
-  data = counts,
-  family = poisson
+ exacerbations_12m ~ smoking + ics_adherence +
+ offset(log(person_years)),
+ data = counts,
+ family = poisson
 )
 ```
 
@@ -555,7 +555,7 @@ Odds ratios above 1 increase odds of the outcome; check CIs that cross 1 and whe
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | OR point estimates as bars | 95% CI, null at OR = 1, log-scale context |
-| **Right** | Forest plot with horizontal CIs | — (matches Methods/Results table) |
+| **Right** | Forest plot with horizontal CIs |: (matches Methods/Results table) |
 
 **Practice read:** would you rank “strongest predictor” from the wrong panel? Forest plots force uncertainty into the slide.
 
@@ -563,8 +563,8 @@ Odds ratios above 1 increase odds of the outcome; check CIs that cross 1 and whe
 
 ## Worked example: exacerbation logistic model
 
-**Estimand:** Adjusted odds ratio for smoking and 12-month exacerbation.  
-**Model:** `exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations`  
+**Estimand:** Adjusted odds ratio for smoking and 12-month exacerbation.
+**Model:** `exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations`
 **Interpretation template:**
 
 > After adjustment, prior exacerbations were associated with higher odds of a new event (OR 1.70, 95% CI 1.12 to 2.59). A 1-unit increase in prior count is not necessarily one extra event - verify coding. FEV1 % predicted showed association (OR 0.95 per 1% increase). Smoking OR was imprecise in this sample.
@@ -573,9 +573,9 @@ Always state **event count and n**.
 
 **Sensitivity analyses to report:**
 
-1. Firth logistic if separation / sparse events  
-2. Log-binomial if OR would mislead (common outcome)  
-3. NB instead of Poisson if overdispersed  
+1. Firth logistic if separation / sparse events
+2. Log-binomial if OR would mislead (common outcome)
+3. NB instead of Poisson if overdispersed
 4. Marginal risks for practice reporting (`emmeans`)
 
 ---
@@ -692,9 +692,9 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 
 ## Further reading
 
-- Agresti, *An Introduction to Categorical Data Analysis* [@agresti2018introduction]  
-- Hosmer, Lemeshow & Sturdivant, *Applied Logistic Regression* [@hosmer2013applied]  
-- Hilbe, *Modeling Count Data* [@hilbe2014count]  
+- Agresti, *An Introduction to Categorical Data Analysis* [@agresti2018introduction]
+- Hosmer, Lemeshow & Sturdivant, *Applied Logistic Regression* [@hosmer2013applied]
+- Hilbe, *Modeling Count Data* [@hilbe2014count]
 - Cameron & Trivedi, *Regression Analysis of Count Data* [@cameron2013regression]
 - TRIPOD statement for prediction models using binary outcomes.
 

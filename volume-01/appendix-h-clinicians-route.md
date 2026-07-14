@@ -2,7 +2,7 @@
 number-sections: false
 ---
 
-# Appendix H: Investigator path (without R) {.unnumbered}
+# Appendix H: Reviewing without R {.unnumbered}
 
 Endpoint router for **investigators** who review protocols, Methods, and Results but do not run R. Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Welcome tour: [Welcome](chapters/00-welcome.md).
 
@@ -34,9 +34,9 @@ Use [Appendix B](appendix-b-quick-reference.md) as a one-page router. Typical re
 | Missing spirometry / dropout | [Ch 20](chapters/20-missing-data.md) | Complete-case is a choice, not a default |
 | Observational smoking/therapy comparison | [Ch 21](chapters/21-causal-inference.md) | Association ≠ causation |
 
-**Shortest route (~2 h):** [Appendix J](appendix-j-investigator-minimum-path.md) — what to read and what to skip.
+**Shortest route:** [Appendix J](appendix-j-investigator-minimum-path.md): what to read and what to skip.
 
-In each chapter: **Investigator path (≈20 min)** → **Method choice at a glance** → **Figure hygiene** pairs ([Appendix I](appendix-i-figure-hygiene.md)) → **Practice read** → **Wrong analysis** → **Reporting template**.
+In each chapter: **In this chapter** → **Method choice at a glance** → **Figure hygiene** pairs ([Appendix I](appendix-i-figure-hygiene.md)) → **Practice read** → **Wrong analysis** → **Reporting template**.
 
 **One full narrative:** [Chapter 12, Case A](chapters/12-case-studies.md) (randomised trial, FEV1 at 12 weeks).
 
@@ -56,6 +56,6 @@ In each chapter: **Investigator path (≈20 min)** → **Method choice at a glan
 
 ## Three questions before you sign off
 
-1. **Estimand:** What exact difference or rate are we estimating, and in whom?  
-2. **Independence:** Are repeated visits, ICU clusters, or crossover visits handled? ([Ch 4](chapters/04-comparing-groups.md), [Ch 18](chapters/18-longitudinal-mixed-models.md))  
+1. **Estimand:** What exact difference or rate are we estimating, and in whom?
+2. **Independence:** Are repeated visits, ICU clusters, or crossover visits handled? ([Ch 4](chapters/04-comparing-groups.md), [Ch 18](chapters/18-longitudinal-mixed-models.md))
 3. **Limits:** What does this analysis **not** prove?

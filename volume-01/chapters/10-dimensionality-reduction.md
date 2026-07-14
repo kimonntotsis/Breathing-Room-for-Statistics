@@ -17,12 +17,12 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Why this chapter](#why-this-chapter) — summarise before clustering
-2. [Method choice at a glance](#method-choice-at-a-glance) — PCA vs alternatives
-3. Scree plot + **Practice read** — how many components?
-4. [Catalog of wrong analyses](#catalog-of-wrong-analyses) — batch-coloured PCA without check
+1. [Why this chapter](#why-this-chapter): summarise before clustering
+2. [Method choice at a glance](#method-choice-at-a-glance): PCA vs alternatives
+3. Scree plot + **Practice read**; how many components?
+4. [Catalog of wrong analyses](#catalog-of-wrong-analyses): batch-coloured PCA without check
 
 **Analyst read:** loadings, biplots, R lab below.
 
@@ -57,7 +57,7 @@ Chapters 3, 5.
 
 ---
 
-*A collaborator emails: “Here is PCA on the 30-marker panel — two clear clusters.” You open the plot: points separate, but colour by processing batch shows the same split. **This chapter** is how you summarise markers without mistaking batch for biology.*
+*A collaborator emails: “Here is PCA on the 30-marker panel: two clear clusters.” You open the plot: points separate, but colour by processing batch shows the same split. **This chapter** is how you summarise markers without mistaking batch for biology.*
 
 ## Why this chapter
 
@@ -189,7 +189,7 @@ Keep components until outcome regression is significant → circular.
 
 ![Scree plot: variance explained by component](../figures/ch10_scree.png)
 
-Use the scree elbow with domain judgment — not as a standalone stopping rule.
+Use the scree elbow with domain judgment, not as a standalone stopping rule.
 
 ---
 
@@ -331,9 +331,9 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 
 ## CASTOR worked example (PCA as baseline)
 
-1. Scale 30 markers (`marker_panel.csv`).  
-2. PCA → PC1 ≈ 27% variance.  
-3. Plot PC1 vs PC2 coloured by `true_phenotype` (synthetic ground truth for teaching).  
+1. Scale 30 markers (`marker_panel.csv`).
+2. PCA → PC1 ≈ 27% variance.
+3. Plot PC1 vs PC2 coloured by `true_phenotype` (synthetic ground truth for teaching).
 4. **Conclusion:** separation visible in simulation; would require replication in real omics.
 
 **Sensitivity:** correlation vs covariance PCA; compare scree.
@@ -372,8 +372,8 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 
 ## Further reading
 
-- Jolliffe & Cadima, PCA review [@jolliffe2016pca]  
-- McShane et al., REMARK biomarker reporting [@mcshane2011biomarker]  
+- Jolliffe & Cadima, PCA review [@jolliffe2016pca]
+- McShane et al., REMARK biomarker reporting [@mcshane2011biomarker]
 - Wenzel, asthma phenotypes/endotypes context [@wenzel2012asthma]
  - ISL (penalization / CV mindset carries over to PLS/omics) [@james2023ISL]
 

@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -25,23 +26,37 @@ flow_long <- flow %>%
   pivot_longer(starts_with("prop_"), names_to = "cell_type", values_to = "prop") %>%
   mutate(cell_type = sub("^prop_", "", cell_type))
 
-p_props <- ggplot(flow_long, aes(group, prop, fill = group)) +
-  geom_boxplot(alpha = 0.7, outlier.alpha = 0.25) +
-  facet_wrap(~ cell_type, scales = "free_y", ncol = 3) +
-  theme_minimal() +
-  guides(fill = "none") +
-  labs(title = "Flow summary: cell-type proportions by group (synthetic)")
+props_mean <- flow_long %>%
+  group_by(group, cell_type) %>%
+  summarise(mean_prop = mean(prop), .groups = "drop")
 
-ggsave(file.path(fig_dir, "ch15_flow_props_by_group.png"), p_props, width = 8.6, height = 6.2, dpi = 160)
+p_props <- ggplot(props_mean, aes(cell_type, mean_prop, fill = group)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.82, alpha = 0.9, colour = "white", linewidth = 0.4) +
+  coord_polar(start = 0) +
+  scale_fill_manual(values = handbook_group_fill, name = "Group") +
+  labs(
+    title = "Circular bar: mean cell-type proportions by group",
+    subtitle = "Participant-level summaries; polar layout highlights compositional balance",
+    x = NULL, y = NULL
+  ) +
+  handbook_theme(11) +
+  theme(panel.grid.major.y = element_line(colour = "#F1F5F9"), axis.text.y = element_blank())
+
+handbook_save(p_props, file.path(fig_dir, "ch15_flow_props_by_group.png"), 7.2, 6.4)
 
 p_drift <- ggplot(flow_long, aes(batch, prop, fill = batch)) +
-  geom_boxplot(alpha = 0.8, outlier.alpha = 0.25) +
+  geom_violin(trim = FALSE, alpha = 0.55, colour = NA) +
+  geom_boxplot(width = 0.12, alpha = 0.85, outlier.alpha = 0.25) +
   facet_wrap(~ cell_type, scales = "free_y", ncol = 3) +
-  theme_minimal() +
+  handbook_theme(10) +
   guides(fill = "none") +
-  labs(title = "Flow summary: drift by day/batch (synthetic)")
+  labs(
+    title = "Drift check: violin + box by batch/day",
+    subtitle = "Run-day effects visible before group comparison",
+    x = "Batch / run day", y = "Proportion"
+  )
 
-ggsave(file.path(fig_dir, "ch15_flow_props_by_batch.png"), p_drift, width = 8.6, height = 6.2, dpi = 160)
+handbook_save(p_drift, file.path(fig_dir, "ch15_flow_props_by_batch.png"), 8.6, 6.2)
 
 # =============================================================================
 # Niche 1: compositional structure (stacked proportions by group)
@@ -55,19 +70,22 @@ flow_comp <- flow %>%
   ungroup()
 
 p_stack <- ggplot(flow_comp, aes(sample_id, prop, fill = cell_type)) +
-  geom_col(width = 0.9) +
+  geom_col(width = 0.92, colour = "white", linewidth = 0.2) +
   facet_wrap(~ group, scales = "free_x", ncol = 1) +
-  theme_minimal() +
-  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank()) +
+  scale_fill_manual(
+    values = grDevices::colorRampPalette(c(handbook_cols$nonsmoker, handbook_cols$intervention, handbook_cols$smoker, "#8B7EC8", "#64748B"))(5),
+    name = "Cell type"
+  ) +
   labs(
     title = "Compositional structure: proportions sum to 1 per participant",
     subtitle = "Each bar = one participant; changing one segment affects others",
     x = "Participants (ordered)",
-    y = "Proportion",
-    fill = "Cell type"
-  )
+    y = "Proportion"
+  ) +
+  handbook_theme(10) +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 
-ggsave(file.path(fig_dir, "ch15_compositional_stacked.png"), p_stack, width = 8.0, height = 5.5, dpi = 160)
+handbook_save(p_stack, file.path(fig_dir, "ch15_compositional_stacked.png"), 8.2, 5.6)
 
 # Correlation between monocytes and CD4 (compositional coupling)
 comp_corr <- flow %>%
@@ -127,18 +145,24 @@ pseudo_demo <- tibble(
 )
 
 p_pseudo <- ggplot(pseudo_demo, aes(analysis_unit, neglog10p, fill = analysis_unit)) +
-  geom_col(width = 0.65) +
-  geom_hline(yintercept = -log10(0.05), linetype = "dashed", color = "grey40") +
-  theme_minimal() +
-  guides(fill = "none") +
+  geom_col(width = 0.68, alpha = 0.9, colour = "white") +
+  geom_hline(yintercept = -log10(0.05), linetype = "dashed", colour = handbook_cols$wrong, linewidth = 0.7) +
+  scale_fill_manual(
+    values = c(
+      "Participant summaries (correct)" = handbook_cols$intervention,
+      "Pooled cells (pseudo-replication)" = handbook_cols$smoker
+    ),
+    guide = "none"
+  ) +
   labs(
     title = "Pseudo-replication demo: same comparison, different unit",
     subtitle = "Pooled cells inflate n and can shrink p-values misleadingly",
     x = NULL,
     y = expression(-log[10](p))
-  )
+  ) +
+  handbook_theme(11)
 
-ggsave(file.path(fig_dir, "ch15_pseudoreplication_demo.png"), p_pseudo, width = 7.4, height = 4.4, dpi = 160)
+handbook_save(p_pseudo, file.path(fig_dir, "ch15_pseudoreplication_demo.png"), 7.6, 4.6)
 
 # =============================================================================
 # Per-cell toy: PCA on marker intensities (descriptive only)
@@ -151,13 +175,17 @@ pca <- prcomp(X, scale. = TRUE)
 scores <- as_tibble(pca$x[, 1:2]) %>%
   mutate(cell_type_true = cells_sub$cell_type_true)
 
-p_cell_pca <- ggplot(scores, aes(PC1, PC2, color = cell_type_true)) +
-  geom_point(alpha = 0.55, size = 0.9) +
-  theme_minimal() +
-  guides(color = "none") +
-  labs(title = "Per-cell toy: PCA of marker intensities (descriptive)")
+p_cell_pca <- plot_pca_scores(
+  scores,
+  colour = "cell_type_true",
+  title = "Per-cell toy: PCA of marker intensities (descriptive)",
+  subtitle = "Teaching only — inference stays at participant level in Ch 15",
+  xlab = sprintf("PC1 (%.0f%%)", 100 * summary(pca)$importance[2, 1]),
+  ylab = sprintf("PC2 (%.0f%%)", 100 * summary(pca)$importance[2, 2])
+) +
+  ggplot2::guides(colour = "none")
 
-ggsave(file.path(fig_dir, "ch15_flow_cells_pca.png"), p_cell_pca, width = 7.4, height = 5.0, dpi = 160)
+handbook_save(p_cell_pca, file.path(fig_dir, "ch15_flow_cells_pca.png"), 7.6, 5.2)
 
 # =============================================================================
 # Mini-case summary table

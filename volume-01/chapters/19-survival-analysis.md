@@ -18,13 +18,13 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — event, censoring, competing death
-2. [Method choice at a glance](#method-choice-at-a-glance) — KM vs Cox vs logistic shortcut
-3. [Technique: Kaplan-Meier](#technique-kaplan-meier) — Practice read on absolute risks
-4. [Reporting template](#reporting-template) — events, person-time, HR + CI
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-time-to-exacerbation) — censoring treated as cure
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): event, censoring, competing death
+2. [Method choice at a glance](#method-choice-at-a-glance): KM vs Cox vs logistic shortcut
+3. [Technique: Kaplan-Meier](#technique-kaplan-meier): Practice read on absolute risks
+4. [Reporting template](#reporting-template): events, person-time, HR + CI
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-time-to-exacerbation): censoring treated as cure
 
 **Analyst read:** Cox diagnostics, R lab, competing risks below.
 
@@ -188,12 +188,12 @@ The smoking HR is **associational** in this observational extension. Wide CI ref
 
 ```r
 fit_cox <- coxph(
-  Surv(time_days, event) ~ smoking +
-    fev1_percent_predicted + therapy + age,
-  data = surv
+ Surv(time_days, event) ~ smoking +
+ fev1_percent_predicted + therapy + age,
+ data = surv
 )
 summary(fit_cox)
-cox.zph(fit_cox)  # proportional hazards check
+cox.zph(fit_cox) # proportional hazards check
 ```
 
 ### Kaplan-Meier vs Cox vs logistic
@@ -270,7 +270,7 @@ The y-axis is zoomed to the observed event-free range so curve separation is vis
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | Bar chart of ever/never event % | When events occur; censored follow-up |
-| **Right** | KM curve with time on *x* | — (censoring explicit on step plot) |
+| **Right** | KM curve with time on *x* |: (censoring explicit on step plot) |
 
 **Practice read:** treating censored patients as “no event” inflates the wrong bar; KM keeps them on the risk set until censoring.
 

@@ -18,16 +18,16 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
 You do not need this entire chapter on first pass. Read in order:
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — level vs slope estimand; missed visits
-2. [The longitudinal workflow](#the-longitudinal-workflow) — prespecify what you are estimating
-3. [Method choice at a glance](#method-choice-at-a-glance) — mixed model vs shortcuts
-4. [Technique: Linear mixed model (random intercept)](#technique-linear-mixed-model-random-intercept) — Practice read and MCID
-5. [Reporting template](#reporting-template) — participant *n*, visits, and fixed effects
-6. [Catalog of wrong analyses](#catalog-of-wrong-analyses-longitudinal-fev1) — pooled visits and pseudo-replication
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): level vs slope estimand; missed visits
+2. [The longitudinal workflow](#the-longitudinal-workflow): prespecify what you are estimating
+3. [Method choice at a glance](#method-choice-at-a-glance): mixed model vs shortcuts
+4. [Technique: Linear mixed model (random intercept)](#technique-linear-mixed-model-random-intercept): Practice read and MCID
+5. [Reporting template](#reporting-template): participant *n*, visits, and fixed effects
+6. [Catalog of wrong analyses](#catalog-of-wrong-analyses-longitudinal-fev1): pooled visits and pseudo-replication
 
 **Analyst read:** mixed model details, GEE comparison, R lab, and extensions below.
 
@@ -164,8 +164,8 @@ The **interaction** is the prespecified treatment effect when the estimand is *d
 long <- readr::read_csv("data/longitudinal_spirometry.csv")
 library(lme4)
 fit <- lmer(
-  fev1 ~ weeks * group + age + sex + smoking + (1 | patient_id),
-  data = long
+ fev1 ~ weeks * group + age + sex + smoking + (1 | patient_id),
+ data = long
 )
 summary(fit)
 ```
@@ -261,6 +261,8 @@ source("R/00_setup.R")
 source("R/examples/ch18_longitudinal_mixed_models.R")
 ```
 
+![Ridge plot: FEV1 by visit week](../figures/ch18_fev1_ridge.png)
+
 ![Spaghetti plot: FEV1 trajectories by participant](../figures/ch18_spaghetti_fev1.png)
 
 Each line is one participant. Use this plot to spot outliers, dropout, and whether a linear trend is plausible before trusting the mixed model.
@@ -272,7 +274,7 @@ Each line is one participant. Use this plot to spot outliers, dropout, and wheth
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | Boxplot at week 52 only | Earlier visits, dropout, heterogeneous slopes |
-| **Right** | Spaghetti across scheduled visits | — (motivates mixed model / GEE) |
+| **Right** | Spaghetti across scheduled visits |: (motivates mixed model / GEE) |
 
 **Practice read:** a week-52 *t*-test figure should not be your only longitudinal slide if the estimand is change over time.
 
@@ -286,7 +288,7 @@ Fitted lines are **population-level** predictions (random effects set to zero), 
 
 ```r
 coefs <- readr::read_csv(
-  "volume-01/tables/ch18_mixed_model_coefficients.csv"
+ "volume-01/tables/ch18_mixed_model_coefficients.csv"
 )
 coefs %>% filter(term == "weeks:groupintervention")
 ```
@@ -297,7 +299,7 @@ Ask: if the interaction is positive, does intervention **slow** or **accelerate*
 
 ```r
 sens <- readr::read_csv(
-  "volume-01/tables/ch18_sensitivity_mixed_vs_fixed.csv"
+ "volume-01/tables/ch18_sensitivity_mixed_vs_fixed.csv"
 )
 sens
 ```
@@ -317,7 +319,7 @@ Compare `std.error` for `groupintervention` across models. Smaller SE in the cro
 | **Effect measure** | Fixed effect for time × treatment (conditional on random effects) | Same regression coefficients interpreted marginally |
 | **R** | `lme4::lmer(fev1 ~ weeks * group + (1 \| patient_id))` | `geepack::geeglm(..., id = patient_id, corstr = "exchangeable")` |
 | **Report** | Participant *n*, visits, random-effect structure, fixed effects + CI | Correlation structure chosen; robust SE; same estimand language |
-| **Prefer mixed when** | Random slopes clinically meaningful; small number of clusters with random centre effects |  |
+| **Prefer mixed when** | Random slopes clinically meaningful; small number of clusters with random centre effects | |
 | **Prefer GEE when** | Robustness to correlation misspecification matters; marginal estimand is target | Few clusters; need simple marginal interpretation |
 
 **Plain language:** mixed models let each patient have their own baseline FEV1; GEE averages over patients with a chosen correlation pattern.

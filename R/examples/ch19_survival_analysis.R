@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(survival)
@@ -31,44 +32,33 @@ fit_km <- survfit(Surv(time_days, event) ~ smoking_lab, data = surv)
 lr <- survdiff(Surv(time_days, event) ~ smoking_lab, data = surv)
 logrank_p <- 1 - pchisq(lr$chisq, df = 1)
 
-km_tidy <- tidy(fit_km) %>%
+km_tidy <- tidy(fit_km, conf.int = TRUE) %>%
   filter(!is.na(estimate)) %>%
   mutate(
     smoking_lab = ifelse(grepl("Smoker", strata), "Smoker", "Non-smoker"),
     surv = estimate
   )
 
-ymin <- max(0, min(km_tidy$surv, na.rm = TRUE) - 0.08)
 n_events_smoker <- sum(surv$event & surv$smoking)
 n_events_nonsmoker <- sum(surv$event & !surv$smoking)
 
-p_km <- ggplot(km_tidy, aes(time, surv, color = smoking_lab)) +
-  geom_step(linewidth = 1.1) +
-  scale_color_manual(values = c("Non-smoker" = "grey40", "Smoker" = "#B22222")) +
-  scale_y_continuous(
-    labels = scales::percent_format(accuracy = 1),
-    limits = c(ymin, 1),
-    expand = expansion(mult = c(0.02, 0))
-  ) +
-  scale_x_continuous(expand = expansion(mult = c(0.02, 0.02))) +
-  theme_minimal(base_size = 12) +
-  theme(
-    legend.position = c(0.78, 0.28),
-    legend.background = element_rect(fill = "white", color = NA),
-    panel.grid.minor = element_blank()
-  ) +
-  labs(
-    title = sprintf("Kaplan-Meier by smoking (log-rank p = %.3f)", logrank_p),
-    subtitle = sprintf(
-      "%d events in 365 d (%d smokers, %d non-smokers); y-axis zoomed to observed range",
-      sum(surv$event), n_events_smoker, n_events_nonsmoker
-    ),
-    x = "Days to first exacerbation or censoring",
-    y = "Event-free probability",
-    color = NULL
-  )
+p_km <- plot_km_handbook(
+  km_tidy,
+  time = "time",
+  surv = "surv",
+  group = "smoking_lab",
+  conf.low = "conf.low",
+  conf.high = "conf.high",
+  title = sprintf("Kaplan-Meier by smoking (log-rank p = %.3f)", logrank_p),
+  subtitle = sprintf(
+    "%d events in 365 d (%d smokers, %d non-smokers); ribbons = 95%% CI",
+    sum(surv$event), n_events_smoker, n_events_nonsmoker
+  ),
+  xlab = "Days to first exacerbation or censoring",
+  ylab = "Event-free probability"
+)
 
-ggsave(file.path(fig_dir, "ch19_km_by_smoking.png"), p_km, width = 7.2, height = 4.8, dpi = 160)
+handbook_save(p_km, file.path(fig_dir, "ch19_km_by_smoking.png"), 7.4, 4.8)
 
 fit_cox <- coxph(
   Surv(time_days, event) ~ smoking + fev1_percent_predicted + therapy + age,
@@ -86,21 +76,14 @@ ph_tbl <- as.data.frame(ph_test$table) %>%
   rename(chisq = chisq, df = df, p = p)
 write_csv(ph_tbl, file.path(tab_dir, "ch19_cox_ph_test.csv"))
 
-p_forest <- cox_tbl %>%
-  filter(term != "(Intercept)") %>%
-  ggplot(aes(x = estimate, y = term)) +
-  geom_point(size = 2.5) +
-  geom_errorbar(aes(xmin = conf.low, xmax = conf.high), orientation = "y", width = 0.2) +
-  geom_vline(xintercept = 1, linetype = 2, color = "grey50") +
-  scale_x_log10() +
-  theme_minimal() +
-  labs(
-    title = "Cox model hazard ratios (95% CI)",
-    x = "Hazard ratio (log scale)",
-    y = NULL
-  )
+p_forest <- plot_forest_ratio(
+  cox_tbl %>% filter(term != "(Intercept)"),
+  title = "Cox model hazard ratios (95% CI)",
+  subtitle = "Adjusted for FEV1 %, therapy, age; log scale",
+  xlab = "Hazard ratio (95% CI, log scale)"
+)
 
-ggsave(file.path(fig_dir, "ch19_cox_forest.png"), p_forest, width = 6.8, height = 4.2, dpi = 160)
+handbook_save(p_forest, file.path(fig_dir, "ch19_cox_forest.png"), 7.0, 4.4)
 
 message(
   "Chapter 19 survival: events = ", sum(surv$event), "/", nrow(surv),

@@ -18,13 +18,13 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Inference vs prediction: choose your lane](#inference-vs-prediction-choose-your-lane) — pick the goal first
-2. [Method choice at a glance](#method-choice-at-a-glance) — logistic, LASSO, trees
-3. [Technique: Binary prediction model](#technique-binary-prediction-model-general) — Practice read on calibration
-4. [Reporting template](#reporting-template) — TRIPOD-style wording
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-prediction-chapter) — train AUC in abstract
+1. [Inference vs prediction: choose your lane](#inference-vs-prediction-choose-your-lane): pick the goal first
+2. [Method choice at a glance](#method-choice-at-a-glance): logistic, LASSO, trees
+3. [Technique: Binary prediction model](#technique-binary-prediction-model-general): Practice read on calibration
+4. [Reporting template](#reporting-template): TRIPOD-style wording
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-prediction-chapter): train AUC in abstract
 
 **Analyst read:** model shootout, R lab, validation extensions below.
 
@@ -63,7 +63,7 @@ Chapters 6–8.
 
 ---
 
-> **In the room ([Story 2](../appendix-k-in-the-room-stories.md#story-2--just-run-random-forest--it-handles-mixed-data)):** 214 asthma patients, mixed baseline predictors, steroid-burst outcome. Random forest, AUC 0.81, no calibration — and a PI who asks both *“probability for this patient?”* and *“does ICS work?”* Two questions; one script. **This chapter** separates prediction from inference before you tune a forest.
+> **In the room ([Story 2](../appendix-k-in-the-room-stories.md#story-2--just-run-random-forest--it-handles-mixed-data)):** 214 asthma patients, mixed baseline predictors, steroid-burst outcome. Random forest, AUC 0.81, no calibration, and a PI who asks both *“probability for this patient?”* and *“does ICS work?”* Two questions; one script. **This chapter** separates prediction from inference before you tune a forest.
 
 ## Why this chapter
 
@@ -106,7 +106,7 @@ Use the same CASTOR habit as [Chapter 1](01-statistical-thinking.md), adapted fo
 
 For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV as in [Chapter 17](17-integrated-castor-hd.md); not a single 70/30 split on four clinical variables.
 
-![CASTOR analysis pipeline](../figures/analysis_pipeline.png){width=75%}
+![Analysis pipeline](../figures/analysis_pipeline.png){width=75%}
 
 *Prediction sits at steps 4–6: method choice, fit with validation discipline, report what you did not prove.*
 
@@ -185,13 +185,13 @@ State these in every prediction Discussion:
 
 Follow TRIPOD for transparent prediction reporting [@moons2015tripod]:
 
-1. **Population:** CASTOR synthetic respiratory cohort  
-2. **Outcome:** `exacerbation_12m` within 12 months  
-3. **Predictors:** smoking, age, FEV1 % predicted, prior exacerbations; all baseline  
-4. **Split:** 70% train / 30% test (seed 42); **same indices for all models**  
-5. **Tuning:** LASSO λ by CV on train; tree/RF/boost hyperparameters fit on train only  
-6. **Metrics:** AUC (with bootstrap CI when stable), Brier, calibration bins  
-7. **Report:** *n*, events in train/test, EPV, software version  
+1. **Population:** CASTOR synthetic respiratory cohort
+2. **Outcome:** `exacerbation_12m` within 12 months
+3. **Predictors:** smoking, age, FEV1 % predicted, prior exacerbations; all baseline
+4. **Split:** 70% train / 30% test (seed 42); **same indices for all models**
+5. **Tuning:** LASSO λ by CV on train; tree/RF/boost hyperparameters fit on train only
+6. **Metrics:** AUC (with bootstrap CI when stable), Brier, calibration bins
+7. **Report:** *n*, events in train/test, EPV, software version
 
 ---
 
@@ -384,7 +384,7 @@ Default 0.5 is often **not** the clinical optimum. With rare events, sensitivity
 
 **Goal:** Predict 12-month exacerbation on CASTOR (`seed = 42`, 70/30 split).
 
-**Train:** *n* = 244, **14 events** (EPV ≈ 3.5; below ideal 10–15).  
+**Train:** *n* = 244, **14 events** (EPV ≈ 3.5; below ideal 10–15).
 **Test:** *n* = 106, **4 events**.
 
 Run `source("R/examples/ch09_prediction.R")` and read [ch09_model_comparison.csv](../tables/ch09_model_comparison.csv). Example output:
@@ -507,10 +507,10 @@ Optional: `install.packages("xgboost")` to include gradient boosting in the shoo
 
 ## Further reading
 
-- Moons et al., TRIPOD statement [@moons2015tripod]  
-- Steyerberg, *Clinical Prediction Models* [@steyerberg2019clinical]  
-- Shmueli, "To explain or to predict?" [@shmueli2010predict]  
-- James et al., *An Introduction to Statistical Learning* [@james2023ISL]  
+- Moons et al., TRIPOD statement [@moons2015tripod]
+- Steyerberg, *Clinical Prediction Models* [@steyerberg2019clinical]
+- Shmueli, "To explain or to predict?" [@shmueli2010predict]
+- James et al., *An Introduction to Statistical Learning* [@james2023ISL]
 - Breiman, random forests [@breiman2001rf]
 
 ## Exercises ([Solutions](../solutions/ch09_solutions.md))

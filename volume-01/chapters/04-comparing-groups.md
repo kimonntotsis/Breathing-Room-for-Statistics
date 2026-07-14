@@ -21,16 +21,16 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
 You do not need this entire chapter on first pass. Read in order:
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — MCID, pairing, proportion vs count
-2. [The comparison workflow](#the-comparison-workflow) — write the estimand in one sentence
-3. [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints) — crude vs covariate-adjusted; link outcomes in the SAP
-4. [Method choice at a glance](#method-choice-at-a-glance) — pick the test by outcome and design
-5. [Worked example: COPD trial FEV1](#worked-example-copd-trial-fev1) — Practice read and reporting wording
-6. [Catalog of wrong analyses](#catalog-of-wrong-analyses-comparison-chapter) — before protocol or manuscript sign-off
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): MCID, pairing, proportion vs count
+2. [The comparison workflow](#the-comparison-workflow): write the estimand in one sentence
+3. [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints): crude vs covariate-adjusted; link outcomes in the SAP
+4. [Method choice at a glance](#method-choice-at-a-glance): pick the test by outcome and design
+5. [Worked example: COPD trial FEV1](#worked-example-copd-trial-fev1): Practice read and reporting wording
+6. [Catalog of wrong analyses](#catalog-of-wrong-analyses-comparison-chapter): before protocol or manuscript sign-off
 
 **Analyst read:** technique cards, R lab, and extensions in the sections below.
 
@@ -130,11 +130,11 @@ Sponsor slides often mix three distinct decisions: a **crude arm difference**, a
 
 **RCT rule:** prespecify in the SAP whether the primary analysis is unadjusted ITT, **ANCOVA with baseline FEV1**, or a prespecified change score. Do not run all three and promote the smallest *p*.
 
-**Observational rule:** adjusted logistic or linear models are the main analysis; unadjusted comparisons are **sensitivity** analyses that show how much confounding matters—not proof of effect ([Ch 21](21-causal-inference.md)).
+**Observational rule:** adjusted logistic or linear models are the main analysis; unadjusted comparisons are **sensitivity** analyses that show how much confounding matters: not proof of effect ([Ch 21](21-causal-inference.md)).
 
 **Wording:** unadjusted → “mean difference between groups”; adjusted → “associated with … after adjustment for …” unless the design supports stronger causal language.
 
-**Practice read:** [Case B in Ch 12](12-case-studies.md) shows crude proportions beside an adjusted exacerbation model—mirror that pattern when baseline imbalance or confounding is plausible.
+**Practice read:** [Case B in Ch 12](12-case-studies.md) shows crude proportions beside an adjusted exacerbation model: mirror that pattern when baseline imbalance or confounding is plausible.
 
 #### Wrong analysis ⚠
 
@@ -160,7 +160,7 @@ FEV1, FVC, symptom scores, and exacerbation rate are **clinically related** but 
 | **Omics / biomarkers** | Separate testing family from clinical endpoints; FDR, not Holm on FEV1 | Ch 13–17 |
 | **Unsupervised clusters** | Not linked to outcomes until externally validated | [Ch 11](11-clustering.md) |
 
-**Composite endpoints** (e.g. FEV1 responder **and** no exacerbation): define components, missing-data rules, and whether components are co-primary **before** data lock. This handbook does not treat composite construction in depth — borrow from trial-statistics references and freeze the **winning definition** in the SAP.
+**Composite endpoints** (e.g. FEV1 responder **and** no exacerbation): define components, missing-data rules, and whether components are co-primary **before** data lock. This handbook does not treat composite construction in depth: borrow from trial-statistics references and freeze the **winning definition** in the SAP.
 
 #### Worked example: composite primary (fictional pulmonary SAP)
 
@@ -174,20 +174,20 @@ A CLD trial team debates a single primary endpoint. They freeze this **before** 
 | **Composite rule** | Responder = **both** A and B |
 | **Missing data** | If week-12 spirometry missing → not a responder for primary ITT; sensitivity with multiple imputation prespecified |
 | **Analysis** | Risk difference in responder proportion (intervention − control) + 95% CI; Fisher or logistic with covariates as supportive |
-| **Secondaries** | FEV1 (continuous), exacerbation rate, CAT — **Holm family**, separate from composite test |
+| **Secondaries** | FEV1 (continuous), exacerbation rate, CAT: **Holm family**, separate from composite test |
 | **Not allowed** | Switching to FEV1 alone if composite p = 0.06 |
 
 **Methods snippet:**
 
 > *The primary endpoint was dual responder status at week 12 (FEV1 increase ≥0.10 L and no moderate/severe exacerbation). The estimand was the risk difference in responder proportion (intervention − standard care) in the intention-to-treat population. Secondary endpoints (FEV1 litres, annualised exacerbation rate, CAT) were tested in a prespecified order with Holm adjustment within the clinical family.*
 
-**Practice read:** composites simplify steering narratives but complicate missing spirometry — write the missing-data rule **with** the composite, not after.
+**Practice read:** composites simplify steering narratives but complicate missing spirometry: write the missing-data rule **with** the composite, not after.
 
 #### Wrong analysis ⚠
 
 | | |
 |---|---|
-| **Mistake** | FEV1, FVC, symptoms, exacerbations—four primary *p*-values on one slide |
+| **Mistake** | FEV1, FVC, symptoms, exacerbations: four primary *p*-values on one slide |
 | **Do instead** | One primary; secondaries in a prespecified family; exploratory labelled |
 
 | | |
@@ -377,8 +377,8 @@ Compare clinic mean to textbook "normal" FEV1 without age/sex/height standardiza
 
 ```r
 bronchodilator <- read_csv(
-  "data/bronchodilator_paired.csv",
-  show_col_types = FALSE
+ "data/bronchodilator_paired.csv",
+ show_col_types = FALSE
 )
 t.test(bronchodilator$fev1_pre, bronchodilator$fev1_post, paired = TRUE)
 ```
@@ -519,7 +519,7 @@ Chi-square only without RD/RR/OR → always add effect measure with CI.
 For small samples or sparse tables:
 
 ```r
-fisher.test(tab, simulate.p.value = TRUE, B = 10000)  # large tables
+fisher.test(tab, simulate.p.value = TRUE, B = 10000) # large tables
 ```
 
 #### Dual interpretation (CASTOR smoking × exacerbation)
@@ -571,9 +571,9 @@ fisher.test(tab, simulate.p.value = TRUE, B = 10000)  # large tables
 
 ```r
 prop.test(
-  x = c(sum(exacerbation$exacerbation_12m[exacerbation$smoking]),
-        sum(!exacerbation$exacerbation_12m[exacerbation$smoking])),
-  n = c(sum(exacerbation$smoking), sum(!exacerbation$smoking))
+ x = c(sum(exacerbation$exacerbation_12m[exacerbation$smoking]),
+ sum(!exacerbation$exacerbation_12m[exacerbation$smoking])),
+ n = c(sum(exacerbation$smoking), sum(!exacerbation$smoking))
 )
 ```
 
@@ -620,13 +620,13 @@ Quick two-group comparison (equal follow-up):
 
 ```r
 counts <- read_csv(
-  "data/exacerbation_counts.csv",
-  show_col_types = FALSE
+ "data/exacerbation_counts.csv",
+ show_col_types = FALSE
 )
 wilcox.test(
-  exacerbations_12m ~ factor(smoking),
-  data = counts
-)  # descriptive
+ exacerbations_12m ~ factor(smoking),
+ data = counts
+) # descriptive
 # Inferential: Poisson GLM (Ch 6)
 ```
 
@@ -644,14 +644,14 @@ where $s_p$ is pooled SD.
 
 ```r
 cohen_d <- function(x, g) {
-  stats <- tapply(x, g, function(v) {
-    c(mean = mean(v), sd = sd(v), n = length(v))
-  })
-  m1 <- stats[[1]]["mean"]; m2 <- stats[[2]]["mean"]
-  s1 <- stats[[1]]["sd"];  s2 <- stats[[2]]["sd"]
-  n1 <- stats[[1]]["n"];   n2 <- stats[[2]]["n"]
-  sp <- sqrt(((n1 - 1) * s1^2 + (n2 - 1) * s2^2) / (n1 + n2 - 2))
-  (m1 - m2) / sp
+ stats <- tapply(x, g, function(v) {
+ c(mean = mean(v), sd = sd(v), n = length(v))
+ })
+ m1 <- stats[[1]]["mean"]; m2 <- stats[[2]]["mean"]
+ s1 <- stats[[1]]["sd"]; s2 <- stats[[2]]["sd"]
+ n1 <- stats[[1]]["n"]; n2 <- stats[[2]]["n"]
+ sp <- sqrt(((n1 - 1) * s1^2 + (n2 - 1) * s2^2) / (n1 + n2 - 2))
+ (m1 - m2) / sp
 }
 cohen_d(spirometry$fev1, spirometry$group)
 ```
@@ -734,10 +734,10 @@ When distributional assumptions are doubtful or as a **robustness check**, permu
 set.seed(101)
 obs_diff <- diff(tapply(spirometry$fev1, spirometry$group, mean))
 perm_diff <- replicate(5000, {
-  g <- sample(spirometry$group)
-  diff(tapply(spirometry$fev1, g, mean))
+ g <- sample(spirometry$group)
+ diff(tapply(spirometry$fev1, g, mean))
 })
-mean(abs(perm_diff) >= abs(obs_diff))  # two-sided permutation p-value
+mean(abs(perm_diff) >= abs(obs_diff)) # two-sided permutation p-value
 ```
 
 **When to use:** small n, skewed outcomes, or to complement parametric tests.
@@ -772,10 +772,10 @@ Power analysis belongs **before** data collection.
 ```r
 # install.packages("pwr")
 pwr::pwr.t.test(
-  d = 0.25,
-  power = 0.8,
-  sig.level = 0.05,
-  type = "two.sample"
+ d = 0.25,
+ power = 0.8,
+ sig.level = 0.05,
+ type = "two.sample"
 )
 ```
 
@@ -832,7 +832,7 @@ Testing FEV1, FVC, symptoms, and exacerbations without a plan inflates false pos
 
 Full map: [METHOD_MAP.md](../METHOD_MAP.md); Visual: `method_decision_tree.png`
 
-![FEV1 by group](../figures/ch04_fev1_by_group.png)
+![Raincloud: FEV1 by trial arm](../figures/ch04_fev1_by_group.png)
 
 Overlapping distributions warn against reading a small mean difference as clinically certain without the CI and sample size.
 
@@ -843,7 +843,7 @@ Overlapping distributions warn against reading a small mean difference as clinic
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | Mean bar heights only | Spread, outliers, per-arm *n* on the plot |
-| **Right** | Boxplot + jitter + mean diamond | — (pair with Welch *t* CI in text) |
+| **Right** | Raincloud + mean diamond | (pair with Welch *t* CI in text) |
 
 **Practice read:** would a sponsor infer “clear separation” from the wrong panel alone? The right panel should match the overlap in your 95% CI.
 
@@ -854,7 +854,7 @@ Overlapping distributions warn against reading a small mean difference as clinic
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | Pre and post as two independent boxplots | Within-person correlation; paired estimand |
-| **Right** | Lines linking each patient’s pre/post | — (supports paired *t* / Wilcoxon signed-rank) |
+| **Right** | Dumbbell / paired segments | (supports paired *t* / Wilcoxon signed-rank) |
 
 Router: [Appendix I](../appendix-i-figure-hygiene.md).
 
@@ -866,15 +866,15 @@ Side-by-side panels show how the same CASTOR subset looks under different compar
 
 ## Worked example: COPD trial FEV1
 
-**Design:** Parallel RCT, n ≈ 200 per arm.  
-**Estimand:** Difference in mean FEV1 (litres) at 12 weeks (intervention − standard).  
+**Design:** Parallel RCT, n ≈ 200 per arm.
+**Estimand:** Difference in mean FEV1 (litres) at 12 weeks (intervention − standard).
 **Analysis:** Welch t-test (prespecified); linear model with baseline covariates as sensitivity.
 
 **Results template:**
 
 > Mean FEV1 was 3.85 L (SD 0.64) in the intervention arm and 3.76 L (SD 0.64) in standard care (n = 198 and 202). The mean difference was 0.09 L (95% CI −0.04 to 0.21; Welch t, p = 0.20). The difference is compatible with no effect and with clinically small benefits; this trial was not powered for a prespecified MCID of 0.10 L.
 
-**Practice read:** not statistically significant; CI includes values that may or may not matter clinically.  
+**Practice read:** not statistically significant; CI includes values that may or may not matter clinically.
 **Statistician read:** non-significant p does not prove no effect - interval estimation preferred [@harrell2015rms].
 
 ---
@@ -1052,9 +1052,9 @@ If the scientific goal is **equivalence** (two-sided margin), prespecify bounds 
 
 ## Further reading
 
-- Agresti, *An Introduction to Categorical Data Analysis* [@agresti2018introduction]  
-- Harrell, *Regression Modeling Strategies* - comparison and MCID context [@harrell2015rms]  
-- ATS/ERS spirometry standardisation [@graham2019spirometry]  
+- Agresti, *An Introduction to Categorical Data Analysis* [@agresti2018introduction]
+- Harrell, *Regression Modeling Strategies* - comparison and MCID context [@harrell2015rms]
+- ATS/ERS spirometry standardisation [@graham2019spirometry]
 - Welch (1947); Mann & Whitney (1947) - original test papers [@welch1947t; @mann1947test]
 
 **Next:** [Chapter 5 - Linear Models](05-linear-models.md)

@@ -18,12 +18,12 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — batch vs biology
-2. [Method choice at a glance](#method-choice-at-a-glance) — diagnose before you adjust
-3. [Wrong analysis](#wrong-analysis-) — confounded group × batch is a stop rule
-4. [Reporting template](#reporting-template) — discoveries with vs without batch
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): batch vs biology
+2. [Method choice at a glance](#method-choice-at-a-glance): diagnose before you adjust
+3. [Wrong analysis](#wrong-analysis-): confounded group × batch is a stop rule
+4. [Reporting template](#reporting-template): discoveries with vs without batch
 
 **Analyst read:** R lab, ComBat caveats, and extensions below.
 
@@ -233,7 +233,7 @@ Separation along PC1 by colour (batch) means batch-aware models or redesign, not
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | PCA coloured by case/control only | Plate/batch structure driving PC1 |
-| **Right** | PCA coloured by batch, shape = group | — (QC before DE list) |
+| **Right** | PCA coloured by batch, shape = group |: (QC before DE list) |
 
 **Practice read:** if the wrong panel were your omics slide, would a biologist call it “a disease axis”? Check batch colour before naming biology.
 
@@ -269,8 +269,8 @@ The script produces:
 - PCA diagnostics (`ch14_pca_proteomics_batch.png`, `ch14_pca_proteomics_plate.png`)
 - Sensitivity bar chart (`ch14_batch_sensitivity_discoveries.png`)
 - **Mini-case figures:**
-  - `ch14_group_batch_overlap.png` (valid overlap vs confounding)
-  - `ch14_pc1_variance_explained.png` (how much PC1 tracks batch vs group)
+ - `ch14_group_batch_overlap.png` (valid overlap vs confounding)
+ - `ch14_pc1_variance_explained.png` (how much PC1 tracks batch vs group)
 - Summary table: `volume-01/tables/ch14_batch_mini_case_summary.csv`
 
 ```r
@@ -278,8 +278,8 @@ source("R/00_setup.R")
 library(tidyverse)
 
 prot <- readr::read_csv(
-  file.path(paths$data, "proteomics_olink_like.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "proteomics_olink_like.csv"),
+ show_col_types = FALSE
 )
 table(prot$group, prot$batch)
 ```
@@ -300,6 +300,18 @@ A large drop in hit count after batch adjustment means many “discoveries” we
 ![PC1 variance explained by batch vs group](../figures/ch14_pc1_variance_explained.png)
 
 When batch explains more variance than group on PC1, prioritise batch QC over interpreting loadings.
+
+### Analyst track (optional): ComBat before/after PCA
+
+After overlap checks pass, see [Appendix L](../appendix-l-omics-analyst-track.md) for hands-on ComBat (not a substitute for balanced design).
+
+```r
+source("R/examples/ch14_analyst_combat.R")
+```
+
+![Proteomics PCA before vs after ComBat](../figures/ch14_analyst_combat_pca.png)
+
+![PC1 R² explained by batch before vs after ComBat](../figures/ch14_analyst_combat_r2.png)
 
 ## Exercises ([Solutions](../solutions/ch14_solutions.md))
 

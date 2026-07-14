@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(glmnet)
@@ -15,7 +16,6 @@ mat_raw <- prot %>%
   select(all_of(feat)) %>%
   as.matrix()
 
-# Teaching: use proteins with lowest missingness (complete-case on 1000 features is empty)
 miss_frac <- colMeans(is.na(mat_raw))
 feat_use <- names(sort(miss_frac))[1:min(200, length(feat))]
 mat_raw <- mat_raw[, feat_use, drop = FALSE]
@@ -56,7 +56,6 @@ auc_outer <- map_dbl(outer_folds, function(test_idx) {
   x_test <- imp$test
   y_train <- y_all[train_idx]
 
-  # Inner CV for lambda (training only)
   cv_fit <- cv.glmnet(
     x_train, y_train,
     family = "binomial",
@@ -73,21 +72,28 @@ auc_summary <- tibble(
 )
 write_csv(auc_summary, file.path(tab_dir, "ch17_elastic_net_cv_auc.csv"))
 
+mean_auc <- mean(auc_outer, na.rm = TRUE)
+
 p_cv <- ggplot(auc_summary, aes(fold, auc)) +
-  geom_col(fill = "steelblue", width = 0.6) +
-  geom_hline(yintercept = mean(auc_outer), linetype = 2, color = "grey40") +
-  ylim(0, 1) +
-  theme_minimal() +
+  geom_col(fill = handbook_cols$intervention, alpha = 0.88, width = 0.62, colour = "white") +
+  geom_hline(yintercept = mean_auc, linetype = "dashed", colour = handbook_cols$accent, linewidth = 0.8) +
+  geom_text(
+    aes(label = sprintf("%.2f", auc)),
+    vjust = -0.35, size = 3.1, colour = "#475569"
+  ) +
+  scale_y_continuous(limits = c(0, 1), expand = expansion(mult = c(0, 0.08))) +
   labs(
     title = "Elastic net proteomics: nested CV AUC (CASTOR-HD)",
     subtitle = sprintf(
       "Mean outer-fold AUC = %.3f (%d proteins, median impute within folds)",
-      mean(auc_outer, na.rm = TRUE), length(feat_use)
+      mean_auc, length(feat_use)
     ),
     x = "Outer fold",
     y = "AUC"
-  )
+  ) +
+  handbook_theme(12)
 
-ggsave(file.path(fig_dir, "ch17_elastic_net_nested_cv.png"), p_cv, width = 6.8, height = 4.5, dpi = 160)
-message("Ch 17 elastic net: mean AUC = ", round(mean(auc_outer, na.rm = TRUE), 3),
+handbook_save(p_cv, file.path(fig_dir, "ch17_elastic_net_nested_cv.png"), 7.0, 4.6)
+
+message("Ch 17 elastic net: mean AUC = ", round(mean_auc, 3),
         " (p = ", length(feat_use), " proteins)")

@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -155,35 +156,27 @@ cal_df <- tibble(y = test$exacerbation_12m, pred = predict_test$logistic) %>%
 
 axis_max <- max(0.15, cal_df$mean_pred, cal_df$obs_rate + cal_df$se, na.rm = TRUE) * 1.15
 
-p_cal <- ggplot(cal_df, aes(x = mean_pred, y = obs_rate)) +
-  geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey50") +
-  geom_errorbar(
-    aes(ymin = pmax(0, obs_rate - se), ymax = pmin(1, obs_rate + se)),
-    width = 0.008, linewidth = 0.6, colour = "grey30"
-  ) +
-  geom_point(aes(size = n), colour = "#1f4e79") +
-  scale_size_continuous(
-    range = c(3, 8),
-    breaks = sort(unique(cal_df$n)),
-    labels = sort(unique(cal_df$n))
-  ) +
-  labs(
-    x = "Mean predicted risk",
-    y = "Observed event rate",
-    title = "Calibration plot: logistic model (test set)",
-    subtitle = sprintf(
-      "%d events in test set (n = %d); %d risk bins",
-      n_events_test, n_test, n_bins
-    )
-  ) +
-  coord_cartesian(xlim = c(0, axis_max), ylim = c(0, axis_max)) +
-  theme_minimal(base_size = 12)
-
 fig_dir <- file.path(paths$root, "volume-01", "figures")
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
-ggsave(
+
+p_cal <- plot_calibration(
+  cal_df,
+  pred = "mean_pred",
+  obs = "obs_rate",
+  n = "n",
+  se = "se",
+  title = "Calibration plot: logistic model (test set)",
+  subtitle = sprintf(
+    "%d events in test set (n = %d); %d risk bins; points sized by n",
+    n_events_test, n_test, n_bins
+  ),
+  axis_max = axis_max
+)
+
+handbook_save(
+  p_cal,
   file.path(fig_dir, "ch09_calibration_logistic.png"),
-  p_cal, width = 6, height = 5, dpi = 150
+  6.8, 5.2
 )
 
 message("Chapter 9 prediction shootout complete.")

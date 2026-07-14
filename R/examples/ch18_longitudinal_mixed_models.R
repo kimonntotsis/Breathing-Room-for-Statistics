@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(lme4)
@@ -16,19 +17,30 @@ visit_tbl <- long %>%
 write_csv(visit_tbl, file.path(tab_dir, "ch18_visit_counts_by_group.csv"))
 
 p_spaghetti <- long %>%
-  ggplot(aes(weeks, fev1, group = patient_id, color = group)) +
-  geom_line(alpha = 0.25, linewidth = 0.4) +
-  scale_color_manual(values = c(standard = "grey50", intervention = "steelblue")) +
-  theme_minimal() +
+  ggplot(aes(weeks, fev1, group = patient_id, colour = group)) +
+  geom_line(alpha = 0.28, linewidth = 0.45) +
+  scale_color_manual(values = handbook_arm_colors, labels = c("Standard", "Intervention")) +
   guides(color = "none") +
   labs(
     title = "Longitudinal FEV1 (CASTOR extension)",
     subtitle = "Spaghetti plot: each line is one participant",
     x = "Weeks from baseline",
     y = "FEV1 (L)"
-  )
+  ) +
+  handbook_theme()
 
-ggsave(file.path(fig_dir, "ch18_spaghetti_fev1.png"), p_spaghetti, width = 7.2, height = 4.6, dpi = 160)
+handbook_save(p_spaghetti, file.path(fig_dir, "ch18_spaghetti_fev1.png"), 7.2, 4.6)
+
+long_ridge <- long %>%
+  mutate(weeks_f = factor(weeks, levels = sort(unique(weeks))))
+
+p_ridge <- plot_density_ridge(
+  long_ridge, "fev1", "weeks_f", fill = "group",
+  title = "Ridge plot: FEV1 distribution by visit week",
+  subtitle = "Colour = trial arm; distribution shifts across follow-up",
+  xlab = "FEV1 (L)", ylab = "Week"
+)
+handbook_save(p_ridge, file.path(fig_dir, "ch18_fev1_ridge.png"), 7.4, 5.4)
 
 long_m <- long %>% mutate(
   group = factor(group, levels = c("standard", "intervention")),
@@ -69,19 +81,20 @@ pred_grid <- expand_grid(
 ) %>%
   mutate(fev1_hat = predict(fit_mixed, newdata = ., re.form = NA))
 
-p_fit <- ggplot(long_m, aes(weeks, fev1, color = group)) +
-  geom_point(alpha = 0.15, size = 1) +
-  geom_line(data = pred_grid, aes(y = fev1_hat), linewidth = 1.1) +
-  scale_color_manual(values = c(standard = "grey40", intervention = "#B22222")) +
-  theme_minimal() +
+p_fit <- ggplot(long_m, aes(weeks, fev1, colour = group)) +
+  geom_point(alpha = 0.12, size = 1.1, colour = "#CBD5E1") +
+  geom_line(data = pred_grid, aes(y = fev1_hat), linewidth = 1.15) +
+  scale_color_manual(values = handbook_arm_colors, labels = c("Standard", "Intervention")) +
   labs(
     title = "Mixed model fitted means (population level)",
     subtitle = "lmer: fev1 ~ weeks * group + covariates + (1|patient_id)",
     x = "Weeks",
-    y = "FEV1 (L)"
-  )
+    y = "FEV1 (L)",
+    colour = NULL
+  ) +
+  handbook_theme()
 
-ggsave(file.path(fig_dir, "ch18_mixed_model_fitted.png"), p_fit, width = 7.2, height = 4.6, dpi = 160)
+handbook_save(p_fit, file.path(fig_dir, "ch18_mixed_model_fitted.png"), 7.4, 4.8)
 
 message("Chapter 18: participants = ", n_distinct(long$patient_id),
         "; visits = ", nrow(long))

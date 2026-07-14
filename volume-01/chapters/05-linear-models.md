@@ -15,17 +15,17 @@
 
 **Also see:** [Appendix B § Step 5](../appendix-b-quick-reference.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#method-choice-at-a-glance)
 
-> **Sounds like your lab?** [Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) — FEV1 compared with a *t*-test but baseline never adjusted? → [ANCOVA: follow-up FEV1 adjusting baseline](#ancova-follow-up-fev1-adjusting-baseline).
+> **Sounds like your lab?** [Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test): FEV1 compared with a *t*-test but baseline never adjusted? → [ANCOVA: follow-up FEV1 adjusting baseline](#ancova-follow-up-fev1-adjusting-baseline).
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [When linear regression is the right tool](#when-linear-regression-is-the-right-tool) — continuous outcome + adjustment
-2. [Method choice at a glance](#method-choice-at-a-glance) — SLR, MLR, ANCOVA
-3. First **Practice read** under main technique — MCID and confounding
+1. [When linear regression is the right tool](#when-linear-regression-is-the-right-tool): continuous outcome + adjustment
+2. [Method choice at a glance](#method-choice-at-a-glance): SLR, MLR, ANCOVA
+3. First **Practice read** under main technique: MCID and confounding
 4. [Reporting template](#reporting-template) in worked section
-5. [Alternatives & extensions](#alternatives--extensions-choose-by-data) — skew, repeated visits
+5. [Alternatives & extensions](#alternatives--extensions-choose-by-data): skew, repeated visits
 
 **Analyst read:** diagnostics, VIF, R lab below.
 
@@ -175,8 +175,8 @@ par(mfrow = c(2, 2)); plot(fit); par(mfrow = c(1, 1))
 
 ```r
 lm(
-  fev1 ~ smoking + splines::ns(age, df = 3) + sex + height_cm,
-  data = spirometry
+ fev1 ~ smoking + splines::ns(age, df = 3) + sex + height_cm,
+ data = spirometry
 )
 ```
 
@@ -197,7 +197,7 @@ Use SLR for bivariate exploration; prefer MLR when confounders matter (almost al
 R default treatment contrasts: first level alphabetically is reference.
 
 ```r
-spirometry$sex <- factor(spirometry$sex)  # reference: female
+spirometry$sex <- factor(spirometry$sex) # reference: female
 # sexmale coefficient = mean difference male vs female
 ```
 
@@ -216,8 +216,8 @@ spirometry$sex <- factor(spirometry$sex)  # reference: female
 ```r
 fit_int <- lm(fev1 ~ smoking * age + sex + height_cm, data = spirometry)
 anova(
-  lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry),
-  fit_int
+ lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry),
+ fit_int
 )
 ```
 
@@ -259,7 +259,7 @@ plot(cooks.distance(fit), type = "h", main = "Cook's distance")
 
 Investigate data errors before removing points. One patient with FEV1 = 0.1 L may be entry error.
 
-![Residual diagnostics: CASTOR smoking model](../figures/ch05_residual_diagnostics.png)
+![Residual diagnostics: hexbin + Q-Q](../figures/ch05_residual_diagnostics.png)
 
 Check pattern in residuals before trusting the adjusted smoking coefficient.
 
@@ -270,7 +270,7 @@ Check pattern in residuals before trusting the adjusted smoking coefficient.
 When predictors correlate strongly (FEV1 model with FVC and FEV1/FVC):
 
 ```r
-car::vif(fit)  # values > 5–10 warrant attention
+car::vif(fit) # values > 5–10 warrant attention
 ```
 
 **Fix:** drop redundant predictors, combine, or use ridge (prediction context, Ch 7).
@@ -283,19 +283,19 @@ car::vif(fit)  # values > 5–10 warrant attention
 
 **Steps:**
 
-1. Table 1 by smoking (Ch 3)  
-2. Fit `lm(fev1 ~ smoking + age + sex + height_cm)`  
-3. Check residuals  
-4. Report β_smoking with CI  
-5. Contextualize with MCID  
+1. Table 1 by smoking (Ch 3)
+2. Fit `lm(fev1 ~ smoking + age + sex + height_cm)`
+3. Check residuals
+4. Report β_smoking with CI
+5. Contextualize with MCID
 
 **Three-reader summary:**
 
-- **Statistician:** adjusted mean difference −0.39 L (95% CI −0.47 to −0.32); model assumptions reasonable.  
-- **Practice:** ~400 mL lower FEV1 in smokers - clinically substantial if causal; observational design limits causal claim.  
+- **Statistician:** adjusted mean difference −0.39 L (95% CI −0.47 to −0.32); model assumptions reasonable.
+- **Practice:** ~400 mL lower FEV1 in smokers - clinically substantial if causal; observational design limits causal claim.
 - **General reader:** smokers in this dataset have notably lower lung function even after accounting for age, sex, and height.
 
-![Adjusted mean FEV1 by smoking (emmeans-style)](../figures/ch05_fev1_by_smoking_adjusted.png)
+![Adjusted mean FEV1 by smoking (dot-and-whisker)](../figures/ch05_fev1_by_smoking_adjusted.png)
 
 Report the interval on this scale; the plot supports the coefficient table, not replaces it.
 
@@ -303,9 +303,9 @@ Report the interval on this scale; the plot supports the coefficient table, not 
 
 ## What linear regression does NOT do
 
-- Model binary exacerbations (Ch 6)  
-- Handle repeated FEV1 visits ([Ch 18](18-longitudinal-mixed-models.md) mixed models)  
-- Prove smoking **caused** lower FEV1 in observational data  
+- Model binary exacerbations (Ch 6)
+- Handle repeated FEV1 visits ([Ch 18](18-longitudinal-mixed-models.md) mixed models)
+- Prove smoking **caused** lower FEV1 in observational data
 - Automatically select important predictors (Ch 7 - prespecification)
 
 ---
@@ -373,7 +373,7 @@ Linear regression (Gaussian errors) is the default for continuous outcomes, but 
 
 ## Further reading
 
-- Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
+- Harrell, *Regression Modeling Strategies* [@harrell2015rms]
 - Venables & Ripley, *Modern Applied Statistics with S* [@venables2002modern]
 
 ## Exercises ([Solutions](../solutions/ch05_solutions.md))

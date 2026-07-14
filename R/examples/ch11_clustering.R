@@ -1,11 +1,8 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(cluster)
-
-if (!requireNamespace("factoextra", quietly = TRUE)) {
-  stop("Install factoextra: install.packages('factoextra')")
-}
 
 fig_dir <- file.path(paths$root, "volume-01", "figures")
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
@@ -69,12 +66,23 @@ km <- kmeans(X, centers = k, nstart = 25)
 message("k-means vs true_phenotype (teaching only):")
 print(table(Predicted = km$cluster, True = omics$true_phenotype))
 
-p_km <- factoextra::fviz_cluster(
-  km, data = X, geom = "point",
-  habillage = omics$true_phenotype, palette = "jco",
-  main = "CASTOR: k-means (k = 2) coloured by true phenotype"
+pca11 <- prcomp(X, center = FALSE, scale. = FALSE)
+pca_df <- tibble(
+  PC1 = pca11$x[, 1],
+  PC2 = pca11$x[, 2],
+  cluster = factor(km$cluster),
+  true_phenotype = omics$true_phenotype
 )
-ggsave(file.path(fig_dir, "ch11_kmeans_clusters.png"), p_km, width = 7, height = 5, dpi = 120)
+
+p_km <- plot_cluster_pca(
+  pca_df,
+  label = "true_phenotype",
+  title = "CASTOR: k-means (k = 2) on marker panel",
+  subtitle = "Colour = cluster assignment; shape = true phenotype (teaching only)",
+  xlab = sprintf("PC1 (%.0f%%)", 100 * summary(pca11)$importance[2, 1]),
+  ylab = sprintf("PC2 (%.0f%%)", 100 * summary(pca11)$importance[2, 2])
+)
+handbook_save(p_km, file.path(fig_dir, "ch11_kmeans_clusters.png"), 7.4, 5.2)
 
 # --- Silhouette for k = 2:6 ----------------------------------------------------
 sil <- sapply(2:6, function(kk) {
@@ -87,13 +95,17 @@ print(round(sil, 3))
 
 sil_df <- tibble(k = as.integer(names(sil)), silhouette = as.numeric(sil))
 p_sil <- ggplot(sil_df, aes(k, silhouette)) +
-  geom_line() + geom_point(size = 2) +
+  geom_col(fill = handbook_cols$intervention, alpha = 0.82, width = 0.65) +
+  geom_line(colour = handbook_cols$accent, linewidth = 0.9, group = 1) +
+  geom_point(size = 2.8, colour = handbook_cols$accent) +
   scale_x_continuous(breaks = 2:6) +
   labs(
     title = "CASTOR: mean silhouette width by k",
+    subtitle = "Peak suggests plausible k; confirm with stability and biology",
     x = "Number of clusters (k)", y = "Mean silhouette"
-  )
-ggsave(file.path(fig_dir, "ch11_silhouette_k.png"), p_sil, width = 6, height = 4, dpi = 120)
+  ) +
+  handbook_theme()
+handbook_save(p_sil, file.path(fig_dir, "ch11_silhouette_k.png"), 6.4, 4.2)
 
 # --- Hierarchical + PAM --------------------------------------------------------
 hc <- hclust(dist(X), method = "ward.D2")
@@ -150,18 +162,26 @@ profile <- omics %>%
   group_by(cluster, marker) %>%
   summarise(mean_value = mean(value), .groups = "drop")
 
-p_prof <- ggplot(profile, aes(marker, mean_value, fill = cluster)) +
-  geom_col(position = "dodge") +
-  labs(
-    title = "CASTOR: mean marker levels by k-means cluster (M1–M5)",
-    x = NULL, y = "Mean (z-scored)", fill = "Cluster"
-  )
-ggsave(file.path(fig_dir, "ch11_cluster_profiles.png"), p_prof, width = 7, height = 4, dpi = 120)
+p_prof <- plot_radar(
+  profile, "cluster", "marker", "mean_value",
+  title = "Radar profiles: mean marker levels by cluster",
+  subtitle = "Spider plot on z-scored M1–M5 (teaching only)"
+)
+handbook_save(p_prof, file.path(fig_dir, "ch11_cluster_profiles.png"), 6.8, 5.4)
 
-# --- Dendrogram (sample if needed: n=120 is fine) -----------------------------
-png(file.path(fig_dir, "ch11_dendrogram.png"), width = 800, height = 500, res = 120)
-plot(hc, labels = FALSE, main = "CASTOR: hierarchical clustering (Ward.D2)")
-rect.hclust(hc, k = k, border = "red")
-dev.off()
+p_heat <- plot_profile_heatmap(
+  profile, "cluster", "marker", "mean_value",
+  title = "Cluster centroid heatmap (M1–M5)",
+  subtitle = "Complements radar; easier to read small differences"
+)
+handbook_save(p_heat, file.path(fig_dir, "ch11_cluster_heatmap.png"), 6.2, 3.8)
+
+# --- Dendrogram (Ward.D2) ----------------------------------------------------
+p_dend <- plot_dendrogram_handbook(
+  hc, k = k,
+  title = "CASTOR: hierarchical clustering (Ward.D2)",
+  subtitle = "Dashed line = k = 2 cut; compare with k-means partition"
+)
+handbook_save(p_dend, file.path(fig_dir, "ch11_dendrogram.png"), 8.2, 4.6)
 
 message("Chapter 11 clustering complete. Figures saved to volume-01/figures/.")

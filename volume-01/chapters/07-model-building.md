@@ -15,14 +15,14 @@
 
 **Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction)
 
-> **Sounds like your lab?** [Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) — only 24 events but tempted to add predictors? → [Technique: Prespecified confounder adjustment](#technique-prespecified-confounder-adjustment).
+> **Sounds like your lab?** [Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation): only 24 events but tempted to add predictors? → [Technique: Prespecified confounder adjustment](#technique-prespecified-confounder-adjustment).
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Three model-building modes](#three-model-building-modes-choose-first) — confirmatory vs exploratory vs prediction
-2. [Method choice at a glance](#method-choice-at-a-glance) — prespecification vs LASSO vs splines
+1. [Three model-building modes](#three-model-building-modes-choose-first): confirmatory vs exploratory vs prediction
+2. [Method choice at a glance](#method-choice-at-a-glance): prespecification vs LASSO vs splines
 3. **Practice read** on stepwise selection
 4. [Reporting template](#reporting-template) if present in main technique
 5. [Alternatives & extensions](#alternatives--extensions-model-building-menus)
@@ -146,15 +146,15 @@ Stepwise selection after seeing results is still common in submitted manuscripts
 
 ```r
 reduced <- glm(
-  exacerbation_12m ~ smoking + age,
-  data = exac,
-  family = binomial
+ exacerbation_12m ~ smoking + age,
+ data = exac,
+ family = binomial
 )
 full <- glm(
-  exacerbation_12m ~ smoking + age +
-    fev1_percent_predicted + prior_exacerbations,
-  data = exac,
-  family = binomial
+ exacerbation_12m ~ smoking + age +
+ fev1_percent_predicted + prior_exacerbations,
+ data = exac,
+ family = binomial
 )
 anova(reduced, full, test = "Chisq")
 ```
@@ -283,7 +283,7 @@ Missing FEV1 often sicker patients - MNAR. Do not silently complete-case without
 
 ```
 exacerbation_12m ~ smoking + age +
-  fev1_percent_predicted + prior_exacerbations
+ fev1_percent_predicted + prior_exacerbations
 ```
 
 **Sensitivity:** add therapy class if not on causal path; Firth if separation.
@@ -363,8 +363,8 @@ source("R/examples/ch07_model_building.R")
 
 ## Further reading
 
-- Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
-- James et al., *An Introduction to Statistical Learning* [@james2023ISL]  
+- Harrell, *Regression Modeling Strategies* [@harrell2015rms]
+- James et al., *An Introduction to Statistical Learning* [@james2023ISL]
 - Shmueli, "To explain or to predict?" [@shmueli2010predict]
 
 ## Exercises ([Solutions](../solutions/ch07_solutions.md))

@@ -23,7 +23,7 @@ The goal is not to memorise methods. It is to make defensible claims:
 
 ## In the room: the omics email (no bioinformatics on the thread)
 
-At the start of the week: “We have 1,000 proteins and 200 DE hits.” The pulmonary PI is on the email chain; the bioinformatics core is not. After batch QC, the FDR-controlled list may be **empty** — and that is the honest result to report. **Part VI** walks proteomics, RNA, flow, and antibody screens with the same question: what are we willing to fund for validation, and what must we **not** merge with the clinical primary endpoint?
+At the start of the week: “We have 1,000 proteins and 200 DE hits.” The pulmonary PI is on the email chain; the bioinformatics core is not. After batch QC, the FDR-controlled list may be **empty**, and that is the honest result to report. **Part VI** walks proteomics, RNA, flow, and antibody screens with the same question: what are we willing to fund for validation, and what must we **not** merge with the clinical primary endpoint?
 
 **Read this if:** you analyse or interpret proteomics, RNA-seq, flow cytometry, or antibody screens **without** embedded bioinformatics support.
 

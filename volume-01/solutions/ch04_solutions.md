@@ -24,7 +24,7 @@ library(tidyverse)
 s <- read_csv("data/spirometry.csv", show_col_types = FALSE)
 t.test(fev1 ~ group, data = s, var.equal = FALSE)
 wilcox.test(fev1 ~ group, data = s)
-source("R/examples/ch04_comparing_groups.R")  # Cohen's d printed
+source("R/examples/ch04_comparing_groups.R") # Cohen's d printed
 ```
 
 ## E4.9
@@ -57,10 +57,10 @@ Mean FEV1 did not differ significantly between intervention and standard care (d
 ```r
 set.seed(99)
 pvals <- replicate(100, {
-  x <- rnorm(50, 0, 1); y <- rnorm(50, 0, 1)
-  t.test(x, y)$p.value
+ x <- rnorm(50, 0, 1); y <- rnorm(50, 0, 1)
+ t.test(x, y)$p.value
 })
-mean(pvals < 0.05)  # ~0.05 under true null
+mean(pvals < 0.05) # ~0.05 under true null
 ```
 
 ## E4.14
@@ -71,10 +71,10 @@ Look up COPD FEV1 MCID (~100 mL often cited). Compare CI bounds from E4.6 to 0.1
 ```r
 trial <- read_csv("data/spirometry_trial.csv", show_col_types = FALSE)
 summary(
-  lm(
-    fev1_followup ~ group + fev1_baseline + age + sex,
-    data = trial
-  )
+ lm(
+ fev1_followup ~ group + fev1_baseline + age + sex,
+ data = trial
+ )
 )
 ```
 
@@ -87,9 +87,9 @@ See `R/examples/ch04_comparing_groups.R`; permutation p printed.
 ```r
 # install.packages("pwr")
 pwr::pwr.t.test(
-  d = 0.25,
-  power = 0.8,
-  sig.level = 0.05,
-  type = "two.sample"
+ d = 0.25,
+ power = 0.8,
+ sig.level = 0.05,
+ type = "two.sample"
 )
 ```

@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -53,20 +54,15 @@ prot_top <- prot_res %>%
 
 write_csv(prot_top, file.path(tab_dir, "ch13_proteomics_top_table.csv"))
 
-p_volcano_prot <- prot_res %>%
-  mutate(sig = ifelse(q < 0.05, "q < 0.05", "q ≥ 0.05")) %>%
-  ggplot(aes(x = estimate, y = neglog10p, color = sig)) +
-  geom_point(alpha = 0.65, size = 1.2) +
-  scale_color_manual(values = c("q < 0.05" = "#B22222", "q ≥ 0.05" = "grey60")) +
-  theme_minimal() +
-  labs(
-    title = "Proteomics differential analysis (CASTOR-HD)",
-    subtitle = "Per-protein linear models (group + covariates + batch + plate); BH FDR",
-    x = "Estimated difference (control - case) on synthetic scale",
-    y = expression(-log[10](p))
-  )
+p_volcano_prot <- plot_volcano_teaching(
+  prot_res,
+  title = "Proteomics differential analysis (CASTOR-HD)",
+  subtitle = "Per-protein linear models (group + covariates + batch + plate); BH FDR",
+  xlab = "Estimated difference (control - case) on synthetic scale",
+  q = "q"
+)
 
-ggsave(file.path(fig_dir, "ch13_volcano_proteomics.png"), p_volcano_prot, width = 7.8, height = 5.2, dpi = 160)
+handbook_save(p_volcano_prot, file.path(fig_dir, "ch13_volcano_proteomics.png"), 7.8, 5.2)
 
 # Niche 1: missingness-by-group diagnostic (proteomics)
 miss_df <- prot %>%
@@ -76,26 +72,31 @@ miss_df <- prot %>%
   )
 
 p_miss <- ggplot(miss_df, aes(group, missing_fraction, fill = group)) +
-  geom_boxplot(alpha = 0.75, outlier.alpha = 0.2) +
-  theme_minimal() +
-  guides(fill = "none") +
+  geom_boxplot(alpha = 0.78, outlier.alpha = 0.25, colour = "#334155", linewidth = 0.35) +
+  scale_fill_manual(values = handbook_group_fill, guide = "none") +
   labs(
     title = "Proteomics: missingness fraction by group (LOD-style)",
+    subtitle = "Differential missingness can masquerade as biology",
     x = NULL,
     y = "Fraction missing across proteins"
-  )
+  ) +
+  handbook_theme()
 
-ggsave(file.path(fig_dir, "ch13_proteomics_missingness_by_group.png"), p_miss, width = 6.6, height = 4.2, dpi = 160)
+handbook_save(p_miss, file.path(fig_dir, "ch13_proteomics_missingness_by_group.png"), 6.8, 4.4)
 
 # Niche 2: q-value distribution (proteomics)
 p_q <- prot_res %>%
   filter(!is.na(q)) %>%
   ggplot(aes(q)) +
-  geom_histogram(bins = 40, fill = "steelblue", color = "white") +
-  theme_minimal() +
-  labs(title = "Proteomics: q-value distribution (BH)", x = "q-value", y = "Proteins")
+  geom_histogram(bins = 40, fill = handbook_cols$intervention, colour = "white", alpha = 0.88) +
+  labs(
+    title = "Proteomics: q-value distribution (BH)",
+    subtitle = "Mass at low q supports real signal; spike near 1 is expected nulls",
+    x = "q-value", y = "Proteins"
+  ) +
+  handbook_theme()
 
-ggsave(file.path(fig_dir, "ch13_proteomics_qvalue_hist.png"), p_q, width = 6.6, height = 4.2, dpi = 160)
+handbook_save(p_q, file.path(fig_dir, "ch13_proteomics_qvalue_hist.png"), 6.8, 4.4)
 
 # =============================================================================
 # RNA-seq: per-gene negative binomial DE + BH FDR + volcano plot
@@ -151,40 +152,43 @@ rna_top <- rna_res %>%
 
 write_csv(rna_top, file.path(tab_dir, "ch13_rnaseq_top_table.csv"))
 
-p_volcano_rna <- rna_res %>%
-  mutate(sig = ifelse(q < 0.05, "q < 0.05", "q ≥ 0.05")) %>%
-  ggplot(aes(x = estimate, y = neglog10p, color = sig)) +
-  geom_point(alpha = 0.65, size = 1.1) +
-  scale_color_manual(values = c("q < 0.05" = "#B22222", "q ≥ 0.05" = "grey60")) +
-  theme_minimal() +
-  labs(
-    title = "RNA differential analysis (CASTOR-HD)",
-    subtitle = "NB GLM per gene (group + batch + library offset); BH FDR",
-    x = "Estimated log fold-change (control vs case, NB coefficient)",
-    y = expression(-log[10](p))
-  )
+p_volcano_rna <- plot_volcano_teaching(
+  rna_res,
+  title = "RNA differential analysis (CASTOR-HD)",
+  subtitle = "NB GLM per gene (group + batch + library offset); BH FDR",
+  xlab = "Estimated log fold-change (control vs case, NB coefficient)",
+  q = "q"
+)
 
-ggsave(file.path(fig_dir, "ch13_volcano_rnaseq.png"), p_volcano_rna, width = 7.8, height = 5.2, dpi = 160)
+handbook_save(p_volcano_rna, file.path(fig_dir, "ch13_volcano_rnaseq.png"), 7.8, 5.2)
 
 # Niche 3: MA plot (RNA) - abundance vs effect (teaching)
 p_ma <- rna_res %>%
-  ggplot(aes(x = mean_logcpm, y = estimate)) +
-  geom_point(alpha = 0.35, size = 1.0, color = "grey40") +
-  geom_hline(yintercept = 0, linewidth = 0.6, color = "grey60") +
-  theme_minimal() +
+  mutate(sig = ifelse(q < 0.05, "q < 0.05", "q \u2265 0.05")) %>%
+  ggplot(aes(x = mean_logcpm, y = estimate, colour = sig)) +
+  geom_hline(yintercept = 0, linewidth = 0.55, colour = "#94A3B8") +
+  geom_point(alpha = 0.65, size = 1.1) +
+  scale_colour_manual(
+    values = c("q < 0.05" = handbook_cols$intervention, "q \u2265 0.05" = "#CBD5E1"),
+    name = NULL
+  ) +
   labs(
     title = "RNA: MA plot (NB teaching model)",
     subtitle = "Mean log-CPM vs NB log fold-change (control vs case)",
     x = "Mean log-CPM",
     y = "Effect estimate"
-  )
+  ) +
+  handbook_theme()
 
-ggsave(file.path(fig_dir, "ch13_rnaseq_ma_plot.png"), p_ma, width = 7.2, height = 4.6, dpi = 160)
+handbook_save(p_ma, file.path(fig_dir, "ch13_rnaseq_ma_plot.png"), 7.4, 4.8)
 
 # Combined panel (handbook-friendly)
 p_panel <- p_volcano_prot / p_volcano_rna +
-  plot_annotation(title = "Differential analysis + FDR: two omics examples (synthetic)")
-ggsave(file.path(fig_dir, "ch13_volcano_panel.png"), p_panel, width = 8.5, height = 9.0, dpi = 160)
+  patchwork::plot_annotation(
+    title = "Differential analysis + FDR: two omics examples (synthetic)",
+    theme = handbook_theme(12)
+  )
+handbook_save(p_panel, file.path(fig_dir, "ch13_volcano_panel.png"), 8.6, 9.2)
 
 message("Chapter 13 differential analysis complete. Figures saved to volume-01/figures/.")
 

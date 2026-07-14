@@ -16,15 +16,15 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Master workflow](#master-workflow-every-castor-analysis) — eight steps every case follows
-2. [Method choice at a glance](#method-choice-at-a-glance) — which case matches your study
-3. [Investigator sign-off checklist](#investigator-sign-off-checklist) — before submission
-4. [Case A](#case-study-a-randomised-trial-fev1-comparison) — RCT FEV1 (minimum read)
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-case-studies) — published-style traps
+1. [Master workflow](#master-workflow-every-castor-analysis) (eight steps) every case follows
+2. [Method choice at a glance](#method-choice-at-a-glance); which case matches your study
+3. [Investigator sign-off checklist](#investigator-sign-off-checklist): before submission
+4. [Case A](#case-study-a-randomised-trial-fev1-comparison): RCT FEV1 (minimum read)
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-case-studies): published-style traps
 
-**Minimum path (~2 h):** [Appendix J](../appendix-j-investigator-minimum-path.md). **APATE vignette (no CSV):** [APATE_VIGNETTE](../APATE_VIGNETTE.md).
+**Minimum path:** [Appendix J](../appendix-j-investigator-minimum-path.md). **APATE vignette (no CSV):** [APATE_VIGNETTE](../APATE_VIGNETTE.md).
 
 ---
 
@@ -55,7 +55,7 @@ Chapters 1-11.
 
 ## Why this chapter
 
-Technique cards teach atoms; case studies teach **workflow**. You will walk **five** complete CASTOR narratives (Cases A–E) with **In the room** notes — fictional steering comments, reviewer lines, and lab emails that mirror what pulmonary teams actually hear. Practice saying what each analysis does **not** prove before your first manuscript discussion section.
+Technique cards teach atoms; case studies teach **workflow**. You will walk **five** complete CASTOR narratives (Cases A–E) with **In the room** notes: fictional steering comments, reviewer lines, and lab emails that mirror what pulmonary teams actually hear. Practice saying what each analysis does **not** prove before your first manuscript discussion section.
 
 ## Opening question
 
@@ -67,7 +67,7 @@ This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_
 
 ## Master workflow (every CASTOR analysis)
 
-![CASTOR analysis pipeline](../figures/analysis_pipeline.png){width=85%}
+![Analysis pipeline](../figures/analysis_pipeline.png){width=85%}
 
 | Step | Action | Chapter |
 |------|--------|---------|
@@ -100,7 +100,7 @@ Before protocol lock, steering committee, or journal submission, walk the seven 
 | 6 | At least one sensitivity named? | Chapter technique / [Ch 20](20-missing-data.md) |
 | 7 | Limits (“not proven”) written? | Case narratives below |
 
-**Real cohorts:** add site clustering, QC exclusions, and protocol deviations — see [APATE](../APATE_VIGNETTE.md) for the checklist CASTOR does not model.
+**Real cohorts:** add site clustering, QC exclusions, and protocol deviations; see [APATE](../APATE_VIGNETTE.md) for the checklist CASTOR does not model.
 
 ### In practice
 
@@ -110,8 +110,8 @@ Manuscripts often mix discovery language (omics hits) with confirmatory language
 
 # Case study A: Randomised trial: FEV1 comparison
 
-> **In the room (steering committee):** *"The intervention arm looks better on the forest plot snippet. Can we call this a win? p is 0.20."*  
-> **Response:** Report mean difference and 95% CI against the prespecified MCID (0.10 L). Non-significant superiority is **inconclusive**, not proof of equivalence. ANCOVA with baseline FEV1 was prespecified as supportive — not as a post hoc rescue.
+> **In the room (steering committee):** *"The intervention arm looks better on the forest plot snippet. Can we call this a win? p is 0.20."*
+> **Response:** Report mean difference and 95% CI against the prespecified MCID (0.10 L). Non-significant superiority is **inconclusive**, not proof of equivalence. ANCOVA with baseline FEV1 was prespecified as supportive, not as a post hoc rescue.
 
 ### Clinical question
 
@@ -177,7 +177,7 @@ Causal effect in broader population; long-term FEV1 decline; symptom benefit.
 
 # Case study B: Observational cohort: exacerbation risk
 
-> **In the room (Reviewer #2):** *"Smoking is your exposure, but you adjusted for FEV1 % predicted — doesn't that block the effect?"*  
+> **In the room (Reviewer #2):** *"Smoking is your exposure, but you adjusted for FEV1 % predicted: doesn't that block the effect?"*
 > **Response:** FEV1 is a prespecified confounder on the causal path smoking → lung function → exacerbation risk; report adjusted OR as primary and crude proportions in supplementary. Associational language only ([Ch 8](08-validation-reporting.md)).
 
 ### Clinical question
@@ -239,7 +239,7 @@ Causal effect of smoking; prediction model performance (see Case C / Ch 9).
 
 # Case study C: Multi-marker panel: PCA + clustering
 
-> **In the room (PI email):** *"Cluster 1 separates well — can we call it the Th2-high endotype in the grant renewal?"*  
+> **In the room (PI email):** *"Cluster 1 separates well: can we call it the Th2-high endotype in the grant renewal?"*
 > **Response:** Unsupervised k-means on 30 markers is **exploratory**; batch colouring and stability checks come first ([Ch 11](11-clustering.md)). Name subgroups only after external replication and outcome linkage.
 
 ### Clinical question
@@ -302,7 +302,7 @@ Biological subtypes; treatment response groups; diagnostic categories.
 
 # Case study D: CASTOR-HD discovery bridge (Ch 13–17)
 
-> **In the room (lab manager):** *"The CRO sent 47 'significant' proteins and a volcano PDF — no plate map. Can we add it beside the week-12 FEV1 figure for the primary paper?"*  
+> **In the room (lab manager):** *"The CRO sent 47 'significant' proteins and a volcano PDF: no plate map. Can we add it beside the week-12 FEV1 figure for the primary paper?"*
 > **Response:** No batch metadata → stop at QC gate ([Ch 14](14-batch-effects.md)). Discovery results get a **separate** paragraph and limitations; they do not upgrade the trial primary endpoint ([Ch 17](17-integrated-castor-hd.md)).
 
 ### Clinical question
@@ -363,7 +363,7 @@ Causal mechanisms; clinical utility; transportability; antibody therapeutic pote
 
 # Case study E: Longitudinal FEV1 + time to exacerbation
 
-> **In the room (CRA):** *"We already have week-52 FEV1 — why fit a mixed model on four visits?"*  
+> **In the room (CRA):** *"We already have week-52 FEV1: why fit a mixed model on four visits?"*
 > **Response:** Pooling visits as independent rows inflates precision ([Ch 18](18-longitudinal-mixed-models.md)). Prespecified primary uses mixed model; week-52 *t*-test is **sensitivity** only (Case E table).
 
 ### Clinical question
@@ -441,29 +441,29 @@ That improving FEV1 trajectory prevents exacerbations (different endpoints); cau
 
 The sign-off figure above is the visual version of this list:
 
-- [ ] Clinical question and estimand stated  
-- [ ] Table 1 and missingness [@schulz2010consort; @vonelm2007strobe]  
-- [ ] Method matches outcome type ([Appendix B](../appendix-b-quick-reference.md))  
-- [ ] Effect size + 95% CI [@harrell2015rms]  
-- [ ] Event count / n  
-- [ ] Sensitivity analysis or limitation noted  
-- [ ] No causal overclaim from observational/exploratory work  
-- [ ] Reproducible R script  
+- [ ] Clinical question and estimand stated
+- [ ] Table 1 and missingness [@schulz2010consort; @vonelm2007strobe]
+- [ ] Method matches outcome type ([Appendix B](../appendix-b-quick-reference.md))
+- [ ] Effect size + 95% CI [@harrell2015rms]
+- [ ] Event count / n
+- [ ] Sensitivity analysis or limitation noted
+- [ ] No causal overclaim from observational/exploratory work
+- [ ] Reproducible R script
 
 ---
 
 ## Extended methods (now in this handbook)
 
-- Longitudinal FEV1 → [Ch 18](18-longitudinal-mixed-models.md)  
-- Time-to-exacerbation → [Ch 19](19-survival-analysis.md)  
-- Missing data / MICE → [Ch 20](20-missing-data.md)  
+- Longitudinal FEV1 → [Ch 18](18-longitudinal-mixed-models.md)
+- Time-to-exacerbation → [Ch 19](19-survival-analysis.md)
+- Missing data / MICE → [Ch 20](20-missing-data.md)
 - Causal inference → [Ch 21](21-causal-inference.md)
 
 ---
 
 ## Closing
 
-The **core path (Ch 1–12)** is complete when you can run the CASTOR pipeline yourself, including **Case E** (longitudinal + survival). The **advanced discovery path (Ch 13–17)** extends CASTOR-HD; **Part VIII (Ch 18–21)** completes the single-volume handbook for repeated measures, time-to-event, missing data, and causal framing [@harrell2015rms; @shmueli2010predict].
+The **core path (Ch 1–12)** is complete when you can run the CASTOR pipeline yourself, including **Case E** (longitudinal + survival). The **advanced discovery path (Ch 13–17)** extends CASTOR-HD; **Part VIII (Ch 18–22)** completes the single-volume handbook for repeated measures, time-to-event, missing data, causal framing, and mediation [@harrell2015rms; @shmueli2010predict].
 
 Adapt CASTOR details to your cohort and have an analyst and investigator review the analysis plan before you submit.
 
@@ -486,8 +486,8 @@ Adapt CASTOR details to your cohort and have an analyst and investigator review 
 
 ## Further reading
 
-- Full bibliography: [REFERENCES.md](../REFERENCES.md) and `references.bib`  
-- Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
+- Full bibliography: [REFERENCES.md](../REFERENCES.md) and `references.bib`
+- Harrell, *Regression Modeling Strategies* [@harrell2015rms]
 - CONSORT / STROBE / TRIPOD reporting [@schulz2010consort; @vonelm2007strobe; @moons2015tripod]
 
 ## Exercises ([Solutions](../solutions/ch12_solutions.md))

@@ -4,15 +4,15 @@ This volume uses **three teaching names**. Only two have data files.
 
 | Name | Type | Purpose |
 |------|------|---------|
-| **CASTOR** | Synthetic cohort (`data/*.csv`) | Reproducible methods from Table 1 through survival (Ch 3–12, 18–21) |
+| **CASTOR** | Synthetic cohort (`data/*.csv`) | Reproducible methods from Table 1 through survival and mediation (Ch 3–12, 18–22) |
 | **CASTOR-HD** | Synthetic omics extension | High-dimensional biology pipeline (Ch 13–17) |
-| **APATE** | **Prose-only vignette** ([APATE_VIGNETTE](APATE_VIGNETTE.md)) | Greek *Apate* (deceit): fictional messy registry story — **no CSV** — lists what real studies hide |
+| **APATE** | **Prose-only vignette** ([APATE_VIGNETTE](APATE_VIGNETTE.md)) | Greek *Apate* (deceit): fictional messy registry story: **no CSV**: lists what real studies hide |
 
 **CASTOR** names two things in this book. First, the **workflow**: *Clinical question → Assess design and data → Select method → Test and fit → Output estimand → Report limits* ([Chapter 1](chapters/01-statistical-thinking.md)). Second, the **CASTOR cohort** below: a **synthetic COPD-oriented** dataset used consistently from Chapter 3 through Chapter 12 (and extended in Ch 18–19). It is not real patient data; it is designed so every method connects to the same story while you practice that sequence.
 
-> **Who CASTOR is for.** The examples read as **COPD** (spirometry, exacerbations, inhaled therapy) so one cohort carries every chapter. The workflow applies across **chronic lung disease (CLD)** and to much of broader pulmonary research — asthma trials, bronchiectasis programmes, mixed clinic cohorts — whenever your **estimand, outcome type, and design** match (FEV1 arms, binary or count exacerbations, longitudinal visits, time-to-event, omics discovery). Classify the **question**, not only the disease label on the consent form. CASTOR is a **starting point**; [APATE](APATE_VIGNETTE.md) reminds you what real registries look like when no bioinformatics core is on the email thread.
+> **Who CASTOR is for.** The examples read as **COPD** (spirometry, exacerbations, inhaled therapy) so one cohort carries every chapter. The workflow applies across **chronic lung disease (CLD)** and to much of broader pulmonary research: asthma trials, bronchiectasis programmes, mixed clinic cohorts: whenever your **estimand, outcome type, and design** match (FEV1 arms, binary or count exacerbations, longitudinal visits, time-to-event, omics discovery). Classify the **question**, not only the disease label on the consent form. CASTOR is a **starting point**; [APATE](APATE_VIGNETTE.md) reminds you what real registries look like when no bioinformatics core is on the email thread.
 
-**APATE** is the deliberate opposite: a **narrative** of visit slippage, QC failures, site clustering, and batch confounding. Read it before you sign off a real Methods section — do not look for `apate.csv`. Full meaning and use: [APATE_VIGNETTE](APATE_VIGNETTE.md).
+**APATE** is the deliberate opposite: a **narrative** of visit slippage, QC failures, site clustering, and batch confounding. Read it before you sign off a real Methods section: do not look for `apate.csv`. Full meaning and use: [APATE_VIGNETTE](APATE_VIGNETTE.md).
 
 **CASTOR-HD** (Ch 13–17) adds high-dimensional omics, flow, and antibody-screen datasets on a parallel synthetic case–control cohort: the same workflow, richer tables.
 
@@ -31,7 +31,7 @@ This volume uses **three teaching names**. Only two have data files.
 | `spirometry.csv` | FEV1, group, smoking, diagnosis | Ch 3–5, trial comparisons |
 | `spirometry_trial.csv` | Baseline + follow-up FEV1 (one visit) | Ch 4 ANCOVA |
 | `bronchodilator_paired.csv` | Pre/post FEV1 same visit | Ch 4 paired t-test |
-| `exacerbation.csv` | Binary 12-month exacerbation | Ch 6 logistic, Ch 9 prediction, Ch 21 IPW |
+| `exacerbation.csv` | Binary 12-month exacerbation | Ch 6 logistic, Ch 9 prediction, Ch 21 IPW, Ch 22 mediation |
 | `exacerbation_counts.csv` | Count + person-years | Ch 6 Poisson/NB |
 | `marker_panel.csv` | 30 markers, `true_phenotype`, `processing_batch` | Ch 10–11, Case C |
 
@@ -79,7 +79,7 @@ Reporting templates: [HIGH_DIM_REPORTING_TEMPLATES.md](HIGH_DIM_REPORTING_TEMPLA
 | 8 | How do immune proportions and screens behave? | Ch 15–16 |
 | 9 | Does FEV1 **trajectory** differ by treatment? | Ch 18, Case E |
 | 10 | Who reaches exacerbation **sooner** (censored follow-up)? | Ch 19, Case E |
-| 11 | How should missing data and confounding change claims? | Ch 20–21 |
+| 11 | How should missing data and confounding change claims? | Ch 20–22 |
 
 ---
 

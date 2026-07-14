@@ -15,13 +15,13 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Outcome types: the master routing table](#outcome-types-the-master-routing-table) — binary vs count vs time-to-event
-2. [Teaching datasets: CASTOR, CASTOR-HD, and APATE](#teaching-datasets-castor-castor-hd-and-apate) — what has CSV files
-3. [Method choice at a glance](#method-choice-at-a-glance) — route to the right chapter
-4. [Data structures](#data-structures) — independence and unit of analysis
-5. Decision tree figure — visual router
+1. [Outcome types: the master routing table](#outcome-types-the-master-routing-table): binary vs count vs time-to-event
+2. [Teaching datasets: CASTOR, CASTOR-HD, and APATE](#teaching-datasets-castor-castor-hd-and-apate): what has CSV files
+3. [Method choice at a glance](#method-choice-at-a-glance): route to the right chapter
+4. [Data structures](#data-structures): independence and unit of analysis
+5. Decision tree figure: visual router
 6. [Alternatives & extensions](#alternatives--extensions-data-structures-that-change-the-method)
 
 **Analyst read:** CASTOR files, quality checks below.
@@ -49,13 +49,13 @@ Full router: [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../MET
 
 | Name | Files in `data/`? | Used for |
 |------|-------------------|----------|
-| **CASTOR** | Yes — spirometry, exacerbation, markers, longitudinal, survival | Learn and reproduce methods (Ch 3–12, 18–21). **COPD-flavoured** data; workflow applies to **CLD** and broader pulmonary research when endpoints and design match |
-| **CASTOR-HD** | Yes — proteomics, RNA, flow, antibody screens | Omics discovery pipeline (Ch 13–17) |
-| **APATE** | **No** — vignette text only | **Apate** (Greek deceit): fictional messy registry; CASTOR vs reality table; sign-off questions before real data |
+| **CASTOR** | Yes: spirometry, exacerbation, markers, longitudinal, survival | Learn and reproduce methods (Ch 3–12, 18–22). **COPD-flavoured** data; workflow applies to **CLD** and broader pulmonary research when endpoints and design match |
+| **CASTOR-HD** | Yes: proteomics, RNA, flow, antibody screens | Omics discovery pipeline (Ch 13–17) |
+| **APATE** | **No**: vignette text only | **Apate** (Greek deceit): fictional messy registry; CASTOR vs reality table; sign-off questions before real data |
 
 CASTOR is clean **on purpose**. APATE describes the illusions real registries create (perfect visit tables, hidden QC drops, batch masquerading as biology). Details: [APATE_VIGNETTE](../APATE_VIGNETTE.md), [RECURRING_COHORT](../RECURRING_COHORT.md).
 
-> **CLD note:** CASTOR’s synthetic patients are labelled COPD-style, but the handbook targets **chronic lung disease (CLD)** and mixed pulmonary cohorts. If you measure FEV1, exacerbations, or omics on a defined population, you are in scope — regardless of whether your protocol says COPD, asthma, or CLD.
+> **CLD note:** CASTOR’s synthetic patients are labelled COPD-style, but the handbook targets **chronic lung disease (CLD)** and mixed pulmonary cohorts. If you measure FEV1, exacerbations, or omics on a defined population, you are in scope: regardless of whether your protocol says COPD, asthma, or CLD.
 
 ---
 
@@ -67,13 +67,13 @@ CASTOR data are COPD-flavoured; **asthma programmes** use the same outcome famil
 
 | Decision | Asthma-specific nuance | Handbook route |
 |----------|------------------------|----------------|
-| Primary endpoint | Often exacerbation rate **or** FEV1 — pick **one** before unblinding | [Ch 4](04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [Ch 8](08-validation-reporting.md) |
+| Primary endpoint | Often exacerbation rate **or** FEV1: pick **one** before unblinding | [Ch 4](04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [Ch 8](08-validation-reporting.md) |
 | MCID | Asthma FEV1 margins differ from COPD; use protocol margin | [Ch 4](04-comparing-groups.md) |
-| Exacerbation secondary | Count or time-to-first event — not interchangeable | [Ch 6](06-generalized-linear-models.md), [Ch 19](19-survival-analysis.md) |
+| Exacerbation secondary | Count or time-to-first event, not interchangeable | [Ch 6](06-generalized-linear-models.md), [Ch 19](19-survival-analysis.md) |
 | Biomarker subgroup | Eosinophil stratum is **prespecified**, not post hoc clustering | [Ch 11](11-clustering.md) claim ladder |
 | Airway + omics | Same patient, two **families** of tests (clinical vs discovery) | [Ch 13–17](13-differential-analysis-fdr.md) |
 
-**Practice read:** if the grant promises “multi-omics endotypes” but the SAP has only FEV1, resolve that mismatch **before** samples are assayed — not in the Discussion.
+**Practice read:** if the grant promises “multi-omics endotypes” but the SAP has only FEV1, resolve that mismatch **before** samples are assayed, not in the Discussion.
 
 ---
 
@@ -128,7 +128,7 @@ Same CASTOR columns (`patient_id`, `age`, `sex`, `smoking`, `therapy`, `fev1`): 
 
 **Wrong:** run all three and report whichever has the smallest *p*-value.
 
-**Related story:** [Story 1 — one export, every column gets a t-test](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test); [Story 3 — `lm()` on 0/1](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation).
+**Related story:** [Story 1: one export, every column gets a t-test](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test); [Story 3: `lm()` on 0/1](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation).
 
 ---
 
@@ -228,11 +228,11 @@ If the protocol defines exacerbations as a **count** but the analyst runs a *t*-
 | Domain | Common variables | Pitfalls | Reference |
 |--------|------------------|----------|-----------|
 | **Spirometry** | FEV1, FVC, FEV1/FVC, % predicted | Pre- vs post-bronchodilator; quality grades | [@graham2019spirometry] |
-| **Symptoms** | CAT, SGRQ, ACT | Patient-reported missingness; ordinal nature | — |
+| **Symptoms** | CAT, SGRQ, ACT | Patient-reported missingness; ordinal nature | |
 | **Exacerbations** | Binary, count, severity | Definition varies by trial | [@hurst2010exacerbation] |
-| **Imaging** | Emphysema fraction, airway wall area | High dimensionality; segmentation error | — |
+| **Imaging** | Emphysema fraction, airway wall area | High dimensionality; segmentation error | |
 | **Omics** | Thousands of markers | *p* >> *n*; batch effects | [@mcshane2011biomarker] |
-| **ICU / ventilation** | Waveforms, ventilator settings | Missing not at random; high frequency | — |
+| **ICU / ventilation** | Waveforms, ventilator settings | Missing not at random; high frequency | |
 
 Always document **definitions** in Methods. An exacerbation in one COPD trial is not necessarily the same in another [@hurst2010exacerbation].
 
@@ -289,14 +289,14 @@ Complete **before** opening [Appendix B](../appendix-b-quick-reference.md):
 
 | File | Key variables | Outcome type | Primary chapter |
 |------|---------------|--------------|-----------------|
-| spirometry.csv | fev1, group, smoking | Continuous | Ch 3-5 |
-| spirometry_trial.csv | baseline and follow-up FEV1 | Continuous (longitudinal; ANCOVA) | Ch 4, 5 |
-| bronchodilator_paired.csv | fev1_pre, fev1_post | Continuous, paired | Ch 4 |
-| exacerbation.csv | exacerbation_12m | Binary | Ch 6 |
-| exacerbation_counts.csv | exacerbations_12m, person_years | Count | Ch 6 |
-| marker_panel.csv | M1-M30, processing_batch | High-dimensional | Ch 10-11 |
-| longitudinal_spirometry.csv | fev1 by visit, group | Continuous, repeated | [Ch 18](18-longitudinal-mixed-models.md) |
-| time_to_exacerbation.csv | time_days, event | Time-to-event | [Ch 19](19-survival-analysis.md) |
+| `spirometry.csv` | fev1, group, smoking | Continuous | Ch 3–5 |
+| `spirometry_trial.csv` | baseline, follow-up FEV1 | Continuous (ANCOVA) | Ch 4–5 |
+| `bronchodilator_paired.csv` | fev1_pre, fev1_post | Continuous, paired | Ch 4 |
+| `exacerbation.csv` | exacerbation_12m | Binary | Ch 6 |
+| `exacerbation_counts.csv` | exacerbations_12m, person_years | Count | Ch 6 |
+| `marker_panel.csv` | M1–M30, processing_batch | High-dimensional | Ch 10–11 |
+| `longitudinal_spirometry.csv` | fev1 by visit, group | Continuous, repeated | Ch 18 |
+| `time_to_exacerbation.csv` | time_days, event | Time-to-event | Ch 19 |
 
 See [RECURRING_COHORT.md](../RECURRING_COHORT.md).
 
@@ -308,12 +308,12 @@ These files are designed for later "advanced discovery" chapters in a single-vol
 
 | File | What it represents | Key teaching points |
 |------|---------------------|---------------------|
-| proteomics_olink_like.csv | Olink-like protein panel (~1000 proteins) | LOD missingness, plate/batch effects, differential abundance, FDR |
-| rnaseq_counts.csv | RNA-seq gene counts (~1200 genes) | library size, NB models, DE, batch runs, FDR |
-| flowcytometry_summary.csv | per-subject flow summaries | proportions, marker medians, drift, group comparisons |
-| flowcytometry_cells_toy.csv | small per-cell flow toy dataset | gating vs clustering, visualization vs inference |
-| antibody_screen.csv | screening signals (replicates, batch) | hit calling, replicate agreement, ranking stability |
-| antibody_confirmation.csv | confirmation assay (KD + positives) | screen PPV, confirmation discipline |
+| `proteomics_olink_like.csv` | Olink-like protein panel (~1000 proteins) | LOD missingness, batch effects, DE, FDR |
+| `rnaseq_counts.csv` | RNA-seq gene counts (~1200 genes) | Library size, NB models, DE, FDR |
+| `flowcytometry_summary.csv` | Per-subject flow summaries | Proportions, drift, group comparisons |
+| `flowcytometry_cells_toy.csv` | Small per-cell toy dataset | Gating vs clustering |
+| `antibody_screen.csv` | Screening signals (replicates) | Hit calling, ranking stability |
+| `antibody_confirmation.csv` | Confirmation assay (KD + positives) | PPV, confirmation discipline |
 
 Reporting templates for these analyses are in [HIGH_DIM_REPORTING_TEMPLATES.md](../HIGH_DIM_REPORTING_TEMPLATES.md).
 
@@ -358,16 +358,16 @@ source("R/generate_data.R")
 library(tidyverse)
 
 spirometry <- read_csv(
-  file.path(paths$data, "spirometry.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "spirometry.csv"),
+ show_col_types = FALSE
 )
 exacerbation <- read_csv(
-  file.path(paths$data, "exacerbation.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "exacerbation.csv"),
+ show_col_types = FALSE
 )
 counts <- read_csv(
-  file.path(paths$data, "exacerbation_counts.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "exacerbation_counts.csv"),
+ show_col_types = FALSE
 )
 
 glimpse(spirometry)
@@ -375,12 +375,12 @@ summary(spirometry$fev1)
 
 # Quality summary
 spirometry %>%
-  summarise(
-    n = n(),
-    pct_missing_fev1 = mean(is.na(fev1)),
-    min_fev1 = min(fev1),
-    max_fev1 = max(fev1)
-  )
+ summarise(
+ n = n(),
+ pct_missing_fev1 = mean(is.na(fev1)),
+ min_fev1 = min(fev1),
+ max_fev1 = max(fev1)
+ )
 
 # Outcome type routing
 message("fev1: continuous → Ch 4–5")
@@ -403,8 +403,8 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 
 ## Further reading
 
-- ATS/ERS spirometry standardisation [@graham2019spirometry]  
-- COPD exacerbation impact [@hurst2010exacerbation]  
+- ATS/ERS spirometry standardisation [@graham2019spirometry]
+- COPD exacerbation impact [@hurst2010exacerbation]
 - Stoltzfus, *Biostatistics for Health and Biological Science Users of R* [@stoltzfus2019biostatistics]
 
 ## Exercises ([Solutions](../solutions/ch02_solutions.md))

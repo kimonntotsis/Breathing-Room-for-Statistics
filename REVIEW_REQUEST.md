@@ -1,8 +1,9 @@
 # External review request
 
-**Handbook:** *Breathing Room for Statistics* (v1.0.0 candidate)  
+**Handbook:** *Breathing Room for Statistics* (**v1.1.0-review** candidate)  
 **Author:** Kimon Ntotsis  
 **Repository:** https://github.com/kimonntotsis/Breathing-Room-for-Statistics  
+**PDF (pin this edition):** [v1.1.0-review release](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.1.0-review)  
 **Rubric:** [REVIEWER_RUBRIC.md](volume-01/REVIEWER_RUBRIC.md)
 
 ---
@@ -12,6 +13,8 @@
 A **targeted read** (not a full line edit) of five chapters that anchor the handbook’s routing, assumptions, and reporting. We want to know whether an investigator or analyst could **choose and defend** the method after reading, and whether the **wrong-analysis panels** and **Practice read** sections catch common mistakes.
 
 Estimated time: **3–5 hours** total if you skim appendices; **6–8 hours** if you run the R examples.
+
+**Out of scope for this pass:** typos-only edits, wet-lab/FASTQ pipelines, pipeline figure branding, reading all 415 pages line-by-line.
 
 ---
 
@@ -25,19 +28,41 @@ Estimated time: **3–5 hours** total if you skim appendices; **6–8 hours** if
 | [Ch 18 — Longitudinal mixed models](volume-01/chapters/18-longitudinal-mixed-models.md) | Repeated measures and estimands |
 | [Ch 20 — Missing data](volume-01/chapters/20-missing-data.md) | MCAR/MAR framing and sensitivity |
 
-**Optional context (30 min):** [Preface](volume-01/chapters/00-preface.md), [Appendix B](volume-01/appendix-b-quick-reference.md), [Appendix I](volume-01/appendix-i-figure-hygiene.md).
+**Optional context (30 min):** [Preface](volume-01/chapters/00-preface.md) (includes reviewer instructions), [Appendix B](volume-01/appendix-b-quick-reference.md), [Appendix I](volume-01/appendix-i-figure-hygiene.md).
+
+**Omics reviewers:** read the **two-track callout** in Ch 13 (teaching `lm`/`glm.nb` vs [Appendix L](volume-01/appendix-l-omics-analyst-track.md) DESeq2/limma) before judging discovery counts.
 
 ---
 
 ## How to review
 
-1. Open the chapter in GitHub or the [v1.0.0 PDF release](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.0.0).
+1. Open the **[v1.1.0-review PDF](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.1.0-review)** or the matching tag on GitHub.
 2. Use the rubric sections: **estimand clarity**, **assumption honesty**, **wrong-analysis usefulness**, **reporting template**, **code reproducibility**.
 3. File feedback as:
    - **GitHub issue** (label `review`), or
    - Email to the author with chapter + section references.
 
 Please flag anything that would mislead a **grant reviewer** or **journal statistical reviewer**, not typos alone.
+
+---
+
+## Reproducibility smoke test (optional)
+
+```r
+# From repository root after clone at tag v1.1.0-review:
+source("R/00_setup.R")
+source("R/examples/ch04_comparing_groups.R")
+source("R/examples/ch13_differential_fdr.R")
+```
+
+---
+
+## What changed since v1.0.0
+
+- Chapters **18–22** (longitudinal, survival, missing data, causal inference, mediation)
+- Appendices **L–N** (omics analyst track, bioinformatics deliverables, bulk vs single-cell)
+- Unified **handbook figure theme** across regression, survival, omics teaching, and antibody/flow chapters
+- Ch 13 proteomics teaching panel with prespecified DE hits; RNA teaching NB contrast vs Appendix L
 
 ---
 

@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -54,35 +55,36 @@ bal_tbl <- bind_rows(bal_before, bal_after)
 write_csv(bal_tbl, file.path(tab_dir, "ch21_balance_before_after_ipw.csv"))
 
 p_bal <- bal_tbl %>%
-  mutate(smoking = factor(smoking, levels = c(FALSE, TRUE), labels = c("Non-smoker", "Smoker"))) %>%
-  ggplot(aes(smoking, mean_fev1, fill = phase)) +
-  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
-  scale_fill_manual(values = c("before_weighting" = "grey70", "after_ipw_on_tertiles" = "steelblue")) +
-  theme_minimal() +
+  mutate(
+    smoking = factor(smoking, levels = c(FALSE, TRUE), labels = c("Non-smoker", "Smoker")),
+    phase = factor(phase, levels = c("before_weighting", "after_ipw_on_tertiles"),
+                   labels = c("Before IPW", "After IPW"))
+  ) %>%
+  ggplot(aes(phase, mean_fev1, group = smoking, colour = smoking)) +
+  geom_line(linewidth = 1.1, colour = "#CBD5E1") +
+  geom_point(aes(shape = phase), size = 4.2) +
+  scale_colour_manual(values = c("Non-smoker" = handbook_cols$nonsmoker, "Smoker" = handbook_cols$smoker)) +
+  scale_shape_manual(values = c("Before IPW" = 1, "After IPW" = 16)) +
   labs(
-    title = "FEV1 % balance: before vs IPW-weighted (toy)",
-    subtitle = "Teaching IPW on FEV1 tertiles, not a full propensity model",
-    x = NULL,
-    y = "Mean (or weighted mean) FEV1 % predicted",
-    fill = NULL
-  )
+    title = "Covariate balance slopegraph: FEV1 % before vs after IPW",
+    subtitle = "Teaching IPW on FEV1 tertiles; lines should move toward overlap",
+    x = NULL, y = "Mean (or weighted mean) FEV1 % predicted",
+    colour = NULL, shape = NULL
+  ) +
+  handbook_theme()
 
-ggsave(file.path(fig_dir, "ch21_covariate_balance.png"), p_bal, width = 7.0, height = 4.2, dpi = 160)
+handbook_save(p_bal, file.path(fig_dir, "ch21_covariate_balance.png"), 7.2, 4.6)
 
-p_or <- ipw_compare %>%
-  ggplot(aes(x = estimate, y = model, xmin = conf.low, xmax = conf.high)) +
-  geom_point(size = 2.5) +
-  geom_errorbarh(height = 0.2) +
-  geom_vline(xintercept = 1, linetype = 2, color = "grey50") +
-  scale_x_log10() +
-  theme_minimal() +
-  labs(
-    title = "Smoking OR: naive vs IPW-weighted logistic",
-    x = "Odds ratio (log scale)",
-    y = NULL
-  )
+p_or <- plot_forest_ratio(
+  ipw_compare %>% mutate(model = recode(model, naive_logistic = "Naive logistic", ipw_weighted = "IPW weighted")),
+  term = "model",
+  title = "Smoking OR: naive vs IPW-weighted logistic",
+  subtitle = "Same outcome model; weights target measured confounding",
+  xlab = "Odds ratio (95% CI, log scale)",
+  point_color = handbook_cols$smoker
+)
 
-ggsave(file.path(fig_dir, "ch21_or_naive_vs_ipw.png"), p_or, width = 6.8, height = 3.6, dpi = 160)
+handbook_save(p_or, file.path(fig_dir, "ch21_or_naive_vs_ipw.png"), 7.0, 3.6)
 
 wt_summary <- tibble(
   min_wt = min(exac$wt),

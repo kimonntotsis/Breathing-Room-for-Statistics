@@ -1,2 +1,2 @@
-pages=365
-figures=65
+pages=400
+figures=80

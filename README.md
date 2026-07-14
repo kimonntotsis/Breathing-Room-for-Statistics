@@ -4,21 +4,21 @@
 
 *With reproducible R examples*
 
-**Repository:** [github.com/kimonntotsis/Breathing-Room-for-Statistics](https://github.com/kimonntotsis/Breathing-Room-for-Statistics)  
-**Latest release (PDF):** [v1.0.0](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.0.0)  
+**Repository:** [github.com/kimonntotsis/Breathing-Room-for-Statistics](https://github.com/kimonntotsis/Breathing-Room-for-Statistics)
+**Latest release (PDF):** [v1.1.0-review](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.1.0-review) (feedback edition) · [v1.0.0](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.0.0)
 Chapters, appendices, datasets, and R scripts live here. The PDF is attached to GitHub releases; links inside the PDF point to these source files on GitHub.
 
-A single-volume handbook for **early- and mid-career** respiratory investigators and analysts — and **senior clinicians** who want statistics and R **on purpose**, not as a second degree in math or computer science.
+A single-volume handbook for **early- and mid-career** respiratory investigators and analysts, and **senior clinicians** who want statistics and R **on purpose**, not as a second degree in math or computer science.
 
-**Aim:** match your question to a defensible method; know alternatives, assumptions, reporting, and limits — especially when high-dimensional data arrives **without** a bioinformatics collaborator. [Preface — Why I wrote this](volume-01/chapters/00-preface.md#why-i-wrote-this).
+**Aim:** match your question to a defensible method; know alternatives, assumptions, reporting, and limits: especially when high-dimensional data arrives **without** a bioinformatics collaborator. [Preface: Why I wrote this](volume-01/chapters/00-preface.md#why-i-wrote-this).
 
 ## Start here (by role)
 
 | Role | Open first |
 |------|------------|
-| **Investigator (no R)** | [Preface](volume-01/chapters/00-preface.md) → [Welcome](volume-01/chapters/00-welcome.md) → [Appendix J (~2 h)](volume-01/appendix-j-investigator-minimum-path.md) → [Appendix K (one story)](volume-01/appendix-k-in-the-room-stories.md) → [Appendix H](volume-01/appendix-h-clinicians-route.md) |
+| **Investigator (no R)** | [Preface](volume-01/chapters/00-preface.md) → [Welcome](volume-01/chapters/00-welcome.md) → [Appendix J ](volume-01/appendix-j-investigator-minimum-path.md) → [Appendix K (one story)](volume-01/appendix-k-in-the-room-stories.md) → [Appendix H](volume-01/appendix-h-clinicians-route.md) |
 | **Analyst (R)** | [Appendix A](volume-01/appendix-a-r-setup.md) → [Appendix B](volume-01/appendix-b-quick-reference.md) → outcome chapter |
-| **Anyone lost** | [Appendix G — navigation](volume-01/appendix-g-handbook-navigation.md) |
+| **Anyone lost** | [Appendix G: navigation](volume-01/appendix-g-handbook-navigation.md) |
 
 **Teaching names:** **CASTOR** / **CASTOR-HD** = COPD-flavoured synthetic CSV cohorts (methods apply to **CLD** when endpoints match); **APATE** = prose-only messy-registry vignette ([APATE_VIGNETTE](volume-01/APATE_VIGNETTE.md), no data files); **Appendix K** = six fictional but feasible “in the room” stories ([appendix-k-in-the-room-stories.md](volume-01/appendix-k-in-the-room-stories.md)).
 
@@ -28,9 +28,9 @@ A single-volume handbook for **early- and mid-career** respiratory investigators
 |------------|------|
 | **Preface → Welcome tour** | [Preface](volume-01/chapters/00-preface.md) → [Welcome](volume-01/chapters/00-welcome.md) |
 | **Appendix index (read order)** | [Appendix G](volume-01/appendix-g-handbook-navigation.md) |
-| **Investigator minimum path (~2 h)** | [Appendix J](volume-01/appendix-j-investigator-minimum-path.md) |
-| **In the room — short stories** | [Appendix K](volume-01/appendix-k-in-the-room-stories.md) |
-| **Investigator path (without R)** | [Appendix H](volume-01/appendix-h-clinicians-route.md) |
+| **Short read (without R)** | [Appendix J](volume-01/appendix-j-investigator-minimum-path.md) |
+| **In the room: short stories** | [Appendix K](volume-01/appendix-k-in-the-room-stories.md) |
+| **Reviewing without R** | [Appendix H](volume-01/appendix-h-clinicians-route.md) |
 | **Figure hygiene (right vs wrong)** | [Appendix I](volume-01/appendix-i-figure-hygiene.md) |
 | **Which test / which model** | [Appendix B](volume-01/appendix-b-quick-reference.md) |
 | **Install R and run code** | [Appendix A](volume-01/appendix-a-r-setup.md) |
@@ -52,12 +52,23 @@ Letters are **citation IDs** (always say “Appendix B” for the method router)
 
 ## Project layout
 
+Only these folders matter for readers and the PDF build. Everything else is author tooling or local drafts (see `.gitignore`).
+
 ```
-volume-01/          Book chapters + handbook navigation (Ch 0–21)
-R/                  Runnable scripts and data generation
-data/               Exported CSV datasets for readers
-references.bib      Bibliography (35+ entries)
+volume-01/
+  chapters/          Main text (Ch 0–22)
+  appendix-*.md      Back matter (letters = citation IDs; PDF order in Appendix G)
+  exercises/         Per-chapter exercises (Appendix F links here)
+  solutions/         Instructor solutions
+  parts/             Part divider pages
+  figures/           Chapter figures + book-cover-pearl-streams.png
+  _quarto.yml        Book build config
+R/                   Runnable scripts and data generation
+data/                Exported CSV datasets for readers
+references.bib       Bibliography
 ```
+
+**Ignored locally (not on GitHub):** `volume-01/figures/pipeline-options/`, `volume-01/figures/archive/`, cover upscale intermediates, built PDF in `_book/` and repo root.
 
 ## Quick start
 
@@ -70,8 +81,8 @@ cd Breathing-Room-for-Statistics
 # From the project root in R:
 source("R/00_setup.R")
 source("R/generate_data.R")
-source("R/examples/generate_figures.R")  # navigation + chapter + viz pairs
-source("R/run_all_examples.R")           # all chapter scripts
+source("R/examples/generate_figures.R") # navigation + chapter + viz pairs
+source("R/run_all_examples.R") # all chapter scripts
 ```
 
 ## Rendering (Quarto book)
@@ -80,8 +91,8 @@ Chapters are Markdown (`.md`); the bibliography appendix is [`volume-01/referenc
 
 ```bash
 cd volume-01
-quarto render --to html     # → _book/index.html
-quarto render --to pdf      # → _book/Breathing-Room-for-Statistics.pdf
+quarto render --to html # → _book/index.html
+quarto render --to pdf # → _book/Breathing-Room-for-Statistics.pdf
 ```
 
 PDF output:
@@ -90,7 +101,7 @@ PDF output:
 - **Quarto build dir:** `volume-01/_book/`
 
 ```bash
-./build-handbook-pdf.sh          # render + copy to repo root
+./build-handbook-pdf.sh # render + copy to repo root
 python3 volume-01/scripts/verify_figure_markdown.py
 pip install pypdf && python3 volume-01/scripts/verify_pdf_build.py
 # or:

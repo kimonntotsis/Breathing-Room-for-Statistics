@@ -1,6 +1,7 @@
 # Right vs wrong visualization pairs for the handbook
 # Source after data load, or: source("R/examples/generate_viz_pairs.R")
 if (!exists("paths")) source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -92,15 +93,15 @@ if (file.exists(prot_path)) {
 draw_plot_router <- function(path) {
   rows <- tibble::tribble(
     ~estimand, ~right_plot, ~wrong_plot, ~masks_if_wrong,
-    "Continuous\n2 groups", "Box/violin +\npoints + n", "Mean bar only\nor truncated y", "Spread,\noutliers, n",
-    "Paired\npre/post", "Lines per\npatient", "Independent\nboxplots", "Within-person\ncorrelation",
-    "Binary /\nproportion", "Bar + count\n(denom)", "Pie / 3D bar", "Denominator,\nsparse cells",
+    "Continuous\n2 groups", "Raincloud /\nviolin + n", "Mean bar only\nor truncated y", "Spread,\noutliers, n",
+    "Paired\npre/post", "Dumbbell /\nlines per patient", "Independent\nboxplots", "Within-person\ncorrelation",
+    "Binary /\nproportion", "Alluvial /\nbar + count", "Pie / 3D bar", "Denominator,\nsparse cells",
     "Adjusted OR/HR", "Forest +\n95% CI", "Coefficient\nbars, no CI", "Uncertainty,\nmultiplicity",
     "Prediction", "Calibration +\nn events", "AUC / ROC\nhero only", "Risk scale,\nmiscalibration",
-    "Longitudinal", "Spaghetti /\nfitted trend", "Single time\nsnapshot", "Trajectory,\nmissing visits",
+    "Longitudinal", "Spaghetti /\nridges / trend", "Single time\nsnapshot", "Trajectory,\nmissing visits",
     "Time-to-event", "KM + events\n+ censoring", "% event bar\nno time", "Censoring,\nfollow-up",
-    "Omics QC", "PCA by batch\nfirst", "PCA by group\nonly", "Batch\nconfounding",
-    "Missing data", "Pattern plot\n+ flow", "Analysed n\nonly", "Who dropped,\nwhy"
+    "Omics QC", "PCA / heatmap\nby batch first", "PCA by group\nonly", "Batch\nconfounding",
+    "Missing data", "Heatmap /\npattern plot", "Analysed n\nonly", "Who dropped,\nwhy"
   ) %>%
     mutate(
       row = rev(row_number()),
@@ -122,7 +123,7 @@ draw_plot_router <- function(path) {
     labs(
       title = "Plot choice by estimand (respiratory handbook router)",
       subtitle = "Match the figure to the estimand before you polish the slide",
-      caption = "Full pairs: viz_pair_*.png · Appendix I · CASTOR teaching cohort"
+      caption = "Full pairs: viz_pair_*.png; Appendix I; CASTOR teaching cohort"
     ) +
     viz_theme(10) +
     theme(axis.text = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())
@@ -133,7 +134,7 @@ draw_plot_router <- function(path) {
 draw_plot_router(file.path(fig_dir, "viz_plot_router.png"))
 
 # =============================================================================
-# 2. Ch 3 — truncated axis vs honest scale
+# 2. Ch 3: truncated axis vs honest scale
 # =============================================================================
 means <- spirometry %>%
   group_by(group) %>%
@@ -146,34 +147,28 @@ p_wrong_scale <- ggplot(means, aes(group, mean_fev1, fill = group)) +
   scale_y_continuous(limits = c(3.72, 3.92), breaks = seq(3.72, 3.92, 0.05)) +
   labs(
     title = "Mean FEV1 by arm",
-    subtitle = "Y-axis starts at 3.72 L — difference looks large",
+    subtitle = "Y-axis starts at 3.72 L: difference looks large",
     x = NULL, y = "FEV1 (L)"
   ) +
   viz_theme()
 
-p_right_scale <- ggplot(spirometry, aes(group, fev1, fill = group)) +
-  geom_violin(alpha = 0.35, trim = FALSE) +
-  geom_boxplot(width = 0.18, outlier.alpha = 0.35) +
-  geom_jitter(width = 0.1, alpha = 0.2, size = 0.8) +
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, colour = "black") +
-  scale_fill_manual(values = c(standard = "#94A3B8", intervention = "#1D4ED8"), guide = "none") +
-  labs(
-    title = "FEV1 distribution by arm",
-    subtitle = "Full scale: overlap, outliers, and mean (diamond) visible",
-    x = NULL, y = "FEV1 (L)"
-  ) +
-  viz_theme()
+p_right_scale <- plot_raincloud(
+  spirometry, "group", "fev1", fill = "group",
+  title = "Raincloud: FEV1 by arm",
+  subtitle = "Full scale with density, box, points, and mean diamond",
+  xlab = NULL, ylab = "FEV1 (L)"
+)
 
 viz_save_pair(
   viz_tag(p_wrong_scale, "Wrong: truncated axis exaggerates gap"),
   viz_tag(p_right_scale, "Right: full scale + raw data"),
   file.path(fig_dir, "viz_pair_ch03_scale_trap.png"),
   "Figure hygiene: axis truncation (CASTOR FEV1)",
-  "Left: steering-deck favourite — small mean gap looks decisive. Right: same data with spread; sign-off needs CI and n."
+  "Left: steering-deck favourite: small mean gap looks decisive. Right: same data with spread; sign-off needs CI and n."
 )
 
 # =============================================================================
-# 3. Ch 4 — mean bar vs box + points (continuous)
+# 3. Ch 4: mean bar vs box + points (continuous)
 # =============================================================================
 p_wrong_bar <- ggplot(means, aes(group, mean_fev1, fill = group)) +
   geom_col(width = 0.55, alpha = 0.9) +
@@ -186,17 +181,12 @@ p_wrong_bar <- ggplot(means, aes(group, mean_fev1, fill = group)) +
   ) +
   viz_theme()
 
-p_right_box <- ggplot(spirometry, aes(group, fev1, fill = group)) +
-  geom_boxplot(alpha = 0.65, outlier.alpha = 0.4, width = 0.5) +
-  geom_jitter(width = 0.12, alpha = 0.25, size = 0.9) +
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, colour = "black") +
-  scale_fill_manual(values = c(standard = "#94A3B8", intervention = "#1D4ED8"), guide = "none") +
-  labs(
-    title = "Boxplot + points + mean",
-    subtitle = "Supports Welch t-test estimand",
-    x = NULL, y = "FEV1 (L)"
-  ) +
-  viz_theme()
+p_right_box <- plot_raincloud(
+  spirometry, "group", "fev1", fill = "group",
+  title = "Raincloud + mean diamond",
+  subtitle = "Supports Welch t-test estimand with visible spread",
+  xlab = NULL, ylab = "FEV1 (L)"
+)
 
 viz_save_pair(
   viz_tag(p_wrong_bar, "Wrong: means without spread"),
@@ -207,7 +197,7 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 4. Ch 4 — paired bronchodilator: independent vs paired
+# 4. Ch 4: paired bronchodilator: independent vs paired
 # =============================================================================
 bd_long <- bronchodilator %>%
   select(patient_id, fev1_pre, fev1_post) %>%
@@ -225,17 +215,12 @@ p_wrong_indep <- ggplot(bd_long, aes(visit, fev1, fill = visit)) +
   ) +
   viz_theme()
 
-p_right_paired <- ggplot(bd_long, aes(visit, fev1, group = patient_id)) +
-  geom_line(alpha = 0.35, colour = "steelblue") +
-  geom_point(alpha = 0.45, size = 1.1, colour = "steelblue") +
-  stat_summary(aes(group = visit), fun = mean, geom = "point", size = 4, colour = "#BE123C") +
-  stat_summary(aes(group = visit), fun.data = mean_se, geom = "errorbar", width = 0.12, colour = "#BE123C", linewidth = 0.8) +
-  labs(
-    title = "Paired lines per patient",
-    subtitle = "Supports paired t-test / Wilcoxon signed-rank",
-    x = NULL, y = "FEV1 (L)"
-  ) +
-  viz_theme() +
+p_right_paired <- plot_dumbbell(
+  bronchodilator, "patient_id", "fev1_pre", "fev1_post",
+  title = "Dumbbell: paired bronchodilator response",
+  subtitle = "Within-person segments support paired t-test / Wilcoxon signed-rank",
+  xlab = "FEV1 (L)", ylab = NULL
+) +
   theme(legend.position = "none")
 
 viz_save_pair(
@@ -247,7 +232,7 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 5. Ch 6 — forest vs bar without CI
+# 5. Ch 6: forest vs bar without CI
 # =============================================================================
 logit_fit <- glm(
   exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations,
@@ -263,7 +248,7 @@ p_wrong_or_bar <- ggplot(forest_df, aes(x = term, y = estimate, fill = estimate 
   scale_fill_manual(values = c("TRUE" = "#BE123C", "FALSE" = "#1D4ED8"), guide = "none") +
   labs(
     title = "Adjusted ORs (point only)",
-    subtitle = "No 95% CI — precision invisible",
+    subtitle = "No 95% CI: precision invisible",
     x = NULL, y = "Odds ratio"
   ) +
   viz_theme() +
@@ -290,7 +275,7 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 6. Ch 9 — AUC shootout vs calibration
+# 6. Ch 9: AUC shootout vs calibration
 # =============================================================================
 if (requireNamespace("pROC", quietly = TRUE)) {
   exac <- exacerbation %>%
@@ -318,7 +303,7 @@ if (requireNamespace("pROC", quietly = TRUE)) {
     scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, 0.2)) +
     labs(
       title = "Model shootout: AUC only",
-      subtitle = "Discrimination hero slide — calibration omitted",
+      subtitle = "Discrimination hero slide: calibration omitted",
       x = NULL, y = "AUC"
     ) +
     viz_theme()
@@ -358,7 +343,7 @@ if (requireNamespace("pROC", quietly = TRUE)) {
 }
 
 # =============================================================================
-# 7. Ch 14 — PCA group-only vs batch-first
+# 7. Ch 14: PCA group-only vs batch-first
 # =============================================================================
 if (exists("pca_scores")) {
   p_wrong_group <- ggplot(pca_scores, aes(PC1, PC2, colour = group)) +
@@ -366,7 +351,7 @@ if (exists("pca_scores")) {
     scale_colour_manual(values = c(control = "#94A3B8", case = "#BE123C")) +
     labs(
       title = "PCA coloured by case/control",
-      subtitle = "Looks like biology — batch not shown",
+      subtitle = "Looks like biology: batch not shown",
       x = "PC1", y = "PC2", colour = "Group"
     ) +
     viz_theme()
@@ -390,7 +375,7 @@ if (exists("pca_scores")) {
 }
 
 # =============================================================================
-# 8. Ch 18 — week-52 snapshot vs spaghetti
+# 8. Ch 18: week-52 snapshot vs spaghetti
 # =============================================================================
 long52 <- long %>% filter(weeks == 52)
 
@@ -424,7 +409,7 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 9. Ch 19 — % event bar vs Kaplan-Meier
+# 9. Ch 19: % event bar vs Kaplan-Meier
 # =============================================================================
 event_bar <- surv %>%
   group_by(smoking_lab) %>%
@@ -472,7 +457,7 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 10. Ch 20 — analysed n vs missingness pattern
+# 10. Ch 20: analysed n vs missingness pattern
 # =============================================================================
 analysed <- spirometry_miss %>%
   group_by(group) %>%
@@ -490,7 +475,7 @@ p_wrong_n <- ggplot(analysed, aes(group, n, fill = stage)) +
   scale_fill_manual(values = c("Enrolled" = "#CBD5E1", "Analysed (complete FEV1)" = "#1D4ED8")) +
   labs(
     title = "Enrolled vs analysed n",
-    subtitle = "Dropout counts only — pattern hidden",
+    subtitle = "Dropout counts only: pattern hidden",
     x = NULL, y = "Participants", fill = NULL
   ) +
   viz_theme()
@@ -506,7 +491,7 @@ p_right_miss <- ggplot(miss_pat, aes(idx, 1, fill = miss)) +
   facet_grid(diagnosis ~ group, scales = "free", space = "free_x") +
   labs(
     title = "Missing FEV1 pattern by subgroup",
-    subtitle = "Who is missing — not just how many",
+    subtitle = "Who is missing, not just how many",
     x = "Participant (sorted)", y = NULL, fill = NULL
   ) +
   viz_theme() +
@@ -527,7 +512,7 @@ viz_save_pair(
 message("Visualization pairs saved to ", fig_dir)
 
 # =============================================================================
-# 11. Ch 5 — line-only fit vs residual diagnostics
+# 11. Ch 5: line-only fit vs residual diagnostics
 # =============================================================================
 fit_lm5 <- lm(fev1 ~ smoking + age + sex, data = spirometry)
 diag_df <- tibble(fitted = fitted(fit_lm5), resid = rstandard(fit_lm5))
@@ -537,7 +522,7 @@ p_wrong_lm <- ggplot(spirometry, aes(age, fev1, colour = smoking)) +
   geom_smooth(method = "lm", se = TRUE, colour = "#1D4ED8", fill = "#BFDBFE") +
   labs(
     title = "FEV1 vs age (smooth line only)",
-    subtitle = "No residual check — leverage invisible",
+    subtitle = "No residual check: leverage invisible",
     x = "Age (years)", y = "FEV1 (L)", colour = "Smoking"
   ) +
   viz_theme()
@@ -562,7 +547,7 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 12. Ch 7 — stepwise 'winner' vs prespecified model
+# 12. Ch 7: stepwise 'winner' vs prespecified model
 # =============================================================================
 models_fake <- tibble(
   model = c("Prespecified\n(age, sex, smoking)", "Stepwise +\nBMI", "Stepwise +\nsplines", "Stepwise +\ninteractions"),
@@ -591,7 +576,7 @@ p_right_prespec <- tibble(
   geom_hline(yintercept = 0, linetype = "dashed", colour = "grey50") +
   labs(
     title = "Prespecified covariate set",
-    subtitle = "SAP locked before unblinding — one defensible model",
+    subtitle = "SAP locked before unblinding: one defensible model",
     x = NULL, y = "Coefficient (illustrative)"
   ) +
   viz_theme()
@@ -605,7 +590,7 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 13. Ch 10 — biplot hero vs scree discipline
+# 13. Ch 10: biplot hero vs scree discipline
 # =============================================================================
 if (requireNamespace("factoextra", quietly = TRUE)) {
   omics10 <- read_csv(file.path(paths$data, "marker_panel.csv"), show_col_types = FALSE)
@@ -621,7 +606,7 @@ if (requireNamespace("factoextra", quietly = TRUE)) {
     geom_point(alpha = 0.75, size = 1.6) +
     scale_colour_manual(values = c("0" = "#94A3B8", "1" = "#BE123C")) +
     labs(
-      title = "PC1 vs PC2 — 'disease axis'",
+      title = "PC1 vs PC2: 'disease axis'",
       subtitle = "No scree: component count assumed",
       x = "PC1", y = "PC2", colour = "Phenotype"
     ) +
@@ -648,7 +633,7 @@ if (requireNamespace("factoextra", quietly = TRUE)) {
   )
 
   # =============================================================================
-  # 14. Ch 11 — named endotypes vs silhouette stability
+  # 14. Ch 11: named endotypes vs silhouette stability
   # =============================================================================
   set.seed(2)
   km11 <- kmeans(X10, centers = 2, nstart = 25)
@@ -665,7 +650,7 @@ if (requireNamespace("factoextra", quietly = TRUE)) {
     scale_colour_manual(values = c("1" = "#BE123C", "2" = "#1D4ED8"), labels = c("Endotype A", "Endotype B")) +
     labs(
       title = "Two 'endotypes' (k = 2)",
-      subtitle = "Named on first k-means run — no stability",
+      subtitle = "Named on first k-means run: no stability",
       x = "PC1", y = "PC2", colour = NULL
     ) +
     viz_theme()
@@ -692,7 +677,7 @@ if (requireNamespace("factoextra", quietly = TRUE)) {
 }
 
 # =============================================================================
-# 15. Ch 16 — screen rank vs PPV / confirmation
+# 15. Ch 16: screen rank vs PPV / confirmation
 # =============================================================================
 if (file.exists(file.path(paths$data, "antibody_screen.csv"))) {
   screen <- read_csv(file.path(paths$data, "antibody_screen.csv"), show_col_types = FALSE)
@@ -741,7 +726,7 @@ if (file.exists(file.path(paths$data, "antibody_screen.csv"))) {
     guides(fill = "none") +
     labs(
       title = sprintf("PPV among hits (threshold = %.1f)", thr),
-      subtitle = "Confirmed / hits — budget for validation",
+      subtitle = "Confirmed / hits: budget for validation",
       x = NULL, y = "PPV"
     ) +
     viz_theme()
@@ -756,7 +741,7 @@ if (file.exists(file.path(paths$data, "antibody_screen.csv"))) {
 }
 
 # =============================================================================
-# 16. Ch 21 — naive OR vs IPW balance
+# 16. Ch 21: naive OR vs IPW balance
 # =============================================================================
 exac21 <- read_csv(file.path(paths$data, "exacerbation.csv"), show_col_types = FALSE) %>%
   mutate(smoking = as.logical(smoking))
@@ -787,7 +772,7 @@ p_wrong_naive <- ggplot(or_compare, aes(model, estimate, fill = model)) +
   scale_fill_manual(values = c("Naive logistic" = "#FECACA", "IPW-weighted" = "#CBD5E1"), guide = "none") +
   labs(
     title = "Smoking OR (no balance check)",
-    subtitle = "Causal wording risky — imbalance ignored",
+    subtitle = "Causal wording risky: imbalance ignored",
     x = NULL, y = "Odds ratio (point only)"
   ) +
   viz_theme()
@@ -816,7 +801,81 @@ viz_save_pair(
 )
 
 # =============================================================================
-# 17. Ch 12 — integrated sign-off checklist (flowchart)
+# 16b. Ch 22: mediation estimand (direct OR mislabeled vs total vs direct)
+# =============================================================================
+exac22 <- readr::read_csv(file.path(paths$data, "exacerbation.csv"), show_col_types = FALSE) %>%
+  dplyr::mutate(smoking_num = as.integer(smoking), sex = factor(sex))
+
+fit_total22 <- glm(
+  exacerbation_12m ~ smoking_num + age + sex + prior_exacerbations,
+  data = exac22, family = binomial()
+)
+fit_direct22 <- glm(
+  exacerbation_12m ~ smoking_num + fev1_percent_predicted + age + sex + prior_exacerbations,
+  data = exac22, family = binomial()
+)
+
+or22 <- bind_rows(
+  broom::tidy(fit_direct22, conf.int = TRUE, exponentiate = TRUE) %>%
+    filter(term == "smoking_num") %>%
+    mutate(model = "Mislabeled: direct OR\nas total effect"),
+  broom::tidy(fit_total22, conf.int = TRUE, exponentiate = TRUE) %>%
+    filter(term == "smoking_num") %>%
+    mutate(model = "Total OR\n(omit FEV1 %)"),
+  broom::tidy(fit_direct22, conf.int = TRUE, exponentiate = TRUE) %>%
+    filter(term == "smoking_num") %>%
+    mutate(model = "Direct OR\n(adjust FEV1 %)")
+) %>%
+  mutate(model = factor(model, levels = c(
+    "Mislabeled: direct OR\nas total effect",
+    "Total OR\n(omit FEV1 %)",
+    "Direct OR\n(adjust FEV1 %)"
+  )))
+
+p_wrong_direct <- or22 %>%
+  filter(model == "Mislabeled: direct OR\nas total effect") %>%
+  ggplot(aes(model, estimate, fill = model)) +
+  geom_col(width = 0.55, alpha = 0.9) +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "grey50") +
+  geom_text(aes(label = sprintf("%.2f", estimate)), vjust = -0.4, size = 3.5) +
+  scale_fill_manual(values = c("Mislabeled: direct OR\nas total effect" = "#FECACA"), guide = "none") +
+  labs(
+    title = "Smoking OR after adjusting FEV1 %",
+    subtitle = "Wrong: called total effect in the abstract",
+    x = NULL, y = "Odds ratio"
+  ) +
+  viz_theme()
+
+p_right_compare <- or22 %>%
+  filter(model != "Mislabeled: direct OR\nas total effect") %>%
+  ggplot(aes(model, estimate, fill = model)) +
+  geom_col(width = 0.55, alpha = 0.9) +
+  geom_hline(yintercept = 1, linetype = "dashed", colour = "grey50") +
+  geom_text(aes(label = sprintf("%.2f", estimate)), vjust = -0.4, size = 3.5) +
+  scale_fill_manual(
+    values = c(
+      "Total OR\n(omit FEV1 %)" = "#BFDBFE",
+      "Direct OR\n(adjust FEV1 %)" = "#BBF7D0"
+    ),
+    guide = "none"
+  ) +
+  labs(
+    title = "Prespecified total vs direct models",
+    subtitle = "Right: estimand named before interpreting ORs",
+    x = NULL, y = "Odds ratio"
+  ) +
+  viz_theme()
+
+viz_save_pair(
+  viz_tag(p_wrong_direct, "Wrong: direct OR = total"),
+  viz_tag(p_right_compare, "Right: total vs direct"),
+  file.path(fig_dir, "viz_pair_ch22_mediation.png"),
+  "Figure hygiene: mediation estimand",
+  "Adjusting the mediator estimates a direct effect; do not report it as the total smoking effect."
+)
+
+# =============================================================================
+# 17. Ch 12: integrated sign-off checklist (flowchart)
 # =============================================================================
 draw_signoff_checklist <- function(path) {
   items <- tibble::tribble(
@@ -856,7 +915,7 @@ draw_signoff_checklist <- function(path) {
     labs(
       title = "CASTOR sign-off checklist (investigator)",
       subtitle = "Before protocol lock, steering deck, or manuscript submission",
-      caption = "Ch 12 capstone · Appendix J minimum path · Case A worked example"
+      caption = "Ch 12 capstone; Appendix J minimum path; Case A worked example"
     ) +
     geom_segment(
       data = items %>% slice_head(n = 6),

@@ -1,4 +1,4 @@
-# Exercises (Ch 1–21)
+# Exercises (Ch 1–22)
 
 Each chapter has conceptual, applied, and extension problems. Solutions are in `../solutions/`.
 
@@ -25,5 +25,6 @@ Each chapter has conceptual, applied, and extension problems. Solutions are in `
 | 19 | [ch19](ch19_exercises.md) | [sol](../solutions/ch19_solutions.md) |
 | 20 | [ch20](ch20_exercises.md) | [sol](../solutions/ch20_solutions.md) |
 | 21 | [ch21](ch21_exercises.md) | [sol](../solutions/ch21_solutions.md) |
+| 22 | [ch22](ch22_exercises.md) | [sol](../solutions/ch22_solutions.md) |
 
 Run `source("R/generate_data.R")` before applied exercises.

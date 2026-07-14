@@ -16,22 +16,22 @@ source("R/examples/ch03_descriptive.R")
 # Or manually:
 library(tidyverse)
 s <- read_csv(
-  "data/spirometry.csv",
-  show_col_types = FALSE
+ "data/spirometry.csv",
+ show_col_types = FALSE
 )
 s %>% group_by(group) %>%
-  summarise(
-    n = n(),
-    age = mean(age),
-    sd_age = sd(age),
-    pct_smoke = 100 * mean(smoking),
-    fev1 = mean(fev1),
-    sd_fev1 = sd(fev1)
-  )
+ summarise(
+ n = n(),
+ age = mean(age),
+ sd_age = sd(age),
+ pct_smoke = 100 * mean(smoking),
+ fev1 = mean(fev1),
+ sd_fev1 = sd(fev1)
+ )
 ggplot(s, aes(fev1)) + geom_histogram(bins = 25)
 ggplot(s, aes(group, fev1)) +
-  geom_boxplot() +
-  geom_jitter(width = 0.1, alpha = 0.3)
+ geom_boxplot() +
+ geom_jitter(width = 0.1, alpha = 0.3)
 ```
 
 ## Extension

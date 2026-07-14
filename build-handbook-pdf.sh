@@ -4,6 +4,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")" && pwd)"
 OUT_NAME="Breathing-Room-for-Statistics.pdf"
 
+python3 "$ROOT/volume-01/scripts/prepare_cover_assets.py"
+
 cd "$ROOT/volume-01"
 quarto render --to pdf
 

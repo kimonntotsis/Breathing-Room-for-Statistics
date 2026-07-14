@@ -1,4 +1,4 @@
-# Solutions (instructor edition, Ch 1–21)
+# Solutions (instructor edition, Ch 1–22)
 
 Full solutions with R code for all chapters.
 
@@ -16,5 +16,6 @@ Full solutions with R code for all chapters.
 | 10 | [ch10_solutions.md](ch10_solutions.md) | Complete |
 | 11 | [ch11_solutions.md](ch11_solutions.md) | Complete |
 | 12 | [ch12_solutions.md](ch12_solutions.md) | Complete |
+| 22 | [ch22_solutions.md](ch22_solutions.md) | Complete (mediation) |
 
 Run `source("R/generate_data.R")` before applied exercises.

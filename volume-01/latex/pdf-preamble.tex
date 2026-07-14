@@ -17,11 +17,24 @@
 % Figures: fit line width; allow slight shrink for tall pipeline art
 \setkeys{Gin}{width=0.92\linewidth,keepaspectratio}
 
-% Dense tables: wrapped columns; normal body size (appendix tables use footnotesize locally)
+% Dense tables: wrapped columns; breakable paths in File columns
+\usepackage{tabularx}
+\usepackage{ragged2e}
 \usepackage{makecell}
-\AtBeginEnvironment{longtable}{\setlength{\tabcolsep}{6pt}}
-\AtBeginEnvironment{table}{\setlength{\tabcolsep}{6pt}}
+\newcolumntype{Y}{>{\RaggedRight\arraybackslash}X}
+\AtBeginEnvironment{longtable}{%
+  \setlength{\tabcolsep}{4pt}%
+  \renewcommand{\arraystretch}{1.2}%
+  \setlength{\extrarowheight}{2pt}%
+}
+\AtBeginEnvironment{table}{%
+  \setlength{\tabcolsep}{4pt}%
+  \renewcommand{\arraystretch}{1.2}%
+  \setlength{\extrarowheight}{2pt}%
+}
 
-% Allow URLs and long words to break in tables
+% Allow URLs and long words to break in tables (including underscores in filenames)
 \usepackage{xurl}
-\Urlmuskip=0mu plus 1mu
+\Urlmuskip=0mu plus 3mu
+\def\UrlBreaks{\do\/\do-\do_\do.\do?\do&\do=\do\#\do\%}
+\urlstyle{same}

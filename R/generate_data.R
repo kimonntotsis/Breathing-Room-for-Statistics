@@ -266,6 +266,13 @@ batch_effect <- ifelse(prot_batch == "Batch2", 1, 0)
 X[, plate_shift_idx] <- X[, plate_shift_idx] + 0.8 * plate_effect
 X[, batch_shift_idx] <- X[, batch_shift_idx] + 0.9 * batch_effect
 
+# Ch 13 teaching hits: prespecified group shift on inflammation panel (not batch-shift block)
+teach_de_idx <- match(sprintf("Prot_%04d", 1:18), prot_names)
+for (i in seq_len(n_prot)) {
+  gshift <- if (prot_group[i] == "case") 0.95 else -0.95
+  X[i, teach_de_idx] <- X[i, teach_de_idx] + gshift + stats::rnorm(length(teach_de_idx), 0, 0.1)
+}
+
 # Olink-like LOD missingness: lower abundance -> more missing; depends on batch slightly
 lod_base <- -0.6
 lod_batch <- ifelse(prot_batch == "Batch2", 0.15, 0)
@@ -301,23 +308,24 @@ de_idx <- 1:80
 batch_idx <- 900:980
 
 log_fc <- rep(0, g)
-log_fc[de_idx] <- rnorm(length(de_idx), mean = 0.7, sd = 0.15)  # up in cases
+log_fc[de_idx] <- rnorm(length(de_idx), mean = 2.2, sd = 0.05)
 
 batch_effect_gene <- rep(0, g)
 batch_effect_gene[batch_idx] <- 0.6
 
+is_case <- rna_group == "case"
+group_fc_mat <- matrix(0, nrow = n_rna, ncol = g)
+group_fc_mat[is_case, ] <- matrix(log_fc, nrow = sum(is_case), ncol = g, byrow = TRUE)
+
 gene_counts <- matrix(0L, nrow = n_rna, ncol = g)
 colnames(gene_counts) <- sprintf("Gene_%04d", seq_len(g))
+size_param <- 40
 for (i in seq_len(n_rna)) {
   batch_bump <- ifelse(rna_batch[i] == "Run3", 1, 0)
-  eta <- log(base_mu) +
-    ifelse(rna_group[i] == "case", log_fc, 0) +
-    batch_bump * batch_effect_gene
-  mu <- exp(eta) * (library_size[i] / 1e6)
-  # NB-ish dispersion via Poisson-Gamma mixture
-  disp <- 0.25
-  mu_g <- rgamma(g, shape = 1 / disp, rate = (1 / disp) / pmax(mu, 1e-6))
-  gene_counts[i, ] <- rpois(g, lambda = mu_g)
+  eta <- log(base_mu) + group_fc_mat[i, ] + batch_bump * batch_effect_gene
+  mu <- exp(eta)
+  raw <- rnbinom(g, size = size_param, mu = pmax(mu, 0.01))
+  gene_counts[i, ] <- as.integer(round(raw / sum(raw) * library_size[i]))
 }
 
 rnaseq <- bind_cols(

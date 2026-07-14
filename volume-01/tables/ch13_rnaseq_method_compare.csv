@@ -1,0 +1,4 @@
+method,n_sig
+Teaching (glm.nb),1200
+DESeq2,153
+limma-voom,117

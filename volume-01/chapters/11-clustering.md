@@ -17,11 +17,11 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Why this chapter](#why-this-chapter) — clustering is hypothesis-generating
-2. [Method choice at a glance](#method-choice-at-a-glance) — k-means vs hierarchical vs PAM
-3. [The endotype claim ladder](#the-endotype-claim-ladder) — what you may claim at each rung
+1. [Why this chapter](#why-this-chapter): clustering is hypothesis-generating
+2. [Method choice at a glance](#method-choice-at-a-glance): k-means vs hierarchical vs PAM
+3. [The endotype claim ladder](#the-endotype-claim-ladder): what you may claim at each rung
 4. **Practice read** on silhouette and stability
 5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-respiratory-specific)
 
@@ -455,7 +455,7 @@ Trial teams use rich labels; clustering may or may not recover them:
 ### R lab
 
 ```r
-table(km$cluster, omics$processing_batch)  # from ch11_clustering.R
+table(km$cluster, omics$processing_batch) # from ch11_clustering.R
 ```
 
 ---
@@ -472,7 +472,7 @@ Run multiple algorithms on the **same scaled markers** and compare - humility is
 | k-means vs `processing_batch` | **High ARI = red flag** (technical not biological) |
 
 ```r
-source("R/examples/ch11_clustering.R")  # prints shootout table
+source("R/examples/ch11_clustering.R") # prints shootout table
 ```
 
 **Interpretation:** partial agreement between algorithms is normal. Perfect agreement with batch is a warning, not a discovery.
@@ -516,14 +516,14 @@ When k-means is too brittle, escalate deliberately:
 
 **Steps:**
 
-1. *z*-score M1-M30.  
-2. k-means *k* = 2, `nstart = 25`.  
-3. Silhouette for *k* = 2…6 (`ch11_silhouette_k.png`).  
-4. Bootstrap item stability (*B* = 200).  
-5. Compare k-means, hierarchical, PAM (shootout table).  
-6. Cluster profiles on M1-M5 (`ch11_cluster_profiles.png`).  
-7. Check `processing_batch` confounding.  
-8. Compare clustering on 5 PCs vs 30 markers.  
+1. *z*-score M1-M30.
+2. k-means *k* = 2, `nstart = 25`.
+3. Silhouette for *k* = 2…6 (`ch11_silhouette_k.png`).
+4. Bootstrap item stability (*B* = 200).
+5. Compare k-means, hierarchical, PAM (shootout table).
+6. Cluster profiles on M1-M5 (`ch11_cluster_profiles.png`).
+7. Check `processing_batch` confounding.
+8. Compare clustering on 5 PCs vs 30 markers.
 9. Compare to `true_phenotype` (**teaching only**).
 
 **Claims allowed:** “Two exploratory clusters with moderate silhouette and reasonable bootstrap stability; partial alignment with prespecified marker contrasts on M1-M5.”
@@ -534,7 +534,9 @@ When k-means is too brittle, escalate deliberately:
 
 > Among 120 participants with 30 blood markers, exploratory k-means (*k* = 2) identified two clusters (mean silhouette 0.25; mean bootstrap item stability 1.00). Cluster profiles differed on M1-M5 (Figure). Agreement with hierarchical clustering was high (adjusted Rand index ≈ 1.0). Clusters were not aligned with processing site (adjusted Rand index ≈ 0.0); external validation and outcome linkage were not performed.
 
-![Mean marker levels by cluster (M1-M5)](../figures/ch11_cluster_profiles.png)
+![Radar profiles: mean marker levels by cluster](../figures/ch11_cluster_profiles.png)
+
+![Cluster centroid heatmap (M1–M5)](../figures/ch11_cluster_heatmap.png)
 
 Profile plots help name clusters for discussion; they do not validate that clusters generalise to new cohorts.
 
@@ -574,9 +576,9 @@ Profile plots help name clusters for discussion; they do not validate that clust
 
 ## Further reading
 
-- Hennig, cluster stability assessment [@hennig2007cluster]  
-- Wenzel, asthma phenotypes and endotypes [@wenzel2012asthma]  
-- McShane et al., biomarker study reporting [@mcshane2011biomarker]  
+- Hennig, cluster stability assessment [@hennig2007cluster]
+- Wenzel, asthma phenotypes and endotypes [@wenzel2012asthma]
+- McShane et al., biomarker study reporting [@mcshane2011biomarker]
 - Jolliffe & Cadima, PCA (preprocessing for clustering) [@jolliffe2016pca]
 
 ## Exercises ([Solutions](../solutions/ch11_solutions.md))

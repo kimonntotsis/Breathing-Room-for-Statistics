@@ -5,6 +5,8 @@ library(tidyverse)
 library(broom)
 library(patchwork)
 
+source("R/viz_handbook.R")
+
 fig_dir <- file.path(paths$root, "volume-01", "figures")
 dir.create(fig_dir, showWarnings = FALSE, recursive = TRUE)
 
@@ -30,24 +32,94 @@ fc_styles <- tibble::tribble(
   "stop",   "#FFF1F2", "#F43F5E", "#BE123C", "bold"
 )
 
-fc_node <- function(id, x, y, label, w, kind = "method") {
+fc_styles_dark <- tibble::tribble(
+  ~kind,    ~fill,     ~border,   ~text,     ~fontface,
+  "start",  "#141820", "#3A9E92", "#E8EDF2", "bold",
+  "decide", "#151B24", "#5EC4B8", "#C8D2DC", "bold",
+  "cat",    "#12161D", "#6E7D8A", "#B8C4CE", "bold",
+  "method", "#10141A", "#4A5A6A", "#DDE4EA", "plain",
+  "warn",   "#1A1218", "#E879A8", "#F5C2D9", "bold",
+  "omics",  "#14101E", "#8B7EC8", "#D4CFF0", "plain",
+  "report", "#131820", "#64748B", "#B8C4CE", "plain",
+  "foot",   "#0F1318", "#3A4555", "#9AA8B5", "plain",
+  "stop",   "#1A1014", "#E85D75", "#F8B4C0", "bold"
+)
+
+fc_styles_handbook <- tibble::tribble(
+  ~kind,    ~fill,     ~border,   ~text,     ~fontface,
+  "start",  "#FFFFFF", "#3A9E92", "#0C0D12", "bold",
+  "decide", "#FFFFFF", "#5EC4B8", "#1E293B", "bold",
+  "cat",    "#FAFBFC", "#9AA8B5", "#334155", "bold",
+  "method", "#FFFFFF", "#C8D2DC", "#334155", "plain",
+  "warn",   "#FFFBFC", "#E879A8", "#9F1239", "bold",
+  "omics",  "#FDFCFF", "#8B7EC8", "#4C3D6E", "plain",
+  "report", "#F8FAFC", "#64748B", "#334155", "plain",
+  "foot",   "#FFFFFF", "#DDE4EA", "#64748B", "plain",
+  "stop",   "#FFF8F8", "#E85D75", "#9F1239", "bold",
+  "header", "#F4F6F8", "#0C0D12", "#0C0D12", "bold"
+)
+
+fc_theme <- function(theme = c("light", "dark", "handbook")) {
+  if (theme[[1]] == "dark") {
+    list(
+      styles = fc_styles_dark,
+      bg = "#0C0D12",
+      title = "#E8EDF2",
+      subtitle = "#9AA8B5",
+      caption = "#6E7D8A",
+      edge = "#5A6A78",
+      accent = "#E85D75",
+      stripe = FALSE,
+      text_size = 2.55,
+      dpi = 250
+    )
+  } else if (theme[[1]] == "handbook") {
+    list(
+      styles = fc_styles_handbook,
+      bg = "#FFFFFF",
+      title = "#0C0D12",
+      subtitle = "#64748B",
+      caption = "#9AA8B5",
+      edge = "#C8D2DC",
+      accent = "#E85D75",
+      stripe = TRUE,
+      text_size = 2.75,
+      dpi = 320
+    )
+  } else {
+    list(
+      styles = fc_styles,
+      bg = "#F8FAFC",
+      title = "#0F172A",
+      subtitle = "#64748B",
+      caption = "#94A3B8",
+      edge = "#94A3B8",
+      accent = "#F43F5E",
+      stripe = FALSE,
+      text_size = 2.55,
+      dpi = 250
+    )
+  }
+}
+
+fc_node <- function(id, x, y, label, w, kind = "method", styles = fc_styles) {
   n <- stringr::str_count(label, "\n") + 1L
   h <- 5.5 + n * 3.1
-  sty <- fc_styles[fc_styles$kind == kind, , drop = FALSE]
+  sty <- styles[styles$kind == kind, , drop = FALSE]
   dplyr::bind_cols(
     tibble::tibble(id = id, x = x, y = y, w = w, h = h, label = label, kind = kind),
     sty |> dplyr::select(-kind)
   )
 }
 
-fc_stack <- function(specs, x, y_top, gap = 2.4) {
+fc_stack <- function(specs, x, y_top, gap = 2.4, styles = fc_styles) {
   y <- y_top
   out <- list()
   for (s in specs) {
     n <- stringr::str_count(s$label, "\n") + 1L
     h <- 5.5 + n * 3.1
     y <- y - h / 2
-    out[[length(out) + 1L]] <- fc_node(s$id, x, y, s$label, s$w, s$kind)
+    out[[length(out) + 1L]] <- fc_node(s$id, x, y, s$label, s$w, s$kind, styles = styles)
     y <- y - h / 2 - gap
   }
   dplyr::bind_rows(out)
@@ -86,11 +158,14 @@ fc_branch_edges <- function(from_id, to_ids, nodes, drop = 0.6) {
     dplyr::filter(!is.na(x))
 }
 
-fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in, accent_edges = NULL) {
+fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in,
+                    accent_edges = NULL, theme = c("light", "dark", "handbook")) {
+  th <- fc_theme(theme)
   nodes <- nodes |>
     dplyr::mutate(
       xmin = x - w / 2, xmax = x + w / 2,
-      ymin = y - h / 2, ymax = y + h / 2
+      ymin = y - h / 2, ymax = y + h / 2,
+      stripe_w = dplyr::if_else(kind %in% c("header", "foot"), 0, 1.1)
     )
 
   y_lo <- min(nodes$ymin) - 3
@@ -102,15 +177,17 @@ fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in, ac
   p <- ggplot2::ggplot() +
     ggplot2::theme_void(base_family = "sans") +
     ggplot2::theme(
-      plot.background = ggplot2::element_rect(fill = "#F8FAFC", colour = NA),
+      plot.background = ggplot2::element_rect(fill = th$bg, colour = NA),
       plot.margin = ggplot2::margin(18, 14, 14, 14),
       plot.title = ggplot2::element_text(
-        face = "bold", size = 16, colour = "#0F172A", hjust = 0.5, margin = ggplot2::margin(b = 4)
+        face = "bold", size = 16, colour = th$title, hjust = 0.5, margin = ggplot2::margin(b = 4)
       ),
       plot.subtitle = ggplot2::element_text(
-        size = 9, colour = "#64748B", hjust = 0.5, margin = ggplot2::margin(b = 10)
+        size = 9, colour = th$subtitle, hjust = 0.5, margin = ggplot2::margin(b = 10)
       ),
-      plot.caption = ggplot2::element_text(size = 7.5, colour = "#94A3B8", hjust = 0.5, margin = ggplot2::margin(t = 8))
+      plot.caption = ggplot2::element_text(
+        size = 7.5, colour = th$caption, hjust = 0.5, margin = ggplot2::margin(t = 8)
+      )
     ) +
     ggplot2::labs(title = title, subtitle = subtitle, caption = caption) +
     ggplot2::coord_cartesian(xlim = c(0, 100), ylim = c(y_lo, y_hi), clip = "off")
@@ -120,18 +197,18 @@ fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in, ac
       p <- p +
         ggplot2::geom_segment(
           data = edges, ggplot2::aes(x = x, y = y, xend = xmid, yend = ymid),
-          colour = "#94A3B8", linewidth = 0.45, lineend = "round"
+          colour = th$edge, linewidth = 0.45, lineend = "round"
         ) +
         ggplot2::geom_segment(
           data = edges, ggplot2::aes(x = xmid, y = ymid, xend = xend, yend = yend),
-          colour = "#94A3B8", linewidth = 0.45, lineend = "round",
+          colour = th$edge, linewidth = 0.45, lineend = "round",
           arrow = grid::arrow(length = grid::unit(0.14, "cm"), type = "closed")
         )
     } else {
       p <- p +
         ggplot2::geom_segment(
           data = edges, ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
-          colour = "#94A3B8", linewidth = 0.45, lineend = "round",
+          colour = th$edge, linewidth = 0.45, lineend = "round",
           arrow = grid::arrow(length = grid::unit(0.14, "cm"), type = "closed")
         )
     }
@@ -142,18 +219,18 @@ fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in, ac
       p <- p +
         ggplot2::geom_segment(
           data = accent_edges, ggplot2::aes(x = x, y = y, xend = xmid, yend = ymid),
-          colour = "#F43F5E", linewidth = 0.5, linetype = "22", lineend = "round"
+          colour = th$accent, linewidth = 0.5, linetype = "22", lineend = "round"
         ) +
         ggplot2::geom_segment(
           data = accent_edges, ggplot2::aes(x = xmid, y = ymid, xend = xend, yend = yend),
-          colour = "#F43F5E", linewidth = 0.5, linetype = "22", lineend = "round",
+          colour = th$accent, linewidth = 0.5, linetype = "22", lineend = "round",
           arrow = grid::arrow(length = grid::unit(0.12, "cm"), type = "closed")
         )
     } else {
       p <- p +
         ggplot2::geom_segment(
           data = accent_edges, ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
-          colour = "#F43F5E", linewidth = 0.5, linetype = "22", lineend = "round",
+          colour = th$accent, linewidth = 0.5, linetype = "22", lineend = "round",
           arrow = grid::arrow(length = grid::unit(0.12, "cm"), type = "closed")
         )
     }
@@ -162,15 +239,27 @@ fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in, ac
   p <- p +
     ggplot2::geom_rect(
       data = nodes, ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
-      fill = nodes$fill, colour = nodes$border, linewidth = 0.55
-    ) +
+      fill = nodes$fill, colour = nodes$border, linewidth = 0.5
+    )
+
+  if (isTRUE(th$stripe)) {
+    stripes <- nodes |> dplyr::filter(stripe_w > 0)
+    p <- p +
+      ggplot2::geom_rect(
+        data = stripes,
+        ggplot2::aes(xmin = xmin, xmax = xmin + stripe_w, ymin = ymin, ymax = ymax),
+        fill = stripes$border, colour = NA
+      )
+  }
+
+  p <- p +
     ggplot2::geom_text(
       data = nodes, ggplot2::aes(x = x, y = y, label = label),
-      size = 2.55, lineheight = 0.88, colour = nodes$text,
+      size = th$text_size, lineheight = 0.88, colour = nodes$text,
       fontface = nodes$fontface, family = "sans"
     )
 
-  ggplot2::ggsave(path, p, width = w_in, height = h_in, dpi = 200, bg = "#F8FAFC")
+  ggplot2::ggsave(path, p, width = w_in, height = h_in, dpi = th$dpi, bg = th$bg)
 }
 
 # =============================================================================
@@ -180,26 +269,26 @@ draw_method_decision_tree <- function(path) {
   top <- fc_stack(
     list(
       list(id = "e1", label = "1. Write estimand\nCh 1", w = 34, kind = "start"),
-      list(id = "e2", label = "2. Outcome type?\nCh 2 · Appendix B", w = 38, kind = "decide")
+      list(id = "e2", label = "2. Outcome type?\nCh 2; Appendix B", w = 38, kind = "decide")
     ),
     x = 50, y_top = 97, gap = 3.2
   )
   branch_top <- min(top$y - top$h / 2) - 2
   col1 <- fc_stack(
     list(
-      list(id = "c1", label = "Continuous\nFEV1 · scores · 6MWD", w = 26, kind = "cat"),
+      list(id = "c1", label = "Continuous\nFEV1; scores; 6MWD", w = 26, kind = "cat"),
       list(id = "m1a", label = "2 independent groups\nWelch t-test\nAlt: Mann-Whitney", w = 26, kind = "method"),
       list(id = "m1b", label = "Paired design\npaired t-test", w = 26, kind = "method"),
-      list(id = "m1c", label = "Adjust covariates\nlinear · ANCOVA\nCh 5", w = 26, kind = "method")
+      list(id = "m1c", label = "Adjust covariates\nlinear; ANCOVA\nCh 5", w = 26, kind = "method")
     ),
     x = 18, y_top = branch_top, gap = 3
   )
   col2 <- fc_stack(
     list(
       list(id = "c2", label = "Binary\nexacerbation Y/N", w = 26, kind = "cat"),
-      list(id = "m2a", label = "2 independent groups\nchi-square · Fisher", w = 26, kind = "method"),
+      list(id = "m2a", label = "2 independent groups\nchi-square; Fisher", w = 26, kind = "method"),
       list(id = "m2b", label = "Paired binary\nMcNemar", w = 26, kind = "method"),
-      list(id = "m2c", label = "Adjust covariates\nlogistic · Firth if sparse\nCh 6", w = 26, kind = "method")
+      list(id = "m2c", label = "Adjust covariates\nlogistic; Firth if sparse\nCh 6", w = 26, kind = "method")
     ),
     x = 50, y_top = branch_top, gap = 3
   )
@@ -215,9 +304,9 @@ draw_method_decision_tree <- function(path) {
   col_min <- min(c(col1$y - col1$h / 2, col2$y - col2$h / 2, col3$y - col3$h / 2))
   bottom <- fc_stack(
     list(
-      list(id = "omics", label = "Many features / omics · Ch 10–17\nDE + FDR (13) · batch (14) · flow (15) · screen (16) · pipeline (17)", w = 78, kind = "omics"),
-      list(id = "report", label = "Report effect · 95% CI · n · limitations\nCONSORT · STROBE · TRIPOD · Ch 8", w = 72, kind = "report"),
-      list(id = "extra", label = "Ch 18–21 · longitudinal · survival · missing data · causal", w = 68, kind = "foot")
+      list(id = "omics", label = "Many features / omics; Ch 10–17\nDE + FDR (13); batch (14); flow (15); screen (16); pipeline (17)", w = 78, kind = "omics"),
+      list(id = "report", label = "Report effect; 95% CI; n; limitations\nCONSORT; STROBE; TRIPOD; Ch 8", w = 72, kind = "report"),
+      list(id = "extra", label = "Ch 18–21; longitudinal; survival; missing data; causal", w = 68, kind = "foot")
     ),
     x = 50, y_top = col_min - 2, gap = 2.6
   )
@@ -235,8 +324,8 @@ draw_method_decision_tree <- function(path) {
   fc_save(
     nodes, edges,
     title = "Method decision tree",
-    subtitle = "After steps 1–3 of the CASTOR pipeline · pick test or model by outcome type",
-    caption = "appendix-b-quick-reference.md · METHOD_MAP.md · analysis_pipeline.png",
+    subtitle = "After steps 1–3 of the CASTOR pipeline; pick test or model by outcome type",
+    caption = "appendix-b-quick-reference.md; METHOD_MAP.md; analysis_pipeline.png",
     path = path, w_in = 7.2, h_in = 12.5
   )
 }
@@ -249,64 +338,302 @@ draw_method_decision_tree(file.path(fig_dir, "method_decision_tree_r.png"))
 # =============================================================================
 # 1b. CASTOR analysis pipeline (process before method choice)
 # =============================================================================
-draw_analysis_pipeline <- function(path) {
+draw_analysis_pipeline <- function(path, theme = "handbook") {
+  th <- fc_theme(theme)
+  sty <- th$styles
+
   spine <- fc_stack(
     list(
-      list(id = "s1", label = "1. Clinical question\nWhat would change practice?", w = 42, kind = "start"),
-      list(id = "s2", label = "2. Estimand + population\nWho · what contrast · when", w = 42, kind = "start"),
-      list(id = "s3", label = "3. Describe the sample\nTable 1 · plots · missingness", w = 42, kind = "decide"),
-      list(id = "s4", label = "4. Choose method\nOutcome type + design", w = 42, kind = "cat"),
-      list(id = "s5", label = "5. Fit model / test in R\nPrespecified script", w = 42, kind = "method"),
-      list(id = "s6", label = "6. Diagnostics + sensitivity\nAssumptions · MI · alternatives", w = 42, kind = "omics"),
-      list(id = "s7", label = "7. Report estimate + 95% CI\nn · limitations · guidelines", w = 42, kind = "report"),
-      list(id = "s8", label = "8. State what was NOT proven\nStop: do not over-claim", w = 42, kind = "stop")
+      list(id = "s1", label = "1  Clinical question\nWhat would change practice?\nCh 1; PICO", w = 30, kind = "start"),
+      list(id = "s2", label = "2  Estimand + population\nWho; contrast; when\nCh 1–2", w = 30, kind = "start"),
+      list(id = "s3", label = "3  Describe the sample\nTable 1; plots; missingness\nCh 3", w = 30, kind = "decide"),
+      list(id = "s4", label = "4  Choose method\nOutcome type + design\nAppendix B; METHOD_MAP", w = 30, kind = "cat"),
+      list(id = "s5", label = "5  Fit model / test in R\nPrespecified script\nAppendix A", w = 30, kind = "method"),
+      list(id = "s6", label = "6  Diagnostics + sensitivity\nAssumptions; MI; alternatives\nCh 7; 20", w = 30, kind = "omics"),
+      list(id = "s7", label = "7  Report estimate + 95% CI\nn; limitations; guidelines\nCh 8", w = 30, kind = "report"),
+      list(id = "s8", label = "8  State what was NOT proven\nStop: do not over-claim", w = 30, kind = "stop")
     ),
-    x = 46, y_top = 92, gap = 2.8
-  ) |> dplyr::mutate(x = 46)
-
-  branches <- fc_stack(
-    list(
-      list(id = "b1", label = "Prediction\nCh 9", w = 22, kind = "decide"),
-      list(id = "b2", label = "Method tree\nAppendix B", w = 22, kind = "method"),
-      list(id = "b3", label = "Omics / discovery\nCh 13–17", w = 22, kind = "omics"),
-      list(id = "b4", label = "Longitudinal\nCh 18–19", w = 22, kind = "cat")
-    ),
-    x = 82, y_top = spine$y[spine$id == "s4"] + 8, gap = 2.2
+    x = 26, y_top = 95, gap = 1.85, styles = sty
   )
 
-  loop_y <- min(spine$y - spine$h / 2) - 6
-  loop <- fc_node("loop", 46, loop_y, "Estimand ≠ design?\nReturn to steps 1–2", 42, "warn")
-  nodes <- dplyr::bind_rows(spine, branches, loop)
+  route_top <- spine$y[spine$id == "s4"] + 12
+  route_hdr <- fc_node("rhdr", 68, route_top + 5.5, "Handbook routes\n(from step 4)", 36, "header", styles = sty)
+
+  col1 <- fc_stack(
+    list(
+      list(id = "b1", label = "Describe & compare\nCh 3–4", w = 17, kind = "decide"),
+      list(id = "b2", label = "Regression; GLM\nCh 5–7", w = 17, kind = "method"),
+      list(id = "b3", label = "Report & predict\nCh 8–9", w = 17, kind = "cat"),
+      list(id = "b4", label = "Discovery & cases\nCh 10–12", w = 17, kind = "omics")
+    ),
+    x = 54, y_top = route_top, gap = 1.25, styles = sty
+  )
+
+  col2 <- fc_stack(
+    list(
+      list(id = "b5", label = "Omics; screens\nCh 13–17", w = 17, kind = "omics"),
+      list(id = "b6", label = "Longitudinal; survival\nCh 18–19", w = 17, kind = "method"),
+      list(id = "b7", label = "Missing; causal\nCh 20–21", w = 17, kind = "report"),
+      list(id = "b8", label = "Routers & paths\nApp B; I; J; K", w = 17, kind = "foot")
+    ),
+    x = 82, y_top = route_top, gap = 1.25, styles = sty
+  )
+
+  loop_y <- min(spine$y - spine$h / 2) - 4.5
+  loop <- fc_node("loop", 26, loop_y, "Estimand ≠ design?\nReturn to steps 1–2", 30, "warn", styles = sty)
+  nodes <- dplyr::bind_rows(spine, route_hdr, col1, col2, loop)
 
   s4 <- nodes |> dplyr::filter(id == "s4")
   accent <- tibble::tibble(
     x = s4$x - s4$w / 2,
     y = s4$y,
-    xmid = 18,
-    ymid = loop$y + loop$h / 2 + 1,
+    xmid = 10,
+    ymid = loop$y + loop$h / 2 + 0.8,
     xend = loop$x - loop$w / 2,
-    yend = loop$y + loop$h / 2 + 0.5
+    yend = loop$y + loop$h / 2 + 0.4
   )
 
   edges <- dplyr::bind_rows(
     fc_edges(paste0("s", 1:7), paste0("s", 2:8), nodes),
-    fc_branch_edges("s4", c("b1", "b2", "b3", "b4"), nodes, drop = 3.5)
+    fc_branch_edges("s4", c(col1$id, col2$id), nodes, drop = 2.2)
   )
 
   fc_save(
     nodes, edges,
-    title = "CASTOR analysis pipeline",
-    subtitle = "Question first · method second · report what you did not prove",
-    caption = "Ch 1 & 12 · CASTOR workflow: Clinical question → Assess → Select → Test → Output → Report limits",
-    path = path, w_in = 6.8, h_in = 10.5,
-    accent_edges = accent
+    title = "Analysis pipeline",
+    subtitle = "Question first ;  method second ;  report what you did not prove",
+    caption = "Ch 1–21 + appendices ;  regenerate: source(\"R/examples/generate_figures.R\")",
+    path = path, w_in = 7.8, h_in = 10.8,
+    accent_edges = accent,
+    theme = theme
   )
 }
 
-draw_analysis_pipeline(file.path(fig_dir, "analysis_pipeline_r.png"))
+draw_analysis_pipeline_modern <- function(path) {
+  steps <- tibble::tribble(
+    ~id, ~n, ~title, ~detail, ~fill, ~border, ~text,
+    "s1", 1L, "Clinical question", "What would change practice?\nCh 1; PICO",
+      "#FFFBEB", "#F59E0B", "#78350F",
+    "s2", 2L, "Estimand + population", "Who; contrast; when\nCh 1–2",
+      "#FFF7ED", "#F97316", "#7C2D12",
+    "s3", 3L, "Describe the sample", "Table 1; plots; missingness\nCh 3",
+      "#EFF6FF", "#3B82F6", "#1E3A8A",
+    "s4", 4L, "Choose method", "Outcome type + design\nAppendix B",
+      "#ECFDF5", "#10B981", "#065F46",
+    "s5", 5L, "Fit model / test in R", "Prespecified script\nAppendix A",
+      "#F0FDFA", "#14B8A6", "#134E4A",
+    "s6", 6L, "Diagnostics + sensitivity", "Assumptions; MI; alternatives\nCh 7; 20",
+      "#F5F3FF", "#8B5CF6", "#4C1D95",
+    "s7", 7L, "Report estimate + 95% CI", "n; limitations; guidelines\nCh 8",
+      "#F8FAFC", "#64748B", "#334155",
+    "s8", 8L, "State what was NOT proven", "Stop: do not over-claim",
+      "#FEF2F2", "#EF4444", "#991B1B"
+  )
 
-# Illustrated CASTOR pipeline (handbook): figures/analysis_pipeline.png
-#: custom asset; not overwritten by this script. R fallback: analysis_pipeline_r.png
+  routes <- tibble::tribble(
+    ~id, ~label, ~fill, ~border, ~text,
+    "r1", "Describe & compare\nCh 3–4", "#EFF6FF", "#3B82F6", "#1E3A8A",
+    "r2", "Regression & prediction\nCh 5–9", "#ECFDF5", "#10B981", "#065F46",
+    "r3", "Discovery & omics\nCh 10–17", "#F5F3FF", "#8B5CF6", "#4C1D95",
+    "r4", "Longitudinal & survival\nCh 18–19", "#F0FDFA", "#14B8A6", "#134E4A",
+    "r5", "Missing; causal; routers\nCh 20–21; App B I J K", "#F8FAFC", "#64748B", "#334155"
+  )
+
+  w_spine <- 46
+  w_route <- 28
+  x_spine <- 36
+  x_route <- 78
+  gap <- 2.6
+  y <- 88
+
+  spine <- purrr::map_dfr(seq_len(nrow(steps)), function(i) {
+    s <- steps[i, ]
+    n_lines <- stringr::str_count(s$detail, "\n") + 1L
+    h <- 7.5 + n_lines * 2.8
+    y <<- y - h / 2
+    out <- tibble::tibble(
+      id = s$id, n = s$n, title = s$title, detail = s$detail,
+      x = x_spine, y = y, w = w_spine, h = h,
+      fill = s$fill, border = s$border, text = s$text
+    )
+    y <<- y - h / 2 - gap
+    out
+  })
+
+  route_y <- spine$y[spine$id == "s4"] + 6
+  routes_xy <- purrr::map_dfr(seq_len(nrow(routes)), function(i) {
+    r <- routes[i, ]
+    h <- 9.5
+    route_y <<- route_y - h / 2
+    out <- tibble::tibble(
+      id = r$id, label = r$label, x = x_route, y = route_y, w = w_route, h = h,
+      fill = r$fill, border = r$border, text = r$text
+    )
+    route_y <<- route_y - h / 2 - 1.8
+    out
+  })
+
+  loop_h <- 10
+  loop_y <- min(spine$y - spine$h / 2) - loop_h / 2 - 3
+  loop <- tibble::tibble(
+    id = "loop", label = "Estimand ≠ design?\nReturn to steps 1–2",
+    x = x_spine, y = loop_y, w = w_spine, h = loop_h,
+    fill = "#FEF2F2", border = "#EF4444", text = "#991B1B"
+  )
+
+  nodes <- spine |>
+    dplyr::mutate(
+      xmin = x - w / 2, xmax = x + w / 2,
+      ymin = y - h / 2, ymax = y + h / 2,
+      label = paste0(title, "\n", detail),
+      shadow = "#E2E8F080"
+    )
+  routes_xy <- routes_xy |>
+    dplyr::mutate(
+      xmin = x - w / 2, xmax = x + w / 2,
+      ymin = y - h / 2, ymax = y + h / 2,
+      shadow = "#E2E8F060"
+    )
+  loop <- loop |>
+    dplyr::mutate(
+      xmin = x - w / 2, xmax = x + w / 2,
+      ymin = y - h / 2, ymax = y + h / 2,
+      shadow = "#E2E8F060"
+    )
+
+  spine_edges <- purrr::map2_dfr(steps$id[-nrow(steps)], steps$id[-1], function(a, b) {
+    na <- nodes |> dplyr::filter(id == a)
+    nb <- nodes |> dplyr::filter(id == b)
+    tibble::tibble(x = na$x, y = na$ymin - 0.2, xend = nb$x, yend = nb$ymax + 0.2)
+  })
+
+  s4 <- nodes |> dplyr::filter(id == "s4")
+  route_edges <- purrr::map_dfr(routes_xy$id, function(rid) {
+    nr <- routes_xy |> dplyr::filter(id == rid)
+    tibble::tibble(
+      x = s4$x + s4$w / 2 + 0.3, y = s4$y,
+      xmid = (s4$x + s4$w / 2 + nr$x - nr$w / 2) / 2,
+      ymid = nr$y, xend = nr$xmin - 0.3, yend = nr$y
+    )
+  })
+
+  accent <- tibble::tibble(
+    x = s4$xmin, y = s4$y,
+    xmid = 8, ymid = loop$y + 1,
+    xend = loop$xmin, yend = loop$y + loop$h / 4
+  )
+
+  badge <- nodes |>
+    dplyr::transmute(x = xmin + 3.8, y = y, n = n, border = border)
+
+  y_lo <- min(loop$ymin, routes_xy$ymin) - 4
+  y_hi <- max(nodes$ymax) + 6
+
+  p <- ggplot2::ggplot() +
+    ggplot2::theme_void(base_family = "sans") +
+    ggplot2::theme(
+      plot.background = ggplot2::element_rect(fill = "#FFFFFF", colour = NA),
+      plot.margin = ggplot2::margin(20, 16, 14, 16),
+      plot.title = ggplot2::element_text(
+        face = "bold", size = 18, colour = "#0C0D12", hjust = 0.5, margin = ggplot2::margin(b = 3)
+      ),
+      plot.subtitle = ggplot2::element_text(
+        size = 10, colour = "#64748B", hjust = 0.5, margin = ggplot2::margin(b = 12)
+      ),
+      plot.caption = ggplot2::element_text(size = 8, colour = "#94A3B8", hjust = 0.5, margin = ggplot2::margin(t = 10))
+    ) +
+    ggplot2::labs(
+      title = "Analysis pipeline",
+      subtitle = "Question first ;  method second ;  report what you did not prove",
+      caption = "Ch 1–21 + appendices"
+    ) +
+    ggplot2::coord_cartesian(xlim = c(0, 100), ylim = c(y_lo, y_hi), clip = "off") +
+    ggplot2::geom_rect(
+      data = nodes,
+      ggplot2::aes(xmin = xmin + 0.45, xmax = xmax + 0.45, ymin = ymin - 0.45, ymax = ymax - 0.45),
+      fill = "#CBD5E133", colour = NA
+    ) +
+    ggplot2::geom_rect(
+      data = routes_xy,
+      ggplot2::aes(xmin = xmin + 0.35, xmax = xmax + 0.35, ymin = ymin - 0.35, ymax = ymax - 0.35),
+      fill = "#CBD5E122", colour = NA
+    ) +
+    ggplot2::geom_rect(
+      data = nodes, ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = nodes$fill, colour = nodes$border, linewidth = 0.9
+    ) +
+    ggplot2::geom_rect(
+      data = routes_xy, ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = routes_xy$fill, colour = routes_xy$border, linewidth = 0.65
+    ) +
+    ggplot2::geom_rect(
+      data = loop, ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+      fill = loop$fill, colour = loop$border, linewidth = 0.7, linetype = "22"
+    ) +
+    ggplot2::geom_segment(
+      data = spine_edges, ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
+      colour = "#94A3B8", linewidth = 0.55,
+      arrow = grid::arrow(length = grid::unit(0.16, "cm"), type = "closed")
+    ) +
+    ggplot2::geom_segment(
+      data = route_edges, ggplot2::aes(x = x, y = y, xend = xmid, yend = ymid),
+      colour = "#CBD5E1", linewidth = 0.45
+    ) +
+    ggplot2::geom_segment(
+      data = route_edges, ggplot2::aes(x = xmid, y = ymid, xend = xend, yend = yend),
+      colour = "#CBD5E1", linewidth = 0.45,
+      arrow = grid::arrow(length = grid::unit(0.12, "cm"), type = "closed")
+    ) +
+    ggplot2::geom_segment(
+      data = accent, ggplot2::aes(x = x, y = y, xend = xmid, yend = ymid),
+      colour = "#EF4444", linewidth = 0.55, linetype = "22"
+    ) +
+    ggplot2::geom_segment(
+      data = accent, ggplot2::aes(x = xmid, y = ymid, xend = xend, yend = yend),
+      colour = "#EF4444", linewidth = 0.55, linetype = "22",
+      arrow = grid::arrow(length = grid::unit(0.12, "cm"), type = "closed")
+    ) +
+    ggplot2::geom_point(
+      data = badge, ggplot2::aes(x = x, y = y),
+      shape = 21, size = 4.2, fill = "#FFFFFF", colour = badge$border, stroke = 1.1
+    ) +
+    ggplot2::geom_text(
+      data = badge, ggplot2::aes(x = x, y = y, label = n),
+      size = 3.1, fontface = "bold", colour = "#0C0D12"
+    ) +
+    ggplot2::geom_text(
+      data = nodes, ggplot2::aes(x = x + 2.5, y = y, label = label),
+      size = 2.85, lineheight = 0.9, colour = nodes$text, hjust = 0.5
+    ) +
+    ggplot2::geom_text(
+      data = routes_xy, ggplot2::aes(x = x, y = y, label = label),
+      size = 2.55, lineheight = 0.88, colour = routes_xy$text, fontface = "bold"
+    ) +
+    ggplot2::geom_text(
+      data = loop, ggplot2::aes(x = x, y = y, label = label),
+      size = 2.6, lineheight = 0.88, colour = loop$text, fontface = "bold"
+    ) +
+    ggplot2::annotate(
+      "text", x = x_route, y = max(routes_xy$ymax) + 3.2,
+      label = "Handbook routes", size = 3.4, fontface = "bold", colour = "#0C0D12"
+    )
+
+  ggplot2::ggsave(path, p, width = 8.2, height = 11.2, dpi = 320, bg = "#FFFFFF")
+}
+
+pipeline_opts <- file.path(fig_dir, "pipeline-options")
+dir.create(pipeline_opts, showWarnings = FALSE, recursive = TRUE)
+
+# Illustrated luxe pipeline (handbook primary): figures/analysis_pipeline.png
+# Do NOT overwrite — restore from pipeline-options/select-illustrated-luxe-full-4096.png
+draw_analysis_pipeline_modern(file.path(pipeline_opts, "pipeline-modern-r.png"))
+draw_analysis_pipeline_modern(file.path(fig_dir, "analysis_pipeline_r_modern.png"))
+draw_analysis_pipeline(file.path(fig_dir, "analysis_pipeline_r.png"), theme = "handbook")
+draw_analysis_pipeline(file.path(pipeline_opts, "option-handbook-ggplot.png"), theme = "handbook")
+draw_analysis_pipeline(file.path(pipeline_opts, "option-dark-pearl.png"), theme = "dark")
+draw_analysis_pipeline(file.path(pipeline_opts, "option-d-r-clean-white.png"), theme = "light")
+
+# Illustrated drafts archived in pipeline-options/ (AI iterations, not primary)
 
 # =============================================================================
 # 2. Comparison panel (t-test vs Wilcoxon vs linear; chi vs logistic)
@@ -321,12 +648,12 @@ p_cont <- tibble(
   outcome = "Continuous (FEV1)"
 ) %>%
   ggplot(aes(x = method, y = 1, fill = method)) +
-  geom_tile(colour = "white", linewidth = 1) +
-  geom_text(aes(label = paste0(use_when, "\n", outcome)), size = 3.2) +
-  scale_fill_brewer(palette = "Blues", guide = "none") +
+  geom_tile(colour = "white", linewidth = 0.9) +
+  geom_text(aes(label = paste0(use_when, "\n", outcome)), size = 3.1, colour = "#334155") +
+  scale_fill_manual(values = c("#E0F2FE", "#BAE6FD", "#7DD3FC"), guide = "none") +
   labs(title = "Continuous outcomes") +
-  theme_void(base_size = 11) +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+  handbook_theme(10) +
+  theme(axis.text = element_blank(), axis.title = element_blank(), panel.grid = element_blank())
 
 p_bin <- tibble(
   method = c("Chi-square / Fisher", "McNemar", "Logistic regression"),
@@ -338,12 +665,12 @@ p_bin <- tibble(
   outcome = "Binary (exacerbation Y/N)"
 ) %>%
   ggplot(aes(x = method, y = 1, fill = method)) +
-  geom_tile(colour = "white", linewidth = 1) +
-  geom_text(aes(label = paste0(use_when, "\n", outcome)), size = 3.2) +
-  scale_fill_brewer(palette = "Greens", guide = "none") +
+  geom_tile(colour = "white", linewidth = 0.9) +
+  geom_text(aes(label = paste0(use_when, "\n", outcome)), size = 3.1, colour = "#334155") +
+  scale_fill_manual(values = c("#D1FAE5", "#A7F3D0", "#6EE7B7"), guide = "none") +
   labs(title = "Binary / categorical outcomes") +
-  theme_void(base_size = 11) +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+  handbook_theme(10) +
+  theme(axis.text = element_blank(), axis.title = element_blank(), panel.grid = element_blank())
 
 p_count <- tibble(
   method = c("NOT t-test", "Poisson GLM", "Negative binomial"),
@@ -355,12 +682,12 @@ p_count <- tibble(
   outcome = "Count (exacerbations)"
 ) %>%
   ggplot(aes(x = method, y = 1, fill = method)) +
-  geom_tile(colour = "white", linewidth = 1) +
-  geom_text(aes(label = paste0(use_when, "\n", outcome)), size = 3.2) +
-  scale_fill_manual(values = c("#F8D7DA", "#D4EDDA", "#D4EDDA"), guide = "none") +
+  geom_tile(colour = "white", linewidth = 0.9) +
+  geom_text(aes(label = paste0(use_when, "\n", outcome)), size = 3.1, colour = "#334155") +
+  scale_fill_manual(values = c("#FFE4E6", "#D1FAE5", "#A7F3D0"), guide = "none") +
   labs(title = "Count outcomes") +
-  theme_void(base_size = 11) +
-  theme(plot.title = element_text(face = "bold", hjust = 0.5))
+  handbook_theme(10) +
+  theme(axis.text = element_blank(), axis.title = element_blank(), panel.grid = element_blank())
 
 p_panel <- p_cont / p_bin / p_count +
   plot_annotation(
@@ -368,104 +695,75 @@ p_panel <- p_cont / p_bin / p_count +
     subtitle = "Full tables: volume-01/appendix-b-quick-reference.md"
   )
 
-ggsave(file.path(fig_dir, "method_comparison_panel.png"), p_panel, width = 9, height = 8, dpi = 150)
+ggsave(file.path(fig_dir, "method_comparison_panel.png"), p_panel, width = 9, height = 8, dpi = 180)
 
 # =============================================================================
 # 3. Chapter 4 figures
 # =============================================================================
-p_ch04_box <- ggplot(spirometry, aes(group, fev1, fill = group)) +
-  geom_boxplot(alpha = 0.7, outlier.alpha = 0.4) +
-  geom_jitter(width = 0.12, alpha = 0.25, size = 1) +
-  stat_summary(fun = mean, geom = "point", shape = 18, size = 3, colour = "black") +
-  labs(
-    title = "FEV1 by trial arm (CASTOR)",
-    subtitle = "Diamond = mean; use Welch t-test for independent groups (Ch 4)",
-    x = NULL, y = "FEV1 (L)"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(legend.position = "none")
+p_ch04_box <- plot_raincloud(
+  spirometry, "group", "fev1", fill = "group",
+  title = "Raincloud: FEV1 by trial arm (CASTOR)",
+  subtitle = "Violin + box + jitter + mean diamond; Welch t-test estimand (Ch 4)",
+  xlab = NULL, ylab = "FEV1 (L)"
+)
 
-ggsave(file.path(fig_dir, "ch04_fev1_by_group.png"), p_ch04_box, width = 6, height = 4.5, dpi = 150)
+handbook_save(p_ch04_box, file.path(fig_dir, "ch04_fev1_by_group.png"), 6.8, 4.8)
 
-p_ch04_paired <- bronchodilator %>%
-  select(patient_id, fev1_pre, fev1_post) %>%
-  pivot_longer(-patient_id, names_to = "visit", values_to = "fev1") %>%
-  mutate(visit = if_else(visit == "fev1_pre", "Pre-BD", "Post-BD")) %>%
-  ggplot(aes(visit, fev1, group = patient_id)) +
-  geom_line(alpha = 0.35, colour = "steelblue") +
-  geom_point(alpha = 0.5, size = 1.2) +
-  stat_summary(aes(group = visit), fun = mean, geom = "point", size = 4, colour = "red") +
-  stat_summary(aes(group = visit), fun.data = mean_se, geom = "errorbar", width = 0.1, colour = "red") +
-  labs(
-    title = "Bronchodilator response (paired FEV1)",
-    subtitle = "Use paired t-test or Wilcoxon signed-rank (Ch 4)",
-    x = NULL, y = "FEV1 (L)"
-  ) +
-  theme_minimal(base_size = 12)
+p_ch04_paired <- plot_dumbbell(
+  bronchodilator, "patient_id", "fev1_pre", "fev1_post",
+  title = "Dumbbell plot: bronchodilator response",
+  subtitle = "Each grey segment is one patient; black diamonds = arm means",
+  xlab = "FEV1 (L)", ylab = NULL
+)
 
-ggsave(file.path(fig_dir, "ch04_paired_bronchodilator.png"), p_ch04_paired, width = 5.5, height = 4.5, dpi = 150)
+handbook_save(p_ch04_paired, file.path(fig_dir, "ch04_paired_bronchodilator.png"), 7, 4.2)
 
-exac_rate <- exacerbation %>%
-  group_by(smoking) %>%
-  summarise(
-    n = n(),
-    events = sum(exacerbation_12m),
-    rate = mean(exacerbation_12m),
-    .groups = "drop"
-  ) %>%
-  mutate(smoking = if_else(smoking, "Smoker", "Non-smoker"))
+exac_flow <- exacerbation %>%
+  mutate(
+    smoking_lab = if_else(smoking, "Smoker", "Non-smoker"),
+    event_lab = if_else(exacerbation_12m, "Exacerbation", "No event")
+  )
 
-p_ch04_bar <- ggplot(exac_rate, aes(smoking, rate, fill = smoking)) +
-  geom_col(width = 0.6, alpha = 0.85) +
-  geom_text(aes(label = sprintf("%d/%d (%.1f%%)", events, n, 100 * rate)), vjust = -0.5, size = 3.5) +
-  scale_y_continuous(labels = scales::percent, limits = c(0, max(exac_rate$rate) * 1.25)) +
-  labs(
-    title = "12-month exacerbation by smoking status",
-    subtitle = "Use Fisher / chi-square or logistic regression (Ch 4, 6)",
-    x = NULL, y = "Proportion with ≥1 exacerbation"
-  ) +
-  theme_minimal(base_size = 12) +
-  theme(legend.position = "none")
+p_ch04_bar <- plot_alluvial_flow(
+  exac_flow, "smoking_lab", "event_lab",
+  title = "Alluvial flow: smoking to 12-month exacerbation",
+  subtitle = "Width = participant count; use with denominator in text (Ch 4, 6)"
+)
 
-ggsave(file.path(fig_dir, "ch04_exacerbation_by_smoking.png"), p_ch04_bar, width = 5.5, height = 4.5, dpi = 150)
+handbook_save(p_ch04_bar, file.path(fig_dir, "ch04_exacerbation_by_smoking.png"), 6.8, 4.8)
 
 # =============================================================================
 # 4. Chapter 5 figures
 # =============================================================================
 fit_lm <- lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry)
 
-p_resid <- ggplot(tibble(fitted = fitted(fit_lm), resid = rstandard(fit_lm)), aes(fitted, resid)) +
-  geom_point(alpha = 0.5) +
-  geom_hline(yintercept = 0, linetype = "dashed") +
-  geom_smooth(se = FALSE, colour = "firebrick", linewidth = 0.8) +
-  labs(title = "Residuals vs fitted", x = "Fitted FEV1", y = "Standardized residuals") +
-  theme_minimal(base_size = 11)
+p_resid_panel <- plot_residual_panel(
+  fit_lm,
+  title_resid = "Residuals vs fitted (hexbin)",
+  title_qq = "Normal Q-Q of residuals"
+)
 
-p_qq <- ggplot(spirometry, aes(sample = rstandard(fit_lm))) +
-  stat_qq(alpha = 0.6) +
-  stat_qq_line(linewidth = 0.8) +
-  labs(title = "Normal Q-Q of residuals", x = "Theoretical", y = "Sample") +
-  theme_minimal(base_size = 11)
-
-ggsave(
+handbook_save(
+  p_resid_panel,
   file.path(fig_dir, "ch05_residual_diagnostics.png"),
-  p_resid | p_qq,
-  width = 9, height = 4, dpi = 150
+  9.2, 4.2
 )
 
 if (requireNamespace("emmeans", quietly = TRUE)) {
   em <- emmeans::emmeans(fit_lm, ~ smoking)
   em_df <- as.data.frame(em)
   p_adj <- ggplot(em_df, aes(smoking, emmean)) +
-    geom_point(size = 3) +
-    geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.15) +
+    geom_hline(yintercept = mean(em_df$emmean), linetype = "dotted", colour = "#CBD5E1") +
+    geom_linerange(aes(ymin = lower.CL, ymax = upper.CL), linewidth = 1.1, colour = "#64748B") +
+    geom_point(size = 4.5, colour = handbook_cols$intervention) +
+    geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.08, linewidth = 0.9, colour = handbook_cols$accent) +
     labs(
-      title = "Adjusted mean FEV1 by smoking (CASTOR)",
-      subtitle = "From linear model adjusting age, sex, height (Ch 5)",
+      title = "Adjusted mean FEV1 by smoking (emmeans)",
+      subtitle = "Dot-and-whisker from linear model: age, sex, height (Ch 5)",
       x = "Smoking", y = "Estimated mean FEV1 (L)"
     ) +
-    theme_minimal(base_size = 12)
-  ggsave(file.path(fig_dir, "ch05_fev1_by_smoking_adjusted.png"), p_adj, width = 5.5, height = 4.5, dpi = 150)
+    handbook_theme()
+  handbook_save(p_adj, file.path(fig_dir, "ch05_fev1_by_smoking_adjusted.png"), 5.8, 4.6)
 }
 
 # =============================================================================
@@ -480,19 +778,14 @@ forest_df <- tidy(logit_fit, conf.int = TRUE, exponentiate = TRUE) %>%
   filter(term != "(Intercept)") %>%
   mutate(term = str_replace_all(term, "_", " "))
 
-p_forest <- ggplot(forest_df, aes(x = estimate, y = reorder(term, estimate))) +
-  geom_vline(xintercept = 1, linetype = "dashed", colour = "grey50") +
-  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
-  geom_point(size = 3, colour = "steelblue") +
-  scale_x_log10() +
-  labs(
-    title = "Adjusted odds ratios: 12-month exacerbation",
-    subtitle = "Logistic regression (Ch 6); log scale",
-    x = "Odds ratio (95% CI)", y = NULL
-  ) +
-  theme_minimal(base_size = 12)
+p_forest <- plot_forest_ratio(
+  forest_df,
+  title = "Adjusted odds ratios: 12-month exacerbation",
+  subtitle = "Logistic regression (Ch 6); exponentiated coefficients",
+  xlab = "Odds ratio (95% CI, log scale)"
+)
 
-ggsave(file.path(fig_dir, "ch06_logistic_forest.png"), p_forest, width = 7, height = 4.5, dpi = 150)
+handbook_save(p_forest, file.path(fig_dir, "ch06_logistic_forest.png"), 7.2, 4.6)
 
 if ("person_years" %in% names(counts)) {
   pois_fit <- glm(
@@ -507,41 +800,42 @@ rr_df <- tidy(pois_fit, conf.int = TRUE, exponentiate = TRUE) %>%
   filter(term != "(Intercept)") %>%
   mutate(term = str_replace_all(term, "_", " "))
 
-p_rr <- ggplot(rr_df, aes(x = estimate, y = reorder(term, estimate))) +
-  geom_vline(xintercept = 1, linetype = "dashed", colour = "grey50") +
-  geom_errorbarh(aes(xmin = conf.low, xmax = conf.high), height = 0.2) +
-  geom_point(size = 3, colour = "darkgreen") +
-  scale_x_log10() +
-  labs(
-    title = "Rate ratios: exacerbation counts",
-    subtitle = "Poisson GLM (Ch 6); log scale",
-    x = "Rate ratio (95% CI)", y = NULL
-  ) +
-  theme_minimal(base_size = 12)
+p_rr <- plot_forest_ratio(
+  rr_df,
+  title = "Rate ratios: exacerbation counts",
+  subtitle = "Poisson GLM with offset (Ch 6)",
+  xlab = "Rate ratio (95% CI, log scale)",
+  point_color = handbook_cols$nonsmoker
+)
 
-ggsave(file.path(fig_dir, "ch06_poisson_rate_ratio.png"), p_rr, width = 7, height = 3.5, dpi = 150)
+handbook_save(p_rr, file.path(fig_dir, "ch06_poisson_rate_ratio.png"), 7.2, 3.8)
 
 # =============================================================================
 # 6. Chapter 10 PCA figures
 # =============================================================================
-if (requireNamespace("factoextra", quietly = TRUE)) {
-  X <- omics %>% select(starts_with("M"))
-  pca <- prcomp(X, scale. = TRUE)
+X <- omics %>% select(starts_with("M"))
+pca <- prcomp(X, scale. = TRUE)
 
-  p_scree <- factoextra::fviz_eig(pca, addlabels = TRUE, barfill = "steelblue", barcolor = "steelblue") +
-    labs(title = "PCA scree plot, CASTOR marker panel")
+p_scree <- plot_scree(
+  pca,
+  title = "PCA scree plot: CASTOR marker panel",
+  subtitle = "Bars = variance per PC; line = cumulative (teaching only)"
+)
+handbook_save(p_scree, file.path(fig_dir, "ch10_scree.png"), 6.8, 4.6)
 
-  ggsave(file.path(fig_dir, "ch10_scree.png"), p_scree, width = 6, height = 4.5, dpi = 150)
-
-  p_biplot <- factoextra::fviz_pca_ind(
-    pca, habillage = omics$true_phenotype,
-    addEllipses = TRUE, palette = "jco",
-    title = "PCA: PC1 vs PC2 (true phenotype, teaching only)"
-  )
-  ggsave(file.path(fig_dir, "ch10_pca_biplot.png"), p_biplot, width = 7, height = 5, dpi = 150)
-} else {
-  message("Install factoextra for PCA figures: install.packages('factoextra')")
-}
+pca_scores <- tibble(
+  PC1 = pca$x[, 1],
+  PC2 = pca$x[, 2],
+  phenotype = omics$true_phenotype
+)
+p_biplot <- plot_pca_scores(
+  pca_scores,
+  title = "PCA: PC1 vs PC2 (true phenotype)",
+  subtitle = "Ellipses = 68% normal contours; labels are for teaching only",
+  xlab = sprintf("PC1 (%.0f%%)", 100 * summary(pca)$importance[2, 1]),
+  ylab = sprintf("PC2 (%.0f%%)", 100 * summary(pca)$importance[2, 2])
+)
+handbook_save(p_biplot, file.path(fig_dir, "ch10_pca_biplot.png"), 7.2, 5.2)
 
 message("Handbook figures saved to ", fig_dir)
 message("See volume-01/FIGURE_INDEX.md for the full list.")

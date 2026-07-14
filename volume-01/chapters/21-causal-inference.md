@@ -17,12 +17,12 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — association ≠ causation
-2. [Method choice at a glance](#method-choice-at-a-glance) — IPW vs adjusted regression
-3. [Technique: IPW](#technique-inverse-probability-weighting-ipw-toy) — balance and weights
-4. [Reporting template](#reporting-template) — associational vs causal wording
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): association ≠ causation
+2. [Method choice at a glance](#method-choice-at-a-glance): IPW vs adjusted regression
+3. [Technique: IPW](#technique-inverse-probability-weighting-ipw-toy): balance and weights
+4. [Reporting template](#reporting-template): associational vs causal wording
 5. [Alternatives & extensions](#alternatives--extensions)
 
 **Analyst read:** DAGs, R lab below.
@@ -41,6 +41,7 @@
 | **E-value / sensitivity** | Unmeasured confounding concern | Quantifies how strong hidden bias would need to be |
 | **No causal adjustment** | RCT primary analysis | Randomisation supports causal contrast ([Case A](12-case-studies.md)) |
 | **Do not adjust mediators** | Total effect estimand | Blocks part of causal path |
+| **Mediation analysis** | Mechanism through measured mediator prespecified | Total vs direct decomposition ([Ch 22](22-mediation-analysis.md)) |
 
 **Extensions:** MSM, matching details in [Alternatives & extensions](#alternatives--extensions).
 
@@ -104,9 +105,9 @@ Randomised trials (Case A) support causal **treatment** claims for the randomise
 
 ```
 Smoking -----> Exacerbation (12m)
-   |                 ^
-   v                 |
-  FEV1 ---------------+
+ | ^
+ v |
+ FEV1 ---------------+
 ```
 
 **Adjust for FEV1** when the estimand is the association of smoking **not explained by** measured lung function (or when FEV1 is a confounder per protocol). **Do not adjust** for FEV1 when the **total effect** of smoking including its impact via FEV1 is the target, unless using a mediation framework prespecified in advance.
@@ -171,7 +172,7 @@ ORs are similar here because the toy weighting scheme is crude. The lesson is **
 ```r
 source("R/examples/ch21_causal_inference.R")
 or_tbl <- readr::read_csv(
-  "volume-01/tables/ch21_smoking_or_naive_vs_ipw.csv"
+ "volume-01/tables/ch21_smoking_or_naive_vs_ipw.csv"
 )
 wt <- readr::read_csv("volume-01/tables/ch21_ipw_weight_summary.csv")
 ```
@@ -248,7 +249,7 @@ source("R/00_setup.R")
 source("R/examples/ch21_causal_inference.R")
 ```
 
-![FEV1 balance before vs after IPW (toy)](../figures/ch21_covariate_balance.png)
+![Covariate balance slopegraph: before vs after IPW](../figures/ch21_covariate_balance.png)
 
 Check whether FEV1 % means are closer across smoking groups after weighting. Poor balance after weighting → revisit exposure model or overlap.
 
@@ -275,9 +276,9 @@ Full propensity score workflow: estimate `e(X) = P(smoking=1|X)`, check overlap,
 # Illustrative only, not the teaching script:
 # library(WeightIt)
 # w <- weightit(
-#   smoking ~ fev1_percent_predicted + age,
-#   data = exac,
-#   method = "ps"
+# smoking ~ fev1_percent_predicted + age,
+# data = exac,
+# method = "ps"
 # )
 # summary(w)
 ```
@@ -296,6 +297,7 @@ When unmeasured confounding is plausible, E-values quantify how strong an unmeas
 | Time-varying treatment | Marginal structural models | Advanced |
 | Unmeasured confounding | Sensitivity analysis (E-values) | Report bounds |
 | RCT subgroup | No causal adjustment needed for randomisation | Case A |
+| Mechanism through FEV1 % | Mediation (total / direct / indirect) | [Chapter 22](22-mediation-analysis.md) |
 
 ---
 
@@ -325,7 +327,7 @@ When unmeasured confounding is plausible, E-values quantify how strong an unmeas
 
 ## Where this chapter leads
 
-You have completed the single-volume path (Ch 0–21). Return to [Chapter 12](12-case-studies.md) when writing integrated discussions, or to [Appendix B](../appendix-b-quick-reference.md) for day-to-day method choice.
+When FEV1 sits on the smoking → exacerbation path and reviewers ask *how much goes through lung function*, continue to [Chapter 22: Mediation analysis](22-mediation-analysis.md). Otherwise return to [Chapter 12](12-case-studies.md) for integrated discussions or [Appendix B](../appendix-b-quick-reference.md) for day-to-day method choice.
 
 ## Further reading
 

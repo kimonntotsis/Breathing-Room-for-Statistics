@@ -19,8 +19,8 @@ Materials for course leads and self-study coordinators.
 | 5 | Ch 6–7 | `ch06_glm.R`, `ch07_model_building.R` |
 | 6 | Ch 8–9 | `ch09_prediction.R` |
 | 7–8 | Ch 10–12 capstone | `ch12_case_*.R` |
-| Optional block | Ch 13–17 omics | `ch17_integrated_castor_hd.R` |
-| Optional block | Ch 18–21 | `ch18_*`, `ch19_*`, `ch20_*`, `ch21_*` |
+| Optional block | Ch 13–17 omics | `ch13_*`, `ch14_*`, `ch17_*` + **Appendix L** analyst scripts |
+| Optional block | Ch 18–22 | `ch18_*`, `ch19_*`, `ch20_*`, `ch21_*`, `ch22_mediation.R` |
 
 ## Assessment ideas
 
@@ -42,3 +42,14 @@ source("R/examples/ch20_missing_data.R")
 ```
 
 Generates `ch20_mice_density.png` and adds MICE pooled coefficients to `volume-01/tables/ch20_smoking_coef_sensitivity.csv`.
+
+## Package note for Chapter 22
+
+Bootstrap natural effects require:
+
+```r
+install.packages("mediation")
+source("R/examples/ch22_mediation.R")
+```
+
+Generates `ch22_mediation_path.png`, `ch22_mediation_effects.png`, `ch22_total_vs_direct_or.png`, and tables under `volume-01/tables/ch22_*.csv`.

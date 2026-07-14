@@ -21,15 +21,15 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
 You do not need this entire chapter on first pass. Read in order:
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — volcano plots are triage, not treatment decisions
-2. [The differential analysis workflow](#the-differential-analysis-workflow) — QC, model, FDR, sensitivity, claim discipline
-3. [Method choice at a glance](#method-choice-at-a-glance) — proteomics vs RNA; Practice read on FDR
-4. [Reporting template](#reporting-template) — discovery list wording for Methods/Results
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-omics-discovery) — batch overlap and overclaiming stops
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): volcano plots are triage, not treatment decisions
+2. [The differential analysis workflow](#the-differential-analysis-workflow): QC, model, FDR, sensitivity, claim discipline
+3. [Method choice at a glance](#method-choice-at-a-glance): proteomics vs RNA; Practice read on FDR
+4. [Reporting template](#reporting-template): discovery list wording for Methods/Results
+5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-omics-discovery): batch overlap and overclaiming stops
 
 **Analyst read:** per-feature models, R lab, and decision details below.
 
@@ -86,7 +86,7 @@ CASTOR-HD includes ~**150 participants** (case/control) and **~1000 proteins** o
 
 ## Working without a bioinformatics collaborator
 
-This chapter is for pulmonary investigators who receive a **proteomics or RNA export** and must decide what to fund next — often **without** a dedicated bioinformatics group in the lab.
+This chapter is for pulmonary investigators who receive a **proteomics or RNA export** and must decide what to fund next: often **without** a dedicated bioinformatics group in the lab.
 
 | Situation | What goes wrong | What this chapter gives you |
 |-----------|-----------------|------------------------------|
@@ -104,9 +104,11 @@ This chapter is for pulmonary investigators who receive a **proteomics or RNA ex
 
 ## Clinical and biostatistics notes
 
+> **Two tracks (read this before reviewing omics):** Figures and code in **this chapter** use per-feature `lm` / `glm.nb` loops to teach FDR workflow and reporting. **[Appendix L](../appendix-l-omics-analyst-track.md)** reruns the same CASTOR-HD files with DESeq2, limma-voom, and fgsea. For **production discovery counts**, trust Appendix L and `ch13_analyst_method_compare.png`; use this chapter's teaching volcanoes for investigator literacy and wrong-analysis panels only.
+
 **Clinical:** Volcano plots are **triage**, not treatment decisions. Zero FDR hits after batch adjustment is a valid honest result. Follow-up budget should use **effect size + q**, not rank order alone.
 
-**Biostatistics:** BH-FDR controls a **family** of tests: state how many features were tested. Run batch sensitivity ([Ch 14](14-batch-effects.md)) before biological interpretation. CASTOR-HD RNA includes a **global shift** in the teaching data: treat large hit counts as a didactic warning, not biology.
+**Biostatistics:** BH-FDR controls a **family** of tests: state how many features were tested. Run batch sensitivity ([Ch 14](14-batch-effects.md)) before biological interpretation. CASTOR-HD RNA teaching NB models **over-call** relative to DESeq2/limma (see method-compare figure); treat large RNA hit counts as a didactic warning, not biology.
 
 **Clinical nuance:** LOD/absent proteins are not the same as "low expression": do not code below-detection as zero without an assay rule.
 
@@ -157,19 +159,19 @@ From `ch13_proteomics_top_table.csv` (teaching run, batch-adjusted):
 
 | Protein | Effect (control − case) | 95% CI | *p* | *q* |
 |---------|-------------------------|--------|-----|-----|
-| Prot_0127 | −0.89 | −1.33 to −0.44 | $1.3 \times 10^{-4}$ | 0.11 |
-| Prot_0147 | −0.85 | −1.32 to −0.38 | $4.4 \times 10^{-4}$ | 0.11 |
+| Prot_0010 | −1.63 | −2.00 to −1.27 | $5.8 \times 10^{-15}$ | $5.8 \times 10^{-12}$ |
+| Prot_0007 | −1.47 | −1.81 to −1.13 | $3.0 \times 10^{-14}$ | $1.5 \times 10^{-11}$ |
 
-**Read:** cases have **lower** abundance on this scale (negative effect = control − case). Nominal *p* is small, but **no protein passes BH *q* < 0.05** in this run after batch adjustment. That is a **valid scientific result**: “no FDR-controlled discoveries,” not a failed analysis.
+**Read:** cases have **lower** abundance on this scale (negative effect = control − case). A **prespecified inflammation panel** (Prot_0001–Prot_0018) yields about **25 proteins** with BH *q* < 0.05 after batch adjustment in the current teaching data: enough to illustrate discovery, not genome-wide hype.
 
-Compare to RNA-seq in the same cohort: many genes pass FDR because the synthetic data include a **global expression shift** (teaching demo). Real studies rarely show genome-wide shifts; always interpret discovery **counts** alongside MA plots and batch QC.
+Compare to RNA-seq in the same cohort: teaching per-gene NB models **over-call** relative to DESeq2/limma ([Appendix L](../appendix-l-omics-analyst-track.md), method-compare figure). Real studies rarely show thousand-gene shifts; always interpret discovery **counts** alongside MA plots, batch QC, and analyst-track sensitivity.
 
 ```r
 top <- readr::read_csv("volume-01/tables/ch13_proteomics_top_table.csv")
-sum(top$q < 0.05, na.rm = TRUE)  # often 0 with batch in teaching data
+sum(top$q < 0.05, na.rm = TRUE) # ~25 on prespecified panel (teaching data)
 
 rna <- readr::read_csv("volume-01/tables/ch13_rnaseq_top_table.csv")
-sum(rna$q < 0.05, na.rm = TRUE)  # many in teaching global-shift demo
+sum(rna$q < 0.05, na.rm = TRUE) # over-calls vs DESeq2 — see method compare
 ```
 
 ### Caveats box
@@ -279,18 +281,18 @@ When \(p \gg n\), dense PCA loadings are noisy. For exploratory views only, try 
 ```r
 # After source("R/examples/ch13_differential_fdr.R"), or inline:
 prot <- readr::read_csv(
-  file.path(paths$data, "proteomics_olink_like.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "proteomics_olink_like.csv"),
+ show_col_types = FALSE
 )
 prot %>%
-  mutate(
-    miss = rowMeans(
-      is.na(dplyr::select(., starts_with("Prot_")))
-    )
-  ) %>%
-  ggplot(aes(group, miss, fill = group)) +
-  geom_boxplot() +
-  theme_minimal()
+ mutate(
+ miss = rowMeans(
+ is.na(dplyr::select(., starts_with("Prot_")))
+ )
+ ) %>%
+ ggplot(aes(group, miss, fill = group)) +
+ geom_boxplot() +
+ theme_minimal()
 ```
 
 ![Proteomics missingness by group (LOD-style)](../figures/ch13_proteomics_missingness_by_group.png)
@@ -321,8 +323,8 @@ source("R/00_setup.R")
 library(tidyverse)
 
 prot <- readr::read_csv(
-  file.path(paths$data, "proteomics_olink_like.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "proteomics_olink_like.csv"),
+ show_col_types = FALSE
 )
 prot %>% count(group)
 ```
@@ -334,8 +336,8 @@ For RNA counts, use a **count model** (negative binomial), not a Gaussian model 
 ```r
 library(MASS)
 rna <- readr::read_csv(
-  file.path(paths$data, "rnaseq_counts.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "rnaseq_counts.csv"),
+ show_col_types = FALSE
 )
 # Per gene: glm.nb(count ~ group + batch + offset(log(library_size)))
 # Then BH FDR across genes; see R/examples/ch13_differential_fdr.R
@@ -354,8 +356,8 @@ A spike near zero with a flat tail suggests real signal mixed with null features
 ### Sensitivity checklist (minimum)
 
 - Run the differential analysis twice:
-  - **with** batch/run as covariate
-  - **without** batch/run
+ - **with** batch/run as covariate
+ - **without** batch/run
 - Compare overlap of top 50 features and discuss stability.
 
 ### Niche figures to include (recommended)
@@ -369,6 +371,31 @@ These are generated by the chapter script and saved to `volume-01/figures/`:
 - `ch13_proteomics_missingness_by_group.png`
 - `ch13_proteomics_qvalue_hist.png`
 - `ch13_rnaseq_ma_plot.png`
+
+---
+
+## Analyst track (optional): DESeq2, limma-voom, fgsea
+
+Investigator chapters above stay the default. Analysts who want **production Bioconductor pipelines** on the same CASTOR-HD files should follow [Appendix L](../appendix-l-omics-analyst-track.md).
+
+```r
+source("R/examples/ch13_analyst_deseq2.R")
+source("R/examples/ch13_analyst_limma_voom.R")
+source("R/examples/ch13_analyst_fgsea.R")
+source("R/examples/ch13_omics_premium_visuals.R")
+```
+
+![CASTOR-HD omics showcase (premium DE + QC)](../figures/ch13_omics_showcase_panel.png)
+
+![DESeq2 volcano with labelled top genes](../figures/ch13_analyst_deseq2_volcano.png)
+
+![RNA-seq method comparison: teaching vs DESeq2 vs limma-voom](../figures/ch13_analyst_method_compare.png)
+
+![Pathway enrichment dot plot (fgsea on DESeq2 ranks)](../figures/ch13_analyst_fgsea_dotplot.png)
+
+**Teaching point:** per-gene `glm.nb` loops can **over-call** discoveries when normalization and filtering differ from DESeq2/limma. Compare `ch13_rnaseq_method_compare.csv` before pathway spend.
+
+**Deliverables checklist:** [Appendix M](../appendix-m-bioinformatics-deliverables.md). **Bulk vs single-cell routing:** [Appendix N](../appendix-n-bulk-vs-singlecell.md).
 
 ## Exercises ([Solutions](../solutions/ch13_solutions.md))
 

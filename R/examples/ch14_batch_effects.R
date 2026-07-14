@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -13,37 +14,53 @@ dir.create(tab_dir, showWarnings = FALSE, recursive = TRUE)
 # Proteomics: PCA colored by batch and group (subset for speed)
 # =============================================================================
 prot <- read_csv(file.path(paths$data, "proteomics_olink_like.csv"), show_col_types = FALSE)
-X <- prot %>% select(starts_with("Prot_000")) # first ~100 proteins
+X <- prot %>% select(starts_with("Prot_000"))
 
-# Simple median imputation per protein for PCA visualization only
 X_imp <- X %>% mutate(across(everything(), \(v) { v[is.na(v)] <- median(v, na.rm = TRUE); v }))
 
 pca <- prcomp(X_imp, scale. = TRUE)
 scores <- as_tibble(pca$x[, 1:2]) %>%
   mutate(batch = prot$batch, plate = prot$plate, group = prot$group)
 
-p_batch <- ggplot(scores, aes(PC1, PC2, color = batch, shape = group)) +
-  geom_point(alpha = 0.85) +
-  theme_minimal() +
-  labs(title = "Proteomics PCA (subset)", subtitle = "Color=batch; shape=group")
+batch_pal <- c(Batch1 = handbook_cols$nonsmoker, Batch2 = handbook_cols$smoker)
+plate_pal <- grDevices::colorRampPalette(c("#CBD5E1", handbook_cols$intervention, "#8B7EC8"))(
+  length(unique(scores$plate))
+)
+names(plate_pal) <- sort(unique(scores$plate))
 
-p_plate <- ggplot(scores, aes(PC1, PC2, color = plate, shape = group)) +
-  geom_point(alpha = 0.85) +
-  theme_minimal() +
-  guides(color = "none") +
-  labs(title = "Proteomics PCA (subset)", subtitle = "Color=plate (hidden legend); shape=group")
+p_batch <- plot_pca_dual(
+  scores,
+  colour = "batch",
+  shape = "group",
+  colour_palette = batch_pal,
+  title = "Proteomics PCA (subset)",
+  subtitle = "Colour = batch; shape = group — batch structure visible before DE",
+  xlab = sprintf("PC1 (%.0f%%)", 100 * summary(pca)$importance[2, 1]),
+  ylab = sprintf("PC2 (%.0f%%)", 100 * summary(pca)$importance[2, 2])
+)
 
-ggsave(file.path(fig_dir, "ch14_pca_proteomics_batch.png"), p_batch, width = 7.2, height = 4.8, dpi = 160)
-ggsave(file.path(fig_dir, "ch14_pca_proteomics_plate.png"), p_plate, width = 7.2, height = 4.8, dpi = 160)
+p_plate <- plot_pca_dual(
+  scores,
+  colour = "plate",
+  shape = "group",
+  colour_palette = plate_pal,
+  show_colour_legend = FALSE,
+  title = "Proteomics PCA (subset)",
+  subtitle = "Colour = plate (legend hidden); shape = group",
+  xlab = sprintf("PC1 (%.0f%%)", 100 * summary(pca)$importance[2, 1]),
+  ylab = sprintf("PC2 (%.0f%%)", 100 * summary(pca)$importance[2, 2])
+)
+
+handbook_save(p_batch, file.path(fig_dir, "ch14_pca_proteomics_batch.png"), 7.4, 4.8)
+handbook_save(p_plate, file.path(fig_dir, "ch14_pca_proteomics_plate.png"), 7.4, 4.8)
 
 # =============================================================================
-# Mini-case A: group × batch overlap (CASTOR-HD) vs Case B: confounded design
+# Mini-case A: group × batch overlap vs Case B: confounded design
 # =============================================================================
 overlap_real <- prot %>%
   count(group, batch, name = "n") %>%
   mutate(scenario = "A: CASTOR-HD (overlap)")
 
-# Synthetic confounded design for teaching (not in CSV)
 overlap_conf <- expand_grid(
   group = c("control", "case"),
   batch = c("Batch1", "Batch2"),
@@ -60,19 +77,19 @@ overlap_conf <- expand_grid(
 overlap_plot_df <- bind_rows(overlap_real, overlap_conf)
 
 p_overlap <- ggplot(overlap_plot_df, aes(batch, n, fill = group)) +
-  geom_col(position = "dodge", width = 0.7) +
+  geom_col(position = position_dodge(width = 0.72), width = 0.68, alpha = 0.9, colour = "white") +
   facet_wrap(~ scenario, scales = "free_x") +
-  theme_minimal() +
+  scale_fill_manual(values = handbook_group_fill, name = "Group") +
   labs(
     title = "Group × batch overlap: valid vs confounded design",
+    subtitle = "Scenario B: group and batch are aliased — adjustment is not identifiable",
     x = "Batch",
-    y = "Sample count",
-    fill = "Group"
-  )
+    y = "Sample count"
+  ) +
+  handbook_theme(11)
 
-ggsave(file.path(fig_dir, "ch14_group_batch_overlap.png"), p_overlap, width = 8.4, height = 4.4, dpi = 160)
+handbook_save(p_overlap, file.path(fig_dir, "ch14_group_batch_overlap.png"), 8.6, 4.6)
 
-# Demonstrate non-identifiability in confounded case (single feature)
 set.seed(20250617)
 y_conf <- rnorm(40, mean = ifelse(rep(c("control", "case"), each = 20) == "case", 1, 0))
 df_conf <- tibble(
@@ -86,7 +103,7 @@ mm_conf <- model.matrix(~ group + batch, data = df_conf)
 identifiable_conf <- qr(mm_conf)$rank == ncol(mm_conf)
 
 # =============================================================================
-# Niche figure: how much does PC1 track batch vs group? (R-squared from ANOVA)
+# PC1 variance explained by batch vs group
 # =============================================================================
 pc1 <- scores$PC1
 r2_batch <- summary(lm(PC1 ~ batch, data = scores))$r.squared
@@ -98,22 +115,19 @@ var_expl <- tibble(
   r_squared = c(r2_batch, r2_group, r2_both)
 )
 
-p_r2 <- ggplot(var_expl, aes(predictor, r_squared, fill = predictor)) +
-  geom_col(width = 0.65) +
-  scale_y_continuous(limits = c(0, 1), labels = scales::percent_format()) +
-  theme_minimal() +
-  guides(fill = "none") +
-  labs(
-    title = "PC1 variance explained (proteomics subset)",
-    subtitle = "If batch dominates PC1, technical structure is large",
-    x = NULL,
-    y = "R-squared"
-  )
+p_r2 <- plot_metric_bars(
+  var_expl, x = "predictor", y = "r_squared",
+  title = "PC1 variance explained (proteomics subset)",
+  subtitle = "If batch dominates PC1, technical structure is large",
+  ylab = "R-squared",
+  y_limits = c(0, 1),
+  y_labels = scales::percent_format()
+)
 
-ggsave(file.path(fig_dir, "ch14_pc1_variance_explained.png"), p_r2, width = 6.8, height = 4.2, dpi = 160)
+handbook_save(p_r2, file.path(fig_dir, "ch14_pc1_variance_explained.png"), 7.0, 4.4)
 
 # =============================================================================
-# Sensitivity illustration: discovery counts with vs without batch covariate
+# Sensitivity: discovery counts with vs without batch covariate
 # =============================================================================
 prot_features <- names(prot)[grepl("^Prot_", names(prot))]
 
@@ -142,15 +156,15 @@ sens <- tibble(
   discoveries_q05 = c(sum(q_with < 0.05, na.rm = TRUE), sum(q_without < 0.05, na.rm = TRUE))
 )
 
-p_bar <- ggplot(sens, aes(model, discoveries_q05, fill = model)) +
-  geom_col(width = 0.65) +
-  theme_minimal() +
-  guides(fill = "none") +
-  labs(title = "Sensitivity to batch adjustment", y = "BH discoveries (q < 0.05)", x = NULL)
+p_bar <- plot_metric_bars(
+  sens, x = "model", y = "discoveries_q05",
+  title = "Sensitivity to batch adjustment",
+  subtitle = "Inflated hits without batch covariates are a red flag in omics screens",
+  ylab = "BH discoveries (q < 0.05)"
+)
 
-ggsave(file.path(fig_dir, "ch14_batch_sensitivity_discoveries.png"), p_bar, width = 6.8, height = 4.0, dpi = 160)
+handbook_save(p_bar, file.path(fig_dir, "ch14_batch_sensitivity_discoveries.png"), 7.0, 4.2)
 
-# Mini-case summary table (for chapter appendix / copy-paste)
 mini_summary <- tibble(
   scenario = c("A: CASTOR-HD overlap", "B: confounded (synthetic)"),
   group_batch_overlap = c("yes (both groups in both batches)", "no (batch == group)"),

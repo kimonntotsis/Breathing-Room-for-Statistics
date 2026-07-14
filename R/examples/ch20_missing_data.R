@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -32,19 +33,17 @@ miss_summary <- spirometry_miss %>%
 
 write_csv(miss_summary, file.path(tab_dir, "ch20_missingness_by_diagnosis.csv"))
 
-p_miss <- ggplot(spirometry_miss, aes(diagnosis, as.integer(missing_fev1), fill = diagnosis)) +
-  geom_bar(stat = "summary", fun = "mean") +
-  theme_minimal() +
-  guides(fill = "none") +
-  labs(
-    title = "Missing FEV1 fraction by obstruction severity (synthetic MAR)",
-    subtitle = sprintf("Overall missing: %d / %d (%.1f%%)", enrol_n - analysed_n, enrol_n,
-                       100 * (enrol_n - analysed_n) / enrol_n),
-    x = NULL,
-    y = "Proportion missing"
-  )
+p_miss <- plot_miss_heatmap(
+  spirometry_miss, "patient_id", c("fev1_obs", "age", "sex", "smoking", "diagnosis"),
+  title = "Missingness heatmap (participant sample)",
+  subtitle = sprintf(
+    "Overall missing FEV1: %d / %d (%.1f%%); pattern informs MAR/MNAR scepticism",
+    enrol_n - analysed_n, enrol_n, 100 * (enrol_n - analysed_n) / enrol_n
+  ),
+  n_show = 56L
+)
 
-ggsave(file.path(fig_dir, "ch20_missingness_pattern.png"), p_miss, width = 6.8, height = 4.4, dpi = 160)
+handbook_save(p_miss, file.path(fig_dir, "ch20_missingness_pattern.png"), 7.4, 5.2)
 
 fit_cc <- lm(fev1_obs ~ smoking + age + sex, data = spirometry_miss, na.action = na.omit)
 spirometry_miss <- spirometry_miss %>%
@@ -95,36 +94,35 @@ if (mice_ok) {
   )
 
   p_mice <- ggplot(diag_df, aes(fev1, fill = source)) +
-    geom_histogram(alpha = 0.55, position = "identity", bins = 25) +
-    theme_minimal() +
+    geom_histogram(alpha = 0.62, position = "identity", bins = 25, colour = "white", linewidth = 0.25) +
+    scale_fill_manual(
+      values = c("observed" = handbook_cols$intervention, "imputed (draw 1)" = handbook_cols$smoker),
+      name = NULL
+    ) +
     labs(
       title = "MICE diagnostic: observed vs imputed FEV1 (imputation 1)",
       subtitle = "Imputed values should sit in a plausible range, not a spike at one number",
       x = "FEV1 (L)",
       y = "Count"
-    )
+    ) +
+    handbook_theme()
 
-  ggsave(file.path(fig_dir, "ch20_mice_density.png"), p_mice, width = 7, height = 4.2, dpi = 160)
+  handbook_save(p_mice, file.path(fig_dir, "ch20_mice_density.png"), 7.2, 4.4)
   message("Chapter 20 MICE: smoking coef = ", round(mice_smoking$estimate, 3),
           " (pooled, m = 20)")
 } else {
   message("Install package 'mice' for MICE demo: install.packages(\"mice\")")
 }
 
-p_sens <- compare %>%
-  ggplot(aes(x = estimate, y = analysis, xmin = conf.low, xmax = conf.high)) +
-  geom_point(size = 2.5) +
-  geom_errorbarh(height = 0.2) +
-  geom_vline(xintercept = 0, linetype = 2, color = "grey50") +
-  theme_minimal() +
-  labs(
-    title = "Smoking coefficient sensitivity: complete-case vs median imputation",
-    subtitle = "Outcome: FEV1 (L); teaching contrast; use MICE in production",
-    x = "Coefficient (smoking vs non-smoking)",
-    y = NULL
-  )
+p_sens <- plot_coef_sensitivity(
+  compare,
+  y = "analysis",
+  title = "Smoking coefficient sensitivity: complete-case vs imputation",
+  subtitle = "Outcome: FEV1 (L); compare with MICE pooled estimate in production",
+  xlab = "Coefficient (smoking vs non-smoking)"
+)
 
-ggsave(file.path(fig_dir, "ch20_smoking_coef_sensitivity.png"), p_sens, width = 6.8, height = 3.8, dpi = 160)
+handbook_save(p_sens, file.path(fig_dir, "ch20_smoking_coef_sensitivity.png"), 7.0, 3.8)
 
 message("Chapter 20: enrolled = ", enrol_n, "; analysed = ", analysed_n,
         "; missing = ", enrol_n - analysed_n)

@@ -16,13 +16,13 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Why this chapter](#why-this-chapter) — pipeline stop/go gates
-2. [Method choice at a glance](#method-choice-at-a-glance) — step order and what each proves
-3. [The discovery claim ladder](#the-discovery-claim-ladder) — what each step may claim
-4. [Step 6: Reporting (integrated)](#step-6-reporting-integrated) — one paragraph per modality
-5. [Pipeline failure modes](#pipeline-failure-modes-what-to-report-honestly) — stop/go gates
+1. [Why this chapter](#why-this-chapter): pipeline stop/go gates
+2. [Method choice at a glance](#method-choice-at-a-glance): step order and what each proves
+3. [The discovery claim ladder](#the-discovery-claim-ladder): what each step may claim
+4. [Step 6: Reporting (integrated)](#step-6-reporting-integrated): one paragraph per modality
+5. [Pipeline failure modes](#pipeline-failure-modes-what-to-report-honestly): stop/go gates
 
 **Analyst read:** elastic net nested CV, R scripts below.
 
@@ -299,7 +299,7 @@ Outer-fold AUC with variability across folds is the honest performance summary; 
 
 ## Where this chapter leads
 
-**Next:** [Chapters 18–21](18-longitudinal-mixed-models.md) for repeated measures, survival, missing data, and causal framing on CASTOR extensions.
+**Next:** [Chapters 18–22](18-longitudinal-mixed-models.md) for repeated measures, survival, missing data, causal framing, and mediation on CASTOR extensions.
 
 ## Further reading
 

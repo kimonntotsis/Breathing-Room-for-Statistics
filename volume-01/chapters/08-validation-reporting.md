@@ -17,12 +17,12 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Why this chapter](#why-this-chapter) — evidence quality for sign-off
-2. [Method choice at a glance](#method-choice-at-a-glance) — CONSORT/STROBE/TRIPOD routing
-3. [Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)](#technique-reporting-guidelines-consort--strobe--tripod) — pick your guideline
-4. [Technique: Multiplicity control](#technique-multiplicity-control) — endpoint families; unadjusted vs adjusted in the SAP
+1. [Why this chapter](#why-this-chapter): evidence quality for sign-off
+2. [Method choice at a glance](#method-choice-at-a-glance): CONSORT/STROBE/TRIPOD routing
+3. [Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)](#technique-reporting-guidelines-consort--strobe--tripod): pick your guideline
+4. [Technique: Multiplicity control](#technique-multiplicity-control): endpoint families; unadjusted vs adjusted in the SAP
 5. **Practice read** on MCID and CIs vs *p*-values
 6. [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit)
 
@@ -148,8 +148,8 @@ Regulatory and device submissions ask: “Did you demonstrate non-inferiority?�
 B <- 2000
 set.seed(1)
 boot_diff <- replicate(B, {
-  d <- spirometry[sample(nrow(spirometry), replace = TRUE), ]
-  diff(tapply(d$fev1, d$group, mean))
+ d <- spirometry[sample(nrow(spirometry), replace = TRUE), ]
+ diff(tapply(d$fev1, d$group, mean))
 })
 quantile(boot_diff, c(0.025, 0.975))
 ```
@@ -193,7 +193,7 @@ Pulmonary trials rarely have a single number of interest, but they should have *
 
 **Practice read:** a steering-committee deck is not a statistical analysis plan. If four lung endpoints each carry α = 0.05, expect at least one false positive by chance. Prespecify which endpoint would change the label claim.
 
-**Unadjusted vs adjusted in the same table:** report both only when prespecified—e.g. unadjusted ITT mean difference as primary, ANCOVA with baseline FEV1 as supported secondary. Do not switch roles post hoc.
+**Unadjusted vs adjusted in the same table:** report both only when prespecified: e.g. unadjusted ITT mean difference as primary, ANCOVA with baseline FEV1 as supported secondary. Do not switch roles post hoc.
 
 ### Caveats
 
@@ -305,8 +305,8 @@ Run 12 models; report only the one with p < 0.05.
 
 **Interpretation:**
 
-- **Statistician:** compatible with null and with effects up to ~0.21 L.  
-- **Practice:** if MCID = 0.10 L, CI includes values above MCID - inconclusive, not negative [@cazzola2008mcid].  
+- **Statistician:** compatible with null and with effects up to ~0.21 L.
+- **Practice:** if MCID = 0.10 L, CI includes values above MCID - inconclusive, not negative [@cazzola2008mcid].
 - **Wrong:** "trial failed" / "no benefit."
 
 **Sensitivity:** permutation p; bootstrap CI; ANCOVA on `spirometry_trial.csv`.
@@ -399,8 +399,8 @@ Multiple imputation (MICE) is the default modern sensitivity tool when missingne
 
 ## Further reading
 
-- Harrell, *Regression Modeling Strategies* [@harrell2015rms]  
-- Efron & Tibshirani, *An Introduction to the Bootstrap* [@efron1993bootstrap]  
+- Harrell, *Regression Modeling Strategies* [@harrell2015rms]
+- Efron & Tibshirani, *An Introduction to the Bootstrap* [@efron1993bootstrap]
 - Steyerberg, *Clinical Prediction Models* [@steyerberg2019clinical]
 
 ## Exercises ([Solutions](../solutions/ch08_solutions.md))

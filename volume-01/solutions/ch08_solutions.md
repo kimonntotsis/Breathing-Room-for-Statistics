@@ -19,8 +19,8 @@ t.test(fev1 ~ group, data = s)$conf.int
 set.seed(1)
 B <- 2000
 boot <- replicate(B, {
-  d <- s[sample(nrow(s), replace = TRUE), ]
-  diff(tapply(d$fev1, d$group, mean))
+ d <- s[sample(nrow(s), replace = TRUE), ]
+ diff(tapply(d$fev1, d$group, mean))
 })
 quantile(boot, c(0.025, 0.975))
 sessionInfo()

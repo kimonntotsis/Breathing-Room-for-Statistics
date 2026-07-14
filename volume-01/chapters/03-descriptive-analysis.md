@@ -16,13 +16,13 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Why this chapter](#why-this-chapter) — Table 1 before any test
-2. [Plot choice by estimand](#plot-choice-by-estimand) — router + right vs wrong pairs
-3. [Method choice at a glance](#method-choice-at-a-glance) — summaries and plots by variable type
-4. [Technique: Table 1](#technique-table-1-baseline-characteristics) — what reviewers see first
-5. [Alternatives & extensions](#alternatives--extensions-choose-by-data) — SMD, robust summaries
+1. [Why this chapter](#why-this-chapter): Table 1 before any test
+2. [Plot choice by estimand](#plot-choice-by-estimand): router + right vs wrong pairs
+3. [Method choice at a glance](#method-choice-at-a-glance): summaries and plots by variable type
+4. [Technique: Table 1](#technique-table-1-baseline-characteristics): what reviewers see first
+5. [Alternatives & extensions](#alternatives--extensions-choose-by-data): SMD, robust summaries
 
 **Analyst read:** distribution plots, R lab below.
 
@@ -75,11 +75,11 @@ Description is not optional preamble. It is how you catch errors and justify the
 
 ## The descriptive workflow
 
-1. **Inventory** - n, variables, types, missingness  
-2. **Summarise** - Table 1 by exposure/arm  
-3. **Visualise** - distributions and relationships  
-4. **Decide** - symmetric → mean/t-test path; skewed → median/nonparametric  
-5. **Report** - before primary analysis  
+1. **Inventory** - n, variables, types, missingness
+2. **Summarise** - Table 1 by exposure/arm
+3. **Visualise** - distributions and relationships
+4. **Decide** - symmetric → mean/t-test path; skewed → median/nonparametric
+5. **Report** - before primary analysis
 
 ---
 
@@ -87,7 +87,7 @@ Description is not optional preamble. It is how you catch errors and justify the
 
 Description is where **figure choice** meets **method choice**. The plot must show the same quantity you will test: spread for a mean difference, pairing for pre/post, denominators for proportions, uncertainty for adjusted effects.
 
-![Plot choice by estimand — prefer vs avoid](../figures/viz_plot_router.png){width=96%}
+![Plot choice by estimand: prefer vs avoid](../figures/viz_plot_router.png){width=96%}
 
 Full router and regeneration: [Appendix I](../appendix-i-figure-hygiene.md).
 
@@ -227,9 +227,13 @@ Report mean (SD) for ICU length-of-stay with extreme outliers → use median [IQ
 
 Overlapping histograms by group need clear colours; bin width affects appearance.
 
-![FEV1 distribution (CASTOR)](../figures/ch03_fev1_histogram.png)
+![FEV1 distribution combo (histogram + density + rug)](../figures/ch03_fev1_histogram.png)
 
-The histogram shows where most CASTOR FEV1 values fall before you choose mean vs median summaries.
+The combo plot shows where most CASTOR FEV1 values fall before you choose mean vs median summaries.
+
+![FEV1 ridges by obstruction category](../figures/ch03_fev1_ridge.png)
+
+Ridge densities compare cohort subsets without collapsing to a single bar.
 
 ### Wrong analysis ⚠
 
@@ -245,17 +249,21 @@ Use bar chart with only mean ± SE for n < 30 without showing raw data.
 |---|---|
 | **Answers** | Compare distribution between groups |
 | **Boxplot** | Median, IQR, outliers |
-| **Violin** | Full density shape |
-| **R** | `geom_boxplot()` + `geom_jitter()`; `geom_violin()` |
+| **Violin** | Full density shape; split by a second factor |
+| **R** | `geom_violin()` + `position_dodge()`; see `R/viz_handbook.R` |
 | **Figure** | `ch03_fev1_violin.png` |
 
 ### Caveats
 
 Outliers may be real severe patients - investigate before deleting. Jitter reveals sample size visually.
 
-![FEV1 by trial arm (violin + boxplot)](../figures/ch03_fev1_violin.png)
+![Split violin: FEV1 by trial arm and smoking](../figures/ch03_fev1_violin.png)
 
-Compare spread between arms, not only central tendency — this is the figure reviewers expect beside Table 1.
+Compare spread between arms and smoking strata, not only central tendency.
+
+![Correlation heatmap: baseline continuous traits](../figures/ch03_corr_heatmap.png)
+
+Heatmaps surface collinearity before regression (Ch 5–7).
 
 ---
 
@@ -310,7 +318,7 @@ Correlation ≠ causation. Influential points drive r. Smoking colour on scatter
 
 Correlate binary smoking (0/1) with FEV1 and call it "effect" - use regression (Ch 5) for adjusted statement.
 
-![FEV1 vs age, coloured by smoking](../figures/ch03_fev1_scatter.png)
+![FEV1 vs age with smoking ellipses](../figures/ch03_fev1_scatter.png)
 
 Association in the scatter motivates adjusted models; it does not prove causation.
 
@@ -324,9 +332,9 @@ Report n for each variable. Note if complete-case n drops. Missing FEV1 in spiro
 
 ## CASTOR worked example
 
-**Step 1:** Table 1 by `group`.  
-**Step 2:** Histogram and violin of FEV1 (figures above).  
-**Step 3:** QQ plot → roughly symmetric → Welch t reasonable (Ch 4) [@welch1947t].  
+**Step 1:** Table 1 by `group`.
+**Step 2:** Histogram and violin of FEV1 (figures above).
+**Step 3:** QQ plot → roughly symmetric → Welch t reasonable (Ch 4) [@welch1947t].
 **Step 4:** Scatter FEV1 vs age, coloured by smoking → motivates adjusted regression (Ch 5).
 
 ---
@@ -407,9 +415,9 @@ Descriptives are where you decide what later methods are plausible. Use these al
 
 ## Further reading
 
-- Harrell, *Regression Modeling Strategies* - descriptive summaries before modelling [@harrell2015rms]  
-- Stoltzfus, *Biostatistics for Health and Biological Science Users of R* [@stoltzfus2019biostatistics]  
-- Wickham, *ggplot2* [@wickham2016ggplot2]  
+- Harrell, *Regression Modeling Strategies* - descriptive summaries before modelling [@harrell2015rms]
+- Stoltzfus, *Biostatistics for Health and Biological Science Users of R* [@stoltzfus2019biostatistics]
+- Wickham, *ggplot2* [@wickham2016ggplot2]
 - CONSORT / STROBE baseline reporting [@schulz2010consort; @vonelm2007strobe]
 
 ## Exercises ([Solutions](../solutions/ch03_solutions.md))

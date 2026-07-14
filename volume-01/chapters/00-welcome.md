@@ -14,12 +14,12 @@ Pick the row that matches your job. You do not need to read the whole volume.
 |-----------|------------|-------------------|-------------------|
 | **Pulmonologist / trial investigator** | [Preface](chapters/00-preface.md) → [Ch 1–2](chapters/01-statistical-thinking.md) → [Appendix B](appendix-b-quick-reference.md) | [Ch 3–4](chapters/03-descriptive-analysis.md), [Ch 8](chapters/08-validation-reporting.md), [Case A](chapters/12-case-studies.md) | Omics (Ch 13–17), causal (Ch 21) |
 | **Translational biologist** | [Ch 1–2](chapters/01-statistical-thinking.md) → [Appendix B §1b](appendix-b-quick-reference.md) | [Ch 13–15](chapters/13-differential-analysis-fdr.md), [Ch 17](chapters/17-integrated-castor-hd.md), [Cases C–D](chapters/12-case-studies.md) | Survival (Ch 19) until you need it |
-| **Analyst (R)** | [Appendix A](appendix-a-r-setup.md) → [Ch 3](chapters/03-descriptive-analysis.md) → [Appendix B](appendix-b-quick-reference.md) | Outcome chapter + [Ch 8](chapters/08-validation-reporting.md); technique cards and R lab | — |
+| **Analyst (R)** | [Appendix A](appendix-a-r-setup.md) → [Ch 3](chapters/03-descriptive-analysis.md) → [Appendix B](appendix-b-quick-reference.md) | Outcome chapter + [Ch 8](chapters/08-validation-reporting.md); technique cards and R lab | |
 | **Fellow / self-study** | Paths below | Ch 1–12 + [Appendix F](appendix-f-exercises.md) | Parts VI–VIII by project |
 
-**Investigator shortcut:** Chapters with heavy method choice include an **Investigator path (≈20 min)** and a **Method choice at a glance** table (Method | When | Why). For slides and Figure 1, start with [Appendix I](appendix-i-figure-hygiene.md) and [Ch 3: Plot choice by estimand](chapters/03-descriptive-analysis.md#plot-choice-by-estimand).
+**Chapter layout:** Chapters with heavy method choice include an **In this chapter** and a **Method choice at a glance** table (Method | When | Why). For slides and Figure 1, start with [Appendix I](appendix-i-figure-hygiene.md) and [Ch 3: Plot choice by estimand](chapters/03-descriptive-analysis.md#plot-choice-by-estimand).
 
-**Too much book?** Investigators who only review protocols/Methods: [Appendix J (~2 hours)](appendix-j-investigator-minimum-path.md) — explicit skip list.
+**Too much book?** Investigators who only review protocols/Methods: [Appendix J](appendix-j-investigator-minimum-path.md): explicit skip list.
 
 **Where are you right now?**
 
@@ -29,7 +29,7 @@ Pick the row that matches your job. You do not need to read the whole volume.
 
 - **As an analyst:** running analyses in R. Install once ([Appendix A](appendix-a-r-setup.md)), describe the cohort ([Chapter 3](chapters/03-descriptive-analysis.md)), then open the chapter that matches your outcome. [METHOD_MAP](METHOD_MAP.md) helps when two methods look plausible.
 
-- **Teaching or self-study.** Work through Ch 1–12 with [Appendix F](appendix-f-exercises.md); add Ch 13–17 for omics blocks or Ch 18–21 for longitudinal and causal material.
+- **Teaching or self-study.** Work through Ch 1–12 with [Appendix F](appendix-f-exercises.md); add Ch 13–17 for omics blocks or Ch 18–22 for longitudinal, causal, and mediation material.
 
 ## Suggested reading paths
 
@@ -45,7 +45,7 @@ Full path tables and file lists: [Appendix G](appendix-g-handbook-navigation.md)
 
 **What holds the volume together**
 
-Every example uses the same synthetic patients (**CASTOR**, a COPD-oriented teaching cohort; omics extensions in **CASTOR-HD**), so a Table 1 in [Chapter 3](chapters/03-descriptive-analysis.md) reappears in regression, survival, and discovery chapters. **APATE** ([vignette](APATE_VIGNETTE.md)) is prose-only: Greek *Apate* (deceit) names the fictional messy registry that contrasts with clean CASTOR — no CSV. R code is there to reproduce each step; you can read the argument without running it. The workflow (question first, limits last) is spelled out in [Chapter 1](chapters/01-statistical-thinking.md).
+Every example uses the same synthetic patients (**CASTOR**, a COPD-oriented teaching cohort; omics extensions in **CASTOR-HD**), so a Table 1 in [Chapter 3](chapters/03-descriptive-analysis.md) reappears in regression, survival, and discovery chapters. **APATE** ([vignette](APATE_VIGNETTE.md)) is prose-only: Greek *Apate* (deceit) names the fictional messy registry that contrasts with clean CASTOR: no CSV. R code is there to reproduce each step; you can read the argument without running it. The workflow (question first, limits last) is spelled out in [Chapter 1](chapters/01-statistical-thinking.md).
 
 **How the eight parts fit**
 
@@ -58,6 +58,6 @@ Every example uses the same synthetic patients (**CASTOR**, a COPD-oriented teac
 | PCA, clustering, worked case studies | Part V (Ch 10–12) |
 | Proteomics, RNA, flow, antibody screens | Part VI (Ch 13–16) |
 | Integrated omics pipeline | Part VII (Ch 17) |
-| Repeated visits, survival, missing data, confounding | Part VIII (Ch 18–21) |
+| Repeated visits, survival, missing data, confounding, mediation | Part VIII (Ch 18–22) |
 
 Full chapter list, topic index, datasets, and R commands: [Appendix G](appendix-g-handbook-navigation.md).

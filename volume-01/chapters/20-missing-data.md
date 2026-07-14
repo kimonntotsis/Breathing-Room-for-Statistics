@@ -17,12 +17,12 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes) — MCAR/MAR/MNAR in plain language
-2. [Method choice at a glance](#method-choice-at-a-glance) — complete-case vs MI vs sensitivity
-3. [Reporting template](#reporting-template) — enrolled vs analysed *n*
-4. [Catalog of wrong analyses](#catalog-of-wrong-analyses-missing-data) — listwise deletion by default
+1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): MCAR/MAR/MNAR in plain language
+2. [Method choice at a glance](#method-choice-at-a-glance): complete-case vs MI vs sensitivity
+3. [Reporting template](#reporting-template): enrolled vs analysed *n*
+4. [Catalog of wrong analyses](#catalog-of-wrong-analyses-missing-data): listwise deletion by default
 5. [Appendix D](../appendix-d-missing-data-checklists.md) checklists
 
 **Analyst read:** MICE workflow, R lab below.
@@ -211,7 +211,7 @@ Both naive approaches show smokers lower FEV1, but the **magnitude** shifts. **M
 source("R/examples/ch20_missing_data.R")
 flow <- readr::read_csv("volume-01/tables/ch20_enrollment_flow.csv")
 miss <- readr::read_csv(
-  "volume-01/tables/ch20_missingness_by_diagnosis.csv"
+ "volume-01/tables/ch20_missingness_by_diagnosis.csv"
 )
 ```
 
@@ -352,7 +352,7 @@ source("R/00_setup.R")
 source("R/examples/ch20_missing_data.R")
 ```
 
-![Missing FEV1 fraction by obstruction severity](../figures/ch20_missingness_pattern.png)
+![Missingness heatmap (participant sample)](../figures/ch20_missingness_pattern.png)
 
 Higher missingness in severe obstruction supports MAR-like missingness tied to observed severity, not random noise.
 
@@ -363,7 +363,7 @@ Higher missingness in severe obstruction supports MAR-like missingness tied to o
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | Enrolled vs analysed *n* bars only | **Who** is missing and whether pattern clusters |
-| **Right** | Missingness strip by diagnosis × arm | — (informs MAR/MNAR scepticism) |
+| **Right** | Missingness strip by diagnosis × arm |: (informs MAR/MNAR scepticism) |
 
 **Practice read:** if analysed *n* drops mainly in severe obstruction, complete-case regression is not a neutral default.
 
@@ -391,30 +391,30 @@ library(mice)
 library(broom)
 
 spirometry <- readr::read_csv(
-  "data/spirometry.csv",
-  show_col_types = FALSE
+ "data/spirometry.csv",
+ show_col_types = FALSE
 )
 set.seed(20250618)
 spirometry_miss <- spirometry %>%
-  mutate(
-    missing_fev1 = rbinom(
-      n(), 1,
-      prob = plogis(-2 + 0.8 * (diagnosis != "no_obstruction"))
-    ) == 1,
-    fev1_obs = if_else(missing_fev1, NA_real_, fev1),
-    diagnosis = factor(diagnosis),
-    sex = factor(sex),
-    smoking = factor(smoking)
-  )
+ mutate(
+ missing_fev1 = rbinom(
+ n(), 1,
+ prob = plogis(-2 + 0.8 * (diagnosis != "no_obstruction"))
+ ) == 1,
+ fev1_obs = if_else(missing_fev1, NA_real_, fev1),
+ diagnosis = factor(diagnosis),
+ sex = factor(sex),
+ smoking = factor(smoking)
+ )
 
 imp_df <- spirometry_miss %>%
-  select(fev1_obs, age, sex, smoking, diagnosis)
+ select(fev1_obs, age, sex, smoking, diagnosis)
 imp <- mice(
-  imp_df,
-  m = 20,
-  maxit = 5,
-  printFlag = FALSE,
-  seed = 20250618
+ imp_df,
+ m = 20,
+ maxit = 5,
+ printFlag = FALSE,
+ seed = 20250618
 )
 pooled <- mice::pool(with(imp, lm(fev1_obs ~ smoking + age + sex)))
 summary(pooled)

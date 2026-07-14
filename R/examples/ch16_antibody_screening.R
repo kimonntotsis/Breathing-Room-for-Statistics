@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(patchwork)
@@ -14,18 +15,31 @@ conf <- read_csv(file.path(paths$data, "antibody_confirmation.csv"), show_col_ty
 PRESPEC_THRESHOLD <- 1.4
 TOP_K <- 20L
 
+batch_pal <- grDevices::colorRampPalette(c(handbook_cols$nonsmoker, handbook_cols$intervention, handbook_cols$smoker))(
+  length(unique(screen$screen_batch))
+)
+names(batch_pal) <- sort(unique(screen$screen_batch))
+
 # =============================================================================
 # Replicate agreement
 # =============================================================================
 p_rep <- screen %>%
   filter(antigen == "AgA") %>%
-  ggplot(aes(signal_rep1, signal_rep2, color = screen_batch)) +
-  geom_point(alpha = 0.6, size = 1.2) +
-  geom_smooth(method = "lm", se = FALSE, linewidth = 0.7, color = "grey30") +
-  theme_minimal() +
-  labs(title = "Replicate agreement (AgA)", x = "replicate 1 signal", y = "replicate 2 signal")
+  ggplot(aes(signal_rep1, signal_rep2, colour = screen_batch)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "#94A3B8", linewidth = 0.6) +
+  geom_point(alpha = 0.65, size = 1.4) +
+  geom_smooth(method = "lm", se = FALSE, linewidth = 0.75, colour = handbook_cols$accent) +
+  scale_colour_manual(values = batch_pal, name = "Screen batch") +
+  labs(
+    title = "Replicate agreement (AgA)",
+    subtitle = "QC before hit calling; batch colour flags run effects",
+    x = "Replicate 1 signal",
+    y = "Replicate 2 signal"
+  ) +
+  handbook_theme(11) +
+  coord_fixed()
 
-ggsave(file.path(fig_dir, "ch16_screen_replicate_agreement.png"), p_rep, width = 6.8, height = 4.6, dpi = 160)
+handbook_save(p_rep, file.path(fig_dir, "ch16_screen_replicate_agreement.png"), 7.0, 4.8)
 
 # =============================================================================
 # Per-clone summary
@@ -46,9 +60,6 @@ screen_eval <- screen_sum %>%
   left_join(conf_lu, by = c("clone_id", "antigen")) %>%
   mutate(confirm_positive = ifelse(is.na(confirm_positive), FALSE, confirm_positive))
 
-# =============================================================================
-# Hit calling at prespecified threshold + PPV by antigen
-# =============================================================================
 hits_prespec <- screen_eval %>%
   mutate(hit = screen_mean > PRESPEC_THRESHOLD)
 
@@ -66,22 +77,20 @@ ppv_by_ag <- hits_prespec %>%
 write_csv(ppv_by_ag, file.path(tab_dir, "ch16_screen_ppv_by_antigen.csv"))
 print(ppv_by_ag)
 
-p_ppv <- ppv_by_ag %>%
-  ggplot(aes(antigen, ppv, fill = antigen)) +
-  geom_col(width = 0.65) +
-  theme_minimal() +
-  guides(fill = "none") +
-  scale_y_continuous(limits = c(0, 1)) +
-  labs(
-    title = sprintf("Screen PPV by antigen (prespecified threshold = %.1f)", PRESPEC_THRESHOLD),
-    y = "PPV among hits",
-    x = NULL
-  )
+p_ppv <- plot_metric_bars(
+  ppv_by_ag,
+  x = "antigen",
+  y = "ppv",
+  title = sprintf("Screen PPV by antigen (prespecified threshold = %.1f)", PRESPEC_THRESHOLD),
+  subtitle = "PPV uses confirmation assay — not screen p-values",
+  ylab = "PPV among hits",
+  y_limits = c(0, 1)
+)
 
-ggsave(file.path(fig_dir, "ch16_screen_ppv.png"), p_ppv, width = 6.8, height = 4.2, dpi = 160)
+handbook_save(p_ppv, file.path(fig_dir, "ch16_screen_ppv.png"), 7.0, 4.4)
 
 # =============================================================================
-# Threshold sensitivity curve (hits + PPV vs threshold) - AgA focus
+# Threshold sensitivity curve (AgA)
 # =============================================================================
 threshold_grid <- seq(0.5, 2.5, by = 0.1)
 
@@ -99,29 +108,23 @@ sens_thr <- map_dfr(threshold_grid, function(thr) {
 
 write_csv(sens_thr, file.path(tab_dir, "ch16_threshold_sensitivity.csv"))
 
-p_hits <- ggplot(sens_thr, aes(threshold, n_hits)) +
-  geom_line(linewidth = 0.9, color = "steelblue") +
-  geom_vline(xintercept = PRESPEC_THRESHOLD, linetype = "dashed", color = "grey40") +
-  theme_minimal() +
-  labs(title = "Threshold sensitivity (AgA)", y = "Number of hits", x = "Screen signal threshold")
+p_thr_panel <- plot_dual_line_panel(
+  sens_thr,
+  x = "threshold",
+  y1 = "n_hits",
+  y2 = "ppv",
+  x_ref = PRESPEC_THRESHOLD,
+  title = "Hit calling sensitivity: do not tune threshold post hoc",
+  subtitle = "Dashed line = prespecified teaching threshold",
+  xlab = "Screen signal threshold",
+  ylab1 = "Number of hits (AgA)",
+  ylab2 = "PPV among hits (AgA)"
+)
 
-p_ppv_curve <- ggplot(sens_thr, aes(threshold, ppv)) +
-  geom_line(linewidth = 0.9, color = "#B22222") +
-  geom_vline(xintercept = PRESPEC_THRESHOLD, linetype = "dashed", color = "grey40") +
-  scale_y_continuous(limits = c(0, 1)) +
-  theme_minimal() +
-  labs(title = "PPV among hits vs threshold (AgA)", y = "PPV", x = "Screen signal threshold")
-
-p_thr_panel <- p_hits / p_ppv_curve +
-  plot_annotation(
-    title = "Hit calling sensitivity: do not tune threshold post hoc",
-    subtitle = "Dashed line = prespecified teaching threshold"
-  )
-
-ggsave(file.path(fig_dir, "ch16_threshold_sensitivity.png"), p_thr_panel, width = 7.2, height = 6.8, dpi = 160)
+handbook_save(p_thr_panel, file.path(fig_dir, "ch16_threshold_sensitivity.png"), 7.4, 7.0)
 
 # =============================================================================
-# Ranking stability tiers (AgA): top-K overlap across replicates
+# Ranking stability tiers (AgA)
 # =============================================================================
 rank_top <- function(rep_col, k = TOP_K) {
   screen %>%
@@ -168,23 +171,33 @@ tier_summary <- tiers_aga %>%
   ) %>%
   mutate(stability_tier = factor(stability_tier, levels = c("Tier 1 (3/3)", "Tier 2 (2/3)", "Tier 3 (1/3)", "Below tier")))
 
-p_tiers <- ggplot(tier_summary, aes(stability_tier, n_clones, fill = stability_tier)) +
-  geom_col(width = 0.7) +
-  theme_minimal() +
-  guides(fill = "none") +
-  labs(title = "Ranking stability tiers (AgA, top-20 lists)", y = "Clones", x = NULL)
+p_tiers <- plot_metric_bars(
+  tier_summary,
+  x = "stability_tier",
+  y = "n_clones",
+  title = "Ranking stability tiers (AgA, top-20 lists)",
+  subtitle = "Prefer Tier 1/2 clones for confirmation claims",
+  xlab = NULL,
+  ylab = "Clones"
+)
 
-p_tier_ppv <- ggplot(tier_summary %>% filter(stability_tier != "Below tier"), aes(stability_tier, ppv, fill = stability_tier)) +
-  geom_col(width = 0.7) +
-  scale_y_continuous(limits = c(0, 1)) +
-  theme_minimal() +
-  guides(fill = "none") +
-  labs(title = "PPV by stability tier (AgA)", y = "PPV", x = NULL)
+p_tier_ppv <- plot_metric_bars(
+  tier_summary %>% filter(stability_tier != "Below tier"),
+  x = "stability_tier",
+  y = "ppv",
+  title = "PPV by stability tier (AgA)",
+  xlab = NULL,
+  ylab = "PPV",
+  y_limits = c(0, 1)
+)
 
 p_tier_panel <- p_tiers + p_tier_ppv +
-  plot_annotation(title = "Prefer Tier 1/2 clones for confirmation claims")
+  patchwork::plot_annotation(
+    title = "Stability tiers improve confirmation yield",
+    theme = handbook_theme(12)
+  )
 
-ggsave(file.path(fig_dir, "ch16_stability_tiers.png"), p_tier_panel, width = 9.0, height = 4.2, dpi = 160)
+handbook_save(p_tier_panel, file.path(fig_dir, "ch16_stability_tiers.png"), 9.2, 4.4)
 
 overlap <- tibble(
   pair = c("rep1 vs rep2", "rep1 vs rep3", "rep2 vs rep3"),
@@ -192,17 +205,17 @@ overlap <- tibble(
 )
 print(overlap)
 
-p_overlap <- ggplot(overlap, aes(pair, overlap_top20, fill = pair)) +
-  geom_col(width = 0.65) +
-  theme_minimal() +
-  guides(fill = "none") +
-  labs(title = "Ranking stability (AgA): overlap of top-20", y = "Shared clones", x = NULL)
+p_overlap <- plot_metric_bars(
+  overlap,
+  x = "pair",
+  y = "overlap_top20",
+  title = "Ranking stability (AgA): overlap of top-20",
+  subtitle = "Low overlap = fragile ranking — report tiers not single ranks",
+  ylab = "Shared clones"
+)
 
-ggsave(file.path(fig_dir, "ch16_ranking_stability.png"), p_overlap, width = 7.2, height = 4.0, dpi = 160)
+handbook_save(p_overlap, file.path(fig_dir, "ch16_ranking_stability.png"), 7.4, 4.2)
 
-# =============================================================================
-# Mini-case summary table
-# =============================================================================
 tier1_n <- sum(tiers_aga$stability_tier == "Tier 1 (3/3)")
 tier1_ppv <- tier_summary %>% filter(stability_tier == "Tier 1 (3/3)") %>% pull(ppv)
 
@@ -214,7 +227,7 @@ mini_summary <- tibble(
     "4. Stability tiers"
   ),
   teaching_output = c(
-    "Rep1 vs Rep2 scatter (+ batch color)",
+    "Rep1 vs Rep2 scatter (+ batch colour)",
     sprintf("Hit if screen_mean > %.1f", PRESPEC_THRESHOLD),
     sprintf("AgA PPV among hits = %.2f (see table by antigen)", ppv_by_ag$ppv[ppv_by_ag$antigen == "AgA"]),
     sprintf("AgA Tier 1 clones = %d; Tier 1 PPV = %.2f", tier1_n, tier1_ppv)

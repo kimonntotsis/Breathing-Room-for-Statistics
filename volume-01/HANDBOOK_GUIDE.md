@@ -1,6 +1,6 @@
 # Handbook guide: how to use this book
 
-This volume is designed as a **working handbook** for respiratory researchers who need statistics and R **on purpose** — especially early- and mid-career investigators and seniors learning to review analyses without becoming mathematicians or software engineers. Choose a method, check assumptions, run R when helpful, report correctly. You do not need to read cover-to-cover. New readers: [Preface](chapters/00-preface.md) (including [Why I wrote this](chapters/00-preface.md#why-i-wrote-this)) → [Welcome tour](chapters/00-welcome.md). Full tables and file lists: [Appendix G](appendix-g-handbook-navigation.md).
+This volume is designed as a **working handbook** for respiratory researchers who need statistics and R **on purpose**: especially early- and mid-career investigators and seniors learning to review analyses without becoming mathematicians or software engineers. Choose a method, check assumptions, run R when helpful, report correctly. You do not need to read cover-to-cover. New readers: [Preface](chapters/00-preface.md) (including [Why I wrote this](chapters/00-preface.md#why-i-wrote-this)) → [Welcome tour](chapters/00-welcome.md). Full tables and file lists: [Appendix G](appendix-g-handbook-navigation.md).
 
 ---
 
@@ -41,14 +41,14 @@ For a continuous read on one CASTOR cohort, follow a role path on the [Welcome](
 **CASTOR** is the order of work: **C**linical question, **A**ssess design and data, **S**elect method, **T**est and fit, **O**utput estimand, **R**eport limits. Pipeline figure and decision tree: [Chapter 1](chapters/01-statistical-thinking.md) and [Appendix B](appendix-b-quick-reference.md).
 
 ```
-1. Clinical question (one sentence)          → Ch 1
-2. Outcome type + design                     → Ch 2, Appendix B
-3. Choose method                             → METHOD_MAP, decision figure
-4. Describe sample (Table 1)                 → Ch 3
-5. Fit model / test                          → Ch 4–7, R/examples/
-6. Diagnostics + sensitivity                 → Ch 7–8
-7. Report estimate + CI + limitations        → Ch 8
-8. State what was NOT proven                 → Wrong analysis panels
+1. Clinical question (one sentence) → Ch 1
+2. Outcome type + design → Ch 2, Appendix B
+3. Choose method → METHOD_MAP, decision figure
+4. Describe sample (Table 1) → Ch 3
+5. Fit model / test → Ch 4–7, R/examples/
+6. Diagnostics + sensitivity → Ch 7–8
+7. Report estimate + CI + limitations → Ch 8
+8. State what was NOT proven → Wrong analysis panels
 ```
 
 Full integration: [Ch 12 case studies](chapters/12-case-studies.md).
@@ -66,17 +66,17 @@ Full integration: [Ch 12 case studies](chapters/12-case-studies.md).
 | **V Discovery (core)** | 10–12 | Structure in markers? CASTOR case studies |
 | **VI High-dimensional biology** | 13–16 | Omics DE, batch, flow, antibody screens |
 | **VII Integrated capstone** | 17 | End-to-end CASTOR-HD + elastic net |
-| **VIII Longitudinal & causal** | 18–21 | Repeated FEV1, survival, missing data, causality |
+| **VIII Longitudinal & causal** | 18–22 | Repeated FEV1, survival, missing data, causality, mediation |
 
 Each method in Ch 4–11 and major techniques in Ch 13–21 follows [CHAPTER_TEMPLATE.md](CHAPTER_TEMPLATE.md):
 
-1. Clinical question  
-2. Technique card (when to use / when NOT)  
-3. Dual interpretation (plain / precise / practice)  
-4. Caveats box  
-5. Wrong analysis ⚠  
-6. Reporting template  
-7. R lab + sensitivity  
+1. Clinical question
+2. Technique card (when to use / when NOT)
+3. Dual interpretation (plain / precise / practice)
+4. Caveats box
+5. Wrong analysis ⚠
+6. Reporting template
+7. R lab + sensitivity
 
 ---
 
@@ -85,11 +85,11 @@ Each method in Ch 4–11 and major techniques in Ch 13–21 follows [CHAPTER_TEM
 Install guide: **[Appendix A](appendix-a-r-setup.md)** (in the PDF). Quick start:
 
 ```r
-setwd("/path/to/Breathing-Room-for-Statistics")  # your clone path; or open as Posit project
+setwd("/path/to/Breathing-Room-for-Statistics") # your clone path; or open as Posit project
 source("R/00_setup.R")
 source("R/generate_data.R")
-source("R/examples/generate_figures.R")       # all handbook figures
-source("R/run_all_examples.R")                # optional: full chapter scripts
+source("R/examples/generate_figures.R") # all handbook figures
+source("R/run_all_examples.R") # optional: full chapter scripts
 ```
 
 ---
@@ -108,4 +108,4 @@ Priority chapters for external read: **4, 6, 13, 18, 20**. Use [REVIEWER_RUBRIC.
 
 ## Extended topics
 
-Longitudinal spirometry, survival, missing data, and causal inference are **[Ch 18–21](chapters/18-longitudinal-mixed-models.md)** in this same volume. Optional deeper material (competing risks, IV, full Bayesian workflows) remains for future expansion; see [BOOK_OUTLINE.md](../BOOK_OUTLINE.md).
+Longitudinal spirometry, survival, missing data, causal inference, and mediation are **[Ch 18–22](chapters/18-longitudinal-mixed-models.md)** in this same volume. Optional deeper material (competing risks, IV, full Bayesian workflows) remains for future expansion; see [BOOK_OUTLINE.md](../BOOK_OUTLINE.md).

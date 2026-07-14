@@ -1,4 +1,4 @@
-% Full-bleed integrated cover via overlay — keeps normal page geometry for TOC
+% Full-bleed cover: solid background + print asset at native aspect (no stretch)
 \definecolor{coverbg}{HTML}{0C0D12}
 \definecolor{covertext}{HTML}{E8EDF2}
 \definecolor{covermuted}{HTML}{9AA8B5}
@@ -7,11 +7,18 @@
 \begin{titlepage}
   \thispagestyle{empty}
   \begin{tikzpicture}[remember picture, overlay]
+    % Match letterbox / margins in book-cover-pearl-streams-print.pdf
+    \fill[coverbg] (current page.south west) rectangle (current page.north east);
+
     \node[
       anchor=center,
       inner sep=0pt
     ] at (current page.center) {%
-      \includegraphics[width=\paperwidth, height=\paperheight]{figures/book-cover-pearl-streams-page.png}%
+      \IfFileExists{figures/book-cover-pearl-streams-print.pdf}{%
+        \includegraphics[width=\paperwidth]{figures/book-cover-pearl-streams-print.pdf}%
+      }{%
+        \includegraphics[width=\paperwidth,keepaspectratio]{figures/book-cover-pearl-streams.png}%
+      }%
     };
 
     \node[

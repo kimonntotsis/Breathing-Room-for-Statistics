@@ -72,39 +72,40 @@ See also the visual figure: `method_decision_tree.png` and `method_comparison_pa
 OUTCOME?
 │
 ├─ CONTINUOUS
-│   ├─ One group vs fixed value?        → One-sample t-test (Ch 4)
-│   ├─ Two independent groups?          → Welch t-test (Ch 4)
-│   ├─ Two paired measurements?         → Paired t-test (Ch 4)
-│   ├─ Three+ independent groups?       → ANOVA → post-hoc (Ch 4)
-│   ├─ Non-normal, small n?             → Wilcoxon / Kruskal-Wallis (Ch 4)
-│   ├─ Adjust for covariates?           → Linear regression / ANCOVA (Ch 5)
-│   └─ Many predictors, prediction?     → LASSO / RF (Ch 7, 9)
+│ ├─ One group vs fixed value? → One-sample t-test (Ch 4)
+│ ├─ Two independent groups? → Welch t-test (Ch 4)
+│ ├─ Two paired measurements? → Paired t-test (Ch 4)
+│ ├─ Three+ independent groups? → ANOVA → post-hoc (Ch 4)
+│ ├─ Non-normal, small n? → Wilcoxon / Kruskal-Wallis (Ch 4)
+│ ├─ Adjust for covariates? → Linear regression / ANCOVA (Ch 5)
+│ └─ Many predictors, prediction? → LASSO / RF (Ch 7, 9)
 │
 ├─ BINARY
-│   ├─ Two independent groups?          → Chi-square / Fisher; RD, RR, OR (Ch 4)
-│   ├─ Paired binary?                   → McNemar (Ch 4)
-│   ├─ Adjust for covariates?           → Logistic regression (Ch 6)
-│   └─ Predict risk?                    → Logistic + validation (Ch 6, 9)
+│ ├─ Two independent groups? → Chi-square / Fisher; RD, RR, OR (Ch 4)
+│ ├─ Paired binary? → McNemar (Ch 4)
+│ ├─ Adjust for covariates? → Logistic regression (Ch 6)
+│ └─ Predict risk? → Logistic + validation (Ch 6, 9)
 │
 ├─ COUNT
-│   ├─ Compare rates between groups?    → Poisson / neg binomial (Ch 6)
-│   ├─ Varying follow-up?               → Offset log(person-time) (Ch 6)
-│   └─ Excess zeros?                    → Zero-inflated (Vol II mention)
+│ ├─ Compare rates between groups? → Poisson / neg binomial (Ch 6)
+│ ├─ Varying follow-up? → Offset log(person-time) (Ch 6)
+│ └─ Excess zeros? → Zero-inflated (Vol II mention)
 │
 └─ MANY FEATURES
-    ├─ Exploratory structure (markers)?     → PCA (Ch 10)
-    ├─ Find subgroups?                      → Clustering (Ch 11)
-    ├─ Many features + two groups?          → Per-feature DE + BH FDR (Ch 13)
-    ├─ Batch/plate/run in omics?            → PCA overlap + sensitivity (Ch 14)
-    ├─ Flow cell-type proportions?          → Participant-level models (Ch 15)
-    ├─ Antibody screen hits?                → PPV + tiers + confirmation (Ch 16)
-    └─ End-to-end CASTOR-HD pipeline?       → Ch 17 integrated case
+ ├─ Exploratory structure (markers)? → PCA (Ch 10)
+ ├─ Find subgroups? → Clustering (Ch 11)
+ ├─ Many features + two groups? → Per-feature DE + BH FDR (Ch 13)
+ ├─ Batch/plate/run in omics? → PCA overlap + sensitivity (Ch 14)
+ ├─ Flow cell-type proportions? → Participant-level models (Ch 15)
+ ├─ Antibody screen hits? → PPV + tiers + confirmation (Ch 16)
+ └─ End-to-end CASTOR-HD pipeline? → Ch 17 integrated case
 
-LONGITUDINAL / SURVIVAL / CAUSAL (Ch 18–21)
-    ├─ Repeated measures per patient?       → Mixed models (Ch 18)
-    ├─ Time to event with censoring?        → Kaplan-Meier, Cox (Ch 19)
-    ├─ Missing outcome/predictors?          → MI sensitivity (Ch 20)
-    └─ Observational causal estimand?       → DAGs, IPW (Ch 21)
+LONGITUDINAL / SURVIVAL / CAUSAL / MEDIATION (Ch 18–22)
+ ├─ Repeated measures per patient? → Mixed models (Ch 18)
+ ├─ Time to event with censoring? → Kaplan-Meier, Cox (Ch 19)
+ ├─ Missing outcome/predictors? → MI sensitivity (Ch 20)
+ └─ Observational causal estimand? → DAGs, IPW (Ch 21)
+ └─ Mechanism through measured mediator? → Mediation (Ch 22)
 ```
 
 ---
@@ -183,11 +184,13 @@ LONGITUDINAL / SURVIVAL / CAUSAL (Ch 18–21)
 - Flow cytometry: participant summaries vs per-cell visualization
 - Antibody discovery screens: hit calling + confirmation + ranking stability
 - Integrated CASTOR-HD pipeline (Ch 17)
-- Elastic net + nested CV for \(p \gg n\) prediction
+- DESeq2 / limma-voom / fgsea (`ch13_analyst_*.R`)
+- ComBat batch correction lab (`ch14_analyst_combat.R`)
+- Premium omics visuals (`R/viz_omics.R`, `ch13_omics_premium_visuals.R`)
 - Sensitivity analyses
 - Reproducible reporting ([HIGH_DIM_REPORTING_TEMPLATES](HIGH_DIM_REPORTING_TEMPLATES.md))
 
-### Longitudinal, survival, missing data, causal (Ch 18–21)
+### Longitudinal, survival, missing data, causal, mediation (Ch 18–22)
 - Linear mixed models (random intercepts; teaching `lmer`)
 - Spaghetti plots and trajectory visualization
 - Kaplan-Meier curves; log-rank tests
@@ -195,6 +198,7 @@ LONGITUDINAL / SURVIVAL / CAUSAL (Ch 18–21)
 - Missing data patterns (MCAR/MAR/MNAR); complete-case vs imputation sensitivity
 - MICE overview (production workflows)
 - Confounding; target trial; introductory IPW
+- Mediation: total vs direct effects; natural indirect/direct effects (`mediate`)
 
 ### Prediction (Ch 9)
 - Train/test split

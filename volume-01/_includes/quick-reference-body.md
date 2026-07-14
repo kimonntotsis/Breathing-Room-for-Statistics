@@ -41,12 +41,13 @@ If you cannot write this sentence, stop. See [Chapter 1](chapters/01-statistical
 
 | Question | Rule of thumb | Chapter |
 |----------|---------------|---------|
-| **Crude arm difference?** | Welch *t*, Fisher, etc. — label **unadjusted**; report CI + *n* (+ events) | [4](chapters/04-comparing-groups.md) |
-| **Adjust for baseline / confounders?** | Linear, logistic, Poisson GLM — list **prespecified** covariates | [4](chapters/04-comparing-groups.md), [5](chapters/05-linear-models.md), [6](chapters/06-generalized-linear-models.md) |
-| **RCT primary** | Freeze unadjusted ITT **or** ANCOVA **or** change score in SAP — not all three | [4](chapters/04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [5](chapters/05-linear-models.md) |
+| **Crude arm difference?** | Welch *t*, Fisher, etc.: label **unadjusted**; report CI + *n* (+ events) | [4](chapters/04-comparing-groups.md) |
+| **Adjust for baseline / confounders?** | Linear, logistic, Poisson GLM: list **prespecified** covariates | [4](chapters/04-comparing-groups.md), [5](chapters/05-linear-models.md), [6](chapters/06-generalized-linear-models.md) |
+| **RCT primary** | Freeze unadjusted ITT **or** ANCOVA **or** change score in SAP, not all three | [4](chapters/04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [5](chapters/05-linear-models.md) |
 | **Observational main analysis** | Adjusted model; unadjusted = sensitivity for confounding | [21](chapters/21-causal-inference.md) |
+| **Mechanism through mediator** | Mediation: total vs direct vs indirect (prespecified) | [22](chapters/22-mediation-analysis.md) |
 | **FEV1 + FVC + symptoms + exacerbations** | **One primary**; secondaries in a **family** (Holm / gatekeeping) | [4](chapters/04-comparing-groups.md#multiplicity), [8](chapters/08-validation-reporting.md) |
-| **Omics + clinical endpoint** | **Separate families** — FDR for features; clinical hierarchy unchanged | [8](chapters/08-validation-reporting.md), [13](chapters/13-differential-analysis-fdr.md) |
+| **Omics + clinical endpoint** | **Separate families**: FDR for features; clinical hierarchy unchanged | [8](chapters/08-validation-reporting.md), [13](chapters/13-differential-analysis-fdr.md) |
 
 **Never:** call an unadjusted OR “adjusted”; never put four primary *p*-values on one slide.
 
@@ -188,7 +189,7 @@ Details: [Chapter 8](chapters/08-validation-reporting.md) and [References](refer
 
 **Process first** (eight steps), then **method choice** (outcome type):
 
-![CASTOR analysis pipeline: question to report](figures/analysis_pipeline.png){width=92%}
+![Analysis pipeline: question to report](figures/analysis_pipeline.png){width=92%}
 
 ## Visual decision tree
 

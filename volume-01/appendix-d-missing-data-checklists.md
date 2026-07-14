@@ -99,13 +99,13 @@ The DAP or Methods must state:
 
 Choose at least one alternative when missingness is moderate or outcome-related:
 
-- [ ] Complete-case analysis  
-- [ ] Available-case descriptives  
-- [ ] Alternative imputation model or *m*  
-- [ ] Observed-outcome mixed model (longitudinal)  
-- [ ] IPW for dropout or attendance (see Ch 21)  
-- [ ] MNAR scenario / tipping-point (advanced)  
-- [ ] Analysis on raw vs centrally processed variables (multi-centre studies)  
+- [ ] Complete-case analysis
+- [ ] Available-case descriptives
+- [ ] Alternative imputation model or *m*
+- [ ] Observed-outcome mixed model (longitudinal)
+- [ ] IPW for dropout or attendance (see Ch 21)
+- [ ] MNAR scenario / tipping-point (advanced)
+- [ ] Analysis on raw vs centrally processed variables (multi-centre studies)
 
 Report whether conclusions change materially.
 
@@ -128,27 +128,27 @@ Local variables (omics panels, working-group endpoints) are documented in the **
 
 ## DAP minimum content (copy-ready headings)
 
-1. Variable roles and structural missingness rules  
-2. Missingness assessment tables and figures (planned)  
-3. Assumed mechanism (MCAR / MAR / MNAR) with rationale  
-4. Primary missing-data method aligned to estimand  
-5. Imputation model specification (if applicable)  
-6. Planned diagnostics  
-7. Prespecified sensitivity analyses  
-8. Software, seed, and code location  
-9. LOD / below-detection handling (omics assays), if applicable  
+1. Variable roles and structural missingness rules
+2. Missingness assessment tables and figures (planned)
+3. Assumed mechanism (MCAR / MAR / MNAR) with rationale
+4. Primary missing-data method aligned to estimand
+5. Imputation model specification (if applicable)
+6. Planned diagnostics
+7. Prespecified sensitivity analyses
+8. Software, seed, and code location
+9. LOD / below-detection handling (omics assays), if applicable
 
 ---
 
 ## Manuscript / report minimum content
 
-- Enrolled *n* vs analysed *n* for each analysis  
-- Missing *n* and % for key variables (denominator stated)  
-- Reasons for missing if collected  
-- Structural missingness described separately  
-- Methods sentence for handling missing data  
-- Sensitivity results (not only primary)  
-- Limitations related to missingness mechanism  
+- Enrolled *n* vs analysed *n* for each analysis
+- Missing *n* and % for key variables (denominator stated)
+- Reasons for missing if collected
+- Structural missingness described separately
+- Methods sentence for handling missing data
+- Sensitivity results (not only primary)
+- Limitations related to missingness mechanism
 
 **Methods template:**
 
@@ -179,10 +179,10 @@ Local variables (omics panels, working-group endpoints) are documented in the **
 
 ## Reproducibility minimum
 
-- Scripted analysis (R/Python), not undocumented point-and-click imputation  
-- Fixed random seed for stochastic imputation  
-- Saved logs of missingness tables and diagnostic plots  
-- Data extraction date and version recorded  
+- Scripted analysis (R/Python), not undocumented point-and-click imputation
+- Fixed random seed for stochastic imputation
+- Saved logs of missingness tables and diagnostic plots
+- Data extraction date and version recorded
 
 ---
 

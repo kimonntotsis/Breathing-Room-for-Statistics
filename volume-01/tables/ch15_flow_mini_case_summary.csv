@@ -1,3 +1,3 @@
 scenario,unit_of_analysis,n_used,primary_outcome,p_value_group,defensible_for_inference,notes
-A: participant summaries,participant,120,logit(prop_Mono) per participant,0.008272263927548087,TRUE,Adjust for batch in primary models; report n = participants
-B: pooled cells (wrong),cell,5532,CD14 per cell,7.32144148751291e-5,FALSE,Pseudo-replication: do not report as confirmatory
+A: participant summaries,participant,120,logit(prop_Mono) per participant,0.5458927724467335,TRUE,Adjust for batch in primary models; report n = participants
+B: pooled cells (wrong),cell,5792,CD14 per cell,0.7486461798659392,FALSE,Pseudo-replication: do not report as confirmatory

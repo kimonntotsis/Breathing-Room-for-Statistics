@@ -1,6 +1,6 @@
 # Chapter template: handbook signature format
 
-Every major technique in Chapters 4–11 and 13–21 uses this **seven-block structure**. Readers always know where to look.
+Every major technique in Chapters 4–11 and 13–22 uses this **seven-block structure**. Readers always know where to look.
 
 ---
 
@@ -11,14 +11,14 @@ These blocks sit **outside** the technique cards. They do not replace assumption
 | Block | Where | Purpose |
 |-------|--------|---------|
 | **Why this chapter** | After prerequisites, before opening question | 3–5 sentences: who needs this, what mistake it prevents |
-| **Investigator path (≈20 min)** | After At a glance | Layered read: estimand, method table, Practice read, reporting |
-| **Method choice at a glance** | After Investigator path | **Method \| When to use \| Why** — canonical routing for the chapter |
+| **In this chapter** | After At a glance | Layered read: estimand, method table, Practice read, reporting |
+| **Method choice at a glance** | After In this chapter | **Method \| When to use \| Why**: canonical routing for the chapter |
 | **Figure hygiene** | Once per chapter (or cross-ref Appendix I) | Right vs wrong plot pair on same CASTOR data; what the wrong panel masks |
 | **In practice** | Once per chapter, before first Wrong analysis | Sponsor meeting / manuscript reality check |
 | **Before you open R** | Immediately before `## R lab` or `### R lab` | Estimand + unit + file + one sensitivity: then code |
 | **Where this chapter leads** | Before Further reading / Exercises | Two sentences linking to the next chapter(s) |
 
-Part intros include an **In the room** vignette (short narrative hook: meeting, email, review). See `parts/part-*.md`. Method chapters may open with a one-paragraph scene before **Why this chapter** — use when it grounds the mistake the chapter prevents.
+Part intros include an **In the room** vignette (short narrative hook: meeting, email, review). See `parts/part-*.md`. Method chapters may open with a one-paragraph scene before **Why this chapter**; use when it grounds the mistake the chapter prevents.
 
 **Humane tone:** prefer specific situations (steering committee, reviewer line, vendor PDF) over generic “researchers often…” prose. First-person author voice belongs in the [Preface](chapters/00-preface.md), not in every technique card.
 
@@ -53,7 +53,7 @@ One sentence an investigator understands.
 
 **Default (Ch 4–8):** **Plain language** + **Precise language** + **Practice read**.
 
-**Ch 10–21:** use a single **Takeaway** line when the technique card already states the estimand; keep **Practice read** for decision-changing interpretation. Drop redundant Plain/Precise pairs that repeat the card verbatim.
+**Ch 10–22:** use a single **Takeaway** line when the technique card already states the estimand; keep **Practice read** for decision-changing interpretation. Drop redundant Plain/Precise pairs that repeat the card verbatim.
 
 **Practice read:** what would change in practice if the estimate were true?
 

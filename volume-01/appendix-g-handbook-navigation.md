@@ -15,8 +15,8 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **See all methods by chapter** | [METHOD_MAP](METHOD_MAP.md) |
 | **Find a figure** | [FIGURE_INDEX](FIGURE_INDEX.md) |
 | **Right vs wrong plots (slides)** | [Appendix I](appendix-i-figure-hygiene.md) |
-| **Investigator minimum path (~2 h)** | [Appendix J](appendix-j-investigator-minimum-path.md) |
-| **In the room — short stories** | [Appendix K](appendix-k-in-the-room-stories.md) |
+| **Short read (without R)** | [Appendix J](appendix-j-investigator-minimum-path.md) |
+| **In the room: short stories** | [Appendix K](appendix-k-in-the-room-stories.md) |
 | **APATE vignette (messy registry, no data)** | [APATE_VIGNETTE](APATE_VIGNETTE.md) |
 | **Edition / citation status** | [HANDBOOK_STATUS](HANDBOOK_STATUS.md) |
 | **Look up a term** | [Appendix C](appendix-c-glossary.md) |
@@ -27,11 +27,13 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **Composite endpoint example** | [Ch 4](chapters/04-comparing-groups.md#worked-example-composite-primary-fictional-pulmonary-sap) |
 | **Sample size (investigator)** | [Appendix B Step 0b](appendix-b-quick-reference.md) |
 | **In the room vignettes** | Part intros `parts/part-*.md`; [Ch 12](chapters/12-case-studies.md) cases A–E |
-| **Short stories (why this book)** | [Appendix K](appendix-k-in-the-room-stories.md) — mixed variables, prediction traps |
+| **Short stories (why this book)** | [Appendix K](appendix-k-in-the-room-stories.md): mixed variables, prediction traps |
 | **Cite a guideline or textbook** | [REFERENCES](REFERENCES.md), [references.qmd](references.qmd) |
 | **Follow CASTOR examples** | [RECURRING_COHORT](RECURRING_COHORT.md) |
 | **Follow a narrative path (Cases A–E)** | [Welcome: reading paths](chapters/00-welcome.md), [Ch 12 capstone](chapters/12-case-studies.md) |
-| **Practice** | [Appendix F](appendix-f-exercises.md), [exercises/](exercises/), [solutions/](solutions/) |
+| **Omics analyst track** | [Appendix L](appendix-l-omics-analyst-track.md) | DESeq2, limma, fgsea, ComBat |
+| **Bioinformatics deliverables** | [Appendix M](appendix-m-bioinformatics-deliverables.md) | What the core should deliver |
+| **Bulk vs single-cell** | [Appendix N](appendix-n-bulk-vs-singlecell.md) | When to escalate beyond Ch 13–15 |
 | **How to use the book** | [HANDBOOK_GUIDE](HANDBOOK_GUIDE.md) |
 
 ## Appendices in this volume
@@ -41,16 +43,19 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | Read order | Appendix | Content | Primary audience |
 |:----------:|:--------:|---------|------------------|
 | 1 | **G** | [Handbook navigation](appendix-g-handbook-navigation.md) (this index) | Everyone |
-| 2 | **J** | [Investigator minimum path (~2 h)](appendix-j-investigator-minimum-path.md) | Investigator |
-| 3 | **K** | [In the room — short stories](appendix-k-in-the-room-stories.md) | Everyone (relatable entry) |
-| 4 | **H** | [Investigator path (without R)](appendix-h-clinicians-route.md) | Investigator |
+| 2 | **J** | [Short read (without R)](appendix-j-investigator-minimum-path.md) | Investigator |
+| 3 | **K** | [In the room: short stories](appendix-k-in-the-room-stories.md) | Everyone (relatable entry) |
+| 4 | **H** | [Reviewing without R](appendix-h-clinicians-route.md) | Investigator |
 | 5 | **I** | [Figure hygiene (right vs wrong)](appendix-i-figure-hygiene.md) | Investigator, slides |
 | 6 | **B** | [Quick reference](appendix-b-quick-reference.md) | Everyone |
 | 7 | **A** | [R environment](appendix-a-r-setup.md) | Analyst |
 | 8 | **C** | [Glossary](appendix-c-glossary.md) | Lookup |
 | 9 | **D** | [Missing data checklists](appendix-d-missing-data-checklists.md) | Analyst, DMC |
 | 10 | **F** | [Exercises](appendix-f-exercises.md) | Fellow, instructor |
-| — | **Refs** | [Bibliography](references.qmd) | Citation |
+| 11 | **L** | [Omics analyst track](appendix-l-omics-analyst-track.md) | Analyst, omics course |
+| 12 | **M** | [Bioinformatics deliverables](appendix-m-bioinformatics-deliverables.md) | PI, core liaison |
+| 13 | **N** | [Bulk vs single-cell](appendix-n-bulk-vs-singlecell.md) | Routing / scope |
+| | **Refs** | [Bibliography](references.qmd) | Citation |
 
 **Analyst fast path:** G → A → B → (chapters) → F. **Investigator fast path:** G → J → **K** (one story) → H → I → B → Ch 12 Case A.
 
@@ -62,7 +67,7 @@ Related (not lettered appendices): [APATE_VIGNETTE](APATE_VIGNETTE.md), [HANDBOO
 |------|----------|----------|
 | **Core path** | 1–12 | Trials, regression, prediction, CASTOR capstone (Cases A–E) |
 | **Advanced discovery** | 13–17 | Omics DE/FDR, batch, flow, antibody screens, integrated CASTOR-HD |
-| **Longitudinal & causal** | 18–21 | Repeated FEV1, time-to-event, missing data, IPW/DAGs |
+| **Longitudinal & causal** | 18–22 | Repeated FEV1, time-to-event, missing data, IPW/DAGs, mediation |
 
 ### Narrative spine (Chapter 12)
 
@@ -78,7 +83,7 @@ Technique chapters are meant to be opened by outcome. If you want one continuous
 |------|------|
 | **Investigator (without R)** | [Appendix H](appendix-h-clinicians-route.md) → [Appendix B](appendix-b-quick-reference.md) → chapter technique card |
 | **Analyst (run R)** | [Ch 2](chapters/02-respiratory-data.md) → [Ch 3](chapters/03-descriptive-analysis.md) → [METHOD_MAP](METHOD_MAP.md) |
-| **Teach or self-study** | [Preface](chapters/00-preface.md) → Core 1–12 + [exercises](exercises/README.md); optional 13–21 blocks |
+| **Teach or self-study** | [Preface](chapters/00-preface.md) → Core 1–12 + [exercises](exercises/README.md); optional 13–22 blocks |
 | **Write a manuscript** | [Appendix B](appendix-b-quick-reference.md) → [Ch 8 reporting](chapters/08-validation-reporting.md) → [REFERENCES](REFERENCES.md) |
 | **Omics / discovery** | [Ch 13](chapters/13-differential-analysis-fdr.md) → [Ch 14 batch](chapters/14-batch-effects.md) → [Ch 17 pipeline](chapters/17-integrated-castor-hd.md) |
 
@@ -93,7 +98,7 @@ Technique chapters are meant to be opened by outcome. If you want one continuous
 | **V Discovery (core)** | 10–12 | Dimension reduction, clustering, CASTOR cases |
 | **VI High-dimensional biology** | 13–16 | DE/FDR, batch, flow, antibody screens |
 | **VII Integrated capstone** | 17 | End-to-end CASTOR-HD + elastic net |
-| **VIII Longitudinal and causal** | 18–21 | Mixed models, survival, missing data, causality |
+| **VIII Longitudinal and causal** | 18–22 | Mixed models, survival, missing data, causality, mediation |
 
 ## Chapters
 
@@ -121,6 +126,7 @@ Technique chapters are meant to be opened by outcome. If you want one continuous
 | 19 | [Survival analysis](chapters/19-survival-analysis.md) | Time to exacerbation |
 | 20 | [Missing data](chapters/20-missing-data.md) | MAR, imputation sensitivity |
 | 21 | [Causal inference](chapters/21-causal-inference.md) | Confounding, toy IPW |
+| 22 | [Mediation analysis](chapters/22-mediation-analysis.md) | Total vs direct effects, `mediate()` |
 
 ## Topics A–Z {#topics-a-z}
 
@@ -155,6 +161,7 @@ Alphabetical guide to **where** topics appear. For definitions see [Appendix C](
 | Firth logistic | [Ch 6](chapters/06-generalized-linear-models.md) |
 | GEE (population-averaged) | [Ch 18](chapters/18-longitudinal-mixed-models.md#technique-mixed-models-vs-gee) |
 | IPW | [Ch 21](chapters/21-causal-inference.md) |
+| Mediation / ACME | [Ch 22](chapters/22-mediation-analysis.md) |
 | Kaplan–Meier | [Ch 19](chapters/19-survival-analysis.md) |
 | LASSO | [Ch 7](chapters/07-model-building.md) |
 | Linear regression | [Ch 5](chapters/05-linear-models.md) |
@@ -229,8 +236,8 @@ setwd("/path/to/Breathing-Room-for-Statistics")
 # or open as Posit project
 source("R/00_setup.R")
 source("R/generate_data.R")
-source("R/examples/generate_figures.R")  # all handbook figures
-source("R/run_all_examples.R")           # full chapter scripts
+source("R/examples/generate_figures.R") # all handbook figures
+source("R/run_all_examples.R") # full chapter scripts
 ```
 
 ## Figures
@@ -239,4 +246,4 @@ Decision tree and chapter plots: [FIGURE_INDEX](FIGURE_INDEX.md). Regenerate any
 
 ## Edition notes
 
-Single-volume handbook (Ch 0–21) with unified navigation, reproducible figures, and CASTOR + CASTOR-HD datasets. Chapter template: [CHAPTER_TEMPLATE](CHAPTER_TEMPLATE.md). PDF build: `quarto render --to pdf` in `volume-01/` → `_book/Breathing-Room-for-Statistics.pdf`, or `./build-handbook-pdf.sh` at repo root.
+Single-volume handbook (Ch 0–22) with unified navigation, reproducible figures, and CASTOR + CASTOR-HD datasets. Chapter template: [CHAPTER_TEMPLATE](CHAPTER_TEMPLATE.md). PDF build: `quarto render --to pdf` in `volume-01/` → `_book/Breathing-Room-for-Statistics.pdf`, or `./build-handbook-pdf.sh` at repo root.

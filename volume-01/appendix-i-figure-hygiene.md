@@ -12,7 +12,7 @@ Plots are not decoration. They are **compressed evidence**. A slide can look dec
 
 ## One-page router
 
-![Plot choice by estimand — prefer vs avoid](figures/viz_plot_router.png){width=100%}
+![Plot choice by estimand: prefer vs avoid](figures/viz_plot_router.png){width=100%}
 
 | If your estimand is… | Prefer | Avoid | Wrong plot often hides |
 |----------------------|--------|-------|------------------------|
@@ -51,11 +51,12 @@ Each `viz_pair_*.png` uses **the same CASTOR (or CASTOR-HD) data** twice: left =
 | `viz_pair_ch11_clustering.png` | [Ch 11](chapters/11-clustering.md) | Endotype overclaiming |
 | `viz_pair_ch16_screen.png` | [Ch 16](chapters/16-antibody-discovery.md) | Rank without PPV |
 | `viz_pair_ch21_causal.png` | [Ch 21](chapters/21-causal-inference.md) | Causal wording without balance |
+| `viz_pair_ch22_mediation.png` | [Ch 22](chapters/22-mediation-analysis.md) | Direct OR reported as total effect |
 | `viz_signoff_checklist.png` | [Ch 12](chapters/12-case-studies.md) | Pre-submission gates |
 
 **Related teaching figures (single panel):** `ch15_pseudoreplication_demo.png` ([Ch 15](chapters/15-flow-cytometry.md)), `ch14_group_batch_overlap.png` ([Ch 14](chapters/14-batch-effects.md)), `ch13_proteomics_missingness_by_group.png` ([Ch 13](chapters/13-differential-analysis-fdr.md)).
 
-**APATE vignette (no figure):** [APATE_VIGNETTE](APATE_VIGNETTE.md) — CASTOR vs messy registry prose.
+**APATE vignette (no figure):** [APATE_VIGNETTE](APATE_VIGNETTE.md): CASTOR vs messy registry prose.
 
 **Shortest investigator read:** [Appendix J](appendix-j-investigator-minimum-path.md).
 

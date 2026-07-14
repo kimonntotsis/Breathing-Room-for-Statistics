@@ -18,12 +18,12 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Why this chapter](#why-this-chapter) — participant-level inference
-2. [Method choice at a glance](#method-choice-at-a-glance) — proportions vs cells
+1. [Why this chapter](#why-this-chapter): participant-level inference
+2. [Method choice at a glance](#method-choice-at-a-glance): proportions vs cells
 3. **Practice read** on pseudo-replication
-4. [Wrong analysis](#wrong-analysis-) — modelling cells as patients
+4. [Wrong analysis](#wrong-analysis-): modelling cells as patients
 5. [Alternatives & extensions](#alternatives--extensions)
 
 **Analyst read:** compositional plots, R lab below.
@@ -247,7 +247,7 @@ Embeddings (UMAP/t-SNE) and clustering can help you **see** structure and check 
 
 **Rule:** if you show an embedding, also show participant-level summaries that support the claim.
 
-![Cell-type proportions by group (participant-level)](../figures/ch15_flow_props_by_group.png)
+![Circular bar: cell-type proportions by group](../figures/ch15_flow_props_by_group.png)
 
 Bars are participant means: the level at which group comparisons belong in a respiratory paper.
 
@@ -255,7 +255,7 @@ Bars are participant means: the level at which group comparisons belong in a res
 
 | Panel / figure | Right use | Wrong use |
 |----------------|-----------|-----------|
-| `ch15_flow_props_by_group.png` | Participant-level proportions by arm | — |
+| `ch15_flow_props_by_group.png` | Participant-level proportions by arm | |
 | `ch15_pseudoreplication_demo.png` | Teaching: why pooling cells inflates *p* | Inference at cell *n* |
 
 ![Pseudo-replication: participant vs pooled-cell p-values](../figures/ch15_pseudoreplication_demo.png)
@@ -304,8 +304,8 @@ source("R/00_setup.R")
 library(tidyverse)
 
 flow <- readr::read_csv(
-  file.path(paths$data, "flowcytometry_summary.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "flowcytometry_summary.csv"),
+ show_col_types = FALSE
 )
 table(flow$group, flow$batch)
 ```

@@ -14,7 +14,7 @@ source("R/examples/ch10_pca.R")
 library(tidyverse)
 o <- read_csv("data/marker_panel.csv", show_col_types = FALSE)
 X <- scale(o %>% select(starts_with("M")))
-pca <- princomp(X)  # or prcomp
+pca <- princomp(X) # or prcomp
 summary(pca)
 ```
 

@@ -21,9 +21,9 @@ When you see an unfamiliar word:
 1. **Read the middle column first** (“Plain language”). That is the everyday meaning used in the chapters.
 2. **Use the third column only if you are writing Methods** or reviewing analysis with an analyst.
 3. **Ask three questions** (same habit as Chapter 1):
-   - What number are they actually estimating?
-   - Who is in the population?
-   - What would I **not** conclude from this term alone?
+ - What number are they actually estimating?
+ - Who is in the population?
+ - What would I **not** conclude from this term alone?
 
 Every major technique in the main chapters also has a **Practice read** line in the technique card. Use this appendix when the word appears outside that chapter: in someone else’s abstract, a steering-committee deck, or an omics email.
 
@@ -68,7 +68,7 @@ Short entries for terms you may hear in respiratory research even when this hand
 | **Standard deviation (SD)** | Spread of values **in the sample** | Typical distance from the mean; describes patients, not uncertainty of the mean |
 | **Heterogeneity** | Studies or sites differ beyond chance | In meta-analysis or multi-centre trials; may need random effects or stratification |
 | **Interaction** | Effect of treatment differs by subgroup | Requires prespecification; often underpowered; distinguish from post-hoc subgroup fishing |
-| **Mediator** | Variable on the causal path between exposure and outcome | Adjusting for a mediator can block part of the effect you care about |
+| **Mediator** | Variable on the causal path between exposure and outcome | Adjusting for a mediator can block part of the effect you care about; see mediation in [Ch 22](chapters/22-mediation-analysis.md) |
 | **Collider** | Variable caused by both exposure and outcome | Conditioning on it can **induce** spurious association (DAG reasoning; Ch 21) |
 | **Registry / pre-registration** | Analysis plan recorded before seeing results | Reduces HARKing; does not guarantee correct methods |
 
@@ -189,6 +189,11 @@ Short entries for terms you may hear in respiratory research even when this hand
 | **Intermittent missingness** | Gap at one visit, later data exist | Common in longitudinal spirometry |
 | **IPW** | Reweight to balance exposed groups | Inverse probability weighting; sensitivity for confounding in observational data, not proof of causation |
 | **DAG** | Diagram of causal paths | Directed acyclic graph for confounder, mediator, and collider reasoning |
+| **ACME** | Indirect effect through a mediator | Average causal mediation effect (natural indirect effect); bootstrap CI in [Ch 22](chapters/22-mediation-analysis.md) |
+| **ADE** | Direct effect not through mediator | Average direct effect in mediation analysis |
+| **Total effect** | Exposure effect through all paths | Omit mediator from outcome model when prespecified |
+| **Direct effect (mediation)** | Exposure effect not through measured mediator | Outcome model includes mediator; not the same as total effect |
+| **Mediation analysis** | Decompose exposure effect into paths | Requires prespecified DAG, timing, and sensitivity; not exploratory covariate adjustment |
 
 ---
 
@@ -206,7 +211,7 @@ Short entries for terms you may hear in respiratory research even when this hand
 | **CLD** | Chronic lung disease (umbrella term in registries and programmes) | CASTOR is COPD-flavoured in the data; methods transfer to CLD when outcome type and design match |
 | **CASTOR** | Analysis workflow (**C**linical question → **A**ssess → **S**elect → **T**est → **O**utput → **R**eport limits) and synthetic teaching cohort | Mnemonic for question-first analysis; spelled out in [Preface](chapters/00-preface.md#what-castor-means) and [Ch 1](chapters/01-statistical-thinking.md); data in [RECURRING_COHORT](RECURRING_COHORT.md) |
 | **CASTOR-HD** | Synthetic omics extension | Proteomics, RNA, flow, and antibody teaching datasets (Ch 13–17) |
-| **APATE** | Greek *Apate* (Ἀπάτη), personification of deceit; handbook **prose-only** messy-registry vignette | Contrasts with clean CASTOR; no `data/*.csv` — [APATE_VIGNETTE](APATE_VIGNETTE.md) |
+| **APATE** | Greek *Apate* (Ἀπάτη), personification of deceit; handbook **prose-only** messy-registry vignette | Contrasts with clean CASTOR; no `data/*.csv`: [APATE_VIGNETTE](APATE_VIGNETTE.md) |
 
 ---
 

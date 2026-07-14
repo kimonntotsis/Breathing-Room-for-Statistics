@@ -2,15 +2,15 @@
 
 ## What APATE means
 
-**APATE** (Ἀπάτη) is the Greek personification of **deceit, fraud, and illusion**. In this handbook the name labels a **fictional registry story** — not a dataset.
+**APATE** (Ἀπάτη) is the Greek personification of **deceit, fraud, and illusion**. In this handbook the name labels a **fictional registry story**, not a dataset.
 
 | Name | What it is | In the repo |
 |------|------------|-------------|
 | **CASTOR** | Synthetic **COPD-flavoured** teaching cohort with CSV files + R scripts | `data/*.csv`, Ch 3–12; workflow applies to **CLD** when estimand/design match |
 | **CASTOR-HD** | Synthetic **omics extension** (proteomics, RNA, flow, screens) | `data/proteomics_*.csv`, etc., Ch 13–17 |
-| **APATE** | **Prose-only vignette** of a messy multi-site registry | **This file only** — no CSV, no R lab |
+| **APATE** | **Prose-only vignette** of a messy multi-site registry | **This file only**: no CSV, no R lab |
 
-**Backronym (teaching label, not for Methods):** *Aggregated Pulmonary Airways Translational Epidemiology* — a name for the fictional registry below.
+**Backronym (teaching label, not for Methods):** *Aggregated Pulmonary Airways Translational Epidemiology*: a name for the fictional registry below.
 
 ---
 
@@ -18,9 +18,9 @@
 
 APATE does **not** teach new tests. It teaches **skepticism** before you sign off a real protocol, steering deck, or manuscript:
 
-1. **Contrast** — CASTOR is clean on purpose; APATE lists what real studies hide (visit slippage, QC failure, site effects, batch confounding).
-2. **Checklist** — Investigator questions to ask when your cohort is **not** in `data/*.csv`.
-3. **Methods voice** — A sample paragraph showing honest *n*, exclusions, clustering, and exploratory vs confirmatory separation.
+1. **Contrast**: CASTOR is clean on purpose; APATE lists what real studies hide (visit slippage, QC failure, site effects, batch confounding).
+2. **Checklist**: Investigator questions to ask when your cohort is **not** in `data/*.csv`.
+3. **Methods voice**: A sample paragraph showing honest *n*, exclusions, clustering, and exploratory vs confirmatory separation.
 
 **Use with:** [RECURRING_COHORT](RECURRING_COHORT.md), [Ch 1](chapters/01-statistical-thinking.md), [Ch 2](chapters/02-respiratory-data.md), [Ch 12](chapters/12-case-studies.md), [Appendix J](appendix-j-investigator-minimum-path.md).
 
@@ -51,7 +51,7 @@ APATE does **not** teach new tests. It teaches **skepticism** before you sign of
 
 ## Investigator questions (before sign-off on real data)
 
-1. **Who is in the analysed set?** Enrolled vs protocol-compliant vs complete primary endpoint — three different *n*s.
+1. **Who is in the analysed set?** Enrolled vs protocol-compliant vs complete primary endpoint: three different *n*s.
 2. **Is the figure honest?** [Appendix I](appendix-i-figure-hygiene.md) three questions on every primary figure.
 3. **Does the estimand survive protocol deviation?** State treatment-policy vs hypothetical strategy.
 4. **Would the conclusion change under MAR vs MNAR?** Say so in limitations ([Ch 20](chapters/20-missing-data.md)).
@@ -79,6 +79,6 @@ CASTOR scripts remain the **method reference**. When moving to a real cohort:
 
 ## Further reading
 
-- Missing data checklists: [Appendix D](appendix-d-missing-data-checklists.md)  
-- High-dimensional reporting: [HIGH_DIM_REPORTING_TEMPLATES](HIGH_DIM_REPORTING_TEMPLATES.md)  
+- Missing data checklists: [Appendix D](appendix-d-missing-data-checklists.md)
+- High-dimensional reporting: [HIGH_DIM_REPORTING_TEMPLATES](HIGH_DIM_REPORTING_TEMPLATES.md)
 - Handbook edition: [HANDBOOK_STATUS](HANDBOOK_STATUS.md)

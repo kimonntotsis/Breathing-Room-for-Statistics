@@ -33,6 +33,26 @@ if (length(missing) > 0) {
   )
 }
 
+viz_pkgs <- c("ggridges", "ggalluvial", "ggforce", "ggrepel", "hexbin", "ggdendro")
+viz_missing <- viz_pkgs[!vapply(viz_pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1))]
+if (length(viz_missing) > 0) {
+  message(
+    "Optional visualization packages (for R/viz_handbook.R and R/viz_omics.R): install.packages(c(",
+    paste(sprintf('"%s"', viz_missing), collapse = ", "),
+    "))"
+  )
+}
+
+omics_pkgs <- c("DESeq2", "limma", "edgeR", "fgsea", "sva")
+omics_missing <- omics_pkgs[!vapply(omics_pkgs, requireNamespace, quietly = TRUE, FUN.VALUE = logical(1))]
+if (length(omics_missing) > 0) {
+  message(
+    "Optional omics analyst packages (Appendix L): BiocManager::install(c(",
+    paste(sprintf('"%s"', omics_missing), collapse = ", "),
+    "))"
+  )
+}
+
  `%||%` <- function(x, y) if (is.null(x)) y else x
 
 paths <- list(

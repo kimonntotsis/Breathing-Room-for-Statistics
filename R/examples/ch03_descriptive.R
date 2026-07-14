@@ -1,4 +1,5 @@
 source("R/00_setup.R")
+source("R/viz_handbook.R")
 
 library(tidyverse)
 library(broom)
@@ -29,47 +30,67 @@ if (requireNamespace("gtsummary", quietly = TRUE)) {
     ))
 }
 
-# --- Histogram + density ---
-p_hist <- ggplot(spirometry, aes(x = fev1, fill = group)) +
-  geom_histogram(aes(y = after_stat(density)), alpha = 0.5, position = "identity", bins = 25) +
-  geom_density(alpha = 0.3) +
-  labs(x = "FEV1 (L)", y = "Density", title = "FEV1 distribution") +
-  theme_minimal(base_size = 12)
+# --- Distribution combo (histogram + density + rug) ---
+p_hist <- plot_dist_combo(
+  spirometry, "fev1", fill = "group",
+  title = "FEV1 distribution by trial arm",
+  subtitle = "Histogram, density, and rug: shape before mean-based tests",
+  xlab = "FEV1 (L)"
+)
 
-# --- Violin + boxplot ---
-p_violin <- ggplot(spirometry, aes(x = group, y = fev1, fill = group)) +
-  geom_violin(alpha = 0.5, trim = FALSE) +
-  geom_boxplot(width = 0.15, outlier.alpha = 0.4) +
-  geom_jitter(width = 0.08, alpha = 0.25, size = 1) +
-  labs(x = NULL, y = "FEV1 (L)", title = "FEV1 by trial arm") +
-  theme_minimal(base_size = 12) +
-  theme(legend.position = "none")
+# --- Ridge plot by diagnosis ---
+p_ridge <- plot_density_ridge(
+  spirometry, "fev1", "diagnosis", fill = "diagnosis",
+  title = "FEV1 ridges by obstruction category",
+  subtitle = "Overlapping ridges show where arms will and will not separate",
+  xlab = "FEV1 (L)", ylab = NULL
+)
 
-# --- Scatter with smooth ---
-p_scatter <- ggplot(spirometry, aes(x = age, y = fev1, colour = smoking)) +
-  geom_point(alpha = 0.55, size = 2) +
-  geom_smooth(method = "lm", se = TRUE, linewidth = 0.8) +
-  labs(x = "Age (years)", y = "FEV1 (L)", colour = "Smoking",
-       title = "FEV1 vs age") +
-  theme_minimal(base_size = 12)
+# --- Split violin: smoking within trial arm ---
+p_split <- plot_split_violin(
+  spirometry, "group", "fev1", "smoking",
+  title = "Split violin: FEV1 by arm and smoking",
+  subtitle = "Two distributions per arm without hiding overlap",
+  xlab = NULL, ylab = "FEV1 (L)"
+)
+
+# --- Correlation heatmap (continuous Table 1 variables) ---
+p_corr <- plot_corr_heatmap(
+  spirometry,
+  vars = c("age", "height_cm", "fev1", "fvc", "fev1_fvc"),
+  title = "Correlation heatmap: baseline continuous traits",
+  subtitle = "Hierarchically ordered; upper triangle labels only"
+)
+
+# --- Marginal scatter with ellipses ---
+p_scatter <- plot_marginal_scatter(
+  spirometry, "age", "fev1", "smoking",
+  title = "FEV1 vs age with smoking ellipses",
+  subtitle = "Covariance visible before adjustment (Ch 5)",
+  xlab = "Age (years)", ylab = "FEV1 (L)"
+)
 
 # --- QQ plot for normality (overall FEV1) ---
 p_qq <- ggplot(spirometry, aes(sample = fev1)) +
-  stat_qq(alpha = 0.6) +
-  stat_qq_line(linewidth = 0.8) +
-  labs(title = "Normal Q-Q: FEV1", x = "Theoretical quantiles", y = "Sample quantiles") +
-  theme_minimal(base_size = 12)
+  stat_qq(alpha = 0.6, colour = "#64748B") +
+  stat_qq_line(linewidth = 0.8, colour = "#3A9E92") +
+  labs(
+    title = "Normal Q-Q: FEV1",
+    subtitle = "Tail deviation is common in spirometry cohorts",
+    x = "Theoretical quantiles", y = "Sample quantiles"
+  ) +
+  handbook_theme()
 
-# --- Correlation ---
 cor_age_fev1 <- cor(spirometry$age, spirometry$fev1)
 message("Correlation age–FEV1: ", round(cor_age_fev1, 3))
 
 # --- Save figures ---
-ggsave(file.path(fig_dir, "ch03_fev1_histogram.png"), p_hist, width = 7, height = 4, dpi = 150)
-ggsave(file.path(fig_dir, "ch03_fev1_violin.png"), p_violin, width = 6, height = 4, dpi = 150)
-ggsave(file.path(fig_dir, "ch03_fev1_qq.png"), p_qq, width = 5, height = 4, dpi = 150)
-ggsave(file.path(fig_dir, "ch03_fev1_scatter.png"), p_scatter, width = 6, height = 4, dpi = 150)
+handbook_save(p_hist, file.path(fig_dir, "ch03_fev1_histogram.png"), 7.2, 4.5)
+handbook_save(p_ridge, file.path(fig_dir, "ch03_fev1_ridge.png"), 7, 4.8)
+handbook_save(p_split, file.path(fig_dir, "ch03_fev1_violin.png"), 6.8, 4.6)
+handbook_save(p_corr, file.path(fig_dir, "ch03_corr_heatmap.png"), 6.5, 5.2)
+handbook_save(p_scatter, file.path(fig_dir, "ch03_fev1_scatter.png"), 6.8, 4.8)
+handbook_save(p_qq, file.path(fig_dir, "ch03_fev1_qq.png"), 5.2, 4.4)
 
-print(p_hist / (p_violin | p_qq))
 message("Figures saved to ", fig_dir)
 message("Chapter 3 descriptive analysis complete.")

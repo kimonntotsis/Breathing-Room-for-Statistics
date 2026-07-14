@@ -45,15 +45,20 @@ Every chapter script expects the packages listed in `R/00_setup.R`. Run this **o
 
 ```r
 install.packages(c(
-  "tidyverse", "broom", "patchwork", "survival", "lme4",
-  "glmnet", "randomForest", "cluster", "factoextra"
+ "tidyverse", "broom", "patchwork", "survival", "lme4",
+ "glmnet", "randomForest", "cluster", "factoextra"
 ))
 
 # Optional (Chapter 20 MICE demo):
 # install.packages("mice")
+
+# Optional (Appendix L omics analyst track — Bioconductor):
+# if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
+# BiocManager::install(c("DESeq2", "limma", "edgeR", "fgsea", "sva"))
+# install.packages(c("ggrepel", "msigdbr"))
 ```
 
-Some optional packages appear in individual chapters or exercises (`pwr`, `logistf`, `mice`, `emmeans`, `rpart`, `xgboost`). Install when a script asks for them:
+Some optional packages appear in individual chapters or exercises (`pwr`, `logistf`, `mice`, `emmeans`, `rpart`, `xgboost`, **omics analyst track** in [Appendix L](appendix-l-omics-analyst-track.md)). Install when a script asks for them:
 
 ```r
 install.packages(c("pwr", "logistf", "mice", "emmeans"))
@@ -70,8 +75,8 @@ install.packages(c("pwr", "logistf", "mice", "emmeans"))
 From the **project root** in R:
 
 ```r
-source("R/00_setup.R")              # paths + package check
-source("R/generate_data.R")         # rebuild CASTOR CSV files in data/
+source("R/00_setup.R") # paths + package check
+source("R/generate_data.R") # rebuild CASTOR CSV files in data/
 source("R/examples/generate_figures.R")
 # optional: all handbook figures
 ```
@@ -82,7 +87,7 @@ To run **one chapter**:
 
 ```r
 source("R/00_setup.R")
-source("R/examples/ch04_comparing_groups.R")   # example
+source("R/examples/ch04_comparing_groups.R") # example
 ```
 
 To run **all chapter scripts** (smoke test):

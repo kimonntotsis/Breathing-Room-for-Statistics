@@ -19,12 +19,12 @@
 
 ---
 
-## Investigator path (≈20 min)
+## In this chapter
 
-1. [Why this chapter](#why-this-chapter) — screen is triage, not truth
-2. [Method choice at a glance](#method-choice-at-a-glance) — thresholds, PPV, tiers
+1. [Why this chapter](#why-this-chapter): screen is triage, not truth
+2. [Method choice at a glance](#method-choice-at-a-glance): thresholds, PPV, tiers
 3. **Practice read** on rank #7 vs #9
-4. [Reporting template](#reporting-template) — Tier 1 clones wording
+4. [Reporting template](#reporting-template): Tier 1 clones wording
 5. [Alternatives & extensions](#alternatives--extensions)
 
 **Analyst read:** replicate agreement, R lab below.
@@ -267,13 +267,13 @@ A cliff edge in PPV means the shortlist is threshold-dependent: show the curve, 
 
 ```r
 screen <- readr::read_csv(
-  file.path(paths$data, "antibody_screen.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "antibody_screen.csv"),
+ show_col_types = FALSE
 )
 # Teaching: z-score within antigen across clones (exploratory)
 screen %>% group_by(antigen) %>%
-  mutate(z = as.numeric(scale(signal_mean))) %>%
-  filter(z > 1.5) %>% count(antigen)
+ mutate(z = as.numeric(scale(signal_mean))) %>%
+ filter(z > 1.5) %>% count(antigen)
 ```
 
 ---
@@ -300,22 +300,22 @@ Outputs:
 - `ch16_stability_tiers.png` (tier counts + PPV by tier for AgA)
 - `ch16_ranking_stability.png` (top-20 overlap across replicate pairs)
 - Tables in `volume-01/tables/`:
-  - `ch16_screen_ppv_by_antigen.csv`
-  - `ch16_threshold_sensitivity.csv`
-  - `ch16_ranking_tiers_aga.csv`
-  - `ch16_mini_case_summary.csv`
+ - `ch16_screen_ppv_by_antigen.csv`
+ - `ch16_threshold_sensitivity.csv`
+ - `ch16_ranking_tiers_aga.csv`
+ - `ch16_mini_case_summary.csv`
 
 ```r
 source("R/00_setup.R")
 library(tidyverse)
 
 screen <- readr::read_csv(
-  file.path(paths$data, "antibody_screen.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "antibody_screen.csv"),
+ show_col_types = FALSE
 )
 conf <- readr::read_csv(
-  file.path(paths$data, "antibody_confirmation.csv"),
-  show_col_types = FALSE
+ file.path(paths$data, "antibody_confirmation.csv"),
+ show_col_types = FALSE
 )
 ```
 
