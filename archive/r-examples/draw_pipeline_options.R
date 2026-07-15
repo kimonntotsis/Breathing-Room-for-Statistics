@@ -3,7 +3,7 @@ source("R/00_setup.R")
 library(tidyverse)
 
 fig_dir <- file.path(paths$root, "volume-01", "figures")
-opts_dir <- file.path(fig_dir, "pipeline-options")
+opts_dir <- file.path(paths$root, "archive", "figures", "pipeline-options")
 dir.create(opts_dir, showWarnings = FALSE, recursive = TRUE)
 
 # --- Palettes -----------------------------------------------------------------

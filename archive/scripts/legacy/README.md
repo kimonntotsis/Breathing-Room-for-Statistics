@@ -13,4 +13,4 @@ These were **migration / editorial passes** during handbook development. They ar
 | `unwrap_figure_links.py` | Unwrap figure link markup |
 | `upscale_cover.py` | Local cover upscale to 2048/4096 |
 
-**Active scripts** (parent folder): `prepare_cover_assets.py`, `verify_figure_markdown.py`, `verify_pdf_build.py`.
+**Active scripts** (repo): `volume-01/scripts/prepare_cover_assets.py`, `verify_figure_markdown.py`, `verify_pdf_build.py`.

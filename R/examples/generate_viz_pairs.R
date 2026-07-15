@@ -25,23 +25,27 @@ viz_theme <- function(base = 11) {
     )
 }
 
-viz_tag <- function(p, label, kind = c("right", "wrong")) {
-  kind <- match.arg(kind)
+viz_tag <- function(p, label, kind = NULL) {
+  if (is.null(kind)) {
+    kind <- if (grepl("^Wrong:", label, ignore.case = TRUE)) "wrong" else "right"
+  }
+  kind <- match.arg(kind, c("right", "wrong"))
   col <- if (kind == "right") "#115E59" else "#BE123C"
   p +
     labs(tag = label) +
     theme(
       plot.tag = element_text(
         face = "bold", size = 11, colour = col,
-        hjust = 0, margin = margin(b = 6)
+        hjust = 0.5, margin = margin(b = 4)
       ),
-      plot.tag.position = "topleft",
-      plot.margin = margin(t = 14, r = 10, b = 8, l = 10)
+      plot.tag.position = "top",
+      plot.margin = margin(t = 16, r = 10, b = 8, l = 10)
     )
 }
 
-viz_save_pair <- function(p_wrong, p_right, path, title, caption, width = 10, height = 4.8) {
+viz_save_pair <- function(p_wrong, p_right, path, title, caption, width = 10, height = 5.1) {
   panel <- (p_wrong | p_right) +
+    plot_layout(widths = c(1, 1)) +
     plot_annotation(
       title = title,
       caption = caption,
@@ -50,7 +54,7 @@ viz_save_pair <- function(p_wrong, p_right, path, title, caption, width = 10, he
         plot.caption = element_text(size = 8.5, colour = "#64748B", hjust = 0.5, lineheight = 0.95)
       )
     )
-  ggsave(path, panel, width = width, height = height, dpi = 160, bg = "white")
+  ggsave(path, panel, width = width, height = height, dpi = 200, bg = "white")
   invisible(path)
 }
 
@@ -70,7 +74,10 @@ surv <- read_csv(file.path(paths$data, "time_to_exacerbation.csv"), show_col_typ
 set.seed(20250711)
 spirometry_miss <- spirometry %>%
   mutate(
-    missing_fev1 = rbinom(n(), 1, prob = plogis(-2 + 0.8 * (diagnosis != "no_obstruction"))) == 1,
+    missing_fev1 = rbinom(
+      n(), 1,
+      prob = plogis(-2.8 + 1.4 * (diagnosis == "moderate_obstruction") + 0.4 * smoking)
+    ) == 1,
     fev1_obs = if_else(missing_fev1, NA_real_, fev1)
   )
 
@@ -91,44 +98,11 @@ if (file.exists(prot_path)) {
 # 1. Plot router (Appendix I + Ch 3)
 # =============================================================================
 draw_plot_router <- function(path) {
-  rows <- tibble::tribble(
-    ~estimand, ~right_plot, ~wrong_plot, ~masks_if_wrong,
-    "Continuous\n2 groups", "Raincloud /\nviolin + n", "Mean bar only\nor truncated y", "Spread,\noutliers, n",
-    "Paired\npre/post", "Dumbbell /\nlines per patient", "Independent\nboxplots", "Within-person\ncorrelation",
-    "Binary /\nproportion", "Alluvial /\nbar + count", "Pie / 3D bar", "Denominator,\nsparse cells",
-    "Adjusted OR/HR", "Forest +\n95% CI", "Coefficient\nbars, no CI", "Uncertainty,\nmultiplicity",
-    "Prediction", "Calibration +\nn events", "AUC / ROC\nhero only", "Risk scale,\nmiscalibration",
-    "Longitudinal", "Spaghetti /\nridges / trend", "Single time\nsnapshot", "Trajectory,\nmissing visits",
-    "Time-to-event", "KM + events\n+ censoring", "% event bar\nno time", "Censoring,\nfollow-up",
-    "Omics QC", "PCA / heatmap\nby batch first", "PCA by group\nonly", "Batch\nconfounding",
-    "Missing data", "Heatmap /\npattern plot", "Analysed n\nonly", "Who dropped,\nwhy"
-  ) %>%
-    mutate(
-      row = rev(row_number()),
-      estimand = str_replace_all(estimand, "\n", " ")
-    )
-
-  p <- ggplot(rows, aes(x = 1, y = row)) +
-    geom_tile(aes(fill = estimand), colour = "white", linewidth = 1.2, width = 0.92, height = 0.88) +
-    geom_text(aes(label = estimand), fontface = "bold", size = 3.1, colour = "#0F172A") +
-    geom_text(aes(x = 2.15, label = right_plot), size = 2.7, colour = "#115E59", lineheight = 0.9) +
-    geom_text(aes(x = 3.35, label = wrong_plot), size = 2.7, colour = "#BE123C", lineheight = 0.9) +
-    geom_text(aes(x = 4.55, label = masks_if_wrong), size = 2.5, colour = "#64748B", lineheight = 0.9) +
-    annotate("text", x = 1, y = max(rows$row) + 0.65, label = "Estimand", fontface = "bold", size = 3.4) +
-    annotate("text", x = 2.15, y = max(rows$row) + 0.65, label = "Prefer", fontface = "bold", size = 3.4, colour = "#115E59") +
-    annotate("text", x = 3.35, y = max(rows$row) + 0.65, label = "Avoid", fontface = "bold", size = 3.4, colour = "#BE123C") +
-    annotate("text", x = 4.55, y = max(rows$row) + 0.65, label = "Wrong plot hides", fontface = "bold", size = 3.4, colour = "#64748B") +
-    scale_fill_manual(values = rep("#F1F5F9", nrow(rows)), guide = "none") +
-    coord_cartesian(xlim = c(0.4, 5.2), ylim = c(0.3, max(rows$row) + 1), clip = "off") +
-    labs(
-      title = "Plot choice by estimand (respiratory handbook router)",
-      subtitle = "Match the figure to the estimand before you polish the slide",
-      caption = "Full pairs: viz_pair_*.png; Appendix I; CASTOR teaching cohort"
-    ) +
-    viz_theme(10) +
-    theme(axis.text = element_blank(), axis.ticks = element_blank(), panel.grid = element_blank())
-
-  ggsave(path, p, width = 9.5, height = 7.2, dpi = 160, bg = "white")
+  # Illustrated master: figures/viz_plot_router.png
+  # R fallback (optional): archive/figures/fallbacks/viz_plot_router_r.png
+  if (!file.exists(path)) {
+    draw_plot_router_modern(path)
+  }
 }
 
 draw_plot_router(file.path(fig_dir, "viz_plot_router.png"))
@@ -485,9 +459,10 @@ miss_pat <- spirometry_miss %>%
   arrange(diagnosis, miss, patient_id) %>%
   mutate(idx = row_number())
 
-p_right_miss <- ggplot(miss_pat, aes(idx, 1, fill = miss)) +
+p_right_miss <- ggplot(miss_pat, aes(idx, factor(1), fill = miss)) +
   geom_tile(height = 0.8) +
   scale_fill_manual(values = c("Observed" = "#1D4ED8", "Missing FEV1" = "#FECACA")) +
+  scale_y_discrete(expand = c(0, 0)) +
   facet_grid(diagnosis ~ group, scales = "free", space = "free_x") +
   labs(
     title = "Missing FEV1 pattern by subgroup",
@@ -498,6 +473,8 @@ p_right_miss <- ggplot(miss_pat, aes(idx, 1, fill = miss)) +
   theme(
     axis.text.x = element_blank(),
     axis.ticks.x = element_blank(),
+    axis.text.y = element_blank(),
+    axis.ticks.y = element_blank(),
     strip.text = element_text(size = 9)
   )
 

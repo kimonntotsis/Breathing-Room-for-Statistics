@@ -108,4 +108,4 @@ Priority chapters for external read: **4, 6, 13, 18, 20**. Use [REVIEWER_RUBRIC.
 
 ## Extended topics
 
-Longitudinal spirometry, survival, missing data, causal inference, and mediation are **[Ch 18–22](chapters/18-longitudinal-mixed-models.md)** in this same volume. Optional deeper material (competing risks, IV, full Bayesian workflows) remains for future expansion; see [BOOK_OUTLINE.md](../BOOK_OUTLINE.md).
+Longitudinal spirometry, survival, missing data, causal inference, and mediation are **[Ch 18–22](chapters/18-longitudinal-mixed-models.md)** in this same volume. Optional deeper material (competing risks, IV, full Bayesian workflows) remains for future expansion; see [`archive/docs/BOOK_OUTLINE.md`](../archive/docs/BOOK_OUTLINE.md).

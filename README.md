@@ -20,7 +20,7 @@ A single-volume handbook for **early- and mid-career** respiratory investigators
 | **Analyst (R)** | [Appendix A](volume-01/appendix-a-r-setup.md) → [Appendix B](volume-01/appendix-b-quick-reference.md) → outcome chapter |
 | **Anyone lost** | [Appendix G: navigation](volume-01/appendix-g-handbook-navigation.md) |
 
-**Teaching names:** **CASTOR** / **CASTOR-HD** = COPD-flavoured synthetic CSV cohorts (methods apply to **CLD** when endpoints match); **APATE** = prose-only messy-registry vignette ([APATE_VIGNETTE](volume-01/APATE_VIGNETTE.md), no data files); **Appendix K** = six fictional but feasible “in the room” stories ([appendix-k-in-the-room-stories.md](volume-01/appendix-k-in-the-room-stories.md)).
+**Teaching names:** **CASTOR** = workflow + COPD-flavoured synthetic CSV cohorts (**CASTOR-HD** for omics); **POLLUX** = Castor's twin, messy-registry vignette ([POLLUX_VIGNETTE](volume-01/POLLUX_VIGNETTE.md); optional `data/pollux_registry_messy.csv` for missingness drills). *CASTOR is where you learn the method; POLLUX is where you learn what the method must survive.* **Appendix K** = six fictional “in the room” stories ([appendix-k-in-the-room-stories.md](volume-01/appendix-k-in-the-room-stories.md)).
 
 ## Handbook navigation
 
@@ -38,7 +38,7 @@ A single-volume handbook for **early- and mid-career** respiratory investigators
 | **Full method inventory** | [volume-01/METHOD_MAP.md](volume-01/METHOD_MAP.md) |
 | **All figures** | [volume-01/FIGURE_INDEX.md](volume-01/FIGURE_INDEX.md) |
 | **Glossary** | [volume-01/appendix-c-glossary.md](volume-01/appendix-c-glossary.md) |
-| **APATE vignette (no CSV)** | [volume-01/APATE_VIGNETTE.md](volume-01/APATE_VIGNETTE.md) |
+| **POLLUX vignette** | [volume-01/POLLUX_VIGNETTE.md](volume-01/POLLUX_VIGNETTE.md) (+ optional `data/pollux_registry_messy.csv`) |
 | **Edition / citation** | [volume-01/HANDBOOK_STATUS.md](volume-01/HANDBOOK_STATUS.md) |
 | **Instructor pack** | [volume-01/INSTRUCTOR_PACK.md](volume-01/INSTRUCTOR_PACK.md), exercises in Appendix F |
 | **Reviewer rubric** | [volume-01/REVIEWER_RUBRIC.md](volume-01/REVIEWER_RUBRIC.md) |
@@ -52,7 +52,7 @@ Letters are **citation IDs** (always say “Appendix B” for the method router)
 
 ## Project layout
 
-Only these folders matter for readers and the PDF build. Everything else is author tooling or local drafts (see `.gitignore`).
+Only these folders matter for readers and the PDF build. Author drafts and one-off tooling live in `archive/` (see [archive/README.md](archive/README.md)).
 
 ```
 volume-01/
@@ -63,12 +63,14 @@ volume-01/
   parts/             Part divider pages
   figures/           Chapter figures + book-cover-pearl-streams.png
   _quarto.yml        Book build config
+  scripts/           CI + cover prep only (verify_*.py, prepare_cover_assets.py)
 R/                   Runnable scripts and data generation
 data/                Exported CSV datasets for readers
+archive/             Unused design drafts, fallbacks, editorial scripts (local)
 references.bib       Bibliography
 ```
 
-**Ignored locally (not on GitHub):** `volume-01/figures/pipeline-options/`, `volume-01/figures/archive/`, cover upscale intermediates, built PDF in `_book/` and repo root.
+**Ignored locally (not on GitHub):** `archive/figures/` (large binaries), `archive/data/*.RData`, cover upscale intermediates, built PDF in `_book/` and repo root.
 
 ## Quick start
 
@@ -98,6 +100,7 @@ quarto render --to pdf # → _book/Breathing-Room-for-Statistics.pdf
 PDF output:
 
 - **Repository root:** `Breathing-Room-for-Statistics.pdf` (via `./build-handbook-pdf.sh`)
+- **Ch 4 extensions (cluster, NI, crossover):** [Appendix O](volume-01/appendix-o-ch04-comparison-extensions.md) — split from core Ch 4 for shorter first pass
 - **Quarto build dir:** `volume-01/_book/`
 
 ```bash

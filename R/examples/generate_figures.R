@@ -330,10 +330,9 @@ draw_method_decision_tree <- function(path) {
   )
 }
 
-draw_method_decision_tree(file.path(fig_dir, "method_decision_tree_r.png"))
-
 # Illustrated method decision tree (handbook): figures/method_decision_tree.png
-#: custom asset; not overwritten by this script. R fallback: method_decision_tree_r.png
+# R fallback (optional): archive/figures/fallbacks/method_decision_tree_r.png
+# Design iterations: archive/figures/pipeline-options/
 
 # =============================================================================
 # 1b. CASTOR analysis pipeline (process before method choice)
@@ -621,19 +620,8 @@ draw_analysis_pipeline_modern <- function(path) {
   ggplot2::ggsave(path, p, width = 8.2, height = 11.2, dpi = 320, bg = "#FFFFFF")
 }
 
-pipeline_opts <- file.path(fig_dir, "pipeline-options")
-dir.create(pipeline_opts, showWarnings = FALSE, recursive = TRUE)
-
 # Illustrated luxe pipeline (handbook primary): figures/analysis_pipeline.png
-# Do NOT overwrite — restore from pipeline-options/select-illustrated-luxe-full-4096.png
-draw_analysis_pipeline_modern(file.path(pipeline_opts, "pipeline-modern-r.png"))
-draw_analysis_pipeline_modern(file.path(fig_dir, "analysis_pipeline_r_modern.png"))
-draw_analysis_pipeline(file.path(fig_dir, "analysis_pipeline_r.png"), theme = "handbook")
-draw_analysis_pipeline(file.path(pipeline_opts, "option-handbook-ggplot.png"), theme = "handbook")
-draw_analysis_pipeline(file.path(pipeline_opts, "option-dark-pearl.png"), theme = "dark")
-draw_analysis_pipeline(file.path(pipeline_opts, "option-d-r-clean-white.png"), theme = "light")
-
-# Illustrated drafts archived in pipeline-options/ (AI iterations, not primary)
+# R fallbacks + design options: archive/figures/ (see archive/r-examples/draw_pipeline_options.R)
 
 # =============================================================================
 # 2. Comparison panel (t-test vs Wilcoxon vs linear; chi vs logistic)

@@ -2,6 +2,8 @@
 source("R/00_setup.R")
 library(tidyverse)
 
+dir.create(file.path(paths$root, "archive", "data"), showWarnings = FALSE, recursive = TRUE)
+
 set.seed(20250616)
 
 n <- 400
@@ -213,7 +215,7 @@ write_csv(time_to_exacerbation, file.path(paths$data, "time_to_exacerbation.csv"
 save(
   spirometry, exacerbation, exac_counts, omics, bronchodilator,
   spirometry_trial, exacerbation_zi, longitudinal_spirometry, time_to_exacerbation,
-  file = file.path(paths$data, "book_data.RData")
+  file = file.path(paths$root, "archive", "data", "book_data.RData")
 )
 
 message("Datasets written to ", paths$data)
@@ -472,8 +474,79 @@ confirm <- ab_screen |>
 
 write_csv(confirm, file.path(paths$data, "antibody_confirmation.csv"))
 
+# --- POLLUX messy registry export (teaching only; not CASTOR-clean) ------------
+# Fictional multi-site export for missingness / QC judgement drills (Ch 20).
+
+set.seed(20260628)
+n_pollux <- 240
+site_pollux <- sample(sprintf("SITE_%02d", 1:14), n_pollux, replace = TRUE)
+age_p <- round(rnorm(n_pollux, 62, 11))
+sex_p <- sample(c("female", "male"), n_pollux, TRUE)
+smoking_p <- rbinom(n_pollux, 1, 0.38)
+gold_p <- sample(c("II", "III", "IV"), n_pollux, TRUE, prob = c(0.45, 0.35, 0.20))
+qc_fail <- rbinom(n_pollux, 1, ifelse(gold_p == "IV", 0.18, 0.08))
+visit_week <- sample(c(0, 12, 24, 52), n_pollux, TRUE)
+visit_week <- visit_week + sample(c(-6, -4, 0, 4, 8, 12), n_pollux, TRUE)
+
+fev1_base <- 2.8 - 0.03 * (age_p - 55) - 0.25 * smoking_p -
+  ifelse(gold_p == "IV", 0.45, ifelse(gold_p == "III", 0.2, 0)) +
+  rnorm(n_pollux, 0, 0.35)
+fev1_obs <- ifelse(qc_fail == 1, NA_real_, pmax(round(fev1_base, 2), 0.5))
+# MNAR-style extra missingness in severe disease
+fev1_obs <- ifelse(gold_p == "IV" & rbinom(n_pollux, 1, 0.35), NA_real_, fev1_obs)
+
+exac_yn <- rbinom(n_pollux, 1, plogis(-1 + 0.5 * smoking_p - 0.4 * (fev1_base - 2)))
+exac_count <- rpois(n_pollux, lambda = exp(0.2 + 0.4 * smoking_p))
+
+pollux_registry <- tibble(
+  patient_id = sprintf("PLX-%04d", seq_len(n_pollux)),
+  site_id = site_pollux,
+  age = age_p,
+  sex = sex_p,
+  smoking = as.logical(smoking_p),
+  gold_stage = gold_p,
+  visit_week_scheduled = visit_week,
+  spirometry_qc_fail = as.logical(qc_fail),
+  fev1_l = fev1_obs,
+  exacerbation_yn = as.logical(exac_yn),
+  exac_count_12m = exac_count
+)
+
+write_csv(pollux_registry, file.path(paths$data, "pollux_registry_messy.csv"))
+
+# --- Asthma biologic trial (Case F teaching; separate from COPD CASTOR) --------
+set.seed(20260715)
+n_asthma <- 96
+arm_asthma <- sample(c("biologic", "placebo"), n_asthma, TRUE)
+age_ast <- round(rnorm(n_asthma, 48, 12))
+sex_ast <- sample(c("female", "male"), n_asthma, TRUE)
+eos_ast <- pmax(150, rnorm(n_asthma, 380, 120))
+baseline_fev1 <- pmax(1.0, 2.6 - 0.008 * (age_ast - 40) + rnorm(n_asthma, 0, 0.25))
+post_bd_fev1 <- baseline_fev1 +
+  ifelse(arm_asthma == "biologic", 0.18, 0.02) +
+  rnorm(n_asthma, 0, 0.2)
+followup_years <- runif(n_asthma, 0.85, 1.15)
+severe_exac <- rpois(
+  n_asthma,
+  lambda = exp(0.1 - 0.35 * (arm_asthma == "biologic") + 0.15 * (eos_ast > 300) / 100)
+)
+
+asthma_biologic_trial <- tibble(
+  patient_id = sprintf("AST-%03d", seq_len(n_asthma)),
+  arm = arm_asthma,
+  age = age_ast,
+  sex = sex_ast,
+  blood_eosinophils = round(eos_ast),
+  baseline_fev1_l = round(baseline_fev1, 2),
+  post_bd_fev1_week12_l = round(pmax(post_bd_fev1, 0.8), 2),
+  followup_years = round(followup_years, 2),
+  severe_exacerbations_52w = severe_exac
+)
+
+write_csv(asthma_biologic_trial, file.path(paths$data, "asthma_biologic_trial.csv"))
+
 # Save high-dimensional objects as well
 save(
   proteomics, rnaseq, flow_summary, flow_cells, ab_screen, confirm,
-  file = file.path(paths$data, "book_data_highdim.RData")
+  file = file.path(paths$root, "archive", "data", "book_data_highdim.RData")
 )

@@ -2,7 +2,7 @@
 number-sections: false
 ---
 
-# Appendix N: Bulk RNA vs single-cell — when to escalate {.unnumbered}
+# Appendix N: Bulk RNA vs single-cell: when to escalate {.unnumbered}
 
 > The handbook teaches **bulk** proteomics and RNA-seq on CASTOR-HD plus **participant-level** flow summaries. This appendix sets boundaries so readers know when Ch 13–15 stop and single-cell tooling begins.
 
@@ -12,18 +12,18 @@ number-sections: false
 |-----------|---------------|---------------|
 | **Bulk RNA counts** (`rnaseq_counts.csv`) | Ch 13, Appendix L (DESeq2/limma) | Need cell-type resolution |
 | **Olink / targeted proteomics** | Ch 13–14 | Need MS1 DIA / spectral library workflows |
-| **Flow — participant proportions** | Ch 15 | Need unsupervised cell discovery at scale |
+| **Flow: participant proportions** | Ch 15 | Need unsupervised cell discovery at scale |
 | **Toy per-cell CSV** (`flowcytometry_cells_toy.csv`) | Ch 15 wrong/right demo only | Production scRNA or CyTOF |
 
 ## Bulk RNA-seq (what this book covers)
 
 - **Unit:** one expression profile per biosample (sputum, biopsy, blood)
 - **DE:** DESeq2 / limma-voom on integer counts ([Appendix L](appendix-l-omics-analyst-track.md))
-- **Limit:** cell-type mixing — a DE signal might be driven by **composition** (more neutrophils in cases) not within-cell expression
+- **Limit:** cell-type mixing: a DE signal might be driven by **composition** (more neutrophils in cases) not within-cell expression
 
 **Practice read:** bulk DE in severe asthma/COPD often needs **cell proportion covariates** or deconvolution before claiming within-cell regulation.
 
-## Single-cell RNA-seq (out of scope — but here is the routing)
+## Single-cell RNA-seq (out of scope: but here is the routing)
 
 | Step | Typical tools | Handbook analogue |
 |------|---------------|-------------------|
@@ -43,15 +43,15 @@ number-sections: false
 | **Summary** | Gated proportions per participant | Clusters + pseudobulk DE |
 | **Handbook** | `lm` on participant proportions | Escalate to Seurat/scanpy |
 
-The toy per-cell file in CASTOR-HD exists only to show **why per-cell models inflate n** — not to teach Seurat.
+The toy per-cell file in CASTOR-HD exists only to show **why per-cell models inflate n**: not to teach Seurat.
 
 ## Integrated CASTOR-HD (Ch 17)
 
-End-to-end capstone uses **bulk** matrices + participant summaries. Multi-omics integration (MOFA+, DIABLO) is listed as future expansion in [BOOK_OUTLINE.md](../BOOK_OUTLINE.md).
+End-to-end capstone uses **bulk** matrices + participant summaries. Multi-omics integration (MOFA+, DIABLO) is listed as future expansion in the author outline ([`archive/docs/BOOK_OUTLINE.md`](../archive/docs/BOOK_OUTLINE.md)).
 
 ## Related chapters
 
-- [Ch 13](chapters/13-differential-analysis-fdr.md) — escalate pointer for FASTQ/single-cell
-- [Ch 15](chapters/15-flow-cytometry.md) — unit of analysis
-- [Appendix L](appendix-l-omics-analyst-track.md) — bulk RNA pipelines
-- [Appendix M](appendix-m-bioinformatics-deliverables.md) — core deliverables
+- [Ch 13](chapters/13-differential-analysis-fdr.md): escalate pointer for FASTQ/single-cell
+- [Ch 15](chapters/15-flow-cytometry.md): unit of analysis
+- [Appendix L](appendix-l-omics-analyst-track.md): bulk RNA pipelines
+- [Appendix M](appendix-m-bioinformatics-deliverables.md): core deliverables
