@@ -84,7 +84,7 @@ spirometry_miss <- spirometry %>%
 prot_path <- file.path(paths$data, "proteomics_olink_like.csv")
 if (file.exists(prot_path)) {
   prot <- read_csv(prot_path, show_col_types = FALSE)
-  X_prot <- prot %>% select(starts_with("Prot_000"))
+  X_prot <- prot %>% dplyr::select(dplyr::starts_with("Prot_000"))
   X_imp <- X_prot %>% mutate(across(everything(), \(v) {
     v[is.na(v)] <- median(v, na.rm = TRUE)
     v
@@ -409,7 +409,10 @@ p_wrong_event <- ggplot(event_bar, aes(smoking_lab, rate, fill = smoking_lab)) +
 fit_km <- survfit(Surv(time_days, event) ~ smoking_lab, data = surv)
 km_tidy <- broom::tidy(fit_km) %>%
   filter(!is.na(estimate)) %>%
-  mutate(smoking_lab = if_else(grepl("Smoker", strata), "Smoker", "Non-smoker"))
+  mutate(
+    smoking_lab = sub("^smoking_lab=", "", .data$strata),
+    smoking_lab = factor(smoking_lab, levels = c("Non-smoker", "Smoker"))
+  )
 
 p_right_km <- ggplot(km_tidy, aes(time, estimate, colour = smoking_lab)) +
   geom_step(linewidth = 1) +
@@ -571,7 +574,7 @@ viz_save_pair(
 # =============================================================================
 if (requireNamespace("factoextra", quietly = TRUE)) {
   omics10 <- read_csv(file.path(paths$data, "marker_panel.csv"), show_col_types = FALSE)
-  X10 <- scale(omics10 %>% select(starts_with("M")))
+  X10 <- scale(omics10 %>% dplyr::select(dplyr::starts_with("M")))
   pca10 <- prcomp(X10, scale. = TRUE)
   scores10 <- as_tibble(pca10$x[, 1:2]) %>%
     mutate(group = omics10$true_phenotype)
@@ -579,9 +582,9 @@ if (requireNamespace("factoextra", quietly = TRUE)) {
   eig <- (pca10$sdev^2) / sum(pca10$sdev^2)
   scree_df <- tibble(PC = paste0("PC", seq_along(eig)), variance = eig)
 
-  p_wrong_biplot <- ggplot(scores10, aes(PC1, PC2, colour = factor(group))) +
+  p_wrong_biplot <- ggplot(scores10, aes(PC1, PC2, colour = group)) +
     geom_point(alpha = 0.75, size = 1.6) +
-    scale_colour_manual(values = c("0" = "#94A3B8", "1" = "#BE123C")) +
+    scale_colour_manual(values = c("A" = "#94A3B8", "B" = "#BE123C")) +
     labs(
       title = "PC1 vs PC2: 'disease axis'",
       subtitle = "No scree: component count assumed",
@@ -624,7 +627,10 @@ if (requireNamespace("factoextra", quietly = TRUE)) {
 
   p_wrong_endo <- ggplot(scores11, aes(PC1, PC2, colour = cluster)) +
     geom_point(size = 2, alpha = 0.8) +
-    scale_colour_manual(values = c("1" = "#BE123C", "2" = "#1D4ED8"), labels = c("Endotype A", "Endotype B")) +
+    scale_colour_manual(
+      values = c("1" = "#BE123C", "2" = "#1D4ED8"),
+      labels = c("Endotype A", "Endotype B")
+    ) +
     labs(
       title = "Two 'endotypes' (k = 2)",
       subtitle = "Named on first k-means run: no stability",
@@ -663,7 +669,7 @@ if (file.exists(file.path(paths$data, "antibody_screen.csv"))) {
   screen_sum <- screen %>%
     group_by(antigen, clone_id) %>%
     summarise(screen_mean = mean(signal_mean), true_binder = first(true_binder), .groups = "drop") %>%
-    left_join(conf %>% select(clone_id, antigen, confirm_positive), by = c("clone_id", "antigen")) %>%
+    left_join(conf %>% dplyr::select(clone_id, antigen, confirm_positive), by = c("clone_id", "antigen")) %>%
     mutate(
       confirm_positive = coalesce(confirm_positive, FALSE),
       hit = screen_mean > thr
@@ -718,56 +724,82 @@ if (file.exists(file.path(paths$data, "antibody_screen.csv"))) {
 }
 
 # =============================================================================
-# 16. Ch 21: naive OR vs IPW balance
+# 16. Ch 21: confounder-adjusted OR vs marginal IPW balance
 # =============================================================================
 exac21 <- read_csv(file.path(paths$data, "exacerbation.csv"), show_col_types = FALSE) %>%
-  mutate(smoking = as.logical(smoking))
+  mutate(smoking = as.logical(smoking), sex = factor(sex))
 
-fit_naive21 <- glm(exacerbation_12m ~ smoking + fev1_percent_predicted, data = exac21, family = binomial())
+fit_naive21 <- glm(
+  exacerbation_12m ~ smoking + age + sex + prior_exacerbations,
+  data = exac21, family = binomial()
+)
 naive_or <- tidy(fit_naive21, conf.int = TRUE, exponentiate = TRUE) %>%
   filter(term == "smokingTRUE")
 
+ps21 <- glm(smoking ~ age + sex + prior_exacerbations, data = exac21, family = binomial())
 exac_w <- exac21 %>%
-  mutate(fev1_tert = ntile(fev1_percent_predicted, 3)) %>%
-  group_by(fev1_tert) %>%
-  mutate(wt = if_else(smoking, 1 / mean(smoking), 1 / (1 - mean(smoking)))) %>%
-  ungroup()
+  mutate(
+    ps = pmin(pmax(predict(ps21, type = "response"), 0.05), 0.95),
+    wt = if_else(smoking, 1 / ps, 1 / (1 - ps))
+  )
 
-fit_ipw21 <- glm(exacerbation_12m ~ smoking + fev1_percent_predicted, data = exac_w, family = binomial(), weights = wt)
-ipw_or <- tidy(fit_ipw21, conf.int = TRUE, exponentiate = TRUE) %>%
-  filter(term == "smokingTRUE")
+fit_ipw21 <- glm(exacerbation_12m ~ smoking, data = exac_w, family = binomial(), weights = wt)
+vc_ipw <- sandwich::vcovHC(fit_ipw21, type = "HC1")
+ipw_or <- broom::tidy(lmtest::coeftest(fit_ipw21, sandwich::vcovHC(fit_ipw21, type = "HC1")), conf.int = TRUE) %>%
+  filter(term == "smokingTRUE") %>%
+  mutate(
+    estimate = exp(estimate),
+    conf.low = exp(conf.low),
+    conf.high = exp(conf.high)
+  )
 
 or_compare <- bind_rows(
-  naive_or %>% mutate(model = "Naive logistic"),
-  ipw_or %>% mutate(model = "IPW-weighted")
+  naive_or %>% mutate(model = "Adjusted (confounders)"),
+  ipw_or %>% mutate(model = "IPW marginal")
 )
 
 p_wrong_naive <- ggplot(or_compare, aes(model, estimate, fill = model)) +
   geom_col(width = 0.55, alpha = 0.9) +
   geom_hline(yintercept = 1, linetype = "dashed", colour = "grey50") +
   geom_text(aes(label = sprintf("%.2f", estimate)), vjust = -0.4, size = 3.5) +
-  scale_fill_manual(values = c("Naive logistic" = "#FECACA", "IPW-weighted" = "#CBD5E1"), guide = "none") +
+  scale_fill_manual(values = c("Adjusted (confounders)" = "#FECACA", "IPW marginal" = "#CBD5E1"), guide = "none") +
   labs(
     title = "Smoking OR (no balance check)",
-    subtitle = "Causal wording risky: imbalance ignored",
+    subtitle = "Causal wording risky: overlap and weights not shown",
     x = NULL, y = "Odds ratio (point only)"
   ) +
   viz_theme()
 
-bal21 <- bind_rows(
-  exac21 %>% group_by(smoking) %>% summarise(mean_fev1 = mean(fev1_percent_predicted), phase = "Before weighting", .groups = "drop"),
-  exac_w %>% group_by(smoking) %>% summarise(mean_fev1 = weighted.mean(fev1_percent_predicted, wt), phase = "After IPW", .groups = "drop")
+bal21_plot <- bind_rows(
+  exac21 %>% group_by(smoking) %>%
+    summarise(mean_age = mean(age), mean_prior = mean(prior_exacerbations), phase = "Before IPW", .groups = "drop"),
+  exac_w %>% group_by(smoking) %>%
+    summarise(
+      mean_age = weighted.mean(age, wt),
+      mean_prior = weighted.mean(prior_exacerbations, wt),
+      phase = "After IPW",
+      .groups = "drop"
+    )
 ) %>%
-  mutate(smoking = if_else(smoking, "Smoker", "Non-smoker"))
+  pivot_longer(c(mean_age, mean_prior), names_to = "covariate", values_to = "value") %>%
+  mutate(
+    covariate = recode(covariate, mean_age = "Age", mean_prior = "Prior exacerbations"),
+    phase = factor(phase, levels = c("Before IPW", "After IPW"))
+  )
 
-p_right_bal <- ggplot(bal21, aes(smoking, mean_fev1, fill = phase)) +
-  geom_col(position = position_dodge(width = 0.7), width = 0.6, alpha = 0.9) +
-  labs(
-    title = "FEV1 % balance: before vs after IPW",
-    subtitle = "Check overlap before causal language",
-    x = NULL, y = "Mean FEV1 % predicted", fill = NULL
-  ) +
-  viz_theme()
+p_right_bal <- plot_balance_slopegraph(
+  bal21_plot,
+  covariate = "covariate",
+  group = "smoking",
+  phase = "phase",
+  value = "value",
+  phase_levels = c("Before IPW", "After IPW"),
+  title = "Confounder balance: before vs after IPW",
+  subtitle = "FEV1 excluded (mediator); check overlap on confounders",
+  ylab = "Mean (or weighted mean)",
+  group_labels = c("Non-smoker", "Smoker"),
+  group_colours = c("FALSE" = "#5EC4B8", "TRUE" = "#E879A8")
+)
 
 viz_save_pair(
   viz_tag(p_wrong_naive, "Wrong: adjusted OR only"),

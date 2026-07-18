@@ -114,11 +114,15 @@ This edition is a **candidate for targeted external review**, not a final sign-o
 
 **CASTOR** is the analysis sequence used throughout the book: **C**linical question, **A**ssess design and data, **S**elect method, **T**est and fit, **O**utput estimand, **R**eport limits. The letters are unpacked in Chapter 1 with an eight-step pipeline figure and a method decision tree at the selection step.
 
-**CASTOR** also names a **synthetic COPD-flavoured cohort** (spirometry, exacerbations, smoking, therapy) reused from descriptive tables through omics capstones; **CASTOR-HD** extends the same patients to high-dimensional biology. The workflow is fixed; only the data file changes. Readers working in **chronic lung disease (CLD)** or broader pulmonary research should treat CASTOR as a **method carrier**: keep the estimand, relabel the population in your protocol.
+**CASTOR** also names a **linked teaching universe** of synthetic COPD-flavoured datasets (spirometry, exacerbations, smoking, therapy) reused from descriptive tables through omics capstones. Files share clinical themes and variable names but **different patient IDs and sample sizes** by design; **CASTOR-HD** extends the same *narrative* to high-dimensional biology rather than one strictly patient-linked multi-omic cohort. The workflow is fixed; only the data file changes. Readers working in **chronic lung disease (CLD)** or broader pulmonary research should treat CASTOR as a **method carrier**: keep the estimand, relabel the population in your protocol.
 
 ## About the data
 
 All examples use simulated data with realistic structure. This keeps the book fully reproducible. When you apply the methods, replace synthetic datasets with your study data and revisit every assumption.
+
+## Scope and deliberate limits
+
+This volume prioritises **applied method choice and interpretation** for respiratory researchers. It does **not** aim to be a complete trial-statistics or advanced-causal textbook. Topics treated briefly or omitted include: formal clinical-trial estimand frameworks and intercurrent events, non-inferiority and cluster-randomised trials, recurrent-event models, diagnostic-accuracy studies, Bland–Altman agreement, meta-analysis, detailed sample-size formulas, multi-state and joint longitudinal–survival models, imaging statistics, and full Bayesian workflows. External validation and model updating are introduced in prediction chapters; executable depth is limited by design. See [`archive/docs/BOOK_OUTLINE.md`](../archive/docs/BOOK_OUTLINE.md) for planned extensions.
 
 ## Related chapters
 

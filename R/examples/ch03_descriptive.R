@@ -71,15 +71,11 @@ p_scatter <- plot_marginal_scatter(
 )
 
 # --- QQ plot for normality (overall FEV1) ---
-p_qq <- ggplot(spirometry, aes(sample = fev1)) +
-  stat_qq(alpha = 0.6, colour = "#64748B") +
-  stat_qq_line(linewidth = 0.8, colour = "#3A9E92") +
-  labs(
-    title = "Normal Q-Q: FEV1",
-    subtitle = "Tail deviation is common in spirometry cohorts",
-    x = "Theoretical quantiles", y = "Sample quantiles"
-  ) +
-  handbook_theme()
+p_qq <- plot_qq_handbook(
+  spirometry, "fev1",
+  title = "Normal Q-Q: FEV1",
+  subtitle = "Tail deviation is common in spirometry cohorts"
+)
 
 cor_age_fev1 <- cor(spirometry$age, spirometry$fev1)
 message("Correlation age–FEV1: ", round(cor_age_fev1, 3))

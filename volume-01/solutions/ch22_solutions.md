@@ -4,7 +4,7 @@
 
 **E22.2** They confound exposure–mediator, exposure–outcome, and mediator–outcome relations. Omitting them from either model can bias path coefficients and natural effects.
 
-**E22.3** ACME is the natural **indirect** effect: the portion of the smoking–exacerbation association consistent with the path through FEV1 % predicted (on the log-odds scale in the teaching script).
+**E22.3** ACME is the natural **indirect** effect: the portion of the smoking–exacerbation association consistent with the path through FEV1 % predicted. With a logistic outcome, `mediate()` reports ACME on the **probability scale** (average difference in predicted P(exacerbation)), not log-odds.
 
 **E22.4** Proportion mediated divides indirect by total; when total is near zero, small numerator changes produce huge unstable ratios (wide bootstrap intervals in `ch22_mediation_effects.csv`).
 

@@ -10,4 +10,4 @@
 
 **E21.5** Eligibility, treatment strategies, assignment mechanism, follow-up start, or outcome definition aligned to a hypothetical RCT.
 
-**Applied** Naive OR ≈ 1.89 vs IPW ≈ 1.84; similar in toy run. Associational rewrite: "Smoking was associated with higher odds of 12-month exacerbation after adjustment for …"
+**Applied** Adjusted OR (confounders, no FEV1) ≈ 2.11 vs IPW marginal OR ≈ 2.29; similar in toy run. Associational rewrite: "Smoking was associated with higher odds of 12-month exacerbation in an observational cohort; IPW sensitivity analysis gave a similar direction under a total-effect estimand."

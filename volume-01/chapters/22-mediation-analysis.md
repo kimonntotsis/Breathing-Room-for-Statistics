@@ -33,9 +33,9 @@ Mediation answers a specific estimand question. CASTOR closes the volume here: t
 |----------|------------------------|---------------------------|--------------------|
 | **Total effect** | No | Combined effect through all paths | **2.11** (0.73 to 7.00) |
 | **Direct effect** | Yes | Effect not through measured FEV1 % | **1.33** (0.42 to 4.68) |
-| **Indirect effect** | Derived | Effect through FEV1 % path | ACME **0.017** log-odds (bootstrap) |
+| **Indirect effect** | Derived | Effect through FEV1 % path | ACME **0.017** probability difference (bootstrap) |
 
-The gap between total OR (2.11) and direct OR (1.33) is the **practical signature** that FEV1 % sits on the path. Formal decomposition uses bootstrap **ACME** (average causal mediation effect / natural indirect effect) and **ADE** (average direct effect) [@imai2010identification].
+The gap between total OR (2.11) and direct OR (1.33) is the **practical signature** that FEV1 % sits on the path. Formal decomposition uses bootstrap **ACME** (average causal mediation effect / natural indirect effect) and **ADE** (average direct effect) on the **probability scale** when the outcome model is logistic [@imai2010identification; @tingley2014mediation].
 
 ---
 
@@ -59,7 +59,7 @@ Adjust the **same prespecified confounder set** in **both** the mediator and out
 
 Path models with natural effects ask how much of the smoking–exacerbation association is consistent with a path through FEV1 % predicted. Exposure (A) is smoking; mediator (M) is FEV1 % predicted; outcome (Y) is 12-month exacerbation; confounders (C) are age, sex, and prior exacerbations. Fit a linear mediator model and logistic outcome model, then bootstrap natural effects with `mediation::mediate(..., boot = TRUE)`. Use when a mechanism hypothesis is prespecified and the mediator precedes the outcome; not for exploratory mediator fishing or reverse causation. Does not prove smoking **causes** exacerbation through FEV1; biology is multi-path.
 
-in the teaching run, the **total** smoking OR is **2.11**; adjusting FEV1 % moves the OR to **1.33**; bootstrap **ACME** on the log-odds scale is **0.017** (95% bootstrap interval 0.000 to 0.048). If your steering committee cares about **total public-health burden of smoking**, report the total-effect model. If the scientific question is **lung-function pathway**, prespecify mediation and report ACME/ADE with sensitivity analysis.
+In the teaching run, the **total** smoking OR is **2.11**; adjusting FEV1 % moves the OR to **1.33**; bootstrap **ACME** is **0.017** on the **probability scale** (average difference in predicted P(exacerbation); 95% bootstrap interval 0.000 to 0.048). Do not report ACME/ADE as log-odds effects when `mediation::mediate()` is used with a logistic outcome. If your steering committee cares about **total public-health burden of smoking**, report the total-effect model. If the scientific question is **lung-function pathway**, prespecify mediation and report ACME/ADE with sensitivity analysis.
 
 ### Worked example (CASTOR)
 
@@ -69,9 +69,9 @@ From `ch22_total_vs_direct_or.csv` and `ch22_mediation_effects.csv`:
 |----------|----------|--------------|-------------------------|
 | Total OR (no FEV1 %) | 2.11 | 0.73 to 7.00 | 0.19 |
 | Direct OR (with FEV1 %) | 1.33 | 0.42 to 4.68 | 0.63 |
-| ACME (indirect, log-odds) | 0.017 | 0.000 to 0.048 | 0.04 |
-| ADE (direct, log-odds) | 0.011 | −0.024 to 0.046 | 0.63 |
-| Total effect (log-odds) | 0.033 | −0.010 to 0.073 | 0.15 |
+| ACME (indirect, probability scale) | 0.017 | 0.000 to 0.048 | 0.04 |
+| ADE (direct, probability scale) | 0.011 | −0.024 to 0.046 | 0.63 |
+| Total effect (probability scale) | 0.033 | −0.010 to 0.073 | 0.15 |
 
 Path coefficients (`ch22_path_coefficients.csv`): smoking lowers FEV1 % (a path ≈ **−8.5** percentage points); lower FEV1 % raises exacerbation odds (b path OR ≈ **0.95** per 1 % unit on the logistic scale after exponentiation).
 
@@ -106,11 +106,11 @@ Path coefficients (`ch22_path_coefficients.csv`): smoking lowers FEV1 % (a path 
 
 **Methods (mediation paragraph)**
 
-> We prespecified a mediation analysis of smoking on 12-month exacerbation with FEV1 % predicted as mediator and adjustment for age, sex, and prior exacerbations. The mediator model was linear (FEV1 % ~ smoking + covariates). The outcome model was logistic (exacerbation ~ smoking + FEV1 % + covariates). We report the total-effect odds ratio (outcome model without mediator), the direct-effect odds ratio (outcome model with mediator), and bootstrap natural indirect (ACME) and direct (ADE) effects on the log-odds scale (500 simulations) using the `mediation` package [@tingley2014mediation]. Cross-sectional CASTOR data provide an associational decomposition under stated no-unmeasured-confounding assumptions; causal interpretation requires stronger design.
+> We prespecified a mediation analysis of smoking on 12-month exacerbation with FEV1 % predicted as mediator and adjustment for age, sex, and prior exacerbations. The mediator model was linear (FEV1 % ~ smoking + covariates). The outcome model was logistic (exacerbation ~ smoking + FEV1 % + covariates). We report the total-effect odds ratio (outcome model without mediator), the direct-effect odds ratio (outcome model with mediator), and bootstrap natural indirect (ACME) and direct (ADE) effects as **average differences in predicted probability** (500 simulations) using the `mediation` package [@tingley2014mediation]. Cross-sectional CASTOR data provide an associational decomposition under stated no-unmeasured-confounding assumptions; causal interpretation requires stronger design.
 
 **Results (one sentence)**
 
-> The total smoking OR was 2.11 (95% CI 0.73 to 7.00); adjusting FEV1 % yielded a direct OR of 1.33 (0.42 to 4.68). The bootstrap natural indirect effect (ACME) was 0.017 log-odds (95% CI 0.000 to 0.048).
+> The total smoking OR was 2.11 (95% CI 0.73 to 7.00); adjusting FEV1 % yielded a direct OR of 1.33 (0.42 to 4.68). The bootstrap natural indirect effect (ACME) was 0.017 on the probability scale (95% CI 0.000 to 0.048).
 
 **Limitations**
 
@@ -156,7 +156,7 @@ source("R/examples/ch22_mediation.R")
 
 ### Natural effects and OR comparison
 
-![Mediation effects on log-odds scale](../figures/ch22_mediation_effects.png)
+![Natural effects on probability scale](../figures/ch22_mediation_effects.png)
 
 ![Total vs direct smoking OR](../figures/ch22_total_vs_direct_or.png)
 
@@ -225,7 +225,7 @@ When reviewers worry about unmeasured confounding of the FEV1 % → exacerbation
 | **Total effect model (omit mediator)** | Policy or exposure effect including all paths | Smoking OR without FEV1 % in the model |
 | **Direct effect model (adjust mediator)** | Effect **not through** measured mediator | Smoking OR with FEV1 % in the model |
 | **Product-of-coefficients (Baron–Kenny style)** | Teaching decomposition; continuous mediator on linear scale | Quick a×b intuition; fragile with GLMs |
-| **Natural effects (`mediate`)** | Prespecified binary exposure, continuous mediator, binary outcome | Bootstrap ACME, ADE, total on log-odds scale |
+| **Natural effects (`mediate`)** | Prespecified binary exposure, continuous mediator, binary outcome | Bootstrap ACME, ADE, total on **probability scale** (logistic outcome) |
 | **Causal mediation with sensitivity** | Reviewer asks about unmeasured mediator–outcome confounding | VanderWeele sensitivity parameters |
 | **Do not run mediation** | Cross-sectional snapshot; mediator measured after outcome | Temporal order unclear; estimand not defensible |
 | **Do not adjust mediator for total effect** | Total smoking impact is the question | Blocks part of the causal path ([Ch 21](21-causal-inference.md)) |

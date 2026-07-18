@@ -49,8 +49,11 @@ pois_off <- glm(
 )
 print(tidy(pois_off, conf.int = TRUE, exponentiate = TRUE))
 
-# --- Negative binomial ---
-nb_fit <- MASS::glm.nb(exacerbations_12m ~ smoking + ics_adherence, data = counts)
+# --- Negative binomial (same offset as Poisson when follow-up varies) ---
+nb_fit <- MASS::glm.nb(
+  exacerbations_12m ~ smoking + ics_adherence + offset(log(person_years)),
+  data = counts
+)
 print(tidy(nb_fit, conf.int = TRUE, exponentiate = TRUE))
 
 # --- Zero-inflated Poisson ---

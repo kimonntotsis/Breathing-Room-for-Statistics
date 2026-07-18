@@ -59,16 +59,26 @@ coef_tbl <- as.data.frame(summary(fit_mixed)$coefficients) %>%
 
 write_csv(coef_tbl, file.path(tab_dir, "ch18_mixed_model_coefficients.csv"))
 
-# Sensitivity: cross-sectional lm at week 52 only vs mixed model (teaching contrast)
+# Sensitivity: cross-sectional lm at week 52 vs mixed-model week-52 contrast
 wk52 <- long_m %>% filter(weeks == 52)
 fit_lm52 <- lm(fev1 ~ group + age + sex + smoking, data = wk52)
 lm52_out <- summary(fit_lm52)$coefficients["groupintervention", , drop = FALSE]
-lmer_out <- summary(fit_mixed)$coefficients["groupintervention", , drop = FALSE]
+
+# Week-52 arm difference from mixed model: beta_group + 52 * beta_interaction
+fix <- fixef(fit_mixed)
+V <- as.matrix(vcov(fit_mixed))
+c_w52 <- rep(0, length(fix))
+names(c_w52) <- names(fix)
+c_w52["groupintervention"] <- 1
+c_w52["weeks:groupintervention"] <- 52
+est_w52 <- sum(c_w52 * fix)
+se_w52 <- sqrt(as.numeric(t(c_w52) %*% V %*% c_w52))
+
 sens <- tibble(
-  model = c("lm_week52_cross_section", "lmer_all_visits"),
-  term = "groupintervention",
-  estimate = c(lm52_out[, "Estimate"], lmer_out[, "Estimate"]),
-  std.error = c(lm52_out[, "Std. Error"], lmer_out[, "Std. Error"])
+  model = c("lm_week52_cross_section", "lmer_week52_contrast"),
+  term = "intervention_vs_standard_at_week52",
+  estimate = c(lm52_out[, "Estimate"], est_w52),
+  std.error = c(lm52_out[, "Std. Error"], se_w52)
 )
 write_csv(sens, file.path(tab_dir, "ch18_sensitivity_mixed_vs_fixed.csv"))
 
@@ -82,8 +92,9 @@ pred_grid <- expand_grid(
   mutate(fev1_hat = predict(fit_mixed, newdata = ., re.form = NA))
 
 p_fit <- ggplot(long_m, aes(weeks, fev1, colour = group)) +
-  geom_point(alpha = 0.12, size = 1.1, colour = "#CBD5E1") +
-  geom_line(data = pred_grid, aes(y = fev1_hat), linewidth = 1.15) +
+  geom_point(alpha = 0.1, size = 1, colour = "#CBD5E1") +
+  geom_line(data = pred_grid, aes(y = fev1_hat), linewidth = 1.25) +
+  geom_point(data = pred_grid, aes(y = fev1_hat), size = 2.8, alpha = 0.95) +
   scale_color_manual(values = handbook_arm_colors, labels = c("Standard", "Intervention")) +
   labs(
     title = "Mixed model fitted means (population level)",

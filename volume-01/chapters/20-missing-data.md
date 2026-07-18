@@ -115,7 +115,7 @@ From `ch20_smoking_coef_sensitivity.csv`:
 | Median imputation | −0.357 | −0.439 to −0.274 |
 | **MICE pooled (m = 20)** | −0.400 | −0.483 to −0.317 |
 
-Both naive approaches show smokers lower FEV1, but the **magnitude** shifts. **MICE** is the defensible primary analysis under MAR; complete-case and median imputation are **sensitivity** contrasts in this teaching script.
+Both naive approaches show smokers lower FEV1, but the **magnitude** shifts. **Median imputation** uses the median of **observed** FEV1 only (`median(fev1_obs, na.rm = TRUE)`), never the complete simulated values that would be unknown in real data. **MICE** is the defensible primary analysis under MAR; complete-case and median imputation are **sensitivity** contrasts in this teaching script.
 
 ```r
 source("R/examples/ch20_missing_data.R")
@@ -124,6 +124,19 @@ miss <- readr::read_csv(
  "volume-01/tables/ch20_missingness_by_diagnosis.csv"
 )
 ```
+
+### Extension: POLLUX registry missingness
+
+CASTOR missingness is MAR-leaning by simulation. **POLLUX** (`pollux_registry_messy.csv`) adds QC failure and higher missing FEV1 in GOLD IV:
+
+```r
+source("R/examples/pollux_clean_registry.R")
+readr::read_csv("volume-01/tables/pollux_missingness_by_gold.csv")
+```
+
+Compare enrolled *n* to analysis-ready *n* in `pollux_enrollment_flow.csv` before interpreting any complete-case model. Discuss MNAR if severity predicts both missing FEV1 and outcomes.
+
+![POLLUX: missing FEV1 and QC failure by GOLD stage](../figures/pollux_missingness_by_gold.png)
 
 ### MICE (production workflow)
 

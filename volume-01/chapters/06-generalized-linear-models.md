@@ -214,7 +214,10 @@ glm(
 **Negative binomial** is the default sensitivity when Pearson χ²/df > 1, `MASS::glm.nb(...)`. Still use offset when follow-up varies.
 
 ```r
-MASS::glm.nb(exacerbations_12m ~ smoking + ics_adherence, data = counts)
+MASS::glm.nb(
+  exacerbations_12m ~ smoking + ics_adherence + offset(log(person_years)),
+  data = counts
+)
 ```
 
 **Zero-inflated Poisson/NB** (`pscl::zeroinfl`), exploratory when structural zeros dominate; do not label clusters as validated phenotypes from one dataset.

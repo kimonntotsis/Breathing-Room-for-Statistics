@@ -58,7 +58,7 @@ Then open Appendix B when a new endpoint appears on the slide deck.
 | **Dr Elena Rivera** | PI; owns the protocol and the steering slide deck |
 | **Mei Lin** | Analyst; pushes estimands before test names |
 | **CASTOR** | Synthetic COPD-oriented trial data (`data/*.csv`) |
-| **CASTOR-HD** | Omics substudy on the same patients (Part VI) |
+| **CASTOR-HD** | Omics substudy in the same teaching universe (Part VI); not one strictly patient-linked multi-omic file |
 | **APATE** | Prose-only messy registry, what CASTOR deliberately hides (POLLUX / APATE vignette) |
 
 Teaching names **CASTOR** (clean cohort) and **APATE** / **POLLUX** (messy reality) are explained in Chapter 1 and RECURRING_COHORT.

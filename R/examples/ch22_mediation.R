@@ -71,7 +71,8 @@ med_summary <- tibble(
   estimate = c(med_out$d0, med_out$z0, med_out$tau.coef, med_out$n0),
   ci_low = c(med_out$d0.ci[1], med_out$z0.ci[1], med_out$tau.ci[1], med_out$n0.ci[1]),
   ci_high = c(med_out$d0.ci[2], med_out$z0.ci[2], med_out$tau.ci[2], med_out$n0.ci[2]),
-  p_value = c(med_out$d0.p, med_out$z0.p, med_out$tau.p, med_out$n0.p)
+  p_value = c(med_out$d0.p, med_out$z0.p, med_out$tau.p, med_out$n0.p),
+  scale = "average difference in predicted probability (binary outcome)"
 ) %>%
   mutate(
     label = case_when(
@@ -89,89 +90,44 @@ med_summary <- tibble(
 
 write_csv(med_summary, file.path(tab_dir, "ch22_mediation_effects.csv"))
 
-path_nodes <- tribble(
-  ~node, ~x, ~y, ~fill,
-  "Smoking", 1, 2, "#FECACA",
-  "FEV1 % pred.", 3, 2, "#E0F2FE",
-  "Exacerbation\n(12 m)", 5, 2, "#DCFCE7"
+p_path <- plot_mediation_path_handbook(
+  title = "Mediation path: smoking, FEV1 %, 12-month exacerbation",
+  subtitle = "Prespecified decomposition; adjust age, sex, prior exacerbations in each equation"
 )
 
-path_edges <- tribble(
-  ~x, ~y, ~xend, ~yend, ~label, ~path,
-  1.55, 2, 2.45, 2, "a", "a",
-  3.55, 2, 4.45, 2, "b", "b",
-  1.55, 2.15, 4.45, 2.15, "c'", "c"
+handbook_save(p_path, file.path(fig_dir, "ch22_mediation_path.png"), 8.2, 3.8)
+
+p_forest <- plot_coef_sensitivity(
+  med_summary %>%
+    filter(effect != "Prop. mediated") %>%
+    mutate(
+      analysis = label,
+      conf.low = ci_low,
+      conf.high = ci_high
+    ),
+  y = "analysis",
+  title = "Natural effects on probability scale (bootstrap)",
+  subtitle = "Binary outcome; ACME/ADE = average differences in predicted P(exacerbation)",
+  xlab = "Effect estimate (probability difference)",
+  point_color = handbook_cols$accent
 )
-
-p_path <- ggplot() +
-  geom_segment(
-    data = path_edges,
-    aes(x = x, y = y, xend = xend, yend = yend),
-    arrow = arrow(length = unit(0.22, "cm"), type = "closed"),
-    linewidth = 0.9,
-    colour = "#334155"
-  ) +
-  geom_label(
-    data = path_nodes,
-    aes(x = x, y = y, label = node, fill = fill),
-    colour = "#0F172A",
-    linewidth = 0.2,
-    size = 4.2
-  ) +
-  geom_text(
-    data = path_edges,
-    aes(x = (x + xend) / 2, y = y + if_else(path == "c", 0.22, 0.18), label = label),
-    size = 4,
-    colour = "#64748B"
-  ) +
-  scale_fill_identity() +
-  coord_cartesian(xlim = c(0.4, 5.6), ylim = c(1.4, 2.8), clip = "off") +
-  theme_void(base_family = "sans") +
-  labs(
-    title = "Mediation path: smoking, FEV1 %, 12-month exacerbation",
-    subtitle = "Prespecified decomposition; adjust age, sex, prior exacerbations in each equation",
-    caption = "CASTOR exacerbation.csv teaching example"
-  )
-
-handbook_save(p_path, file.path(fig_dir, "ch22_mediation_path.png"), 7.4, 3.2)
-
-  p_forest <- med_summary %>%
-  filter(effect != "Prop. mediated") %>%
-  mutate(label = factor(label, levels = rev(label))) %>%
-  ggplot(aes(x = estimate, y = label, xmin = ci_low, xmax = ci_high)) +
-  geom_vline(xintercept = 0, linetype = 2, colour = "#94A3B8") +
-  geom_point(size = 3, colour = handbook_cols$accent) +
-  geom_errorbar(orientation = "y", width = 0.18, linewidth = 0.7, colour = handbook_cols$accent) +
-  labs(
-    title = "Mediation effects on log-odds scale (bootstrap)",
-    subtitle = "Binary outcome; continuous mediator; 500 simulations",
-    x = "Effect estimate (log-odds difference)",
-    y = NULL
-  ) +
-  handbook_theme()
 
 handbook_save(p_forest, file.path(fig_dir, "ch22_mediation_effects.png"), 7.2, 4.2)
 
-p_or <- or_compare %>%
-  mutate(
-    estimand = factor(
-      estimand,
-      levels = c("total_effect_no_mediator", "direct_effect_with_mediator"),
-      labels = c("Total (omit FEV1 %)", "Direct (adjust FEV1 %)")
-    )
-  ) %>%
-  ggplot(aes(x = estimate, y = estimand, xmin = conf.low, xmax = conf.high)) +
-  geom_vline(xintercept = 1, linetype = 2, colour = "#94A3B8") +
-  geom_point(size = 3, colour = handbook_cols$smoker) +
-  geom_errorbar(orientation = "y", width = 0.2, linewidth = 0.7, colour = handbook_cols$smoker) +
-  scale_x_log10() +
-  labs(
-    title = "Smoking OR: total vs direct effect models",
-    subtitle = "Adjusting the mediator targets the direct path, not the total effect",
-    x = "Odds ratio (log scale)",
-    y = NULL
-  ) +
-  handbook_theme()
+p_or <- plot_forest_ratio(
+  or_compare %>%
+    mutate(
+      estimand = recode(estimand,
+        total_effect_no_mediator = "Total (omit FEV1 %)",
+        direct_effect_with_mediator = "Direct (adjust FEV1 %)"
+      )
+    ),
+  term = "estimand",
+  title = "Smoking OR: total vs direct effect models",
+  subtitle = "Adjusting the mediator targets the direct path, not the total effect",
+  xlab = "Odds ratio (95% CI, log scale)",
+  point_color = handbook_cols$smoker
+)
 
 handbook_save(p_or, file.path(fig_dir, "ch22_total_vs_direct_or.png"), 7.0, 3.8)
 

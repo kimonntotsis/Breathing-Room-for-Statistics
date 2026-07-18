@@ -20,7 +20,7 @@
 
 **E6.7** How many events (exacerbations) occurred? Report events-per-variable (EPV). Is EPV above 10?
 
-**E6.8** Fit Poisson and negative binomial models for `exacerbations_12m ~ smoking + ics_adherence` on `data/exacerbation_counts.csv`. Compare rate ratios.
+**E6.8** Fit Poisson and negative binomial models for `exacerbations_12m ~ smoking + ics_adherence + offset(log(person_years))` on `data/exacerbation_counts.csv`. Compare rate ratios.
 
 **E6.9** Estimate Pearson dispersion for the Poisson model in E6.8. Is overdispersion suggested?
 

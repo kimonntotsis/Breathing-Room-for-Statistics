@@ -74,19 +74,22 @@ plot_coef_sensitivity <- function(
     xlab = "Coefficient (95% CI)",
     title = NULL,
     subtitle = NULL,
-    ref = 0
+    ref = 0,
+    point_color = handbook_cols$intervention
 ) {
   est_sym <- .col_name(estimate)
   lo_sym <- .col_name(conf.low)
   hi_sym <- .col_name(conf.high)
   y_sym <- .col_name(y)
-  ggplot2::ggplot(data, ggplot2::aes(
-    x = .data[[est_sym]], y = .data[[y_sym]],
+  df <- data |>
+    dplyr::mutate(.y = stats::reorder(.data[[y_sym]], .data[[est_sym]]))
+  ggplot2::ggplot(df, ggplot2::aes(
+    x = .data[[est_sym]], y = .y,
     xmin = .data[[lo_sym]], xmax = .data[[hi_sym]]
   )) +
     ggplot2::geom_vline(xintercept = ref, linetype = "dashed", colour = "#94A3B8", linewidth = 0.6) +
-    ggplot2::geom_errorbar(orientation = "y", width = 0.22, linewidth = 0.75, colour = handbook_cols$accent) +
-    ggplot2::geom_point(size = 3.2, colour = handbook_cols$intervention) +
+    ggplot2::geom_errorbar(orientation = "y", width = 0.22, linewidth = 0.75, colour = "#64748B") +
+    ggplot2::geom_point(size = 3.2, colour = point_color) +
     ggplot2::labs(title = title, subtitle = subtitle, x = xlab, y = NULL) +
     handbook_theme(11)
 }
@@ -327,19 +330,27 @@ handbook_theme <- function(base = 12, grid = "minor") {
   ggplot2::theme_minimal(base_size = base, base_family = "sans") +
     ggplot2::theme(
       plot.title = ggplot2::element_text(
-        face = "bold", size = base + 1, colour = handbook_cols$accent, margin = ggplot2::margin(b = 4)
+        face = "bold", size = base + 1, colour = handbook_cols$accent,
+        margin = ggplot2::margin(b = 4)
       ),
       plot.subtitle = ggplot2::element_text(
-        size = base - 1, colour = "#64748B", margin = ggplot2::margin(b = 8)
+        size = base - 1, colour = "#64748B", margin = ggplot2::margin(b = 10)
       ),
       plot.caption = ggplot2::element_text(size = base - 2.5, colour = "#94A3B8", hjust = 0),
-      panel.grid.minor = if (grid == "minor") ggplot2::element_line(colour = "#F1F5F9") else ggplot2::element_blank(),
-      panel.grid.major = ggplot2::element_line(colour = "#E2E8F0", linewidth = 0.35),
-      axis.title = ggplot2::element_text(colour = "#334155"),
+      plot.margin = ggplot2::margin(10, 12, 10, 12),
+      panel.grid.minor = if (grid == "minor") {
+        ggplot2::element_line(colour = "#F1F5F9", linewidth = 0.35)
+      } else {
+        ggplot2::element_blank()
+      },
+      panel.grid.major = ggplot2::element_line(colour = "#E2E8F0", linewidth = 0.4),
+      axis.title = ggplot2::element_text(colour = "#334155", face = "bold", size = base - 0.5),
       axis.text = ggplot2::element_text(colour = "#475569"),
       legend.position = "bottom",
       legend.title = ggplot2::element_text(face = "bold", size = base - 1),
-      strip.text = ggplot2::element_text(face = "bold", colour = handbook_cols$accent)
+      legend.key.size = grid::unit(0.45, "cm"),
+      strip.text = ggplot2::element_text(face = "bold", colour = handbook_cols$accent),
+      strip.background = ggplot2::element_rect(fill = "#F8FAFC", colour = "#E2E8F0", linewidth = 0.3)
     )
 }
 
@@ -915,4 +926,228 @@ plot_dual_line_panel <- function(
   } else {
     p1
   }
+}
+
+#' Reference line for clinical minimum important difference (continuous y)
+geom_mcid_hline <- function(yintercept, label = "MCID", ...) {
+  ggplot2::list(
+    ggplot2::geom_hline(
+      yintercept = yintercept, linetype = "dotted",
+      colour = handbook_cols$smoker, linewidth = 0.65, alpha = 0.85, ...
+    ),
+    ggplot2::annotate(
+      "text", x = Inf, y = yintercept, label = label,
+      hjust = 1.05, vjust = -0.35, size = 3, colour = handbook_cols$smoker
+    )
+  )
+}
+
+#' Normal Q-Q with handbook styling
+plot_qq_handbook <- function(data, sample, title = NULL, subtitle = NULL,
+                             xlab = "Theoretical quantiles", ylab = "Sample quantiles") {
+  s_sym <- .col_name(sample)
+  ggplot2::ggplot(data, ggplot2::aes(sample = .data[[s_sym]])) +
+    ggplot2::stat_qq(alpha = 0.55, colour = "#64748B", size = 1.6) +
+    ggplot2::stat_qq_line(linewidth = 0.85, colour = handbook_cols$intervention) +
+    ggplot2::labs(title = title, subtitle = subtitle, x = xlab, y = ylab) +
+    handbook_theme(11)
+}
+
+#' emmeans / marginal means: dot-and-whisker
+plot_emmeans_dot <- function(data, x, estimate, lower, upper, title = NULL, subtitle = NULL,
+                             xlab = NULL, ylab = NULL, point_color = handbook_cols$intervention) {
+  x_sym <- .col_name(x)
+  e_sym <- .col_name(estimate)
+  lo_sym <- .col_name(lower)
+  hi_sym <- .col_name(upper)
+  df <- data
+  if (is.logical(df[[x_sym]])) {
+    df[[x_sym]] <- factor(df[[x_sym]], levels = c(FALSE, TRUE), labels = c("Non-smoker", "Smoker"))
+  }
+  ggplot2::ggplot(df, ggplot2::aes(.data[[x_sym]], .data[[e_sym]])) +
+    ggplot2::geom_hline(
+      yintercept = mean(data[[e_sym]], na.rm = TRUE),
+      linetype = "dotted", colour = "#CBD5E1", linewidth = 0.55
+    ) +
+    ggplot2::geom_linerange(
+      ggplot2::aes(ymin = .data[[lo_sym]], ymax = .data[[hi_sym]]),
+      linewidth = 1.05, colour = "#64748B"
+    ) +
+    ggplot2::geom_point(size = 4.8, colour = point_color) +
+    ggplot2::labs(title = title, subtitle = subtitle, x = xlab, y = ylab) +
+    handbook_theme(11)
+}
+
+#' Slopegraph: covariate balance before vs after weighting
+plot_balance_slopegraph <- function(
+    data,
+    covariate,
+    group,
+    phase,
+    value,
+    phase_levels = NULL,
+    title = NULL,
+    subtitle = NULL,
+    ylab = "Mean (or weighted mean)",
+    group_labels = NULL,
+    group_colours = NULL
+) {
+  c_sym <- .col_name(covariate)
+  g_sym <- .col_name(group)
+  p_sym <- .col_name(phase)
+  v_sym <- .col_name(value)
+  df <- data
+  if (!is.null(phase_levels)) {
+    df[[p_sym]] <- factor(df[[p_sym]], levels = phase_levels)
+  }
+  if (is.null(group_colours) && is.logical(df[[g_sym]])) {
+    group_colours <- c("FALSE" = handbook_cols$nonsmoker, "TRUE" = handbook_cols$smoker)
+  }
+  ggplot2::ggplot(df, ggplot2::aes(
+    .data[[p_sym]], .data[[v_sym]],
+    colour = .data[[g_sym]], group = .data[[g_sym]]
+  )) +
+    ggplot2::geom_line(linewidth = 1.15, alpha = 0.9) +
+    ggplot2::geom_point(size = 4.2, alpha = 0.95) +
+    ggplot2::facet_wrap(ggplot2::vars(.data[[c_sym]]), nrow = 1, scales = "free_y") +
+    ggplot2::scale_colour_manual(values = group_colours, labels = group_labels, name = NULL) +
+    ggplot2::labs(title = title, subtitle = subtitle, x = NULL, y = ylab) +
+    handbook_theme(11) +
+    ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
+}
+
+#' AUC / metric comparison: horizontal dot plot with optional CI
+plot_metric_dotplot <- function(
+    data,
+    y,
+    x,
+    xmin = NULL,
+    xmax = NULL,
+    title = NULL,
+    subtitle = NULL,
+    xlab = "AUC (95% bootstrap CI)",
+    ref = 0.5,
+    ref_label = "Chance (0.5)",
+    point_color = handbook_cols$intervention
+) {
+  y_sym <- .col_name(y)
+  x_sym <- .col_name(x)
+  lo_sym <- if ("auc_lo" %in% names(data)) "auc_lo" else if ("conf.low" %in% names(data)) "conf.low" else NULL
+  hi_sym <- if ("auc_hi" %in% names(data)) "auc_hi" else if ("conf.high" %in% names(data)) "conf.high" else NULL
+  df <- data |>
+    dplyr::mutate(.y = stats::reorder(.data[[y_sym]], .data[[x_sym]]))
+  p <- ggplot2::ggplot(df, ggplot2::aes(.data[[x_sym]], .y))
+  if (!is.null(lo_sym) && !is.null(hi_sym)) {
+    p <- p + ggplot2::geom_errorbar(
+      ggplot2::aes(y = .y, xmin = .data[[lo_sym]], xmax = .data[[hi_sym]]),
+      orientation = "y",
+      width = 0.22, linewidth = 0.75, colour = "#64748B"
+    )
+  }
+  xlim <- if (is.null(xmin) && is.null(xmax)) {
+    NULL
+  } else {
+    c(if (is.null(xmin)) NA_real_ else xmin, if (is.null(xmax)) NA_real_ else xmax)
+  }
+  p +
+    ggplot2::geom_vline(xintercept = ref, linetype = "dashed", colour = "#94A3B8", linewidth = 0.6) +
+    ggplot2::geom_point(size = 3.4, colour = point_color) +
+    ggplot2::scale_x_continuous(
+      limits = xlim,
+      expand = ggplot2::expansion(mult = c(0.02, 0.06))
+    ) +
+    ggplot2::labs(title = title, subtitle = subtitle, x = xlab, y = NULL) +
+    handbook_theme(11)
+}
+
+#' Grouped lollipop for counts / rates (POLLUX, batch sensitivity)
+plot_grouped_lollipop <- function(
+    data, x, y, group = NULL,
+    title = NULL, subtitle = NULL, xlab = NULL, ylab = NULL,
+    pal = NULL
+) {
+  x_sym <- .col_name(x)
+  y_sym <- .col_name(y)
+  if (is.null(group)) {
+    ggplot2::ggplot(data, ggplot2::aes(.data[[x_sym]], .data[[y_sym]])) +
+      ggplot2::geom_segment(
+        ggplot2::aes(x = .data[[x_sym]], xend = .data[[x_sym]], y = 0, yend = .data[[y_sym]]),
+        colour = "#CBD5E1", linewidth = 0.9
+      ) +
+      ggplot2::geom_point(size = 4, colour = handbook_cols$intervention) +
+      ggplot2::labs(title = title, subtitle = subtitle, x = xlab, y = ylab) +
+      handbook_theme(11)
+  } else {
+    g_sym <- .col_name(group)
+    if (is.null(pal)) {
+      n_g <- length(unique(data[[g_sym]]))
+      pal <- grDevices::colorRampPalette(c(handbook_cols$intervention, handbook_cols$smoker, handbook_cols$nonsmoker))(n_g)
+      names(pal) <- unique(data[[g_sym]])
+    }
+    ggplot2::ggplot(data, ggplot2::aes(.data[[x_sym]], .data[[y_sym]], colour = .data[[g_sym]])) +
+      ggplot2::geom_segment(
+        ggplot2::aes(x = .data[[x_sym]], xend = .data[[x_sym]], y = 0, yend = .data[[y_sym]]),
+        linewidth = 0.85, alpha = 0.55
+      ) +
+      ggplot2::geom_point(size = 3.8, alpha = 0.95) +
+      ggplot2::scale_colour_manual(values = pal, name = NULL) +
+      ggplot2::labs(title = title, subtitle = subtitle, x = xlab, y = ylab) +
+      handbook_theme(11) +
+      ggplot2::theme(panel.grid.major.x = ggplot2::element_blank())
+  }
+}
+
+#' Mediation path diagram (handbook styling)
+plot_mediation_path_handbook <- function(
+    title = "Mediation path",
+    subtitle = NULL,
+    nodes = c("Smoking", "FEV1 % pred.", "Exacerbation (12 m)"),
+    node_colours = c("#FECACA", "#E0F2FE", "#DCFCE7")
+) {
+  path_nodes <- tibble::tibble(
+    node = nodes,
+    x = c(1, 2.5, 4),
+    y = c(2, 2, 2),
+    fill = node_colours
+  )
+  path_edges <- tibble::tibble(
+    x = c(1.35, 2.85), y = c(2, 2), xend = c(2.15, 3.65), yend = c(2, 2),
+    label = c("a", "b")
+  )
+  ggplot2::ggplot() +
+    ggplot2::geom_curve(
+      ggplot2::aes(x = 1.15, y = 2.42, xend = 3.85, yend = 2.42),
+      curvature = 0.08,
+      arrow = grid::arrow(length = grid::unit(0.2, "cm"), type = "closed"),
+      linewidth = 0.85, colour = "#334155"
+    ) +
+    ggplot2::geom_text(
+      ggplot2::aes(x = 2.5, y = 2.58, label = "c'"),
+      size = 3.8, colour = "#64748B"
+    ) +
+    ggplot2::geom_segment(
+      data = path_edges,
+      ggplot2::aes(x = x, y = y, xend = xend, yend = yend),
+      arrow = grid::arrow(length = grid::unit(0.2, "cm"), type = "closed"),
+      linewidth = 0.85, colour = "#334155"
+    ) +
+    ggplot2::geom_text(
+      data = path_edges,
+      ggplot2::aes(x = (x + xend) / 2, y = y - 0.18, label = label),
+      size = 3.8, colour = "#64748B"
+    ) +
+    ggplot2::geom_label(
+      data = path_nodes,
+      ggplot2::aes(x = x, y = y, label = node, fill = fill),
+      colour = "#0F172A", linewidth = 0.25, size = 4.2, label.size = 0.15
+    ) +
+    ggplot2::scale_fill_identity() +
+    ggplot2::coord_cartesian(xlim = c(0.35, 4.65), ylim = c(1.55, 2.85), clip = "off") +
+    ggplot2::labs(title = title, subtitle = subtitle) +
+    handbook_theme(11) +
+    ggplot2::theme(
+      axis.text = ggplot2::element_blank(),
+      axis.title = ggplot2::element_blank(),
+      panel.grid = ggplot2::element_blank()
+    )
 }

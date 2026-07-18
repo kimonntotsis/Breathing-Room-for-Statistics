@@ -74,13 +74,18 @@ write_csv(exacerbation, file.path(paths$data, "exacerbation.csv"))
 # --- Exacerbation counts (Poisson-style) -------------------------------------
 
 n_count <- 280
-lambda <- exp(0.4 + 0.5 * rbinom(n_count, 1, 0.35) - 0.015 * rnorm(n_count, 55, 10))
+smoking_count <- rbinom(n_count, 1, 0.38)
+ics_adherence <- pmax(0, pmin(1, rbeta(n_count, 5, 2)))
+person_years <- round(runif(n_count, 0.7, 1.0), 2)
+# Expected count scales with person-time; smoking and adherence enter the rate model
+log_rate <- 0.4 + 0.5 * smoking_count - 0.8 * ics_adherence - 0.015 * rnorm(n_count, 55, 10)
+rate_py <- exp(log_rate)
 exac_counts <- tibble(
   patient_id = sprintf("C%04d", seq_len(n_count)),
-  smoking = rbinom(n_count, 1, 0.38),
-  ics_adherence = pmax(0, pmin(1, rbeta(n_count, 5, 2))),
-  exacerbations_12m = rpois(n_count, lambda = lambda),
-  person_years = round(runif(n_count, 0.7, 1.0), 2)
+  smoking = smoking_count,
+  ics_adherence = ics_adherence,
+  person_years = person_years,
+  exacerbations_12m = rpois(n_count, lambda = rate_py * person_years)
 )
 
 write_csv(exac_counts, file.path(paths$data, "exacerbation_counts.csv"))
@@ -174,9 +179,10 @@ visit_weeks <- c(0, 12, 24, 52)
 longitudinal_spirometry <- long_pat %>%
   crossing(weeks = visit_weeks) %>%
   mutate(
-    decline = -0.002 * weeks,
-    trt = ifelse(group == "intervention", 0.06, 0),
-    fev1 = fev1_baseline + decline + trt * (weeks > 0) + rnorm(n(), 0, 0.08),
+    # Intervention slows decline: standard −0.002 L/week; intervention +0.001 L/week slower
+    fev1 = fev1_baseline - 0.002 * weeks +
+      ifelse(group == "intervention", 0.001 * weeks, 0) +
+      rnorm(n(), 0, 0.08),
     fev1 = round(pmax(fev1, 0.5), 2)
   ) %>%
   select(patient_id, group, age, sex, smoking, weeks, fev1, fev1_baseline)
@@ -234,9 +240,13 @@ p_prot <- 1000
 prot_names <- sprintf("Prot_%04d", seq_len(p_prot))
 
 prot_ids <- sprintf("P%04d", seq_len(n_prot))
-prot_batch <- sample(c("Batch1", "Batch2"), n_prot, replace = TRUE, prob = c(0.55, 0.45))
 prot_plate <- sample(sprintf("Plate%02d", 1:10), n_prot, replace = TRUE)
 prot_group <- sample(c("control", "case"), n_prot, replace = TRUE, prob = c(0.5, 0.5))
+# Mild batch–group overlap: without batch covariates, technical shifts masquerade as group hits
+prot_batch <- ifelse(
+  stats::runif(n_prot) < ifelse(prot_group == "case", 0.65, 0.35),
+  "Batch2", "Batch1"
+)
 prot_age <- round(rnorm(n_prot, mean = 62, sd = 9))
 prot_sex <- sample(c("female", "male"), n_prot, replace = TRUE)
 
@@ -259,14 +269,16 @@ for (i in seq_len(n_prot)) {
     1.2 * zinflam[i] * loadingI
 }
 
-# technical effects: plate shift on subset, batch shift on subset
+# technical effects: plate shift on subset, batch shift on two blocks (Ch 14 teaching)
 plate_shift_idx <- 850:920
+batch_only_idx <- 200:279
 batch_shift_idx <- 930:1000
 plate_effect <- as.numeric(as.factor(prot_plate)) / 10
 batch_effect <- ifelse(prot_batch == "Batch2", 1, 0)
 
 X[, plate_shift_idx] <- X[, plate_shift_idx] + 0.8 * plate_effect
-X[, batch_shift_idx] <- X[, batch_shift_idx] + 0.9 * batch_effect
+X[, batch_only_idx] <- X[, batch_only_idx] + 2.6 * batch_effect
+X[, batch_shift_idx] <- X[, batch_shift_idx] + 2.6 * batch_effect
 
 # Ch 13 teaching hits: prespecified group shift on inflammation panel (not batch-shift block)
 teach_de_idx <- match(sprintf("Prot_%04d", 1:18), prot_names)

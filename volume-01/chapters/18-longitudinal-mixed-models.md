@@ -10,7 +10,7 @@ The extension study has four FEV₁ visits per patient. A collaborator pools all
 
 ## Why this chapter
 
-Longitudinal spirometry is the commonest place independence assumptions break. CASTOR's `longitudinal_spirometry.csv` and Case E teach trajectories, random intercepts, and when a single visit snapshot is prespecified instead. Prespecify whether the estimand is **week-52 level**, **slope**, or **change from baseline**; they answer different trial questions. Missed visits and inability to perform manoeuvres are clinical missingness (Ch 20). **Random intercept** is the minimum for repeated FEV1; a significant `weeks:group` term means **differential slope**, not automatically week-52 benefit. Stacking visits in `lm()` or Welch *t* inflates precision. Population fitted lines are **average trajectories**, not individual forecasts for clinic. CASTOR teaching output: intervention × time coefficient ≈ **+0.00054 L/week** (95% CI roughly −0.00015 to +0.00122); modelled week-52 separation is modest; illustrate workflow, not a powered trial result.
+Longitudinal spirometry is the commonest place independence assumptions break. CASTOR's `longitudinal_spirometry.csv` and Case E teach trajectories, random intercepts, and when a single visit snapshot is prespecified instead. Prespecify whether the estimand is **week-52 level**, **slope**, or **change from baseline**; they answer different trial questions. Missed visits and inability to perform manoeuvres are clinical missingness (Ch 20). **Random intercept** is the minimum for repeated FEV1; a significant `weeks:group` term means **differential slope**, not automatically week-52 benefit. Stacking visits in `lm()` or Welch *t* inflates precision. Population fitted lines are **average trajectories**, not individual forecasts for clinic. In the teaching simulation, intervention **slows decline** (differential slope); the mixed-model interaction is the prespecified slope estimand, and the week-52 arm difference is obtained from $\hat\beta_{\text{group}} + 52\hat\beta_{\text{time}\times\text{group}}$.
 
 > **Consult a statistician when:** you need random slopes, unstructured covariance, GEE vs mixed-model choice, cluster-randomised longitudinal designs, or MMRM for regulatory submission.
 
@@ -54,14 +54,14 @@ After `source("R/examples/ch18_longitudinal_mixed_models.R")`, the mixed model r
 
 | Term | Estimate (L or L/week) | Plain read |
 |------|------------------------|------------|
-| `weeks` | −0.0018 per week | Both arms decline slightly on average |
-| `groupintervention` | −0.066 at week 0 | Level shift at baseline (should be ~0 in well-randomised trials) |
-| `weeks:groupintervention` | +0.00054 per week | Intervention associated with **less decline** per week |
+| `weeks` | −0.0015 per week | Both arms decline slightly on average |
+| `groupintervention` | +0.022 at week 0 | Level at time origin (should be ~0 in well-randomised trials) |
+| `weeks:groupintervention` | +0.00035 per week | Intervention associated with **less decline** per week |
 | `(1 \| patient_id)` | random intercept | Each patient has their own baseline FEV1 |
 
-The **interaction** is the prespecified treatment effect when the estimand is *differential slope*. Over 52 weeks, the modelled extra gain is roughly \(0.00054 \times 52 \approx 0.03\) L: small in this synthetic run; always compare to MCID and CI, not only the point estimate.
+The **interaction** is the prespecified estimand when the trial question is *differential slope*. The **week-52 arm difference** is $\hat\beta_{\text{group}} + 52\hat\beta_{\text{time}\times\text{group}}$ ≈ **0.040 L** in the teaching run (not the main-effect `groupintervention` coefficient alone, which is the level difference at week 0). Over 52 weeks under linearity, the interaction implies roughly $0.00035 \times 52 \approx 0.018$ L extra separation attributable to slope alone; always compare to MCID and CI.
 
-**Sensitivity:** a cross-sectional `lm()` at week 52 alone gives a similar point estimate for the intervention effect (−0.051 L) but the **logic** differs: the mixed model uses all visits and models correlation. See `ch18_sensitivity_mixed_vs_fixed.csv`. If the cross-sectional SE were much smaller than the mixed-model SE, that would be a red flag for pseudo-replication; here they are similar because visit count is balanced.
+**Sensitivity:** a cross-sectional `lm()` at week 52 (one row per patient) targets the same **week-52 level** estimand and gives a similar point estimate (~0.047 L) with comparable SE. It does **not** commit the pseudo-replication error (that error arises when **all visits are stacked** in ordinary `lm()`). The mixed model uses earlier visits to improve precision under MAR. See `ch18_sensitivity_mixed_vs_fixed.csv`.
 
 ```r
 long <- readr::read_csv("data/longitudinal_spirometry.csv")
@@ -123,7 +123,7 @@ One analyst proposes GEE; another fits `lmer`. Both can be correct; they answer 
 
 > Longitudinal FEV1 (litres) was analysed in *n* = … participants contributing … visits (weeks 0, 12, 24, 52). We fitted a linear mixed model with random intercepts for patient: FEV1 ~ time × treatment + age + sex + smoking + (1\|patient). The estimated difference in slope (intervention − standard) was … L per week (95% CI …). Sensitivity analysis compared a cross-sectional model at week 52 only. Missing visits were …%.
 
-**Results (CASTOR extension):** Among 160 participants (640 visits), mean FEV1 declined by approximately 0.0018 L per week in the standard arm (fixed effect for `weeks`). The intervention × time interaction was **0.00054 L per week** (95% CI −0.00015 to 0.00122), corresponding to a modelled **≈0.028 L** separation at week 52 under linearity. Spaghetti plots showed heterogeneous trajectories; population-level fitted means are in Figure.
+**Results (CASTOR extension):** Among 160 participants (640 visits), mean FEV1 declined by approximately 0.0015 L per week in the standard arm (fixed effect for `weeks`). The intervention × time interaction was **0.00035 L per week** (95% CI −0.0003 to 0.0010), corresponding to a modelled **≈0.04 L** week-52 separation via $\hat\beta_{\text{group}} + 52\hat\beta_{\text{interaction}}$. Spaghetti plots showed heterogeneous trajectories; population-level fitted means are in Figure.
 
 ---
 
@@ -193,7 +193,7 @@ sens <- readr::read_csv(
 sens
 ```
 
-Compare `std.error` for `groupintervention` across models. Smaller SE in the cross-sectional model with stacked visits would suggest pseudo-replication.
+Compare `std.error` for the **week-52 contrast** across models (`intervention_vs_standard_at_week52`). Smaller SE in a model that stacks all visits without `(1|patient_id)` would suggest pseudo-replication; the week-52-only `lm()` does not stack visits.
 
 ---
 

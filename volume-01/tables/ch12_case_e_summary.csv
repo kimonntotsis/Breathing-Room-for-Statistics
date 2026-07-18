@@ -1,5 +1,5 @@
 analysis,metric
-longitudinal_mixed_group_intervention,-0.0655418170716505
-longitudinal_mixed_weeks_x_group,0.000537222524830781
-survival_cox_smoking_HR,1.69 (0.97 to 2.97)
+longitudinal_mixed_group_intervention,0.0223461003196546
+longitudinal_mixed_weeks_x_group,0.000346257642842739
+survival_cox_smoking_HR,1.52 (0.88 to 2.62)
 survival_logrank_smoking,see ch19_km_by_smoking.png subtitle

@@ -18,9 +18,25 @@ jobs:
       - name: Verify figure markdown
         run: python3 volume-01/scripts/verify_figure_markdown.py
 
+  run-core-r-examples:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: "release"
+      - uses: r-lib/actions/setup-renv@v2
+        with:
+          cache-version: 1
+      - name: Restore renv library
+        run: Rscript -e 'renv::restore()'
+      - name: Run core R examples and regenerate data
+        run: |
+          Rscript -e 'source("R/run_all_examples.R"); run_all_examples(include_omics = FALSE)'
+
   build-pdf:
     runs-on: ubuntu-latest
-    needs: verify-figures
+    needs: [verify-figures, run-core-r-examples]
     steps:
       - uses: actions/checkout@v4
       - uses: quarto-dev/quarto-actions/setup@v2

@@ -69,20 +69,20 @@ Smoking -----> Exacerbation (12m)
 
 **Associational logistic regression** asks whether smoking is associated with exacerbation after adjusting for measured covariates. The estimand is a conditional odds ratio: hypothesis generation and STROBE cohort descriptions, not proof that smoking causes exacerbations. In R: `glm(exacerbation_12m ~ smoking + fev1_pct, family = binomial)`.
 
-**Introductory IPW** reweights patients so exposure groups look more comparable on measured confounders, then re-estimates the smoking–exacerbation association. Model exposure ~ confounders → weights = 1/P(exposure|confounders) → weighted outcome model. Assumes no unmeasured confounding, positivity, and a correct exposure model. Use as sensitivity to covariate adjustment; do not treat as automatic proof of causation, and trim extreme weights.
+**Introductory IPW** reweights patients so exposure groups look more comparable on **measured confounders** (not mediators), then estimates a **marginal** smoking–exacerbation association without adjusting for FEV1 on the outcome path. Model `smoking ~ confounders` → stabilized weights → weighted outcome model `exacerbation ~ smoking` with **robust standard errors**. Assumes no unmeasured confounding, positivity, and a correct exposure model. Use as sensitivity for a **total-effect** estimand; do not treat as automatic proof of causation, and trim extreme weights.
 
 "Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
 
 ### Worked example (CASTOR)
 
-From `ch21_smoking_or_naive_vs_ipw.csv` (teaching run):
+From `ch21_smoking_or_naive_vs_ipw.csv` (teaching run, **total-effect** estimand; FEV1 excluded):
 
 | Model | Smoking OR (95% CI) |
 |-------|----------------------|
-| Naive logistic | 1.89 (0.64 to 6.30) |
-| IPW-weighted | 1.84 (0.88 to 4.08) |
+| Adjusted for confounders (age, sex, prior exacerbations) | 2.11 (0.73 to 7.00) |
+| IPW marginal (robust SE) | 2.29 (0.76 to 6.90) |
 
-ORs are similar here because the toy weighting scheme is crude. The lesson is **process**: check balance, weights, and overlap before interpreting either OR causally. Wide CIs reflect sparse events.
+ORs are similar here because overlap on confounders is adequate. The lesson is **process**: specify estimand (total vs direct), exclude mediators from the IPW path, check balance on **confounders**, inspect weights, and use robust uncertainty for the weighted outcome model. Wide CIs reflect sparse events.
 
 ```r
 source("R/examples/ch21_causal_inference.R")
@@ -142,7 +142,7 @@ Smoking is **not** a randomised exposure in CASTOR; causal language is especiall
 
 ### Reporting template
 
-> We estimated the association between smoking and 12-month exacerbation in an observational cohort (*n* = …). The naive logistic model adjusting for FEV1 % predicted yielded OR = … (95% CI …). As a sensitivity analysis, we applied inverse probability weights for smoking based on … (weight range …; mean …). The IPW OR was … (95% CI …). These analyses assume no unmeasured confounding and sufficient overlap of smokers and non-smokers within confounder strata. Causal interpretation is not claimed; findings are associational [@vonelm2007strobe].
+> We estimated the association between smoking and 12-month exacerbation in an observational cohort (*n* = …). The confounder-adjusted logistic model (age, sex, prior exacerbations; **FEV1 excluded** for total-effect estimand) yielded OR = … (95% CI …). As a sensitivity analysis, we applied inverse probability weights for smoking based on the same confounders (weight range …; mean …) and fitted a marginal weighted outcome model with robust standard errors. The IPW OR was … (95% CI …). These analyses assume no unmeasured confounding and sufficient overlap of smokers and non-smokers within confounder strata. Causal interpretation is not claimed; findings are associational [@vonelm2007strobe].
 
 ---
 
@@ -166,7 +166,7 @@ source("R/examples/ch21_causal_inference.R")
 
 ![Covariate balance slopegraph: before vs after IPW](../figures/ch21_covariate_balance.png)
 
-Check whether FEV1 % means are closer across smoking groups after weighting. Poor balance after weighting → revisit exposure model or overlap.
+Check whether **age** and **prior exacerbations** means are closer across smoking groups after weighting. FEV1 is a mediator on the total-effect path and is intentionally not balanced by this IPW scheme. Poor confounder balance after weighting → revisit exposure model or overlap.
 
 ### Figure hygiene: naive OR vs balance check
 

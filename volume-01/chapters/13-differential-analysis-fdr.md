@@ -41,6 +41,17 @@ One model per protein/gene with group + prespecified covariates (+ batch when id
 
 FDR limits false discoveries across many tests, it does not tell you which marker is clinically useful or which volcano point is causal.
 
+### BH-adjusted *p*-values vs Storey *q*-values
+
+These labels are often both called “q” in slides; they are **not** the same object.
+
+| Quantity | What it is | This handbook |
+|----------|------------|---------------|
+| **Benjamini–Hochberg (BH)** | Adjusted *p*-value controlling FDR across the tested family | Default: `p.adjust(p, method = "BH")` in teaching loops and Appendix L |
+| **Storey *q*-value** | Estimate of the proportion of false positives among rejections (π₀-based) | **Not** used in chapter scripts; requires explicit software (e.g. `qvalue` Bioconductor) and assumptions on π₀ |
+
+**Reporting rule:** write “BH-adjusted *p*-value (q)” or “FDR-adjusted *p*”, not “Storey q-value”, unless you actually fit Storey's method. Do not rank hits by nominal *p* when BH was prespecified.
+
 **Caveats:** batch/plate often drives "significant" features; LOD missingness can mimic group differences; small *n* with huge *p* → unstable ranks; confounding from smoking/age/therapy.
 
 **Common mistakes:** nominal *p* hunting; volcano-only hero slides; batch ignored; LOD imputed as zero; imputation before train/test split.

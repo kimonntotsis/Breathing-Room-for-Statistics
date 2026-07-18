@@ -1,3 +1,3 @@
 model,term,estimate,std.error
-lm_week52_cross_section,groupintervention,-0.05126220512880409,0.06521051569495957
-lmer_all_visits,groupintervention,-0.06554181707165048,0.06524129476879637
+lm_week52_cross_section,intervention_vs_standard_at_week52,0.04655651834577757,0.06589667313127193
+lmer_week52_contrast,intervention_vs_standard_at_week52,0.04035149774747698,0.06568540568515782

@@ -14,7 +14,7 @@ dir.create(tab_dir, showWarnings = FALSE, recursive = TRUE)
 # Proteomics: PCA colored by batch and group (subset for speed)
 # =============================================================================
 prot <- read_csv(file.path(paths$data, "proteomics_olink_like.csv"), show_col_types = FALSE)
-X <- prot %>% select(starts_with("Prot_000"))
+X <- prot %>% dplyr::select(dplyr::starts_with("Prot_000"))
 
 X_imp <- X %>% mutate(across(everything(), \(v) { v[is.na(v)] <- median(v, na.rm = TRUE); v }))
 
@@ -79,7 +79,10 @@ overlap_plot_df <- bind_rows(overlap_real, overlap_conf)
 p_overlap <- ggplot(overlap_plot_df, aes(batch, n, fill = group)) +
   geom_col(position = position_dodge(width = 0.72), width = 0.68, alpha = 0.9, colour = "white") +
   facet_wrap(~ scenario, scales = "free_x") +
-  scale_fill_manual(values = handbook_group_fill, name = "Group") +
+  scale_fill_manual(
+    values = c(control = handbook_cols$standard, case = handbook_cols$intervention),
+    name = "Group"
+  ) +
   labs(
     title = "Group × batch overlap: valid vs confounded design",
     subtitle = "Scenario B: group and batch are aliased — adjustment is not identifiable",
@@ -134,10 +137,10 @@ prot_features <- names(prot)[grepl("^Prot_", names(prot))]
 fit_p <- function(with_batch = TRUE) {
   map_dbl(prot_features, function(nm) {
     df <- prot %>%
-      select(group, age, sex, batch, plate, y = all_of(nm)) %>%
+      dplyr::select(group, age, sex, batch, plate, y = all_of(nm)) %>%
       filter(!is.na(y))
     if (nrow(df) < 40) return(NA_real_)
-    f <- if (with_batch) y ~ group + age + sex + batch + plate else y ~ group + age + sex
+    f <- if (with_batch) y ~ age + sex + plate + batch + group else y ~ age + sex + group
     stats::anova(lm(f, data = df))["group", "Pr(>F)"] %>% as.numeric()
   })
 }
@@ -148,19 +151,36 @@ p_without <- fit_p(FALSE)
 q_with <- p.adjust(p_with, method = "BH")
 q_without <- p.adjust(p_without, method = "BH")
 
-message("Proteomics discoveries (q<0.05) with batch+plate: ", sum(q_with < 0.05, na.rm = TRUE))
-message("Proteomics discoveries (q<0.05) without batch+plate: ", sum(q_without < 0.05, na.rm = TRUE))
+# Focus on batch-technical proteins (no prespecified group shift) for inflation teaching
+tech_idx <- as.integer(sub("^Prot_", "", prot_features))
+tech_features <- prot_features[tech_idx %in% c(200:279, 930:1000)]
+n_tech <- length(tech_features)
+
+disc_with <- sum(q_with[match(tech_features, prot_features)] < 0.05, na.rm = TRUE)
+disc_without <- sum(q_without[match(tech_features, prot_features)] < 0.05, na.rm = TRUE)
+disc_teach_with <- sum(q_with[match(sprintf("Prot_%04d", 1:18), prot_features)] < 0.05, na.rm = TRUE)
+
+message("Batch-only proteins (n=", n_tech, "): q<0.05 with batch+plate = ", disc_with)
+message("Batch-only proteins (n=", n_tech, "): q<0.05 without batch/plate = ", disc_without)
+message("Prespecified group panel (n=18): q<0.05 with batch+plate = ", disc_teach_with)
 
 sens <- tibble(
   model = c("with batch+plate", "without batch+plate"),
-  discoveries_q05 = c(sum(q_with < 0.05, na.rm = TRUE), sum(q_without < 0.05, na.rm = TRUE))
+  discoveries_q05 = c(disc_with, disc_without)
 )
 
-p_bar <- plot_metric_bars(
-  sens, x = "model", y = "discoveries_q05",
+p_bar <- plot_grouped_lollipop(
+  sens %>% mutate(model = recode(model,
+    `with batch+plate` = "With batch + plate",
+    `without batch+plate` = "Without batch/plate"
+  )),
+  x = "model", y = "discoveries_q05",
   title = "Sensitivity to batch adjustment",
-  subtitle = "Inflated hits without batch covariates are a red flag in omics screens",
-  ylab = "BH discoveries (q < 0.05)"
+  subtitle = sprintf(
+    "Batch-only proteins (n=%d): spurious group hits without batch/plate covariates",
+    n_tech
+  ),
+  xlab = NULL, ylab = "BH discoveries (q < 0.05)"
 )
 
 handbook_save(p_bar, file.path(fig_dir, "ch14_batch_sensitivity_discoveries.png"), 7.0, 4.2)
@@ -171,8 +191,9 @@ mini_summary <- tibble(
   covariate_adjustment_defensible = c("yes (with sensitivity)", "no (not identifiable)"),
   pc1_r2_batch = c(round(r2_batch, 3), NA_real_),
   pc1_r2_group = c(round(r2_group, 3), NA_real_),
-  discoveries_q05_with_batch = c(sum(q_with < 0.05, na.rm = TRUE), NA_integer_),
-  discoveries_q05_without_batch = c(sum(q_without < 0.05, na.rm = TRUE), NA_integer_),
+  discoveries_q05_with_batch = c(disc_with, NA_integer_),
+  discoveries_q05_without_batch = c(disc_without, NA_integer_),
+  discoveries_teach_panel_with_batch = c(disc_teach_with, NA_integer_),
   group_effect_identifiable = c(NA, identifiable_conf)
 )
 

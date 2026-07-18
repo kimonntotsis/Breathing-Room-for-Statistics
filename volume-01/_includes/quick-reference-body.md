@@ -196,3 +196,24 @@ Details: [Chapter 8](chapters/08-validation-reporting.md) and [References](refer
 ![Method decision tree: start from outcome type](figures/method_decision_tree.png){width=88%}
 
 Regenerate from the project root: `source("R/examples/generate_figures.R")` after [Appendix A](appendix-a-r-setup.md) setup.
+
+---
+
+## Scope: not covered in this volume
+
+Use this table when a question falls outside the handbook's core path. Ask a statistician or specialist text rather than forcing CASTOR scripts.
+
+| Topic | Status in this book | Where to go next |
+|-------|---------------------|------------------|
+| Trial estimands / intercurrent events | Introduced only | ICH E9(R1); specialist trial statistician |
+| Non-inferiority, equivalence, cluster RCT | Not covered | Trial design texts; [Appendix O](appendix-o-ch04-comparison-extensions.md) (Welch/NI pointers only) |
+| Recurrent events, competing risks | Survival basics only | Ch 19 limits; specialist extensions |
+| Diagnostic accuracy (ROC for tests) | Prediction framing in Ch 9 | Diagnostic medicine methods |
+| Bland–Altman / agreement | Not covered | Measurement error literature |
+| Meta-analysis / evidence synthesis | Not covered | Cochrane Handbook; specialist reviews |
+| Sample-size formulas | Power sketch in Ch 1 | `pwr` package; trial statistician |
+| Multi-state / joint longitudinal–survival | Not covered | Specialist biostatistics texts |
+| Imaging statistics | Not covered | Domain-specific methods |
+| Bayesian workflows | Not covered | [archive/docs/BOOK_OUTLINE.md](../archive/docs/BOOK_OUTLINE.md) |
+| External validation / model updating | Principles in Ch 9 | TRIPOD+AI; transportability literature |
+| Storey *q*-values | BH default; distinction in Ch 13 | `qvalue` Bioconductor if prespecified |

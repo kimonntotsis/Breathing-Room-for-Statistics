@@ -87,28 +87,30 @@ If `R/` is missing, repeat **File → Open Project…** and pick the correct par
 
 ## Install R packages (once)
 
-Every chapter script expects the packages listed in `R/00_setup.R`. Run this **once** in the **Console** (from the project root):
+**Reproducible environments:** this repository ships **`renv.lock`**. After cloning, open the project and run:
 
 ```r
-install.packages(c(
- "tidyverse", "broom", "patchwork", "survival", "lme4",
- "glmnet", "randomForest", "cluster", "factoextra"
-))
+install.packages("renv")   # once per machine
+renv::restore()            # installs pinned versions from renv.lock
+source("R/00_setup.R")
+```
 
-# Optional (Chapter 20 MICE demo):
-# install.packages("mice")
+To refresh the lockfile after adding packages: `renv::snapshot()`. Optional packages without lockfile entries: `source("R/package_manifest.R"); install_optional()`.
 
-# Optional (Appendix L omics analyst track. Bioconductor):
-# if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
-# BiocManager::install(c("DESeq2", "limma", "edgeR", "fgsea", "sva"))
-# install.packages(c("ggrepel", "msigdbr"))
+**First-time install without renv** (fallback):
+
+```r
+source("R/package_manifest.R")
+install_core()
 ```
 
 Some optional packages appear in individual chapters or exercises (`pwr`, `logistf`, `mice`, `emmeans`, `rpart`, `xgboost`, **omics analyst track** in [Appendix L](appendix-l-omics-analyst-track.md)). Install when a script asks for them:
 
 ```r
-install.packages(c("pwr", "logistf", "mice", "emmeans"))
+install.packages(c("mice", "xgboost", "pscl", "car", "logistf", "emmeans", "pwr"))
 ```
+
+**Reproducible environments:** for frozen package versions, use `renv::restore()` (see lockfile note above). Run all core examples with `source("R/run_all_examples.R"); run_all_examples()`. Bioconductor scripts: `run_all_examples(include_omics = TRUE)`.
 
 **Windows:** if packages fail to compile, install [Rtools](https://cran.r-project.org/bin/windows/Rtools/) matching your R version.
 
@@ -144,8 +146,9 @@ source("R/examples/generate_figures.R")
 **Smoke test, all chapter scripts:**
 
 ```r
-source("R/00_setup.R")
 source("R/run_all_examples.R")
+run_all_examples()                 # core path (Ch 1–22 minus Bioconductor)
+# run_all_examples(include_omics = TRUE)  # optional Appendix L
 ```
 
 Outputs land in `data/`, `volume-01/figures/`, and `volume-01/tables/` depending on the script.

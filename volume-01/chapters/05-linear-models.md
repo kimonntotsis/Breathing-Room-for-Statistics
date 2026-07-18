@@ -147,7 +147,7 @@ Check pattern in residuals before trusting the adjusted smoking coefficient.
 When predictors correlate strongly (FEV1 model with FVC and FEV1/FVC):
 
 ```r
-car::vif(fit) # values > 5–10 warrant attention
+car::vif(fit) # values above ~5–10 are a rule-of-thumb flag, not an automatic drop rule
 ```
 
 **Fix:** drop redundant predictors, combine, or use ridge (prediction context, Ch 7).

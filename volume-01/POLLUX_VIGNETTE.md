@@ -12,7 +12,7 @@
 
 > **CASTOR is where you learn the method; POLLUX is where you learn what the method must survive.**
 
-CASTOR data are clean **on purpose** so each technique stays visible. **POLLUX** is the fictional registry where visit slippage, QC failure, site clustering, and batch confounding appear: the problems your CASTOR script did not need to fight yet. POLLUX is **realistic teaching material**, not a live cohort you can enrol patients into, and **not** a file in `data/`.
+CASTOR data are clean **on purpose** so each technique stays visible. **POLLUX** is the fictional registry where visit slippage, QC failure, site clustering, and batch confounding appear: the problems your CASTOR script did not need to fight yet. POLLUX is **realistic teaching material**, not a live cohort you can enrol patients into. An executable messy export lives in `data/pollux_registry_messy.csv`; clean it with `R/examples/pollux_clean_registry.R`.
 
 **Backronym (teaching label, not for Methods):** *Pragmatic Observational Lung Longitudinal Unified eXperience*: a name for the fictional registry below.
 

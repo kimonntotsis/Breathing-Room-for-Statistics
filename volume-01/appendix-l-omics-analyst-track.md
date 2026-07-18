@@ -71,6 +71,8 @@ source("R/examples/ch14_analyst_combat.R")
 
 The teaching `glm.nb` loop and specialist pipelines should be **directionally similar** when batch is in the model. Large disagreement flags model misspecification, normalization, or filtering differences. See `volume-01/tables/ch13_rnaseq_method_compare.csv`.
 
+**Multiplicity note:** analyst pipelines report BH-adjusted *p*-values via DESeq2/limma defaults. That is **not** the same as Storey π₀-based *q*-values; label results accordingly ([Ch 13](chapters/13-differential-analysis-fdr.md#bh-adjusted-p-values-vs-storey-q-values)).
+
 ## What this appendix does NOT cover
 
 - FASTQ → BAM → count matrix (see [Appendix M](appendix-m-bioinformatics-deliverables.md))

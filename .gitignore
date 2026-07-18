@@ -17,6 +17,14 @@ volume-01/index_files/
 /Breathing-Room-for-Statistics.pdf
 volume-01/_book/
 
+# renv (library is local; lockfile is committed)
+renv/library/
+renv/local/
+renv/cellar/
+renv/staging/
+renv/python/
+renv/sandbox/
+
 # Root drafts (not source)
 ChatGPT Image*
 *.merged.pdf
@@ -37,5 +45,6 @@ volume-01/figures/book-cover-pearl-streams-page.png
 volume-01/figures/book-cover-pearl-streams-print.png
 volume-01/figures/book-cover-pearl-streams-print.pdf
 
-# Unused figure exports
+# Generated teaching outputs (reproducible from R scripts)
+data/pollux_registry_clean.csv
 volume-01/figures/analysis_pipeline.pdf

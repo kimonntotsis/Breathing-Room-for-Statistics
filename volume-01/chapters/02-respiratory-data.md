@@ -20,7 +20,7 @@ The wrong method usually starts with the wrong **outcome type**, not the wrong R
 
 ## The cohort you are classifying
 
-**CASTOR** is the synthetic COPD-oriented trial cohort in `data/*.csv`, clean **on purpose** so you can learn routing. **CASTOR-HD** adds omics files for Part VI. **POLLUX** / **APATE** is prose-only messy-registry fiction (Handbook resources).
+**CASTOR** is the synthetic COPD-oriented trial cohort in `data/*.csv`, clean **on purpose** so you can learn routing. **CASTOR-HD** adds omics files for Part VI. **POLLUX** is the messy-registry counterpart: narrative in [POLLUX_VIGNETTE](../POLLUX_VIGNETTE.md) plus executable export `data/pollux_registry_messy.csv` and cleaning script `R/examples/pollux_clean_registry.R`.
 
 CASTOR’s disease labels say COPD; the routing logic applies across **chronic lung disease** and asthma programmes whenever endpoints and design match, FEV₁ arms, binary or count exacerbations, survival, omics.
 
@@ -51,6 +51,24 @@ Same CASTOR columns (`patient_id`, `age`, `sex`, `smoking`, `therapy`, `fev1`): 
 | FEV1 trajectory on therapy? | `fev1` at each visit | Patient (repeated) | Mixed model Ch 18 |
 
 **Wrong:** run all three and report whichever has the smallest *p*-value.
+
+### POLLUX contrast: same questions, messy export
+
+CASTOR teaches routing on clean files. **POLLUX** (`data/pollux_registry_messy.csv`) adds site IDs, slipped visit weeks, spirometry QC flags, and MNAR-leaning missing FEV1. Before any model, run the cleaning script and read the flow table:
+
+```r
+source("R/examples/pollux_clean_registry.R")
+readr::read_csv("volume-01/tables/pollux_enrollment_flow.csv")
+```
+
+| Step | What to check | POLLUX teaching habit |
+|------|---------------|------------------------|
+| Enrolled *n* vs analysed *n* | QC failures, missing FEV1 | Report both in Methods |
+| Visit week | Scheduled vs observed window | Do not treat −6 as week 0 |
+| Site | `site_id` counts | Cluster-robust SE or random effect |
+| GOLD stage | Missingness by severity | MNAR sensitivity (Ch 20) |
+
+Output: `data/pollux_registry_clean.csv` is **analysis-ready for one prespecified snapshot**, not a substitute for full registry governance.
 
 **Related story:** Appendix K, Stories 1 and 3 (Handbook resources).
 
@@ -328,7 +346,7 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 | [Appendix K: In the room, short stories](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) | Story 1: one export, every column gets a *t*-test |
 | [Appendix K: Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) | Story 3: `lm()` on 0/1 exacerbation |
 | [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
-| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry, what CASTOR deliberately hides |
+| [POLLUX vignette](../POLLUX_VIGNETTE.md) | Messy registry narrative + `pollux_registry_messy.csv` cleaning drill |
 | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
 
 ## Further reading

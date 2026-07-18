@@ -71,7 +71,7 @@ p_rna_vol <- plot_volcano_premium(
 )
 omics_save(p_rna_vol, file.path(fig_dir, "ch13_rnaseq_volcano_premium.png"), 8.2, 5.8)
 
-X <- prot %>% select(starts_with("Prot_000"))
+X <- prot %>% dplyr::select(dplyr::starts_with("Prot_000"))
 X_imp <- X %>% mutate(across(everything(), \(v) { v[is.na(v)] <- median(v, na.rm = TRUE); v }))
 scores <- prcomp(X_imp, scale. = TRUE)$x[, 1:2, drop = FALSE]
 scores <- as_tibble(scores)

@@ -20,7 +20,9 @@ A single-volume handbook for **early- and mid-career** respiratory investigators
 | **Analyst (R)** | [Appendix A](volume-01/appendix-a-r-setup.md) → [Appendix B](volume-01/appendix-b-quick-reference.md) → outcome chapter |
 | **Anyone lost** | [Appendix G: navigation](volume-01/appendix-g-handbook-navigation.md) |
 
-**Teaching names:** **CASTOR** = workflow + COPD-flavoured synthetic CSV cohorts (**CASTOR-HD** for omics); **POLLUX** = Castor's twin, messy-registry vignette ([POLLUX_VIGNETTE](volume-01/POLLUX_VIGNETTE.md); optional `data/pollux_registry_messy.csv` for missingness drills). *CASTOR is where you learn the method; POLLUX is where you learn what the method must survive.* **Appendix K** = six fictional “in the room” stories ([appendix-k-in-the-room-stories.md](volume-01/appendix-k-in-the-room-stories.md)).
+**Teaching names:** **CASTOR** = workflow + COPD-flavoured synthetic CSV cohorts (**CASTOR-HD** for omics); **POLLUX** = Castor's twin, messy-registry teaching export ([POLLUX_VIGNETTE](volume-01/POLLUX_VIGNETTE.md); `data/pollux_registry_messy.csv` + `R/examples/pollux_clean_registry.R`). *CASTOR is where you learn the method; POLLUX is where you learn what the method must survive.*
+
+**Reproducibility:** pinned R packages in `renv.lock`; after clone run `renv::restore()` ([Appendix A](volume-01/appendix-a-r-setup.md)). **Appendix K** = six fictional “in the room” stories ([appendix-k-in-the-room-stories.md](volume-01/appendix-k-in-the-room-stories.md)).
 
 ## Handbook navigation
 

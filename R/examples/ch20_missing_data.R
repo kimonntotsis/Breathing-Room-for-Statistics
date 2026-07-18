@@ -46,8 +46,9 @@ p_miss <- plot_miss_heatmap(
 handbook_save(p_miss, file.path(fig_dir, "ch20_missingness_pattern.png"), 7.4, 5.2)
 
 fit_cc <- lm(fev1_obs ~ smoking + age + sex, data = spirometry_miss, na.action = na.omit)
+fev1_imp_median <- median(spirometry_miss$fev1_obs, na.rm = TRUE)
 spirometry_miss <- spirometry_miss %>%
-  mutate(fev1_imp = if_else(is.na(fev1_obs), median(fev1, na.rm = TRUE), fev1_obs))
+  mutate(fev1_imp = if_else(is.na(fev1_obs), fev1_imp_median, fev1_obs))
 fit_imp <- lm(fev1_imp ~ smoking + age + sex, data = spirometry_miss)
 
 compare <- bind_rows(

@@ -100,6 +100,17 @@ The combo plot shows where most CASTOR FEV1 values fall before you choose mean v
 
 Ridge densities compare cohort subsets without collapsing to a single bar.
 
+### Mini-lab: POLLUX missingness before Table 1
+
+On the messy registry export, describe **enrolled vs analysed *n*** before comparing arms:
+
+```r
+source("R/examples/pollux_clean_registry.R")
+readr::read_csv("volume-01/tables/pollux_missingness_by_gold.csv")
+```
+
+If missing FEV1 rises with GOLD IV, a complete-case Table 1 is a **selected** population, say so in the caption.
+
 With small *n*, a bar chart of mean ± SE alone is misleading, show the distribution or individual points.
 
 ---

@@ -7,7 +7,7 @@ if (!requireNamespace("factoextra", quietly = TRUE)) {
 }
 
 omics <- read_csv(file.path(paths$data, "marker_panel.csv"), show_col_types = FALSE)
-X <- omics %>% select(starts_with("M"))
+X <- omics %>% dplyr::select(dplyr::starts_with("M"))
 
 pca <- prcomp(X, scale. = TRUE)
 print(summary(pca))

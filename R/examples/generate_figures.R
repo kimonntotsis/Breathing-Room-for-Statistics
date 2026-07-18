@@ -740,17 +740,12 @@ handbook_save(
 if (requireNamespace("emmeans", quietly = TRUE)) {
   em <- emmeans::emmeans(fit_lm, ~ smoking)
   em_df <- as.data.frame(em)
-  p_adj <- ggplot(em_df, aes(smoking, emmean)) +
-    geom_hline(yintercept = mean(em_df$emmean), linetype = "dotted", colour = "#CBD5E1") +
-    geom_linerange(aes(ymin = lower.CL, ymax = upper.CL), linewidth = 1.1, colour = "#64748B") +
-    geom_point(size = 4.5, colour = handbook_cols$intervention) +
-    geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.08, linewidth = 0.9, colour = handbook_cols$accent) +
-    labs(
-      title = "Adjusted mean FEV1 by smoking (emmeans)",
-      subtitle = "Dot-and-whisker from linear model: age, sex, height (Ch 5)",
-      x = "Smoking", y = "Estimated mean FEV1 (L)"
-    ) +
-    handbook_theme()
+  p_adj <- plot_emmeans_dot(
+    em_df, x = "smoking", estimate = "emmean", lower = "lower.CL", upper = "upper.CL",
+    title = "Adjusted mean FEV1 by smoking (emmeans)",
+    subtitle = "Dot-and-whisker from linear model: age, sex, height (Ch 5)",
+    xlab = "Smoking", ylab = "Estimated mean FEV1 (L)"
+  )
   handbook_save(p_adj, file.path(fig_dir, "ch05_fev1_by_smoking_adjusted.png"), 5.8, 4.6)
 }
 
@@ -801,7 +796,7 @@ handbook_save(p_rr, file.path(fig_dir, "ch06_poisson_rate_ratio.png"), 7.2, 3.8)
 # =============================================================================
 # 6. Chapter 10 PCA figures
 # =============================================================================
-X <- omics %>% select(starts_with("M"))
+X <- omics %>% dplyr::select(dplyr::starts_with("M"))
 pca <- prcomp(X, scale. = TRUE)
 
 p_scree <- plot_scree(

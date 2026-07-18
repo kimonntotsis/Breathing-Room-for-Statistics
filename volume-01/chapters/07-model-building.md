@@ -198,7 +198,7 @@ source("R/examples/ch07_model_building.R")
 | **Splines for age/FEV1** | Non-linearity prespecified | Flexible; limit df to avoid overfit |
 | **Stepwise selection** | Avoid in confirmatory work | Inflates optimism; invalid CIs |
 | **Complete-case vs MI** | Predictors have missing values | MI inside resampling for prediction ([Ch 20](20-missing-data.md)) |
-| **EPV rule (events per variable)** | Logistic with few events | &lt;10–15 events per coefficient is fragile |
+| **EPV rule (events per variable)** | Logistic with few events | Low EPV is a fragility warning; use resampling and shrinkage, not a single cutoff |
 
 
 ## Where we go next

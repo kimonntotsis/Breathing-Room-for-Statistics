@@ -61,7 +61,7 @@ For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV a
 
 Use `glm(..., family=binomial)` + `predict(..., type="response")`. Predictors must be measured **before** the outcome window; tune and select features **inside train** only. Success = calibration **and** discrimination (AUC), not training-set fit.
 
-CASTOR has ~18 events / 350, models overfit easily. Aim ≥10–15 events per predictor; be skeptical below [@harrell2015rms]. AUC of 0.85 on four test events is not deployable.
+CASTOR has ~18 events / 350, models overfit easily. Contemporary prediction sample-size guidance treats **events per variable (EPV)** as a rule of thumb, not a hard cutoff: aim for adequate events in **both train and test**, and prefer resampling when EPV is low [@harrell2015rms; @riley2019minimum]. AUC of 0.85 on four test events is not deployable.
 
 **Common mistakes:** report training AUC; tune λ or trees on full data then split; cite RF importance as biomarker discovery; trust OR-based risk without calibration.
 
@@ -101,24 +101,24 @@ Follow TRIPOD for transparent prediction reporting [@moons2015tripod]:
 1. **Population:** CASTOR synthetic respiratory cohort
 2. **Outcome:** `exacerbation_12m` within 12 months
 3. **Predictors:** smoking, age, FEV1 % predicted, prior exacerbations; all baseline
-4. **Split:** 70% train / 30% test (seed 42); **same indices for all models**
-5. **Tuning:** LASSO λ by CV on train; tree/RF/boost hyperparameters fit on train only
-6. **Metrics:** AUC (with bootstrap CI when stable), Brier, calibration bins
+4. **Split:** 70% train / 30% test (seed 42) for the **teaching shootout**; same indices for all models. With only four test events, treat this split as **illustrative**; production work should use repeated or nested cross-validation.
+5. **Tuning:** LASSO λ, tree `cp`, forest `mtry`, and boosting hyperparameters chosen by **5-fold CV on train only**
+6. **Metrics:** AUC (bootstrap CI on test when stable; constant predictions yield AUC = 0.50 with CI 0.50–0.50), Brier, calibration intercept/slope mindset, calibration bins
 7. **Report:** *n*, events in train/test, EPV, software version
 
 ---
 
-## Model shootout: one split, fair comparison
+## Model shootout: one split, comparable tuning discipline
 
 | Model | Role | Tune on train? |
 |-------|------|----------------|
 | **Logistic** | Interpretable baseline | No |
-| **LASSO** | Penalized selection | Yes (`cv.glmnet`, λ~1se) |
-| **rpart tree** | Nonlinear rules | Yes (cp, minbucket) |
-| **Random forest** | Ensemble | Yes (ntree, mtry defaults) |
-| **XGBoost** (optional) | Gradient boosting | Yes (depth, η; package optional) |
+| **LASSO** | Penalized selection | Yes (`cv.glmnet`, λ~1se, 5-fold) |
+| **rpart tree** | Nonlinear rules | Yes (`cp` grid, 5-fold CV AUC) |
+| **Random forest** | Ensemble | Yes (`mtry` grid, 5-fold CV AUC) |
+| **XGBoost** (optional) | Gradient boosting | Yes (small grid on train CV) |
 
-**Rule:** never compare models tuned on different information or evaluated on training rows. With CASTOR's low EPV (~3.5 events per predictor in the training split), **complex models often tie or lose to logistic**; that is a feature, not a bug.
+**Rule:** never compare models tuned on different information or evaluated on training rows. With CASTOR's low EPV (~3.5 events per predictor in the training split), **complex models often tie or lose to logistic**; that is a feature, not a bug. When test events are sparse, **binned calibration plots are unstable**; emphasize Brier score, calibration-in-the-large, and resampling on train before trusting ranking differences.
 
 **LASSO** (`cv.glmnet`, λ~1se on train): pulls weak predictors toward zero when many candidates exist; not when CASTOR has four predictors and ~14 train events. **Trees** (`rpart`): interpretable if–then rules; unstable with sparse events, keep shallow (`cp`, `minbucket`). **Random forest** and **XGBoost** (optional): nonlinear ensembles; often better ranking but opaque; variable importance ≠ causality. Same calibration standards as logistic; install `xgboost` only for the teaching shootout.
 
@@ -172,15 +172,17 @@ Default 0.5 is often **not** the clinical optimum. With rare events, sensitivity
 
 Run `source("R/examples/ch09_prediction.R")` and read [ch09_model_comparison.csv](../tables/ch09_model_comparison.csv). Example output:
 
+![Test-set AUC by model](../figures/ch09_model_comparison.png)
+
 | Model | AUC (95% boot. CI) | Brier |
 |-------|-------------------|-------|
-| Logistic | 0.93 (0.88–0.99) | 0.033 |
-| LASSO | 0.50 (NA) | 0.037 |
-| Tree | 0.50 (NA) | 0.037 |
-| Random forest | 0.75 (0.55–0.99) | 0.038 |
-| XGBoost (if installed) | ~0.73 | ~0.036 |
+| Logistic | 0.93 (0.87–0.99) | 0.033 |
+| LASSO | 0.50 (0.50–0.50) | 0.037 |
+| Tree | 0.50 (0.50–0.50) | 0.037 |
+| Random forest | 0.81 (0.68–0.99) | 0.044 |
+| XGBoost (if installed) | ~0.83 (wide CI) | ~0.034 |
 
-**Interpretation:** with so few events, **penalized and tree models may collapse to constant predictions** (AUC = 0.5). Logistic remains the defensible primary model; forest/boost may rank better but with **very wide** bootstrap intervals. This illustrates Harrell's EPV warning better than a synthetic "RF wins" story.
+**Interpretation:** with so few test events, **penalized and tree models may collapse to constant predictions** (AUC = 0.50; bootstrap CI also 0.50–0.50). Logistic remains the defensible primary model; forest/boost may rank better but with **very wide** bootstrap intervals. This illustrates low-EPV warnings better than a synthetic "RF wins" story.
 
 **Calibration:** logistic decile plot (figure (`ch09_calibration_logistic.png`)); inspect highest-risk bin event counts.
 

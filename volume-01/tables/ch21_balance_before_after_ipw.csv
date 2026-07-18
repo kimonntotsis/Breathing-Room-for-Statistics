@@ -1,5 +1,9 @@
-smoking,phase,mean_fev1
-FALSE,before_weighting,83.44134078212291
-TRUE,before_weighting,75.71169590643275
-FALSE,after_ipw_on_tertiles,80.89912741312753
-TRUE,after_ipw_on_tertiles,78.70908603441374
+smoking,phase,covariate,value
+FALSE,before_weighting,mean_age,65.75977653631286
+FALSE,before_weighting,mean_prior_exac,0.64804469273743
+TRUE,before_weighting,mean_age,63.67836257309942
+TRUE,before_weighting,mean_prior_exac,1.1169590643274854
+FALSE,after_ipw,mean_age,64.86327504764668
+FALSE,after_ipw,mean_prior_exac,0.83836406700575
+TRUE,after_ipw,mean_age,64.94781178158114
+TRUE,after_ipw,mean_prior_exac,0.8725913163040682

@@ -56,7 +56,7 @@ bootstrap_item_stability <- function(X, k = 2, B = 300, nstart = 10) {
 }
 
 omics <- read_csv(file.path(paths$data, "marker_panel.csv"), show_col_types = FALSE)
-X <- as.matrix(scale(omics %>% select(starts_with("M"))))
+X <- as.matrix(scale(omics %>% dplyr::select(dplyr::starts_with("M"))))
 
 set.seed(2)
 k <- 2
