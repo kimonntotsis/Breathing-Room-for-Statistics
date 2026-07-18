@@ -31,7 +31,8 @@ ps_fit <- glm(ps_formula, data = exac, family = binomial())
 exac <- exac %>%
   mutate(
     ps = pmin(pmax(predict(ps_fit, type = "response"), 0.05), 0.95),
-    wt = if_else(smoking, 1 / ps, 1 / (1 - ps))
+    p_smoke = mean(smoking),
+    wt = if_else(smoking, p_smoke / ps, (1 - p_smoke) / (1 - ps))
   )
 
 # Marginal IPW: smoking only, no FEV1 adjustment
@@ -132,6 +133,7 @@ wt_summary <- tibble(
   min_wt = min(exac$wt),
   max_wt = max(exac$wt),
   mean_wt = mean(exac$wt),
+  ess = sum(exac$wt)^2 / sum(exac$wt^2),
   pct_wt_above_5 = mean(exac$wt > 5) * 100
 )
 write_csv(wt_summary, file.path(tab_dir, "ch21_ipw_weight_summary.csv"))

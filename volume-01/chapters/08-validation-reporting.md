@@ -67,13 +67,13 @@ One **prespecified primary** endpoint; secondaries in a **family** with Holm or 
 
 | Guideline | Design | Key items |
 |-----------|--------|-----------|
-| **CONSORT** | RCT | Flow diagram, randomisation, primary outcome [@schulz2010consort] |
+| **CONSORT** | RCT | Flow diagram, randomisation, primary outcome [@schulz2010consort; @consort2025] |
 | **STROBE** | Observational | Eligibility, confounding, missing data [@vonelm2007strobe] |
-| **TRIPOD** | Prediction | Validation, calibration, model specification [@moons2015tripod] |
+| **TRIPOD** | Prediction | Validation, calibration, model specification [@moons2015tripod; @collins2024tripodai] |
 
 Checklists improve transparency; they do not replace correct analysis. Cite checklist version/year; full protocol in supplement.
 
-**Methods snippet:** We followed CONSORT 2010 guidelines [@schulz2010consort]. The analysis plan was prespecified before unblinding (supplementary protocol).
+**Methods snippet:** We followed CONSORT 2025 reporting guidance [@consort2025] (supersedes CONSORT 2010 [@schulz2010consort]). The analysis plan was prespecified before unblinding (supplementary protocol). Prediction models follow TRIPOD+AI 2024 where applicable [@collins2024tripodai].
 
 ---
 

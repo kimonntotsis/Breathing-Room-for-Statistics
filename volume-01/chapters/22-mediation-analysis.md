@@ -22,7 +22,7 @@ Mediation answers a specific estimand question. CASTOR closes the volume here: t
 2. **DAG**: draw smoking → FEV1 % → exacerbation; list confounders **not** on the path.
 3. **Timing**: mediator measured before outcome window (defend in protocol).
 4. **Models**: mediator model (M ~ A + C); outcome model (Y ~ A + M + C).
-5. **Effects**: compare total vs direct ORs; bootstrap natural effects.
+5. **Effects**: bootstrap natural indirect/direct effects on the **probability scale**; treat total vs direct ORs as **descriptive** only (ORs are non-collapsible).
 6. **Sensitivity**: unmeasured confounding of mediator–outcome link; avoid causal verbs without design support.
 
 ---
@@ -35,7 +35,7 @@ Mediation answers a specific estimand question. CASTOR closes the volume here: t
 | **Direct effect** | Yes | Effect not through measured FEV1 % | **1.33** (0.42 to 4.68) |
 | **Indirect effect** | Derived | Effect through FEV1 % path | ACME **0.017** probability difference (bootstrap) |
 
-The gap between total OR (2.11) and direct OR (1.33) is the **practical signature** that FEV1 % sits on the path. Formal decomposition uses bootstrap **ACME** (average causal mediation effect / natural indirect effect) and **ADE** (average direct effect) on the **probability scale** when the outcome model is logistic [@imai2010identification; @tingley2014mediation].
+The shift from total OR (**2.11**) to direct OR (**1.33**) after adjusting FEV1 % is **not** evidence of mediation by itself: odds ratios are **non-collapsible**, so an OR can change after adding covariates even without a mediator on the path [@vanderweele2015explanation]. **Formal** decomposition uses bootstrap **ACME** (natural indirect effect) and **ADE** (natural direct effect) on the **probability scale** when the outcome is logistic [@imai2010identification; @tingley2014mediation]. Report ACME/ADE and CIs; use total vs direct ORs only as **illustrative** contrasts with explicit non-collapsibility warning.
 
 ---
 
@@ -82,6 +82,7 @@ Path coefficients (`ch22_path_coefficients.csv`): smoking lowers FEV1 % (a path 
 | **Cross-sectional snapshot** | FEV1 % and 12-month exacerbation in one row do not prove temporal order |
 | **Single mediator** | Inflammation, adherence, and infections are unmeasured parallel paths |
 | **No unmeasured mediator–outcome confounding** | Severity may affect both FEV1 and exacerbation beyond prior counts |
+| **Non-collapsible ORs** | Total vs direct OR difference ≠ proof of mediation | Report bootstrap ACME/ADE on probability scale |
 | **Nonlinear GLM** | Product-of-coefficients shortcuts fail; use simulation/bootstrap (`mediate`) |
 | **Rare events / separation** | Unstable logistic fits; check events per cell |
 | **Proportion mediated** | Can be unstable when total effect is near zero; interpret cautiously |

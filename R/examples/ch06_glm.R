@@ -2,6 +2,8 @@ source("R/00_setup.R")
 
 library(tidyverse)
 library(broom)
+library(lmtest)
+library(sandwich)
 
 exac <- read_csv(file.path(paths$data, "exacerbation.csv"), show_col_types = FALSE)
 counts <- read_csv(file.path(paths$data, "exacerbation_counts.csv"), show_col_types = FALSE)
@@ -41,6 +43,20 @@ if (requireNamespace("logistf", quietly = TRUE)) {
 if (requireNamespace("emmeans", quietly = TRUE)) {
   print(emmeans::emmeans(logit_fit, ~ smoking, type = "response"))
 }
+
+# --- Modified Poisson (risk ratios with robust SE) ---
+mod_pois <- glm(
+  exacerbation_12m ~ smoking + age + fev1_percent_predicted + prior_exacerbations,
+  data = exac, family = poisson
+)
+mod_pois_rob <- lmtest::coeftest(mod_pois, sandwich::vcovHC(mod_pois, type = "HC1"))
+mod_pois_rr <- tibble(
+  term = rownames(mod_pois_rob),
+  rr = exp(mod_pois_rob[, "Estimate"]),
+  conf.low = exp(mod_pois_rob[, "Estimate"] - 1.96 * mod_pois_rob[, "Std. Error"]),
+  conf.high = exp(mod_pois_rob[, "Estimate"] + 1.96 * mod_pois_rob[, "Std. Error"])
+)
+print(mod_pois_rr)
 
 # --- Poisson with offset ---
 pois_off <- glm(

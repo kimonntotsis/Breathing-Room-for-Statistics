@@ -105,7 +105,8 @@ Choosing the wrong outcome type - treating a **count** as **binary**, or a **bin
 | **Binary** | ≥1 exacerbation Y/N; died Y/N | Proportions, Fisher, logistic | Ch 4, 6 |
 | **Count** | Exacerbations per year | Poisson, negative binomial | Ch 6 |
 | **Proportion** | % with response (large *n*) | Logistic or linear | Ch 4 |
-| **Ordinal** | mMRC dyspnoea 0–4 | Ordinal logistic | Ch 6 |
+| **Ordinal (individual items)** | mMRC item 0–4; CAT item scores | Ordinal logistic on **ordered items** | Ch 6 |
+| **Continuous (summary scores)** | CAT total, SGRQ total | Often treated as **continuous** in trials (prespecify); banded ordinal is a separate estimand | Ch 5–6 |
 | **Time-to-event** | Time to first exacerbation | Kaplan-Meier, Cox | Ch 19 |
 | **High-dimensional** | Proteomics, transcriptomics | PCA, clustering, penalized ML | Ch 10–17 |
 | **Proportions (bounded)** | Flow cell-type % | Participant-level models | Ch 15 |

@@ -57,9 +57,9 @@ This is more actionable than a screen p-value.
 
 | Antigen | Hits | Confirmed in hits | PPV |
 |---------|------|-------------------|-----|
-| AgA | 85 | 44 | 0.52 |
-| AgB | 69 | 37 | 0.54 |
-| AgC | 61 | 34 | 0.56 |
+| AgA | 81 | 42 | 0.52 |
+| AgB | 74 | 38 | 0.51 |
+| AgC | 63 | 27 | 0.43 |
 
 PPV ≈ 50% means **half** of screen hits fail confirmation: normal for screens. Budget confirmation for Tier 1 clones first.
 

@@ -17,6 +17,8 @@ jobs:
           python-version: "3.11"
       - name: Verify figure markdown
         run: python3 volume-01/scripts/verify_figure_markdown.py
+      - name: Verify committed outputs match prose
+        run: python3 volume-01/scripts/verify_committed_outputs.py
 
   run-core-r-examples:
     runs-on: ubuntu-latest

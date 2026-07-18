@@ -196,7 +196,7 @@ Risk difference tells you how many more patients per 100 experience the event. R
 ```r
 prop.test(
  x = c(sum(exacerbation$exacerbation_12m[exacerbation$smoking]),
- sum(!exacerbation$exacerbation_12m[exacerbation$smoking])),
+       sum(exacerbation$exacerbation_12m[!exacerbation$smoking])),
  n = c(sum(exacerbation$smoking), sum(!exacerbation$smoking))
 )
 ```

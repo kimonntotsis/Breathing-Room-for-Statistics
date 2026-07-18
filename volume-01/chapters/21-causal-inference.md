@@ -113,7 +113,7 @@ Smoking is **not** a randomised exposure in CASTOR; causal language is especiall
 | Unmeasured confounding | Adherence, SES, exacerbation history incompletely captured |
 | Collider adjustment | Conditioning on post-exposure variables (e.g. antibiotics) opens bias |
 | Mediator adjustment | Adjusting for variables on causal path blocks total effect |
-| Positivity / extreme weights | Sparse cells → unstable weights; trim and report ESS |
+| Positivity / extreme weights | Sparse cells → unstable weights; trim and report **ESS** |
 | Overlap | No empirical overlap → estimand not supported in data |
 | Transportability | CASTOR-like synthetic cohort ≠ your clinic population |
 
@@ -252,7 +252,7 @@ When unmeasured confounding is plausible, E-values quantify how strong an unmeas
 1. Run `source("R/examples/ch21_causal_inference.R")`.
 2. Compare naive vs IPW OR in `ch21_smoking_or_naive_vs_ipw.csv`.
 3. Read `ch21_ipw_weight_summary.csv`: any extreme weights?
-4. From the balance plot, did IPW improve FEV1 balance in this toy run?
+4. From the balance plot, did IPW improve **confounder** balance (age, prior exacerbations)? FEV1 is excluded from this total-effect weighting scheme.
 5. Rewrite a causal-sounding sentence as an associational sentence suitable for STROBE.
 
 **Capstone link:** Case B (associational logistic) vs this chapter (explicit causal framing).

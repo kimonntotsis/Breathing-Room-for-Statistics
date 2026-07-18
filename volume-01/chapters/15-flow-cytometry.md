@@ -47,12 +47,12 @@ From `ch15_flow_effects_by_celltype.csv` (logit scale, batch-adjusted, *n* = 120
 
 | Cell type | Logit difference (case vs control) | *q* (BH) | Interpretation |
 |-----------|-----------------------------------|----------|----------------|
-| Mono | +0.81 | 0.025 | Higher monocyte proportion in cases |
-| NK | +0.63 | 0.030 | Higher NK proportion in cases |
-| CD8_T | −0.58 | 0.060 | Suggestive lower CD8 (borderline FDR) |
-| CD4_T | −0.12 | 0.60 | No FDR evidence |
+| Mono | +0.18 | 0.89 | No FDR evidence; direction only |
+| NK | +0.04 | 0.89 | No FDR evidence |
+| CD8_T | −0.35 | 0.89 | No FDR evidence |
+| CD4_T | +0.24 | 0.89 | No FDR evidence |
 
-Report **participant *n***, not cell event counts. The pseudo-replication demo in the chapter script shows pooled-cell *p*-values far smaller than participant-level models for the same comparison.
+None of the prespecified cell types meet BH *q* < 0.05 in the teaching run — an honest null result. Report **participant *n***, not cell event counts. The pseudo-replication demo shows pooled-cell *p*-values far smaller than participant-level models for the same comparison.
 
 ### Case B (wrong): per-cell analysis as if independent
 
@@ -184,7 +184,7 @@ Inflated significance when cells are pooled is the reason flow claims must stay 
 
 ### Mini-lab: beta regression pointer (proportions)
 
-When proportions are bounded and skewed, `lm(logit(p) ~ ...)` is a teaching default. For publication, consider beta regression (`betareg` package) on (0,1) with jitter away from 0/1.
+When proportions are bounded and skewed, `lm(logit(p) ~ ...)` is a teaching default. For publication, consider **beta regression** on (0,1) proportions with zero/one inflation (`betareg`, `gamlss`) or **fractional logistic** / count-based binomial models when zeros and ones are common — avoid ad hoc jitter at boundaries.
 
 ```r
 # Teaching default (Ch 15 script):

@@ -138,7 +138,7 @@ logistf::logistf(
 
 ### Technique: Log-binomial GLM
 
-**Log-binomial GLM** estimates an adjusted **risk ratio** (not odds ratio) on the log link, `glm(y ~ x, family = binomial(link = "log"))`. Use in cohorts and trials when the outcome is common (>10%); convergence failures may require modified Poisson with robust SE. Predicted risks must stay ≤ 1.
+**Log-binomial GLM** estimates an adjusted **risk ratio** (not odds ratio) on the log link, `glm(y ~ x, family = binomial(link = "log"))`. Use in cohorts and trials when the outcome is common (>10%); convergence failures may require **modified Poisson** (`family = poisson`) with **robust (sandwich) SEs** — see `R/examples/ch06_glm.R`. Predicted risks must stay ≤ 1.
 
 Smokers have RR × exp(β) times the risk of exacerbation, adjusted. RR is often closer to "percent increase in risk" than OR when events are common.
 
@@ -359,7 +359,7 @@ Formally: proportional odds logistic model estimates cumulative log-odds of bein
 
 **Methods:** mMRC (0–4) was modelled as an ordered factor using proportional odds logistic regression, adjusting for … Proportional odds was assessed with …
 
-**Results:** Adjusted OR for treatment = … (95% CI …) per one-category increase in mMRC. Distribution by arm: [table of category counts].
+**Results:** Adjusted OR for **treatment** = … (95% CI …) on the proportional-odds scale (higher cumulative odds of worse mMRC category in the treatment arm vs control). Distribution by arm: [table of category counts].
 
 ---
 

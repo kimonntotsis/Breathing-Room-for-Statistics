@@ -140,7 +140,11 @@ Compare enrolled *n* to analysis-ready *n* in `pollux_enrollment_flow.csv` befor
 
 ### MICE (production workflow)
 
-Specify an imputation model for each variable with missing values, including predictors of missingness (diagnosis, baseline FEV1, arm). Create *m* imputed datasets (often 20–50), fit the analysis model in each, and pool with Rubin's rules (`mice::pool`). Report enrolled *n*, imputation variables, and sensitivity. Include the outcome in the imputation model when imputing covariates; recalculate derived variables (BMI, change scores) **after** imputation. Practical minimum **m = 20**; never impute using future outcomes or test-set labels (Ch 9, 17).
+Specify an imputation model for each variable with missing values, including predictors of missingness (diagnosis, baseline FEV1, arm). Create *m* imputed datasets (often 20–50), fit the analysis model in each, and pool with Rubin's rules (`mice::pool`). Report enrolled *n*, imputation variables, and sensitivity.
+
+**Inferential MI (association / trial estimands):** include the **analysis outcome** in the imputation model when imputing covariates — this is standard MAR practice, not “leakage” [@vanbuuren2011mice]. Recalculate derived variables (BMI, change scores) **after** imputation.
+
+**Predictive MI (Ch 9, 17):** fit imputation **inside training folds only**; never use test-set labels or future outcomes when building deployment pipelines.
 
 ### Imputation diagnostics (minimum)
 
@@ -163,7 +167,8 @@ Implausible imputations (e.g. FEV1 of 8 L in severe COPD) signal a wrong imputat
 | Informative spirometry missingness | Severe dyspnoea, exacerbation, poor effort tests |
 | MAR is untestable | You defend it with subject-matter reasoning + sensitivity |
 | Median imputation | Shrinks variance; SEs wrong if treated as observed |
-| Imputing then splitting train/test | Leakage in prediction workflows (Ch 9, 17) |
+| Imputing then splitting train/test | Leakage in **prediction** workflows (Ch 9, 17) |
+| Outcome in inferential MI | Expected under MAR when imputing covariates — not prediction leakage |
 | LOCF for FEV1 trajectories | Can create false stability (Ch 18) |
 | MNAR for death/discontinuation | Requires dedicated models, not silent deletion |
 

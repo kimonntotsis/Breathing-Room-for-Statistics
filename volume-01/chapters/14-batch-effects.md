@@ -42,7 +42,7 @@ In `proteomics_olink_like.csv`, cases and controls appear in **both** batches. B
 
 We can attempt to separate biology from lab process because both patient types were measured under multiple conditions.
 
-**Teaching numbers** (`ch14_batch_mini_case_summary.csv`): with batch overlap, **3** proteomics discoveries at FDR *q* < 0.05 **with** batch adjustment and **3 without** in this synthetic run. Stability across adjustment is reassuring; a large flip (e.g. 50 → 0) would signal an unstable conclusion.
+**Teaching numbers** (`ch14_batch_mini_case_summary.csv`, batch-only protein block *n* = 151): with batch/plate adjustment, **1** spurious group hit at BH *q* < 0.05 vs **128 without** adjustment; the prespecified biology panel (*n* = 18) retains **18** hits with adjustment. A large flip signals unstable conclusions — here the inflation without batch covariates is the teaching point.
 
 ### Case B (synthetic confounding): batch == group
 
@@ -60,7 +60,7 @@ If disease status and lab day are inseparable, the analysis cannot tell you whet
 ### Decision rule (use before any "ComBat" or covariate adjustment)
 
 1. **Tabulate** `group × batch` (and plate/run if available).
-2. If any cell has **zero** samples for a group-batch combination you need, treat confounding as likely.
+2. If any cell has **zero** samples for a group-batch combination you need, treat **overlap as inadequate** for batch adjustment (precision and extrapolation suffer). **Perfect confounding** (batch == group) makes the group effect **non-identifiable** — a stronger failure mode than partial imbalance alone.
 3. **Plot** PCA (or another QC embedding) colored by batch **and** group.
 4. Fit a **sensitivity model** with and without batch; if the main conclusion flips, report instability.
 5. If batch and group are perfectly confounded, stop claiming adjusted group effects; redesign or collect new data.

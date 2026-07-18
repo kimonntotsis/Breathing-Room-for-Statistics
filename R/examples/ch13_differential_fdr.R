@@ -84,19 +84,19 @@ p_miss <- ggplot(miss_df, aes(group, missing_fraction, fill = group)) +
 
 handbook_save(p_miss, file.path(fig_dir, "ch13_proteomics_missingness_by_group.png"), 6.8, 4.4)
 
-# Niche 2: q-value distribution (proteomics)
-p_q <- prot_res %>%
-  filter(!is.na(q)) %>%
-  ggplot(aes(q)) +
+# Niche 2: raw p-value distribution (proteomics) — diagnostic under null features
+p_p <- prot_res %>%
+  filter(!is.na(p)) %>%
+  ggplot(aes(p)) +
   geom_histogram(bins = 40, fill = handbook_cols$intervention, colour = "white", alpha = 0.88) +
   labs(
-    title = "Proteomics: q-value distribution (BH)",
-    subtitle = "Mass at low q supports real signal; spike near 1 is expected nulls",
-    x = "q-value", y = "Proteins"
+    title = "Proteomics: raw p-value distribution",
+    subtitle = "Uniform tail under null is ideal; spike near 0 suggests signal (or bias/misspecification)",
+    x = "Nominal p-value (group term)", y = "Proteins"
   ) +
   handbook_theme()
 
-handbook_save(p_q, file.path(fig_dir, "ch13_proteomics_qvalue_hist.png"), 6.8, 4.4)
+handbook_save(p_p, file.path(fig_dir, "ch13_proteomics_qvalue_hist.png"), 6.8, 4.4)
 
 # =============================================================================
 # RNA-seq: per-gene negative binomial DE + BH FDR + volcano plot

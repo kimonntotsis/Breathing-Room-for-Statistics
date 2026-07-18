@@ -17,6 +17,7 @@ project:
     - appendix-l-omics-analyst-track.md
     - appendix-m-bioinformatics-deliverables.md
     - appendix-n-bulk-vs-singlecell.md
+    - appendix-o-ch04-comparison-extensions.md
     - references.qmd
 
 filters:
@@ -34,6 +35,7 @@ book:
   cover-image-alt: "Stylized lungs formed from statistical plots, formulas, and data streams on a dark pearl-grey background."
   chapters:
     - index.md
+    - chapters/00-edition.md
     - chapters/00-preface.md
     - chapters/00-welcome.md
     - parts/part-01-foundations.md
@@ -79,6 +81,7 @@ book:
     - appendix-l-omics-analyst-track.md
     - appendix-m-bioinformatics-deliverables.md
     - appendix-n-bulk-vs-singlecell.md
+    - appendix-o-ch04-comparison-extensions.md
     - references.qmd
 
 bibliography: ../references.bib

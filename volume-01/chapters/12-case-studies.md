@@ -107,7 +107,7 @@ Causal effect in broader population; long-term FEV1 decline; symptom benefit.
 # Case study B: Observational cohort: exacerbation risk
 
 > **In the room (Reviewer #2):** *"Smoking is your exposure, but you adjusted for FEV1 % predicted: doesn't that block the effect?"*
-> **Response:** FEV1 is a prespecified confounder on the causal path smoking → lung function → exacerbation risk; report adjusted OR as primary and crude proportions in supplementary. Associational language only; state limits in Discussion.
+> **Response:** For the **total-effect** smoking OR we adjust age, sex, and prior exacerbations only (Ch 21). FEV1 % is on the smoking → exacerbation path and is a **mediator**, not a confounder for that estimand — adjusting it targets the **direct** effect. Report both estimands with labels; do not infer mediation from OR change alone (Ch 22).
 
 ### Clinical question
 
@@ -327,7 +327,7 @@ source("R/examples/ch12_case_e_longitudinal_survival.R")
 
 ### Results template
 
-> **Longitudinal (RCT extension):** Among *n* = … participants (… visits), FEV1 trajectories differed by treatment (Figure). A linear mixed model with random intercepts estimated a week × intervention interaction of … L per week (95% CI …). A sensitivity analysis using only week-52 FEV1 yielded a different standard error, illustrating pseudo-replication risk. **Survival (cohort):** During 365 days of follow-up, … exacerbations occurred. Kaplan-Meier curves separated by smoking (log-rank *p* = …). The adjusted Cox hazard ratio for smoking was … (95% CI …). Proportional hazards diagnostics: … [@harrell2015rms; @vonelm2007strobe].
+> **Longitudinal (RCT extension):** Among *n* = … participants (… visits), FEV1 trajectories differed by treatment (Figure). A linear mixed model with random intercepts estimated a week × intervention interaction of … L per week (95% CI …). A sensitivity **week-52 cross-sectional** model gave a similar point estimate with comparable SE (see `ch18_sensitivity_mixed_vs_fixed.csv`); pseudo-replication risk arises when **all visits are stacked** in ordinary `lm()`, not from a single-visit *t*-test alone. **Survival (cohort):** During 365 days of follow-up, … exacerbations occurred. Kaplan-Meier curves separated by smoking (log-rank *p* = …). The adjusted Cox hazard ratio for smoking was … (95% CI …). Proportional hazards diagnostics: … [@harrell2015rms; @vonelm2007strobe].
 
 ### Three-reader interpretation
 

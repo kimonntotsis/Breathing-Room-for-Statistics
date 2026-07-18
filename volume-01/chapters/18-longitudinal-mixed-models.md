@@ -79,7 +79,7 @@ Add `(weeks | patient_id)` or `(1 + weeks | patient_id)` when patients differ su
 
 ### GEE (population-averaged alternative)
 
-GEE (`geepack::geeglm(fev1 ~ weeks * group, id = patient_id, corstr = "exchangeable")`) targets **marginal** (population-average) effects with robust SEs. Mixed models are **conditional** (subject-specific). Both are valid; **do not mix estimands** in the same paper without stating which you target.
+GEE (`geepack::geeglm(fev1 ~ weeks * group, id = patient_id, corstr = "exchangeable")`) targets **marginal** (population-average) effects with robust SEs. Mixed models with random intercepts estimate **subject-specific** trajectories. For **continuous Gaussian** outcomes in parallel-group trials, the two often agree in **direction**; coefficients need not match numerically. Prespecify one primary approach; do not swap estimands after seeing results.
 
 ### Caveats box
 
