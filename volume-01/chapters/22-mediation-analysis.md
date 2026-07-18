@@ -12,6 +12,8 @@ Smoking associates with exacerbation; FEV₁ sits on the path. A PI asks how muc
 
 Mediation answers a specific estimand question. CASTOR closes the volume here: total, direct, and indirect language tied to bootstrap CIs — and explicit limits on causal reading. Lower FEV1 % is a plausible **mechanism** linking smoking to exacerbation in COPD, but not the only one (airway inflammation, colonisation, adherence). A mediation analysis quantifies association through **one measured mediator**, not the full biology. Mediation requires **three no-confounding** structures (exposure–mediator, exposure–outcome, mediator–outcome) and correct **temporal ordering**. CASTOR `exacerbation.csv` is a **single time-point teaching snapshot** — treat results as **illustrative**, not as proof that smoking causes exacerbations through FEV1. If the indirect effect is small and the direct path dominates, policy discussion may still focus on total smoking burden rather than lung-function pathways alone.
 
+> **Consult a statistician when:** mediation will support mechanism claims, policy decomposition, or sensitivity to unmeasured mediator–outcome confounding. This chapter teaches **one-mediator bootstrap workflow** — not causal mediation theory in full.
+
 ---
 
 ## The mediation workflow

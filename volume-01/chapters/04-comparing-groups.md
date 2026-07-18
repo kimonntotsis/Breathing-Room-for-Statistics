@@ -69,32 +69,9 @@ FEV1, FVC, symptom scores, and exacerbation rate are **clinically related** but 
 | **Omics / biomarkers** | Separate testing family from clinical endpoints; FDR, not Holm on FEV1 | Part VI |
 | **Unsupervised clusters** | Not linked to outcomes until externally validated | Ch 11 |
 
-**Composite endpoints** (e.g. FEV1 responder **and** no exacerbation): define components, missing-data rules, and whether components are co-primary **before** data lock. This handbook does not treat composite construction in depth: borrow from trial-statistics references and freeze the **winning definition** in the SAP.
+**Composite endpoints** (e.g. FEV₁ responder **and** no exacerbation): freeze components, missing-data rules, and the winning definition in the SAP **before** database lock — not after a borderline *p*-value. Typical analysis: risk difference in responder proportion + 95% CI; secondaries in a separate Holm family. This handbook does not treat composite construction in depth; borrow from trial-statistics references and mirror the single-endpoint discipline in Case A (Ch 12).
 
-#### Worked example: composite primary (fictional pulmonary SAP)
-
-A CLD trial team debates a single primary endpoint. They freeze this **before** database lock:
-
-| Element | Prespecification |
-|---------|------------------|
-| **Composite name** | “Dual responder at week 12” |
-| **Component A** | Post-BD FEV1 ≥100 mL above baseline at week 12 (ATS-acceptable manoeuvre) |
-| **Component B** | No moderate/severe exacerbation from randomisation through week 12 |
-| **Composite rule** | Responder = **both** A and B |
-| **Missing data** | If week-12 spirometry missing → not a responder for primary ITT; sensitivity with multiple imputation prespecified |
-| **Analysis** | Risk difference in responder proportion (intervention − control) + 95% CI; Fisher or logistic with covariates as supportive |
-| **Secondaries** | FEV1 (continuous), exacerbation rate, CAT: **Holm family**, separate from composite test |
-| **Not allowed** | Switching to FEV1 alone if composite p = 0.06 |
-
-**Methods snippet:**
-
-> *The primary endpoint was dual responder status at week 12 (FEV1 increase ≥0.10 L and no moderate/severe exacerbation). The estimand was the risk difference in responder proportion (intervention − standard care) in the intention-to-treat population. Secondary endpoints (FEV1 litres, annualised exacerbation rate, CAT) were tested in a prespecified order with Holm adjustment within the clinical family.*
-
-**Practice read:** composites simplify steering narratives but complicate missing spirometry: write the missing-data rule **with** the composite, not after.
-
-#### Wrong analysis ⚠
-
-Do not put four primary *p*-values on one slide (FEV1, FVC, symptoms, exacerbations) — one primary, secondaries in a prespecified family, exploratory labelled. Do not package an omics volcano beside week-12 FEV1 as one confirmatory package; separate discovery from confirmatory (Ch 12, Ch 17).
+**Common mistakes:** four primary *p*-values on one slide; omics volcano beside week-12 FEV₁ as one confirmatory package; Fisher/Welch labelled “adjusted” without covariates — route adjustment to Part III regression.
 
 ---
 
@@ -102,42 +79,19 @@ Do not put four primary *p*-values on one slide (FEV1, FVC, symptoms, exacerbati
 
 ### Technique: Welch two-sample t-test
 
-Welch's *t*-test compares **means** between two independent groups on a continuous outcome — FEV₁, FVC, 6MWD — without assuming equal variances. It needs one measurement per patient, approximate normality within groups (or large *n*), and independence. The estimand is the mean difference (group A − group B); in R, `t.test(y ~ group, var.equal = FALSE)`.
+Welch's *t*-test compares **means** between two independent groups on a continuous outcome — FEV₁, FVC, 6MWD — without assuming equal variances. One measurement per patient; approximate normality within groups (or large *n*); independence. Estimand: mean difference (group A − group B). R: `t.test(y ~ group, var.equal = FALSE)`.
 
-**Plain language:** is average lung function higher in one arm?
+**Practice read (CASTOR primary):** mean difference 0.09 L (95% CI −0.04 to 0.21) — does the interval exclude, straddle, or include the prespecified MCID (~0.10 L in many COPD trials)? That question matters more than *p* = 0.20 [@cazzola2008mcid; @welch1947t].
 
-**Precise language:** test $H_0$: $\mu_1 = \mu_2$ with a CI for $\mu_1 - \mu_2$; Welch-Satterthwaite degrees of freedom handle unequal spreads [@welch1947t].
-
-**Clinical relevance:** ask whether the mean difference exceeds the **MCID** for that outcome — literature-based and disease-specific [@cazzola2008mcid]. Do not use Welch on binary or count outcomes, paired measurements, strongly skewed small samples, or clustered data without the paired/cluster methods below.
+Do not use Welch on binary/count outcomes, paired measurements, strongly skewed small samples, or clustered data. Non-significant superiority is **inconclusive**, not proof of equivalence. Pre- and post-bronchodilator protocol must match between groups [@graham2019spirometry]. For skewed FEV₁, prespecify Mann–Whitney as sensitivity and report median [IQR] alongside the mean-based primary.
 
 ```r
 t.test(fev1 ~ group, data = spirometry, var.equal = FALSE)
 ```
 
-### Other respiratory settings
+**Methods:** FEV1 (L) at 12 weeks compared between arms using Welch's *t*-test (two-sided α = 0.05); estimand = mean difference (intervention − standard).
 
-CASTOR uses COPD-style FEV1 trials. When you interpret a mean difference or CI:
-
-- **Asthma:** MCID for FEV1 differs from COPD. Biologic trials may prespecify exacerbation reduction even when FEV1 moves modestly. Compare the CI to the margin in your protocol.
-- **Mixed airways disease:** Match pre- and post-bronchodilator timing between arms before any group comparison or ANCOVA.
-
-Fix the primary estimand in the SAP before unblinding.
-
-**Practice read (CASTOR arms):** is the mean difference (e.g. 0.09 L) large enough to matter given MCID (~0.10 L in many COPD trials)? The CI answers that as well as *p*-values [@cazzola2008mcid].
-
-**What Welch does not do:** it compares means, not medians — skewed FEV₁ in severe COPD may call for Mann–Whitney or median reporting alongside. It assumes **independence** (not ICU wardmates or repeated measures). It is a **one time point** comparison, not a decline model (Ch 18). In observational data, group differences may reflect confounding. A non-significant *p* with a CI that includes the MCID is **inconclusive**, not proof of no effect. Pre- vs post-bronchodilator protocol must match between groups [@graham2019spirometry].
-
-The protocol says “compare FEV1 at week 12,” but exports include baseline visits, dropouts, and one site on post-BD only — map protocol → estimand → test before `t.test()`. Steering decks often stack FEV1, FVC, symptoms, and exacerbation rates: unless prespecified, label secondaries exploratory and report CIs. Non-inferiority device trials need a margin and TOST/CI-against-margin — not superiority *p* > 0.05 read as “similar” ([NI reporting](#technique-non-inferiority-and-equivalence-trials)).
-
-**Common mismatches:** running a *t*-test on exacerbation **counts** (use Poisson/NB in Ch 6); mixing post-BD FEV₁ in one arm and pre-BD in the other; reading *p* > 0.05 as “equivalent” when the trial was never powered for equivalence.
-
-#### Reporting template
-
-**Methods:** FEV1 (L) at 12 weeks was compared between intervention and standard care using Welch's t-test (two-sided α = 0.05). The primary estimand was the mean difference (intervention − standard).
-
-**Results:** Mean FEV1 was 3.85 L (SD 0.64) in intervention (n = 198) and 3.76 L (SD 0.64) in standard care (n = 202). Mean difference 0.09 L (95% CI −0.04 to 0.21; p = 0.20).
-
-**Do not say:** "No effect of intervention"; "trend toward benefit" without prespecified trend test.
+**Results:** Mean FEV1 3.85 L (SD 0.64, *n* = 198) vs 3.76 L (SD 0.64, *n* = 202). Mean difference 0.09 L (95% CI −0.04 to 0.21; *p* = 0.20). **Do not say:** “No effect”; “trend toward benefit” without a prespecified trend test.
 
 ### Technique: Pooled two-sample t-test
 
@@ -303,52 +257,13 @@ cohen_d <- function(x, g) {
 cohen_d(spirometry$fev1, spirometry$group)
 ```
 
-Rule-of-thumb (Cohen): |d| ≈ 0.2 small, 0.5 medium, 0.8 large - context matters more in clinical research.
+Rule-of-thumb (Cohen): |d| ≈ 0.2 small, 0.5 medium, 0.8 large — MCID and clinical context matter more in pulmonary trials.
 
 ---
 
-**Do not:** run many tests and report only significant ones.
+## Permutation tests and sample size (Tier C)
 
----
-
-## Permutation (randomisation) tests
-
-Robustness check when *n* is small or distributions are doubtful: shuffle group labels and compare observed mean difference to the permutation distribution. Complements Welch — does not replace MCID reasoning or prespecification.
-
-```r
-set.seed(101)
-obs_diff <- diff(tapply(spirometry$fev1, spirometry$group, mean))
-perm_diff <- replicate(5000, {
- g <- sample(spirometry$group)
- diff(tapply(spirometry$fev1, g, mean))
-})
-mean(abs(perm_diff) >= abs(obs_diff))
-```
-
----
-
-## Sample size and power (design stage)
-
-Before enrolment closes — not as post hoc rescue. Anchor expected effect on **MCID** or published mean difference, not Cohen's d tradition alone [@cazzola2008mcid; @harrell2015rms].
-
-```r
-pwr::pwr.t.test(d = 0.25, power = 0.8, sig.level = 0.05, type = "two.sample")
-```
-
----
-
-## Multiplicity
-
-Testing FEV1, FVC, symptoms, and exacerbations without a plan inflates false positives [@benjamini1995fdr]. See [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints) for how to **link** clinical outcomes in the SAP.
-
-**Strategies:**
-
-- One **prespecified primary endpoint** [@schulz2010consort]
-- Holm or Bonferroni for **secondary endpoints in the same family**
-- **Gatekeeping** when later endpoints are tested only if earlier ones succeed
-- **Separate families** for omics screens (FDR; Ch 13) vs pulmonary function endpoints
-
-**Do not:** run many tests and report only significant ones.
+**Permutation test:** shuffle group labels when *n* is small or distributions are doubtful — complements Welch; prespecify the statistic. **Power:** anchor on MCID or published mean difference before enrolment closes, not post hoc (`pwr::pwr.t.test(...)`). **Multiplicity:** one prespecified primary; Holm/gatekeeping for secondaries; separate FDR family for omics (see [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints)).
 
 ---
 
@@ -423,8 +338,7 @@ Side-by-side panels show how the same CASTOR subset looks under different compar
 
 > Mean FEV1 was 3.85 L (SD 0.64) in the intervention arm and 3.76 L (SD 0.64) in standard care (n = 198 and 202). The mean difference was 0.09 L (95% CI −0.04 to 0.21; Welch t, p = 0.20). The difference is compatible with no effect and with clinically small benefits; this trial was not powered for a prespecified MCID of 0.10 L.
 
-**Practice read:** not statistically significant; CI includes values that may or may not matter clinically.
-**Statistician read:** non-significant p does not prove no effect - interval estimation preferred [@harrell2015rms].
+**Practice read:** not statistically significant; CI includes values that may or may not matter clinically — interval estimation preferred over “failed trial” language [@harrell2015rms].
 
 ---
 
@@ -479,94 +393,19 @@ Chapter 4 covers the default comparisons. Use these alternatives when the **assu
 | Different follow-up time | **Poisson/NB + offset(log person-time)** | Ch 6 |
 | Many zeros | **Zero-inflated / hurdle models** | Ch 6 (ZIP/ZINB) |
 
-### Design extensions: clustered and crossover data
+### Design extensions: clustered, crossover, NI, longitudinal
 
-Standard Ch 4 tests assume **independent** observations. Respiratory studies often violate that.
+Standard Ch 4 tests assume **independent** observations.
 
-### Technique: Clustered units (wards, centres, GP practices)
+**Clustered units (ICU wards, centres):** patients within a cluster correlate — Welch *t* on all rows gives SEs that are too small. Use mixed models or GEE with cluster random effects (Part VIII). Report number of **clusters** randomised, not only patients. Unstable with only 2–3 clusters.
 
-| | |
-|---|---|
-| **Answers** | Is the outcome different between arms when patients are nested in clusters? |
-| **Outcome** | Continuous, binary, or count (same as unadjusted comparison) |
-| **Design** | Cluster randomised trial, or patients nested in ICU wards / hospitals |
-| **Assumptions** | Clusters are independent; enough clusters (not just patients) for inference |
-| **Effect measure** | Same estimand as unadjusted comparison, with **cluster-appropriate SE** |
-| **R (continuous)** | Mixed model: `lmer(outcome ~ arm + (1 \| cluster_id))` (Ch 18) |
-| **R (binary/count)** | GEE with `cluster = cluster_id` or mixed GLMM |
-| **Report** | Number of **clusters** and patients; ICC if reported; CI from cluster-aware model |
-| **Avoid when** | Only 2–3 clusters (unstable); treating cluster members as independent (SE too small) |
+**Crossover / paired bronchodilator:** same patient, two manoeuvres — **paired** *t* or Wilcoxon signed-rank, not two independent groups. Document BD dose and wait time [@graham2019spirometry].
 
-**Plain language:** patients in the same ICU ward correlate; analyse at ward level or use a model that respects nesting.
+**Non-inferiority / equivalence:** prespecify margin Δ and test CI against Δ (often 90% CI for NI) — *p* > 0.05 from a superiority test is **not** equivalence. Methods template: *Non-inferiority of [intervention] vs [control] on [endpoint] tested with margin Δ = … using [TOST / CI against margin].* Full NI/equivalence detail: [Appendix O](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials).
 
-**Precise language:** ignore clustering → anti-conservative SEs and inflated significance [@harrell2015rms].
+**Repeated visits / time-to-event:** use Part VIII (mixed models, survival) — not a week-52 *t*-test on stacked rows.
 
-**Practice read:** “n = 400 patients” may hide “8 wards”; ask how many **units** were randomised.
-
-#### Wrong analysis ⚠
-
-| Mistake | Why it fails | Do instead |
-|---------|--------------|------------|
-| Welch *t* on all ICU patients | Ward-level exposure shared | Mixed model or GEE with ward random effect |
-| Cluster RCT analysed as individual RCT | Wrong denominator for inference | Cluster-level or mixed model with `(1 \| cluster)` |
-
-### Technique: Crossover and paired bronchodilator designs
-
-| | |
-|---|---|
-| **Answers** | Is post-BD FEV1 higher than pre-BD **within the same patient**? |
-| **Outcome** | Continuous (FEV1, FVC) |
-| **Design** | Paired measurements same visit (CASTOR: `bronchodilator_paired.csv`) |
-| **Assumptions** | Pairs independent; difference approximately normal or large *n* |
-| **Effect measure** | Mean change (post − pre) |
-| **R** | `t.test(post, pre, paired = TRUE)` or mixed model if multiple crossover periods |
-| **Report** | Mean change + 95% CI; *n* pairs; BD protocol (dose, wait time) |
-| **Avoid when** | Carryover between periods in multi-period crossover without washout |
-
-**Plain language:** same patient, two manoeuvres; use a **paired** test, not two independent groups.
-
-**Practice read:** ATS/ERS BD reversibility uses within-patient change; do not split pre and post into fictional “groups.”
-
-CASTOR paired example: `R/examples/ch04_comparing_groups.R` and Figure (`ch04_paired_bronchodilator.png`).
-
-### Technique: Non-inferiority and equivalence trials {#technique-non-inferiority-and-equivalence-trials}
-
-| | |
-|---|---|
-| **Answers** | Is the new therapy **not worse** than control by more than a prespecified margin? |
-| **Outcome** | Continuous (FEV1 change), binary (exacerbation), or rate |
-| **Design** | Parallel NI/ equivalence trial with **prespecified Δ** |
-| **Assumptions** | Margin clinically justified; powered for NI (not superiority) |
-| **Effect measure** | Mean difference vs margin; or proportion difference vs margin |
-| **Methods** | Two one-sided tests (TOST); or 90% CI vs margin (common in NI) |
-| **Report** | Margin Δ, NI conclusion yes/no, CI relative to Δ |
-| **Avoid when** | Declaring equivalence from superiority *p* > 0.05 |
-
-**Plain language:** “Not significantly different” ≠ “equivalent.” You must prespecify how much worse is acceptable.
-
-**Practice read:** device and inhaler NI trials live or die on the **margin**, not the *p*-value from a superiority test.
-
-#### Reporting template (non-inferiority, continuous FEV1)
-
-**Methods:** The primary estimand was the mean difference in change from baseline FEV1 at 12 weeks (new therapy − control). Non-inferiority was prespecified with margin Δ = −0.10 L (one-sided α = 0.025). We used a two one-sided tests (TOST) procedure / 90% confidence interval against Δ.
-
-**Results:** Mean difference = −0.03 L (90% CI −0.08 to 0.02). The upper bound of the CI was below Δ → **non-inferiority demonstrated** / exceeded Δ → **not demonstrated**.
-
-**Do not say:** “Groups were equivalent because p = 0.34.”
-
-NI trials: prespecify margin and CI-against-margin in the SAP.
-
-### Design extensions (longitudinal and survival)
-
-| Design feature | Why Ch 4 methods fail | Handbook chapter |
-|---|---|---|
-| Repeated measures | observations not independent | Ch 18 mixed models / GEE |
-| Multi-centre clustering | SEs too small if ignored | Cluster-robust SE / `(1 \| centre)` ; this chapter + Ch 18 |
-| Time-to-event endpoints | censoring | Ch 19 survival analysis |
-
-### Equivalence (superiority test insufficient)
-
-If the scientific goal is **equivalence** (two-sided margin), prespecify bounds and use an equivalence framework. A non-significant *p*-value from a superiority test is not evidence of equivalence [@harrell2015rms] ; use the [NI template above](#technique-non-inferiority-and-equivalence-trials).
+---
 
 ## Catalog of wrong analyses (comparison chapter)
 
@@ -586,7 +425,19 @@ If the scientific goal is **equivalence** (two-sided margin), prespecify bounds 
 
 ## Quick reference: methods in this chapter
 
-Use the **[Master decision table](#master-decision-table)** for the full router. CASTOR primary (Case A): Welch *t* on week-12 FEV₁; report **mean difference + 95% CI** against prespecified MCID — not *p* alone.
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Welch *t*-test** | Two independent groups; continuous FEV₁/FVC | Default for arm comparison; unequal variances OK |
+| **Paired *t*-test** | Pre/post BD, crossover periods | Within-patient correlation |
+| **Mann–Whitney** | Skewed continuous; sensitivity to Welch | Ranks, not means — report both if they diverge |
+| **ANOVA + contrasts** | 3+ independent groups | F-test then prespecified contrasts |
+| **Chi-square / Fisher** | Binary proportions, larger/sparse tables | Effect size + CI required |
+| **McNemar** | Paired binary (before/after) | Not for independent groups |
+| **ANCOVA preview** | RCT with baseline FEV₁ | Full treatment in Ch 5 |
+
+Use the **[Master decision table](#master-decision-table)** for outcome × design routing. CASTOR primary (Case A): Welch on week-12 FEV₁; report **mean difference + 95% CI** against prespecified MCID.
+
+**Extensions:** permutation, NI/equivalence, clustered designs in [Alternatives & extensions](#alternatives--extensions-choose-by-data-and-design).
 
 ## Exercises
 

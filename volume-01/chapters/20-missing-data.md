@@ -12,6 +12,8 @@ Week-12 spirometry missing for forty-eight participants — clinic closure, COVI
 
 Missing data is where ITT meets reality. This chapter connects patterns, mechanisms, and sensitivity — so missingness is a result, not a footnote. Missing spirometry in severe COPD often reflects **inability to test**, not random noise; LOCF on FEV1 trajectories can fake stability. Structural missingness (e.g. sputum in non-producers) must not be imputed to the full cohort. **MAR is not testable** — defend with subject-matter reasoning. Median imputation is **sensitivity only**; production default is **MICE + Rubin pooling** when MAR is plausible. Imputation belongs **inside CV folds** for prediction (Ch 9). Table 1 should show missingness by severity and arm before the primary model is debated; report enrolled *n*, analysed *n*, and sensitivity side-by-side (Appendix D checklists support DAP/manuscript sign-off).
 
+> **Consult a statistician when:** MNAR tipping-point analysis, joint modelling of dropout, pattern-mixture models, or imputation in cluster/survival settings is on the SAP. This chapter teaches **describe → assume → sensitivity** — not every missing-data method.
+
 ---
 
 ## The missing-data workflow

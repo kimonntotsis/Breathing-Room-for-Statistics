@@ -28,6 +28,21 @@ It is **not** a linear statistics textbook from page 1 to page 800. It is a **st
 
 That path follows CASTOR from protocol argument to Table 1 to the primary comparison. Chapter 12 replays the same arcs as capstone cases.
 
+### Investigator fast path (before your next steering meeting)
+
+About **90 minutes**, no R required — same sequence as [Appendix J](appendix-j-investigator-minimum-path.md):
+
+| # | Read | Time |
+|---|------|------|
+| 1 | [Chapter 1](chapters/01-statistical-thinking.md) — estimand + three layers | 20 min |
+| 2 | [Chapter 2](chapters/02-respiratory-data.md) — outcome routing table | 15 min |
+| 3 | [Chapter 3](chapters/03-descriptive-analysis.md) — Table 1 + missingness | 15 min |
+| 4 | [Chapter 4](chapters/04-comparing-groups.md) — opening + Quick reference | 20 min |
+| 5 | [Chapter 8](chapters/08-validation-reporting.md) — CIs + multiplicity | 15 min |
+| 6 | [Chapter 12 Case A](chapters/12-case-studies.md#case-study-a-randomised-trial-fev1-comparison) + sign-off checklist | 15 min |
+
+Then open Appendix B when a new endpoint appears on the slide deck.
+
 **If you already know your endpoint** — open Appendix B, find your outcome type, jump to that chapter. Read the **opening scene** anyway; it tells you what mistake the chapter exists to prevent.
 
 **If you are an investigator who will never run R** — Appendix J is the short read. Return here when you want the full estimand language in Chapter 1.

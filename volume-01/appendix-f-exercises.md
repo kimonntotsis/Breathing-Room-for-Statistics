@@ -8,6 +8,31 @@ Practice problems for Chapters 1–21. **Solutions** (repository only): `volume-
 
 ---
 
+## Exercise index by estimand
+
+| Estimand / outcome | Chapter | Applied task (start here) |
+|--------------------|---------|----------------------------|
+| One-sentence estimand + PICO | Ch 1 | Write PICO for two inhaler devices on exacerbation rate |
+| Outcome type routing | Ch 2 | Route each CASTOR file in the outcome map to one word |
+| Table 1 + distribution | Ch 3 | Table 1 by `group`; histogram of FEV₁ |
+| Mean difference between arms | Ch 4 | Welch *t* on CASTOR FEV₁; report MD + CI |
+| Adjusted continuous association | Ch 5 | `lm(fev1 ~ smoking + age + sex + height_cm)` |
+| Binary exacerbation (adjusted OR) | Ch 6 | Logistic on `exacerbation.csv`; state event count |
+| Prespecified vs exploratory models | Ch 7 | List SAP covariates; no stepwise |
+| CIs + CONSORT limits | Ch 8 | Draft Results paragraph for non-significant primary |
+| Prediction + calibration | Ch 9 | Run `ch09_prediction.R`; read calibration figure |
+| PCA / clustering (exploratory) | Ch 10–11 | Colour PCA by batch before phenotype |
+| Full trial narrative | Ch 12 Case A | Walk sign-off checklist |
+| DE + FDR (omics) | Ch 13 | Interpret top 5 rows of proteomics top table |
+| Batch QC | Ch 14 | Interpret group × batch overlap figure |
+| Repeated FEV₁ visits | Ch 18 | Spaghetti plot; why not week-52 *t*-test |
+| Time to first exacerbation | Ch 19 | KM curve + event table |
+| Missing FEV₁ | Ch 20 | Missingness table by arm |
+| Observational confounding | Ch 21 | Rewrite causal sentence as association |
+| Mediation through FEV1 % | Ch 22 | Compare total vs direct OR |
+
+---
+
 ## Chapter 01
 
 **E1.1** Define estimand for: *"Does pulmonary rehab improve 6-minute walk distance at 8 weeks?"*

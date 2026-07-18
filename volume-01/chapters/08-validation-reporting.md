@@ -179,7 +179,7 @@ sessionInfo()
 
 > The estimated difference was … (90% CI …). Because the CI [was / was not] entirely above Δ, non-inferiority [was / was not] demonstrated.
 
-Full technique card: Chapter 4.
+Full NI/equivalence templates: [Appendix O](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials).
 
 ### Missing data
 
@@ -213,7 +213,7 @@ Multiple imputation (MICE) is the default modern sensitivity tool when missingne
 | Chapter | When to open it |
 |---------|------------------|
 | [Chapter 3: Descriptive analysis](03-descriptive-analysis.md#plot-choice-by-estimand) | Table 1, plots, distribution checks |
-| [Chapter 4: Comparing groups](04-comparing-groups.md#technique-non-inferiority-and-equivalence-trials) | Welch *t*, proportions, group comparisons |
+| [Appendix O: Ch 4 comparison extensions](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials) | Non-inferiority, equivalence, clustered designs |
 | [Chapter 9: Prediction vs inference](09-prediction-vs-inference.md) | AUC, calibration, nested CV |
 | [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
 | [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |

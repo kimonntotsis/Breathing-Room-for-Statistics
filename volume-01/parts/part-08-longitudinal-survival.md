@@ -9,3 +9,5 @@ These chapters complete the single-volume handbook: data structures that break i
 ## In the room: the extension analysis plan
 
 The same trial now has four visits per patient and a separate cohort with time to first exacerbation. The first draft proposes a week-52 *t*-test and a logistic “any exacerbation” model. **Part VIII** keeps trajectories (Ch 18), timing and censoring (Ch 19), missing visits (Ch 20), causal language (Ch 21), and mechanism questions through FEV1 % (Ch 22) aligned with what the protocol can support.
+
+> **Consult a statistician when:** your SAP includes random slopes, competing risks, MNAR sensitivity, IPW with extreme weights, or mediation claims for regulatory or policy decisions. These chapters teach **routing and limits** — not a substitute for pivotal-trial statistical leadership.

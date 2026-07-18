@@ -16,15 +16,15 @@ Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Role-based wel
 |------|------|---------------------|
 | 1 | [Preface](chapters/00-preface.md) (Who / **Why I wrote this** / without bioinformatics) | Why estimands come first |
 | 1b | [Appendix K](appendix-k-in-the-room-stories.md): **one** story that matches your week | Why this handbook exists for your situation |
-| 2 | [Ch 1: In this chapter](chapters/01-statistical-thinking.md#in-this-chapter) + pipeline figure | One-sentence estimand |
+| 2 | [Ch 1: Why this chapter](chapters/01-statistical-thinking.md#why-this-chapter) + pipeline figure | One-sentence estimand |
 | 3 | [Ch 2: Outcome routing table](chapters/02-respiratory-data.md#outcome-types-the-master-routing-table) | Continuous vs binary vs count vs time-to-event |
 | 4 | [Appendix B](appendix-b-quick-reference.md) | Prespecified primary method |
-| 5 | [Ch 4: In this chapter](chapters/04-comparing-groups.md#in-this-chapter): especially [unadjusted vs adjusted](chapters/04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints) + figure hygiene pairs | Group comparison + slide traps |
+| 5 | [Ch 4: Why this chapter](chapters/04-comparing-groups.md#why-this-chapter) + [Quick reference](chapters/04-comparing-groups.md#quick-reference-methods-in-this-chapter) | Group comparison + slide traps |
 | 6 | [Appendix I](appendix-i-figure-hygiene.md) router | Figure 1 matches estimand |
-| 7 | [Ch 12 Case A](chapters/12-case-studies.md#case-study-a-randomised-trial-fev1-comparison) + sign-off checklist | Full trial narrative |
+| 7 | [Ch 12 Case A](chapters/12-case-studies.md#case-study-a-randomised-trial-fev1-comparison) + [sign-off workflow](chapters/12-case-studies.md#sign-off-workflow-castor) | Full trial narrative |
 | 8 | [Ch 8: Multiplicity + CONSORT](chapters/08-validation-reporting.md#technique-multiplicity-control) | Primary vs secondary families |
 
-**Capstone figure:** `viz_signoff_checklist.png` in [Ch 12](chapters/12-case-studies.md#investigator-sign-off-checklist).
+**Capstone figure:** `viz_signoff_checklist.png` in [Ch 12 sign-off workflow](chapters/12-case-studies.md#sign-off-workflow-castor).
 
 ---
 
@@ -32,13 +32,13 @@ Full navigation: [Appendix G](appendix-g-handbook-navigation.md). Role-based wel
 
 | If your endpoint is… | Add when needed | Skip until then |
 |----------------------|-------------------|-----------------|
-| Adjusted FEV1 / covariates | [Ch 5 in this chapter](chapters/05-linear-models.md#in-this-chapter) | Full regression chapters |
-| Exacerbation Y/N or counts | [Ch 6 in this chapter](chapters/06-generalized-linear-models.md#in-this-chapter) | Poisson algebra |
-| Repeated visits | [Ch 18 in this chapter](chapters/18-longitudinal-mixed-models.md#in-this-chapter) | Mixed-model R lab |
-| Time to exacerbation | [Ch 19 in this chapter](chapters/19-survival-analysis.md#in-this-chapter) | Cox algebra |
-| Missing spirometry | [Ch 20 in this chapter](chapters/20-missing-data.md#in-this-chapter) + [Appendix D](appendix-d-missing-data-checklists.md) | MICE code |
-| Observational therapy comparison | [Ch 21 in this chapter](chapters/21-causal-inference.md#in-this-chapter) | DAG proofs |
-| Proteomics / screen | [Ch 13](chapters/13-differential-analysis-fdr.md#working-without-a-bioinformatics-collaborator) → [Ch 17](chapters/17-integrated-castor-hd.md#in-this-chapter) | Elastic net details |
+| Adjusted FEV1 / covariates | [Ch 5: Why this chapter](chapters/05-linear-models.md#why-this-chapter) | Full regression chapters |
+| Exacerbation Y/N or counts | [Ch 6: Why this chapter](chapters/06-generalized-linear-models.md#why-this-chapter) | Poisson algebra |
+| Repeated visits | [Ch 18: Why this chapter](chapters/18-longitudinal-mixed-models.md#why-this-chapter) | Mixed-model R lab |
+| Time to exacerbation | [Ch 19: Why this chapter](chapters/19-survival-analysis.md#why-this-chapter) | Cox algebra |
+| Missing spirometry | [Ch 20: Why this chapter](chapters/20-missing-data.md#why-this-chapter) + [Appendix D](appendix-d-missing-data-checklists.md) | MICE code |
+| Observational therapy comparison | [Ch 21: Why this chapter](chapters/21-causal-inference.md#why-this-chapter) | DAG proofs |
+| Proteomics / screen | [Ch 13: Why this chapter](chapters/13-differential-analysis-fdr.md#why-this-chapter) → [Ch 17](chapters/17-integrated-castor-hd.md#why-this-chapter) | Elastic net details |
 
 ---
 

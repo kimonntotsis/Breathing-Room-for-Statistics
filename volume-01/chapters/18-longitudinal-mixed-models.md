@@ -12,6 +12,8 @@ The extension study has four FEV₁ visits per patient. A collaborator pools all
 
 Longitudinal spirometry is the commonest place independence assumptions break. CASTOR's `longitudinal_spirometry.csv` and Case E teach trajectories, random intercepts, and when a single visit snapshot is prespecified instead. Prespecify whether the estimand is **week-52 level**, **slope**, or **change from baseline** — they answer different trial questions. Missed visits and inability to perform manoeuvres are clinical missingness (Ch 20). **Random intercept** is the minimum for repeated FEV1; a significant `weeks:group` term means **differential slope**, not automatically week-52 benefit. Stacking visits in `lm()` or Welch *t* inflates precision. Population fitted lines are **average trajectories**, not individual forecasts for clinic. CASTOR teaching output: intervention × time coefficient ≈ **+0.00054 L/week** (95% CI roughly −0.00015 to +0.00122); modelled week-52 separation is modest — illustrate workflow, not a powered trial result.
 
+> **Consult a statistician when:** you need random slopes, unstructured covariance, GEE vs mixed-model choice, cluster-randomised longitudinal designs, or MMRM for regulatory submission. This chapter is the **minimum vocabulary** for repeated FEV₁ — not the full trial SAP.
+
 ---
 
 ## The longitudinal workflow

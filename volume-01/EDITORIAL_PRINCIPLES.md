@@ -116,8 +116,11 @@ Lead with **In the room** (2–4 sentences). Bulleted syllabi belong in Appendix
 | 2 | Case A → journal submission scene (Ch 12) | Done in pass |
 | 3 | Part III, IV, VI narrative-first openers | Done in pass |
 | 4 | Trim end-matter boilerplate (`scripts/trim_end_matter.py`) | Script |
-| 5 | Ch 4 demote minor techniques to Tier B/C | Ongoing |
-| 6 | Merge Clinical/biostat notes into Why this chapter | Ongoing |
+| 5 | Ch 4 demote minor techniques to Tier B/C | Done |
+| 6 | Merge Clinical/biostat notes into Why this chapter | Done |
 | 7 | Single Lookup section at chapter end | Optional next pass |
+| 8 | Investigator fast path (Welcome + Appendix J) | Done |
+| 9 | Part VIII statistician escalation callouts | Done |
+| 10 | Exercise index by estimand (Appendix F) | Done |
 
 See also: [CHAPTER_TEMPLATE.md](CHAPTER_TEMPLATE.md), [RECURRING_COHORT.md](RECURRING_COHORT.md#narrative-spine-the-castor-trial).

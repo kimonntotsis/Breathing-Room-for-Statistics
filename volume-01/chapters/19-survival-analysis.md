@@ -12,6 +12,8 @@ Twelve-month follow-up, censored at day 365, exacerbation events unevenly spaced
 
 Time-to-event endpoints need time in the model. CASTOR's `time_to_exacerbation.csv` teaches censoring, Cox models, and why a proportion bar is the wrong plot.
 
+> **Consult a statistician when:** you have competing events (death vs exacerbation), recurrent events, interval censoring, time-varying covariates, or fragile proportional-hazards assumptions. This chapter covers **first-event Cox** basics — not the full competing-risks literature.
+
 ---
 
 ## The survival workflow

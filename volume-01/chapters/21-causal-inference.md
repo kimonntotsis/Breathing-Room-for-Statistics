@@ -12,6 +12,8 @@ The observational CASTOR cohort shows a significant adjusted OR after `lm()` on 
 
 Observational respiratory studies dominate the literature. This chapter gives IPW, matching, and honest limits — without selling association as intervention effect.
 
+> **Consult a statistician when:** target-trial emulation, g-methods, IV analysis, or causal claims will appear in a label, guideline, or HTA submission. This chapter is **associational framing + introductory IPW** — not a causal inference textbook.
+
 ---
 
 ## The causal workflow

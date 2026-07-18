@@ -12,7 +12,7 @@ The CRO proposes "let the data tell us" which covariates belong in the FEV₁ mo
 
 ## Why this chapter
 
-Model building is where good studies leak degrees of freedom. This chapter separates prespecification from exploration — and gives you language for the meeting when someone wants "just one more predictor.
+Model building is where good studies leak degrees of freedom. This chapter separates prespecification from exploration — and gives you language for the meeting when someone wants "just one more predictor."
 
 ---
 

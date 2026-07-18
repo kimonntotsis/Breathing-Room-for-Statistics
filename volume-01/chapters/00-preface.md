@@ -10,7 +10,7 @@ Respiratory research rests on incompatible data shapes in the same programme: sp
 
 **Investigators** and **analysts** who need to match a research question to a defensible analysis: especially **early- and mid-career** respiratory researchers, and **senior clinicians** who want statistics and coding to feel **purposeful**, not like a second degree in mathematics or computer science.
 
-You do not need to derive every estimator or write production-grade software. You **do** need to know: what question the method answers, when it fits your data, what to check, what to report, what alternatives exist, and what the result does **not** prove. Investigators can use estimand sections, technique cards, and reporting templates without running R; analysts follow the same workflow with reproducible R on CASTOR.
+You do not need to derive every estimator or write production-grade software. You **do** need to know: what question the method answers, when it fits your data, what to check, what to report, what alternatives exist, and what the result does **not** prove. Investigators can use opening scenes, **Practice read** paragraphs, and reporting templates without running R; analysts follow the same workflow with reproducible R on CASTOR.
 
 **CASTOR** is a **COPD-flavoured** synthetic teaching cohort (spirometry, exacerbations, smoking, therapy) so examples stay comparable from Table 1 through survival and omics; the workflow applies across **chronic lung disease (CLD)** and other respiratory settings when the **outcome type and design** match, including asthma trials and mixed pulmonary programmes.
 
@@ -69,7 +69,7 @@ Most training still runs software-first: a test is chosen, then justified. The r
 
 ## Accessibility and validity
 
-Precision and readability are not trade-offs. Each chapter pairs plain language with a formal statement, lists assumptions explicitly, and shows where respiratory studies commonly misstep. Terms are defined in Appendix C; use the plain-language column as a lookup, not a memorisation exercise.
+Precision and readability are not trade-offs. Each chapter opens with a clinical scene, states the estimand in plain language, lists assumptions where they matter, and shows where respiratory studies commonly misstep. Terms are defined in Appendix C; use the glossary as a lookup, not a memorisation exercise.
 
 ## R as a teaching tool
 
@@ -94,7 +94,7 @@ If you use this book in fellowship teaching, trial work, or translational progra
 
 ## How to use this handbook
 
-Use it by outcome and design, not by page order. Appendix B routes a question to a chapter; Appendix G lists datasets, files, and topics; Appendix J is the **shortest route**; Appendix H expands endpoint routing without R. In the PDF, appendices appear in **reader-importance order** (G → J → **K** → H → I → B → …); letters stay fixed for citations. The Welcome page summarises the eight parts. Each method chapter follows the same skeleton (CHAPTER_TEMPLATE): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
+Use it by outcome and design, not by page order. Appendix B routes a question to a chapter; Appendix G lists datasets, files, and topics; **Appendix J** is the **shortest investigator path** (six sections before your next steering meeting — also on the Welcome page); Appendix H expands endpoint routing without R. In the PDF, appendices appear in **reader-importance order** (G → J → **K** → H → I → B → …); letters stay fixed for citations. Each method chapter follows [CHAPTER_TEMPLATE](CHAPTER_TEMPLATE.md): opening scene, tiered technique prose, one **Practice read**, Quick reference at the end, and **Related chapters / Handbook resources** for lookup.
 
 ## Circulating for feedback (reviewers) {#circulating-for-feedback-reviewers}
 
@@ -108,7 +108,7 @@ This edition is a **candidate for targeted external review**, not a final sign-o
 
 **Feedback:** GitHub issue with label `review`, or email the author with chapter + section references.
 
-**Signposts in the chapters:** Each part opens with a short **In the room** vignette (a meeting, email, or review moment). Method chapters use a shared skeleton (CHAPTER_TEMPLATE): but openings vary: some start with a case, not a catalogue. Look for **Practice read** (what would change the decision), **In practice** (sponsor or manuscript reality), **Figure hygiene** (Appendix I), and **Wrong analysis** panels. You do not need every signpost on first pass; Appendix J lists the shortest route.
+**Signposts in the chapters:** Each part opens with a short **In the room** vignette (a meeting, email, or review moment). Method chapters vary in depth — major methods get a full worked example; supporting methods are shorter prose. Look for **Practice read** (what would change the decision), **Figure hygiene** (Appendix I), and wrong-analysis catalogs. You do not need every section on first pass; Appendix J lists the shortest route.
 
 ## What CASTOR means {#what-castor-means}
 
