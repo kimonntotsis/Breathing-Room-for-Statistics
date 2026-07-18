@@ -2,130 +2,59 @@
 
 > **Part I: Foundations**
 
-## At a glance
+## Opening scene: Monday morning, wrong tests on every column
 
-| | |
-|---|---|
-| **Focus** | How to think before analysing |
-| **Key ideas** | Estimands, design, bias, inference vs prediction |
-| **Tools** | PICO, method map, reporting frameworks |
-| **Exercises** | [ch01](../exercises/ch01_exercises.md), [Solutions](../solutions/ch01_solutions.md) |
+Dr Okonkwo’s registry export lands in Mei Lin’s inbox: twelve columns, four hundred rows, one instruction from a student — *“Run stats on everything by smoking.”* The slide deck for lab meeting shows six *p*-values. FEV₁ looks “significant.” So does exacerbation coded 0/1, analysed as if it were a Gaussian outcome. Exacerbation **counts** get the same Welch *t*-test. No one has written the estimand.
 
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), Pipeline figure (`analysis_pipeline.png`), [Appendix B](../appendix-b-quick-reference.md), [Appendix C glossary](../appendix-c-glossary.md), [METHOD_MAP](../METHOD_MAP.md), Decision tree (`method_decision_tree.png`), [REFERENCES](../REFERENCES.md)
+Dr Rivera stops on slide 4. *“So smoking affects everything?”* Mei replies: *“We tested everything. We answered nothing. Pick one question first.”*
 
----
-
-## In this chapter
-
-1. [Why this chapter](#why-this-chapter): estimand before software
-2. [Method choice at a glance](#method-choice-at-a-glance); which part of the book to open
-3. [Three layers of every analysis](#three-layers-of-every-analysis): clinical / statistical / data
-4. [What CASTOR means](#what-castor-means) + pipeline figure: eight-step workflow
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-thinking-chapter): question–method mismatch
-
-**Shortest route:** [Appendix J](../appendix-j-investigator-minimum-path.md). **Messy registry vignette (no data):** [APATE](../APATE_VIGNETTE.md). **Six “in the room” stories (mixed data, prediction traps):** [Appendix K](../appendix-k-in-the-room-stories.md).
-
----
-
-## Method choice at a glance
-
-*This table routes you to **chapters**, not statistical tests. For tests, use [Appendix B](../appendix-b-quick-reference.md) after you write the estimand.*
-
-| Your question type | Open first | Do not skip |
-|--------------------|------------|-------------|
-| **Who is in the study?** | [Ch 3](03-descriptive-analysis.md) | Table 1, missingness |
-| **Are groups different?** (FEV1, proportions, counts) | [Ch 4](04-comparing-groups.md) | Estimand + pairing |
-| **Adjusted continuous association** | [Ch 5](05-linear-models.md) | Diagnostics |
-| **Binary / count outcomes** | [Ch 6](06-generalized-linear-models.md) | OR vs RR, offset |
-| **Many predictors / model building** | [Ch 7](07-model-building.md) | Prespecification |
-| **Reporting / CONSORT** | [Ch 8](08-validation-reporting.md) | Limits section |
-| **Prediction** | [Ch 9](09-prediction-vs-inference.md) | Calibration |
-| **Subgroups / omics exploration** | [Ch 10–11](10-dimensionality-reduction.md) | Claim ladder only |
-| **Full worked narratives** | [Ch 12](12-case-studies.md) | Sign-off checklist |
-| **Proteomics / screens** | [Ch 13–17](13-differential-analysis-fdr.md) | Batch + FDR |
-| **Repeated visits** | [Ch 18](18-longitudinal-mixed-models.md) | Not week-52 *t*-test |
-| **Time to event** | [Ch 19](19-survival-analysis.md) | Censoring |
-| **Missing data** | [Ch 20](20-missing-data.md) | Pattern + sensitivity |
-| **Observational confounding** | [Ch 21](21-causal-inference.md) | Association ≠ causation |
-| **Messy registry (no data)** | [APATE vignette](../APATE_VIGNETTE.md) | Before real Methods sign-off |
-
-**Figure hygiene (all designs):** [Appendix I](../appendix-i-figure-hygiene.md).
-
----
-
-## Learning objectives
-
-1. Separate clinical, statistical, and data layers of an analysis.
-2. Define an **estimand** in plain language and formal terms.
-3. Classify respiratory study designs and what each can support.
-4. Distinguish **inference** from **prediction** [@shmueli2010predict].
-5. Navigate the handbook method map and quick reference.
-
-## Prerequisites
-
-None - start here. **Unfamiliar term?** See [Appendix C](../appendix-c-glossary.md) (plain-language column first).
+That hallway moment is why this chapter exists. Later chapters assume you have already written **one sentence** for what you are estimating. Without it, a correct *t*-test or Cox model still answers the wrong question [@harrell2015rms].
 
 ---
 
 ## Why this chapter
 
-Later chapters presuppose a written estimand. Without it, even a correct *t*-test or Cox model answers the wrong question. Investigators use this chapter to align with their analyst; analysts use it to push back when a protocol question is vague.
+Investigators use this chapter to align with their analyst before recruitment closes. Analysts use it to push back when a protocol says only “compare groups.” You will separate three layers every analysis has — clinical, statistical, and data — and you will meet **CASTOR**, the workflow and synthetic cohort that carry the rest of the book.
 
-## Opening question
-
-*"Is FEV1 lower in smokers?"* is not yet an analysis. Three clarifications precede any software: what decision the answer would inform (clinical); the exact contrast and population (statistical estimand); and whether the data are cross-sectional, trial follow-up, or repeated visits with missingness (data). Methods from [Chapter 4](04-comparing-groups.md) onward assume this order [@harrell2015rms].
-
-> **In the room ([Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test)):** a registry CSV with FEV1, exacerbation Y/N, exacerbation counts, and symptom scores, and a loop of Welch *t*-tests on every column. Same patients, six *p*-values, no estimand sentence. That is why outcome **type** comes before software.
-
-Write the estimand in one sentence before opening [Appendix B](../appendix-b-quick-reference.md).
+*"Is FEV₁ lower in smokers?"* is not yet an analysis until you specify population, contrast, timing, and what decision the answer would inform. Write the estimand in one sentence **before** you open a method router.
 
 ---
 
 ## Three layers of every analysis
 
-### Technique card
+Every analysis has three layers. When they disagree, the output looks fine and the conclusion is still wrong. Mei checks alignment **before** opening R.
 
-| | |
-|---|---|
-| **Answers** | Are clinical question, statistical estimand, and data structure aligned? |
-| **Clinical layer** | What would change practice or knowledge? |
-| **Statistical layer** | What parameter or contrast is estimated? |
-| **Data layer** | What was measured, in whom, when, with what missingness? |
-| **When to use** | At the start of every project - before software |
-| **When NOT to use** | Never skip - even for "simple" t-tests |
-| **Does NOT prove** | That a method is correct - only that the question is clear |
+**Clinical layer:** what would change in practice if the answer were known? Dr Rivera might need a regulatory story on exacerbations while a steering deck highlights symptom scores — that is a protocol conversation, not a menu choice in SPSS.
 
-### Dual interpretation
+**Statistical layer:** what exact contrast are you estimating? Mean FEV₁ at week 12 is not the same estimand as risk difference on ≥1 exacerbation, even on the same spreadsheet.
 
-**Plain language:** make sure you are answering the question the protocol actually asks.
+**Data layer:** what was measured, in whom, when — and what is missing? Post-bronchodilator FEV₁ in one arm and pre-BD in another is a data failure no test repairs.
 
-**Precise language:** the estimand must be well-defined relative to the target population, intervention/exposure, and outcome measure [@celli2015copdresearch].
-
-**Practice read:** if the analyst analyses post-bronchodilator FEV1 but the trial protocol specifies pre-bronchodilator, the answer may not apply to your decision.
+The table below is a checklist when layers drift apart:
 
 | Layer | Question | Example error |
 |-------|----------|---------------|
-| Clinical | What decision or knowledge? | Using the wrong endpoint (symptom score when regulatory approval needs exacerbations) |
-| Statistical | What estimand/hypothesis? | Testing mean FEV1 when the protocol specifies risk difference |
+| Clinical | What decision or knowledge? | Symptom score on slide when approval needs exacerbations |
+| Statistical | What estimand/hypothesis? | Mean FEV₁ when the SAP specifies risk difference |
 | Data | What was measured, in whom? | Ignoring missing spirometry or mixed BD protocols |
-
-### In practice
 
 Sponsor timelines compress analysis into a test name. The durable step is five minutes on the estimand in the analysis plan before the first line of R. That prevents more errors than revising the model choice later.
 
+**Common mistake:** open software and pick “Compare Means.” **Instead:** write the estimand, then route via Appendix B, then code.
+
 ## What CASTOR means
 
-**CASTOR** names both the working sequence in this book and the synthetic cohort that carries the examples. The sequence is fixed; the data file grows from core trial variables to omics in **CASTOR-HD** ([RECURRING_COHORT](../RECURRING_COHORT.md)).
+**CASTOR** names both the working sequence in this book and the synthetic cohort that carries the examples. The sequence is fixed; the data file grows from core trial variables to omics in **CASTOR-HD** (RECURRING_COHORT).
 
 > **Chronic lung disease (CLD) and beyond.** CASTOR is **COPD-flavoured** in the synthetic data so examples stay comparable. The same CASTOR path applies to **CLD** and to other pulmonary work when endpoints align: spirometry, exacerbation rates, longitudinal follow-up, survival, not only when the protocol says “COPD.” Match **estimand and design** first; swap disease wording in your Methods.
 
-**Real registries deceive if you analyse them like CASTOR.** CASTOR omits site clustering, spirometry QC failures, and protocol deviations on purpose. **APATE** (Greek *Apate*, deceit) is the handbook’s prose-only vignette of that mess: read [APATE_VIGNETTE](../APATE_VIGNETTE.md) before signing off real Methods.
+**Real registries deceive if you analyse them like CASTOR.** CASTOR omits site clustering, spirometry QC failures, and protocol deviations on purpose. **POLLUX** / **APATE** is the handbook’s prose-only vignette of that mess — read it before signing off real Methods (Handbook resources). Extended “in the room” stories: Appendix K (Handbook resources).
 
 **C. Clinical question.** One sentence on what would change in practice if the answer were known. Endpoints and estimands follow from that sentence, not from a software menu.
 
 **A. Assess design and data.** Classify outcome type, follow-up structure, missingness, and confounding while the question can still be revised.
 
-**S. Select method.** Match the estimand to a technique ([Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md)); never reverse the order.
+**S. Select method.** Match the estimand to a technique (Appendix B, METHOD_MAP); never reverse the order.
 
 **T. Test and fit.** Estimate with stated assumptions; run the sensitivity analysis you prespecified, not the one that rescues the *p*-value.
 
@@ -141,19 +70,11 @@ The figure below expands the six letters into eight operational steps (descripti
 
 *Same path for a Welch *t*-test on FEV1, a Cox model for time to exacerbation, or a batch-aware omics screen: question, data, method, estimate, limits.*
 
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | Open software first; pick "Compare Means" from a menu |
-| **Why it fails** | Method follows question, not the reverse |
-| **Do instead** | Write estimand → check [Appendix B](../appendix-b-quick-reference.md) → then code |
-
 ---
 
 ## PICO for respiratory studies
 
-### Technique card
+PICO is not a test — it is a **target**. Mei asks investigators to fill four cells on one slide before anyone names a model:
 
 | Element | Question | COPD example |
 |---------|----------|--------------|
@@ -162,7 +83,7 @@ The figure below expands the six letters into eight operational steps (descripti
 | **C** Comparator | Compared to what? | Standard care, placebo, active control |
 | **O** Outcome | What endpoint? | FEV1 at 12 weeks; ≥1 moderate/severe exacerbation in 12 months |
 
-Write PICO **before** choosing software. PICO does not specify the test - it specifies the **target** [@celli2015copdresearch].
+If the **O** cell holds three endpoints, you do not have a PICO yet — you have a wish list. Write PICO before choosing software [@celli2015copdresearch].
 
 ### Reporting template
 
@@ -174,38 +95,18 @@ Write PICO **before** choosing software. PICO does not specify the test - it spe
 
 ## Estimands: the target of inference
 
-### Technique card
+The **estimand** is the number you would put in the abstract if you could know the truth — not the *p*-value, not “significance,” not the test statistic. Under trial guidance (ICH E9(R1)), estimands tie treatment, population, variable, and intercurrent events; this handbook uses plain language first [@schulz2010consort].
 
-| | |
-|---|---|
-| **Definition** | The precise numerical summary the analysis should estimate for a defined population |
-| **Examples** | Mean FEV1 difference at 12 weeks (RCT); adjusted odds of exacerbation (cohort); rate ratio per person-year |
-| **Report with** | Point estimate, 95% CI, population, timeframe |
-| **Does NOT mean** | The p-value; the test statistic; "significance" |
-
-### Worked examples (respiratory)
+Ask your analyst: *“What one number answers my question?”* If they cannot say, pause.
 
 | Study | Estimand |
 |-------|----------|
 | COPD RCT | Mean difference in FEV1 (L) at 12 weeks: intervention − control, ITT population |
 | Observational cohort | Adjusted odds ratio for ≥1 exacerbation comparing current smokers to never-smokers, conditional on age and FEV1 % predicted |
 | Bronchodilator test | Mean change in FEV1 (post − pre) on same visit |
-| Prediction model (Ch 9) | 12-month exacerbation risk for a patient with specified covariates - **not** the same as an OR estimand |
+| Prediction model (Ch 9) | 12-month exacerbation risk for a patient with specified covariates — **not** the same as an OR estimand |
 
-### Dual interpretation
-
-**Plain language:** the estimand is the number you would put in the abstract if you could know the truth.
-
-**Precise language:** under the ICH E9(R1) framework, estimands link treatment, population, variable, and intercurrent events - this handbook uses the plain-language version; trials should follow protocol definitions [@schulz2010consort].
-
-**Practice read:** ask your analyst "what one number answers my question?" If they cannot say, pause.
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | Report p = 0.06 with no effect size |
-| **Do instead** | Report estimand + CI; see [Ch 8](08-validation-reporting.md) |
+Reporting *p* = 0.06 without an effect size is not reporting an estimand. Report the estimate and 95% CI in Results — not *p* alone.
 
 ---
 
@@ -219,9 +120,9 @@ Write PICO **before** choosing software. PICO does not specify the test - it spe
 | **Cross-sectional** | Prevalence, description | No temporal order for causation | Ch 3-5 |
 | **Clustered** | Real-world multi-centre | Wrong SEs if ignored | Vol II |
 
-Design **limits language**. An adjusted logistic OR from an observational cohort is an **association**, not proof that stopping smoking **causes** fewer exacerbations [@vonelm2007strobe].
+Design **limits language**. An adjusted logistic OR from an observational cohort is an **association** — Mei will not let you call it proof that stopping smoking **causes** fewer exacerbations without a design that supports that claim [@vonelm2007strobe].
 
-Full data-structure detail: [Chapter 2](02-respiratory-data.md).
+Full data-structure detail: Chapter 2.
 
 ---
 
@@ -233,7 +134,7 @@ Full data-structure detail: [Chapter 2](02-respiratory-data.md).
 | **Type II error (β)** | Miss a real effect | Depends on sample size and effect size |
 | **Power** | 1 − β; chance to detect effect if true | Target 80-90% at design stage |
 
-Underpowered exacerbation studies produce **wide CIs** compatible with both null and clinically important effects [@harrell2015rms]. A non-significant p-value does **not** prove "no effect" - see [Ch 8 §8.7](08-validation-reporting.md).
+Underpowered exacerbation studies produce **wide CIs** compatible with both null and clinically important effects [@harrell2015rms]. A non-significant p-value does **not** prove "no effect" - remember: wide CIs can include both null and clinically important effects.
 
 ### Practice check
 
@@ -264,11 +165,11 @@ Claim causation from observational adjustment alone → use associational langua
 | **Goal** | Estimate adjusted associations; test hypotheses | Rank or classify new patients |
 | **CASTOR example** | Smoking OR for exacerbation (Ch 6) | Exacerbation risk score (Ch 9) |
 | **Evaluation** | CI, LRT, prespecified estimand | Calibration, AUC, external validation [@moons2015tripod] |
-| **Variable selection** | Prespecified confounders (Ch 7) | CV, LASSO - different rules |
+| **Variable selection** | Prespecified prespecified confounders | CV, LASSO - different rules |
 
 Do not evaluate an explanatory model **only** by AUC [@shmueli2010predict]. Do not treat a high-AUC predictor as proof of causation.
 
-Full treatment: [Chapter 9](09-prediction-vs-inference.md).
+Full treatment: Chapter 9.
 
 ---
 
@@ -281,7 +182,7 @@ Full treatment: [Chapter 9](09-prediction-vs-inference.md).
 | **TRIPOD** | Prediction model development/validation | [@moons2015tripod] |
 | **RECORD** | Routinely collected health data | [@benchimol2015record] |
 
-Checklists improve **transparency**; they do not replace correct analysis [@harrell2015rms]. Details: [Chapter 8](08-validation-reporting.md).
+Checklists improve **transparency**; they do not replace correct analysis [@harrell2015rms]. Use CONSORT/STROBE wording when you draft Methods and Discussion.
 
 ---
 
@@ -292,8 +193,8 @@ This handbook provides four linked tools:
 | Tool | Use when |
 |------|----------|
 | `analysis_pipeline.png` | You need the **full process** (question → report) |
-| [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) | You know outcome type; need test/model now |
-| [METHOD_MAP.md](../METHOD_MAP.md) | Full inventory and decision tree text |
+| Appendix B | You know outcome type; need test/model now |
+| METHOD_MAP | Full inventory and decision tree text |
 | `method_decision_tree.png` | Visual routing by outcome type |
 
 **Workflow:** pipeline steps 1–3 → method decision tree (step 4) → chapter technique card → R script → report + limitations (steps 7–8).
@@ -319,10 +220,10 @@ These are not “more statistics.” They are ways to make the same methods more
 
 | Need | Add | Where |
 |---|---|---|
-| Formal causal language | DAGs + identification assumptions | [Ch 21](21-causal-inference.md) |
+| Formal causal language | DAGs + identification assumptions | Ch 21 |
 | Trial estimand precision | ICH E9(R1) estimand framework | Trial protocol work |
 | Clinical decision framing | Decision thresholds / net benefit | Ch 9 extensions |
-| Reporting discipline | Protocol + checklist alignment | Ch 8 |
+| Reporting discipline | Protocol + checklist alignment | manuscript sign-off |
 
 **Rule:** choose the smallest extension that solves the real problem (confounding, clustering, time-to-event), rather than adding complexity for its own sake.
 
@@ -359,20 +260,58 @@ t.test(
 )
 ```
 
-Always **describe** ([Ch 3](03-descriptive-analysis.md)) before **compare** ([Ch 4](04-comparing-groups.md)).
+Always **describe** (Ch 3) before **compare** (Ch 4).
 
 ---
 
-## Chapter summary
+## Quick reference: where questions go in this handbook
 
-- Align clinical, statistical, and data layers before any test.
-- Write the **estimand** in one sentence; use PICO to frame the question.
-- Design limits causal language; reporting guidelines limit hidden flexibility.
-- Use [Appendix B](../appendix-b-quick-reference.md) after the estimand is clear - not before.
+*Routes you to **chapters**.*
 
-## Where this chapter leads
+| Your question type | Open first | Do not skip |
+|--------------------|------------|-------------|
+| **Who is in the study?** | [Ch 3](03-descriptive-analysis.md) | Table 1, missingness |
+| **Are groups different?** | [Ch 4](04-comparing-groups.md) | Estimand + pairing |
+| **Adjusted continuous association** | [Ch 5](05-linear-models.md) | Diagnostics |
+| **Binary / count outcomes** | [Ch 6](06-generalized-linear-models.md) | OR vs RR, offset |
+| **Many predictors / model building** | [Ch 7](07-model-building.md) | Prespecification |
+| **Reporting / CONSORT** | [Ch 8](08-validation-reporting.md) | Limits section |
+| **Prediction** | [Ch 9](09-prediction-vs-inference.md) | Calibration |
+| **Subgroups / omics exploration** | [Ch 10–11](10-dimensionality-reduction.md) | Claim ladder only |
+| **Full worked narratives** | [Ch 12](12-case-studies.md) | Sign-off checklist |
+| **Proteomics / screens** | [Ch 13–17](13-differential-analysis-fdr.md) | Batch + FDR |
+| **Repeated visits** | [Ch 18](18-longitudinal-mixed-models.md) | Not week-52 *t*-test |
+| **Time to event** | [Ch 19](19-survival-analysis.md) | Censoring |
+| **Missing data** | [Ch 20](20-missing-data.md) | Pattern + sensitivity |
+| **Observational confounding** | [Ch 21](21-causal-inference.md) | Association ≠ causation |
 
-**Next:** [Chapter 2](02-respiratory-data.md) classifies CASTOR variables so [Appendix B](../appendix-b-quick-reference.md) routes you to the right method. Keep your estimand sentence from this chapter on hand.
+Pipeline figure (`analysis_pipeline.png`), decision tree (`method_decision_tree.png`).
+
+## Where we go next
+
+The CASTOR trial protocol is taking shape: primary FEV₁ at week 12, secondary exacerbation endpoints, four hundred participants. **Chapter 2** is where Mei opens the data dictionary and classifies every column before anyone says “run a *t*-test.” Keep your estimand sentence from this chapter on hand.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 2: Respiratory data](02-respiratory-data.md) | Outcome type, unit of analysis, CASTOR files |
+| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
+| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
+| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
+| [Chapter 9: Prediction vs inference](09-prediction-vs-inference.md) | AUC, calibration, nested CV |
+| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
+| [Appendix K: In the room — short stories](../appendix-k-in-the-room-stories.md) | Extended vignettes of common analysis mistakes |
+| [METHOD_MAP](../METHOD_MAP.md) | Full method inventory and decision-tree text |
+| [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
+| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry — what CASTOR deliberately hides |
 
 ## Further reading
 
@@ -381,5 +320,3 @@ Always **describe** ([Ch 3](03-descriptive-analysis.md)) before **compare** ([Ch
 - ATS/ERS COPD research statement [@celli2015copdresearch]
 
 ## Exercises ([Solutions](../solutions/ch01_solutions.md))
-
-**Next:** [Chapter 2 - Data in Respiratory Research](02-respiratory-data.md)

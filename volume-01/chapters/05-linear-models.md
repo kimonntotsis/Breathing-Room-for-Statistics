@@ -2,76 +2,17 @@
 
 > **Part III: Regression for Continuous Outcomes**
 
-## At a glance
+## Opening scene: "Can we adjust for baseline?"
 
-| | |
-|---|---|
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/spirometry.csv` |
-| **Question type** | How is FEV1 associated with predictors, adjusted for others? |
-| **Key methods** | SLR, MLR, interactions, ANCOVA, diagnostics, VIF |
-| **R scripts** | `R/examples/ch05_linear_models.R` |
-| **Figures** | residual diagnostics (`ch05_residual_diagnostics.png`), adjusted means (`ch05_fev1_by_smoking_adjusted.png`); **figure hygiene:** `viz_pair_ch05_residuals.png` |
-| **Exercises** | [ch05](../exercises/ch05_exercises.md) |
+The primary Welch *t*-test on week-12 FEV₁ is prespecified; the sponsor now asks whether baseline FEV₁ changes the story. That is not a post hoc rescue — it is ANCOVA, if it was in the SAP. Separately, an observational question arrives from the same cohort: *Is FEV₁ lower in smokers after age and height?* Different estimand, same regression family.
 
-**Also see:** [Appendix B § Step 5](../appendix-b-quick-reference.md), When *t*-test vs regression: [Ch 4 master table](../chapters/04-comparing-groups.md#method-choice-at-a-glance)
-
-> **Sounds like your lab?** [Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test): FEV1 compared with a *t*-test but baseline never adjusted? → [ANCOVA: follow-up FEV1 adjusting baseline](#ancova-follow-up-fev1-adjusting-baseline).
-
----
-
-## In this chapter
-
-1. [When linear regression is the right tool](#when-linear-regression-is-the-right-tool): continuous outcome + adjustment
-2. [Method choice at a glance](#method-choice-at-a-glance): SLR, MLR, ANCOVA
-3. First **Practice read** under main technique: MCID and confounding
-4. [Reporting template](#reporting-template) in worked section
-5. [Alternatives & extensions](#alternatives--extensions-choose-by-data): skew, repeated visits
-
-**Analyst read:** diagnostics, VIF, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Simple linear regression (SLR)** | One predictor; continuous FEV1 | Baseline adjusted association; one coefficient to report |
-| **Multiple linear regression (MLR)** | Several covariates; continuous outcome | Adjusted mean differences; standard for observational spirometry |
-| **ANCOVA (baseline in model)** | RCT; baseline FEV1 measured | Often more efficient than change score; prespecify |
-| **Interaction terms** | Effect differs by subgroup (prespecified) | Tests modification; not post hoc fishing |
-| **Robust / Huber regression** | Outliers in biomarkers or LOS | Sensitivity to leverage points |
-| **Log-transform outcome** | Strong right skew; multiplicative effects | Changes estimand; report on original scale if needed |
-| **Splines / GAM** | Non-linear age–FEV1 (prespecified) | Flexible curvature; avoid p-hacking ([Ch 7](07-model-building.md)) |
-| **Mixed model** | Repeated FEV1 visits | `lm()` on stacked rows is wrong ([Ch 18](18-longitudinal-mixed-models.md)) |
-
-**Extensions:** gamma GLM, quantile regression in [Alternatives & extensions](#alternatives--extensions-choose-by-data).
-
----
-
-## Learning objectives
-
-1. Specify a linear model that matches the scientific question and estimand.
-2. Interpret coefficients as adjusted mean differences or slopes.
-3. Use dummy coding and interactions correctly.
-4. Diagnose violations with residual plots, VIF, and influence.
-5. Distinguish association from causation in observational spirometry data.
-6. Write Methods and Results sentences for a regression paper.
-
-## Prerequisites
-
-Chapters 3-4.
+Mei draws two columns on the whiteboard: **trial contrast** vs **adjusted association**. Same `lm()` syntax; different sentences in the abstract.
 
 ---
 
 ## Why this chapter
 
-Trials rarely stop at a raw mean difference; they adjust for baseline FEV1, centre, or stratification factors. Linear models are the workhorse for continuous lung function and for ANCOVA-style trial analysis. You need this chapter before interpreting “adjusted” results in papers.
-
-## Opening question (CASTOR cohort)
-
-*Among adults in the CASTOR cohort, is FEV1 lower in smokers after adjusting for age, sex, and height?*
-
-A t-test compares smokers vs non-smokers on FEV1 alone. Regression estimates the **smoking effect while holding other factors fixed** - the estimand is an adjusted mean difference [@harrell2015rms].
+Linear models carry adjusted mean differences, ANCOVA, and diagnostic discipline. You need them when a *t*-test is too crude or when confounders are part of the question — not when you are fishing for significance.
 
 ---
 
@@ -88,97 +29,33 @@ A t-test compares smokers vs non-smokers on FEV1 alone. Regression estimates the
 
 ## Technique: Multiple linear regression (MLR)
 
-### Technique card
+Multiple linear regression estimates the **adjusted association** between predictors and a mean continuous outcome — FEV1 litres, change in FEV1, symptom scores — in cross-sectional, trial follow-up (with care), or cohort designs. Assumes linearity in parameters, independent homoscedastic errors, and approximate normality of residuals (especially with small *n*) [@harrell2015rms]. Report **β** as mean difference or slope with 95% CI.
 
-| | |
-|---|---|
-| **Answers** | What is the adjusted association between predictors and mean continuous outcome? |
-| **Outcome** | Continuous (FEV1 litres, change in FEV1, symptom score) |
-| **Design** | Cross-sectional, trial follow-up (with care), cohort |
-| **Data required** | Outcome + predictors; complete cases or planned imputation |
-| **Assumptions** | Linear in parameters; independent errors; homoscedasticity; approximate normality of residuals (small n) [@harrell2015rms] |
-| **Effect measure** | β = mean difference or slope; 95% CI |
-| **R** | `lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry)` |
-| **When to use** | Multiple confounders; adjusted comparison; continuous outcome |
-| **When NOT to use** | Binary/count outcome; repeated measures without extension; causal claims from observational data without design |
-| **Does NOT prove** | Causal effect of smoking; prediction accuracy (use Ch 9); mechanism |
+**R:** `lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry)`
 
-### Dual interpretation
+Use MLR when multiple confounders matter and the outcome is continuous. Do **not** use it for binary/count outcomes, repeated measures without extension, or causal claims from observational data without design support. It does **not** prove causation, prediction accuracy (Ch 9), or mechanism.
 
-**Plain language:** after accounting for age, sex, and height, smokers have lower average FEV1 by about 0.39 L.
+**Plain language:** after accounting for age, sex, and height, smokers have lower average FEV1 by about 0.39 L. **Precise language:** the smoking coefficient is the expected difference in mean FEV1 between smokers and non-smokers with other covariates held fixed.
 
-**Precise language:** the coefficient for smoking is the expected difference in mean FEV1 between smokers and non-smokers with other covariates held fixed; inference assumes linear model and independent homoscedastic errors.
+**Practice read:** is ~0.4 L meaningful given MCID (~0.1 L in many COPD contexts)? Possibly — but this is observational; unmeasured confounding may remain [@cazzola2008mcid].
 
-**Practice read:** is ~0.4 L a meaningful gap given MCID (~0.1 L in many COPD contexts)? Possibly - but this is observational; unmeasured confounding may remain [@cazzola2008mcid].
+Watch for: association ≠ causation; FEV1 vs age non-linearity (splines); collinearity when FEV1 and FVC are both in the model; extrapolation outside observed ranges; cross-sectional models ≠ longitudinal decline (Ch 18); mixing % predicted and litres. "Adjust for baseline FEV1" usually means ANCOVA, not change scores unless prespecified.
 
-### Caveats box: MLR for FEV1
+**Common mistakes:** `lm(exacerbation_12m ~ smoking)` on 0/1 outcomes (predictions outside [0,1]; use Ch 6 logistic); dropping non-significant covariates after fitting (inflates type I error — prespecify in the SAP); causal language from cross-sectional data ("smoking **causes** lower FEV1" → "smoking was **associated with** lower FEV1 after adjustment…").
 
-| Caveat | Why it matters |
-|--------|----------------|
-| **Association ≠ causation** | Smokers differ in many unmeasured ways |
-| **Linearity** | FEV1 vs age is not always linear - consider splines |
-| **Collinearity** | FEV1 and FVC together inflate SEs |
-| **Extrapolation** | Do not predict outside observed age/height range |
-| **One time point** | Cross-sectional model ≠ longitudinal decline | [Ch 18](18-longitudinal-mixed-models.md) |
-| **% predicted vs litres** | Mixing units confounds interpretation |
+**Methods:** FEV1 (litres) was modelled with multiple linear regression adjusting for age, sex, and height. We report coefficients with 95% CIs; residual diagnostics were examined.
 
-### In practice
-
-“Adjust for baseline FEV1” usually means ANCOVA, not change scores unless prespecified. Check whether baseline was measured pre-randomisation and whether missing baseline rows are excluded silently.
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | `lm(exacerbation_12m ~ smoking)` on 0/1 outcome |
-| **Why wrong** | Predictions outside [0,1]; wrong variance model |
-| **Do instead** | Logistic regression (Ch 6) |
-
-| | |
-|---|---|
-| **Mistake** | Drop non-significant covariates after fitting (stepwise) |
-| **Why wrong** | Inflates type I error; biased coefficients for confirmatory inference |
-| **Do instead** | Prespecify confounders (Ch 7) |
-
-| | |
-|---|---|
-| **Mistake** | Say "smoking **causes** lower FEV1" from cross-sectional data |
-| **Why wrong** | Design does not support causal language |
-| **Do instead** | "Smoking was **associated with** lower FEV1 after adjustment…" |
-
-### Reporting template
-
-**Methods:**
-
-> FEV1 (litres) was modelled with multiple linear regression adjusting for age (years), sex, and height (cm). Smoking was coded yes/no. We report regression coefficients with 95% confidence intervals. Residual diagnostics were examined. Analysis used R 4.x (lm).
-
-**Results:**
-
-> In 400 participants, smoking was associated with 0.39 L lower mean FEV1 (95% CI −0.47 to −0.32; p < 0.001) after adjustment for age, sex, and height. Residuals showed no major departures from linear model assumptions.
-
-**Do not say:** "Smoking reduced FEV1" (causal); "$R^2 = 0.68$ proves good model" ($R^2$ is not primary evidence).
+**Results:** In 400 participants, smoking was associated with 0.39 L lower mean FEV1 (95% CI −0.47 to −0.32; p < 0.001) after adjustment. Do not cite $R^2$ as primary evidence.
 
 ### R lab
 
 ```r
-source("R/00_setup.R")
-library(tidyverse)
-library(broom)
-
-spirometry <- read_csv("data/spirometry.csv", show_col_types = FALSE)
+source("R/examples/ch05_linear_models.R")
 fit <- lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry)
-tidy(fit, conf.int = TRUE)
-par(mfrow = c(2, 2)); plot(fit); par(mfrow = c(1, 1))
+broom::tidy(fit, conf.int = TRUE); plot(fit)
 ```
 
-**Sensitivity:** log(FEV1) if distribution heavily skewed; spline on age:
-
-```r
-lm(
- fev1 ~ smoking + splines::ns(age, df = 3) + sex + height_cm,
- data = spirometry
-)
-```
+**Sensitivity:** log(FEV1) if heavily skewed; `splines::ns(age, df = 3)` if curvature is prespecified.
 
 ---
 
@@ -225,7 +102,7 @@ anova(
 
 ## ANCOVA: follow-up FEV1 adjusting baseline
 
-See [Chapter 4](04-comparing-groups.md) for trial context.
+See Chapter 4 for trial context.
 
 ```r
 trial <- read_csv("data/spirometry_trial.csv", show_col_types = FALSE)
@@ -304,7 +181,7 @@ Report the interval on this scale; the plot supports the coefficient table, not 
 ## What linear regression does NOT do
 
 - Model binary exacerbations (Ch 6)
-- Handle repeated FEV1 visits ([Ch 18](18-longitudinal-mixed-models.md) mixed models)
+- Handle repeated FEV1 visits (Ch 18 mixed models)
 - Prove smoking **caused** lower FEV1 in observational data
 - Automatically select important predictors (Ch 7 - prespecification)
 
@@ -357,19 +234,46 @@ Linear regression (Gaussian errors) is the default for continuous outcomes, but 
 
 | Feature | Why lm() fails | What to use |
 |---|---|---|
-| Repeated FEV1 visits | correlated residuals | [Ch 18](18-longitudinal-mixed-models.md) mixed models / GEE |
-| Multi-centre clustering | SEs too small if ignored | [Ch 18](18-longitudinal-mixed-models.md) cluster-robust / mixed |
+| Repeated FEV1 visits | correlated residuals | Ch 18 mixed models / GEE |
+| Multi-centre clustering | SEs too small if ignored | Ch 18 cluster-robust / mixed |
 
-## Chapter summary
+---
 
-- Linear regression answers **adjusted** questions about continuous outcomes [@harrell2015rms].
-- Every coefficient needs a reference category or unit definition.
-- Diagnostics and caveats are part of the analysis, not optional extras.
-- Report coefficients + CI; avoid causal language without design support.
+## Quick reference: methods in this chapter
 
-## Where this chapter leads
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Simple linear regression (SLR)** | One predictor; continuous FEV1 | Baseline adjusted association; one coefficient to report |
+| **Multiple linear regression (MLR)** | Several covariates; continuous outcome | Adjusted mean differences; standard for observational spirometry |
+| **ANCOVA (baseline in model)** | RCT; baseline FEV1 measured | Often more efficient than change score; prespecify |
+| **Interaction terms** | Effect differs by subgroup (prespecified) | Tests modification; not post hoc fishing |
+| **Robust / Huber regression** | Outliers in biomarkers or LOS | Sensitivity to leverage points |
+| **Log-transform outcome** | Strong right skew; multiplicative effects | Changes estimand; report on original scale if needed |
+| **Splines / GAM** | Non-linear age–FEV1 (prespecified) | Flexible curvature; avoid p-hacking ([Ch 7](07-model-building.md)) |
+| **Mixed model** | Repeated FEV1 visits | `lm()` on stacked rows is wrong ([Ch 18](18-longitudinal-mixed-models.md)) |
 
-**Next:** Non-Gaussian outcomes → [Chapter 6](06-generalized-linear-models.md). Model selection and penalization → [Chapter 7](07-model-building.md). Reporting → [Chapter 8](08-validation-reporting.md).
+**Extensions:** gamma GLM, quantile regression in [Alternatives & extensions](#alternatives--extensions-choose-by-data).
+
+---
+
+
+## Where we go next
+
+Regulatory affairs wants the exacerbation tables by Friday — binary and count versions of the same flare-up story. **Chapter 6** is where `lm()` on 0/1 finally gets retired. If the team starts adding predictors after unblinding, **Chapter 7** is the argument you will need before the next steering call.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
+| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
+| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 
@@ -378,4 +282,3 @@ Linear regression (Gaussian errors) is the default for continuous outcomes, but 
 
 ## Exercises ([Solutions](../solutions/ch05_solutions.md))
 
-**Next:** [Chapter 6 - GLMs](06-generalized-linear-models.md)

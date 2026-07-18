@@ -2,74 +2,19 @@
 
 > **Part II: Description Before Inference**
 
-## At a glance
+## Opening scene: the steering committee wants numbers
 
-| | |
-|---|---|
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/spirometry.csv` |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **R** | `R/examples/ch03_descriptive.R` |
-| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch03_*.png`, `viz_plot_router.png`, `viz_pair_ch03_scale_trap.png` |
-| **Exercises** | [ch03](../exercises/ch03_exercises.md) |
+Two weeks before interim lock, the DSMB asks for baseline balance. Dr Rivera needs Table 1 by tomorrow. Mei has the CASTOR export but not yet a prespecified primary test — and that is fine. Description comes **first**.
 
-**Also see:** [Appendix B](../appendix-b-quick-reference.md), Describe before infer: [Ch 4-6](04-comparing-groups.md)
-
----
-
-## In this chapter
-
-1. [Why this chapter](#why-this-chapter): Table 1 before any test
-2. [Plot choice by estimand](#plot-choice-by-estimand): router + right vs wrong pairs
-3. [Method choice at a glance](#method-choice-at-a-glance): summaries and plots by variable type
-4. [Technique: Table 1](#technique-table-1-baseline-characteristics): what reviewers see first
-5. [Alternatives & extensions](#alternatives--extensions-choose-by-data): SMD, robust summaries
-
-**Analyst read:** distribution plots, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Mean ± SD** | Approximately normal continuous (FEV1 litres) | Standard; pair with n and units |
-| **Median [IQR]** | Skewed outcomes (LOS, costs, some biomarkers) | Robust centre and spread |
-| **Count (% )** | Binary and categorical variables | Clear for exacerbation history, smoking |
-| **Histogram / density** | Check skew, bimodality before *t*-tests | Informs Ch 4–6 method choice |
-| **Q–Q plot** | Formal normality check (sensitivity) | Supports or challenges Gaussian methods |
-| **Boxplot / violin by group** | Visual arm comparison before inference | Shows overlap and outliers |
-| **Scatter (FEV1 vs age)** | Bivariate relationships | Motivates adjustment in Ch 5 |
-| **Table 1** | Baseline characteristics by arm | Required before comparative claims |
-| **Missingness table / plot** | Any variable with &gt;0% missing | Documents who is excluded later |
-| **SMD instead of Table 1 *p*-values** | Describe balance without hypothesis tests | *p*-values confound balance with sample size |
-
-**Extensions:** ECDF, ridgeline plots in [Alternatives & extensions](#alternatives--extensions-choose-by-data).
-
----
-
-## Learning objectives
-
-1. Choose summaries matched to variable type and distribution.
-2. Build Table 1 before any inferential analysis.
-3. Create diagnostic plots that inform method choice (Ch 4-6).
-4. Report missingness and n transparently.
-5. Write descriptive Methods/Results text for a respiratory paper.
-
-## Prerequisites
-
-Chapters 1-2.
+A sponsor slide shows mean FEV₁ bars with a cropped *y*-axis; the arms look worlds apart. Mei replaces it with violins on the full scale. *"If this is our only figure,"* she tells Rivera, *"would you still sign the SAP?"*
 
 ---
 
 ## Why this chapter
 
-Reviewers and investigators meet your study in Table 1 and the first figure. Description is not “preliminary”; it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same patients before any test is run.
+Reviewers meet your study in Table 1 and Figure 1. Description is not preamble — it is where missingness, skew, and protocol quirks become visible. CASTOR starts here so you see the same four hundred participants before any inferential claim.
 
-## Opening question (CASTOR)
-
-*Before comparing FEV1 between trial arms - who is in the CASTOR cohort, and are groups similar at baseline?*
-
-Description is not optional preamble. It is how you catch errors and justify the methods that follow [@harrell2015rms; @stoltzfus2019biostatistics].
+> **How to read this chapter:** Table 1 and plot-choice sections first; technique cards below are reference — jump to your variable type.
 
 ---
 
@@ -89,7 +34,6 @@ Description is where **figure choice** meets **method choice**. The plot must sh
 
 ![Plot choice by estimand: prefer vs avoid](../figures/viz_plot_router.png){width=96%}
 
-Full router and regeneration: [Appendix I](../appendix-i-figure-hygiene.md).
 
 ### Figure hygiene: axis truncation
 
@@ -106,65 +50,19 @@ Steering decks often crop the *y*-axis so a small mean difference looks decisive
 
 **Caption template:** “FEV1 (L) by randomised arm; box = IQR, points = participants, diamond = mean; *n* = … per arm.”
 
-### Wrong analysis ⚠ (visual)
-
-| | |
-|---|---|
-| **Mistake** | Truncate axes, drop points, or show means without *n* |
-| **Why it fails** | Readers infer separation that CIs and overlap contradict |
-| **Do instead** | Full-scale distribution plot; pair with Table 1 and prespecified test ([Ch 4](04-comparing-groups.md)) |
+Truncating the *y*-axis or dropping points makes arms look separated when the full-scale plot would show overlap — pair every inferential figure with Table 1 and the prespecified test (Ch 4).
 
 ---
 
 ## Technique: Table 1 (baseline characteristics)
 
-### Technique card
+Table 1 answers: *who entered the study, and do the arms look comparable on what we measured?* It is **descriptive only** — not evidence that treatment worked. For CASTOR, Mei builds it with `gtsummary::tbl_summary(by = group)` before any primary test [@schulz2010consort; @vonelm2007strobe].
 
-| | |
-|---|---|
-| **Answers** | What does the study sample look like? Are groups balanced? |
-| **Outcome** | None - purely descriptive |
-| **Design** | Any; essential for RCT and cohort papers |
-| **Data required** | Demographics, key clinical vars, stratification factor |
-| **R** | `gtsummary::tbl_summary(by = group)` |
-| **When to use** | Always before primary inference [@schulz2010consort; @vonelm2007strobe] |
-| **When NOT to use** | As primary evidence of treatment effect |
-| **Does NOT prove** | Causation; that adjustment is unnecessary |
+**Practice read:** if arms differ sharply on baseline FEV₁ or smoking, an unadjusted week-12 comparison is harder to defend — plan adjustment in Ch 5–6. Do not treat baseline *p*-values as if they were the trial primary; reviewers see that mistake often.
 
-### Dual interpretation
+Watch for: different *n* on each row (hidden attrition), collapsed GOLD categories that hide severity, and baseline-only snapshots that ignore later missingness. Table 1 is often drafted by a junior author while the analyst is on another project — agree variable definitions first or Table 1 and the model will describe different populations.
 
-**Plain language:** Table 1 shows age, sex, smoking, and lung function in each group.
-
-**Precise language:** descriptive frequencies and summaries; between-group p-values are optional and not substitute for prespecified primary analysis.
-
-**Practice read:** are groups similar enough that unadjusted comparison is plausible? Large imbalances → need adjustment (Ch 5-6).
-
-### Caveats box
-
-| Caveat | Why it matters |
-|--------|----------------|
-| Table 1 p-values | Not primary endpoint in RCT; can mislead [@schulz2010consort] |
-| Missing data | Different n across rows hides attrition |
-| Collapsed categories | Hides severity spectrum (GOLD, mMRC) |
-| Single time point | Baseline only - not longitudinal status |
-| Synthetic vs real | CASTOR is simulated - replace with your cohort |
-
-### In practice
-
-Table 1 is often drafted by a junior author while the analyst is busy elsewhere. Agree on variable definitions and missingness rules first; otherwise Table 1 and the model use different populations.
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | Skip Table 1; jump to p-value on outcome |
-| **Do instead** | Describe first; state n and missingness |
-
-| | |
-|---|---|
-| **Mistake** | "Baseline p < 0.05 proves groups differ on outcome" |
-| **Why wrong** | Table 1 tests are not the trial primary analysis |
-| **Do instead** | Prespecified outcome model (Ch 4-6) |
+**Common mistakes:** skipping Table 1 and jumping to an outcome *p*-value; or citing baseline *p* < 0.05 as proof the arms will differ on the primary endpoint.
 
 ### Reporting template
 
@@ -182,50 +80,17 @@ source("R/examples/ch03_descriptive.R")
 
 ## Technique: Summary statistics (mean, median, SD, IQR)
 
-### Technique card
+Summaries describe **typical** and **spread**. For roughly symmetric FEV₁ in litres, mean (SD) is standard. For skewed outcomes — ICU length of stay, costs, some biomarkers — median [IQR] tells a truer story. Binary variables are always *n* (%).
 
-| | |
-|---|---|
-| **Answers** | What is typical and how variable is this measure? |
-| **Continuous symmetric** | Mean (SD) |
-| **Continuous skewed** | Median [IQR] |
-| **Binary** | n (%) |
-| **Does NOT prove** | Normality (use QQ plot) |
-
-### Caveats: FEV1 specifically
-
-| Caveat | Detail |
-|--------|--------|
-| Mean hides bimodality | Mixed asthma+COPD cohorts |
-| SD ≠ CI | SD describes patients; SE/CI describes mean uncertainty |
-| Units | Litres vs % predicted - label clearly [@graham2019spirometry] |
-
-### Wrong analysis ⚠
-
-Report mean (SD) for ICU length-of-stay with extreme outliers → use median [IQR].
+For FEV₁ specifically: a single mean can hide bimodality in mixed asthma–COPD cohorts; SD describes patient spread while the CI describes uncertainty in the **mean** — do not confuse them. Label litres vs % predicted clearly [@graham2019spirometry].
 
 ---
 
 ## Technique: Histogram and density plot
 
-### Technique card
+Before a *t*-test, look at the shape. Histograms and density curves show skew, floor effects, and outliers that a mean bar would hide. CASTOR figures: `ch03_fev1_histogram.png`, `ch03_fev1_ridge.png`.
 
-| | |
-|---|---|
-| **Answers** | What is the shape of the distribution? |
-| **Use** | Continuous outcomes before t-test |
-| **R** | `ggplot(aes(x=fev1)) + geom_histogram + geom_density` |
-| **CASTOR figure** | `volume-01/figures/ch03_fev1_histogram.png` |
-
-### Dual interpretation
-
-**Plain language:** where do most patients' FEV1 values fall?
-
-**Practice read:** bimodal or floor effects (severe obstruction cluster) suggest mean alone may mislead.
-
-### Caveats
-
-Overlapping histograms by group need clear colours; bin width affects appearance.
+**Practice read:** a cluster of very low FEV₁ values (severe obstruction) is a signal to consider median-based summaries or rank tests in Ch 4 — not a reason to truncate the axis on a slide.
 
 ![FEV1 distribution combo (histogram + density + rug)](../figures/ch03_fev1_histogram.png)
 
@@ -235,27 +100,13 @@ The combo plot shows where most CASTOR FEV1 values fall before you choose mean v
 
 Ridge densities compare cohort subsets without collapsing to a single bar.
 
-### Wrong analysis ⚠
-
-Use bar chart with only mean ± SE for n < 30 without showing raw data.
+With small *n*, a bar chart of mean ± SE alone is misleading — show the distribution or individual points.
 
 ---
 
 ## Technique: Boxplot and violin plot
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Compare distribution between groups |
-| **Boxplot** | Median, IQR, outliers |
-| **Violin** | Full density shape; split by a second factor |
-| **R** | `geom_violin()` + `position_dodge()`; see `R/viz_handbook.R` |
-| **Figure** | `ch03_fev1_violin.png` |
-
-### Caveats
-
-Outliers may be real severe patients - investigate before deleting. Jitter reveals sample size visually.
+Boxplots show median, IQR, and outliers; violins show the full density — useful when arms **overlap** more than a mean bar suggests. CASTOR: `ch03_fev1_violin.png`. Outliers may be real severe patients; investigate before deleting points.
 
 ![Split violin: FEV1 by trial arm and smoking](../figures/ch03_fev1_violin.png)
 
@@ -269,54 +120,21 @@ Heatmaps surface collinearity before regression (Ch 5–7).
 
 ## Technique: QQ plot (normality check)
 
-### Technique card
+QQ plots ask a narrow question: *are these data roughly normal enough for a mean-based test?* Points near the diagonal suggest yes; heavy tail curvature suggests skew or outliers. Run one before a *t*-test on small or moderate *n* — not as a ritual on every large trial, where Shapiro–Wilk often rejects trivial deviations [@harrell2015rms]. CASTOR figure: `ch03_fev1_qq.png`; in R, `stat_qq() + stat_qq_line()`.
 
-| | |
-|---|---|
-| **Answers** | Are data roughly normal for mean-based methods? |
-| **Use before** | t-test, ANOVA on small/m moderate n |
-| **R** | `stat_qq() + stat_qq_line()` |
-| **Figure** | `ch03_fev1_qq.png` |
-
-### Dual interpretation
-
-**Plain language:** do points follow the diagonal line?
-
-**Precise language:** visual check of agreement with normal distribution; Shapiro test often overpowers large n [@harrell2015rms].
-
-### Caveats
-
-Mild tail deviation may be acceptable with large n (CLT) [@harrell2015rms]. QQ on **residuals** after regression more relevant than on raw FEV1 alone.
-
-### Wrong analysis ⚠
-
-Reject t-test solely because Shapiro p < 0.05 with n = 500 - consider Welch t and effect size.
+**Practice read:** mild tail deviation is common in spirometry. With *n* ≈ 400, pair the visual with the planned Welch test rather than swapping methods because Shapiro *p* < 0.05. After regression, QQ on **residuals** matters more than QQ on raw FEV₁.
 
 ![Normality check: FEV1 QQ plot](../figures/ch03_fev1_qq.png)
-
-Mild tail deviation is common in spirometry; pair this visual with sample size and the planned test (Ch 4).
 
 ---
 
 ## Technique: Scatterplot and correlation
 
-### Technique card
+Scatterplots show whether two continuous measures move together — FEV₁ vs age, for example — before you commit to a regression line. Pearson *r* assumes linearity; Spearman ρ is safer when the relationship is monotonic but curved. CASTOR: `ch03_fev1_scatter.png`.
 
-| | |
-|---|---|
-| **Answers** | Is FEV1 associated with age (linearly)? |
-| **Pearson r** | Linear association |
-| **Spearman ρ** | Monotonic, robust |
-| **R** | `ggplot + geom_point + geom_smooth`; `cor()` |
-| **Figure** | `ch03_fev1_scatter.png` |
+Correlation is not causation, and a few influential points can drive *r*. Colouring by smoking often reveals confounding structure that a single correlation coefficient hides.
 
-### Caveats
-
-Correlation ≠ causation. Influential points drive r. Smoking colour on scatter can reveal confounding structure.
-
-### Wrong analysis ⚠
-
-Correlate binary smoking (0/1) with FEV1 and call it "effect" - use regression (Ch 5) for adjusted statement.
+**Common mistake:** correlating binary smoking (0/1) with FEV₁ and calling it an “effect” — use regression (Ch 5) for an adjusted statement.
 
 ![FEV1 vs age with smoking ellipses](../figures/ch03_fev1_scatter.png)
 
@@ -326,7 +144,7 @@ Association in the scatter motivates adjusted models; it does not prove causatio
 
 ## Missing data in descriptives
 
-Report n for each variable. Note if complete-case n drops. Missing FEV1 in spirometry trials often informative (sicker patients skip test) - see [Ch 20](20-missing-data.md).
+Report n for each variable. Note if complete-case n drops. Missing FEV1 in spirometry trials often informative (sicker patients skip test) - see Ch 20.
 
 ---
 
@@ -341,13 +159,7 @@ Report n for each variable. Note if complete-case n drops. Missing FEV1 in spiro
 
 ## Catalog of wrong analyses (descriptive chapter)
 
-| Wrong | Right |
-|-------|-------|
-| Hide missing n | Report n per variable |
-| Table 1 p as primary result | Prespecified outcome analysis |
-| Mean for heavy skew | Median [IQR] |
-| No units on axes | FEV1 (L), age (years) |
-| Skip plots | Plot before test |
+The recurring failures are predictable: hiding missing *n*, treating Table 1 *p*-values as the trial primary, summarising heavy skew with a mean, leaving units off axes, or skipping plots and trusting a test you never looked at. Each of those is fixable in an hour if you catch it before submission — expensive if a reviewer does.
 
 ---
 
@@ -360,11 +172,22 @@ source("R/examples/ch03_descriptive.R")
 
 ---
 
-## Chapter summary
+## Quick reference: methods in this chapter
 
-- Describe before you infer [@harrell2015rms].
-- Table 1 + distribution plots drive method choice.
-- Every summary needs n, units, and missingness note.
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Mean ± SD** | Approximately normal continuous (FEV1 litres) | Standard; pair with n and units |
+| **Median [IQR]** | Skewed outcomes (LOS, costs, some biomarkers) | Robust centre and spread |
+| **Count (% )** | Binary and categorical variables | Clear for exacerbation history, smoking |
+| **Histogram / density** | Check skew, bimodality before *t*-tests | Informs Ch 4–6 method choice |
+| **Q–Q plot** | Formal normality check (sensitivity) | Supports or challenges Gaussian methods |
+| **Boxplot / violin by group** | Visual arm comparison before inference | Shows overlap and outliers |
+| **Scatter (FEV1 vs age)** | Bivariate relationships | Motivates adjustment in Ch 5 |
+| **Table 1** | Baseline characteristics by arm | Required before comparative claims |
+| **Missingness table / plot** | Any variable with &gt;0% missing | Documents who is excluded later |
+| **SMD instead of Table 1 *p*-values** | Describe balance without hypothesis tests | *p*-values confound balance with sample size |
+
+**Extensions:** ECDF, ridgeline plots in [Alternatives & extensions](#alternatives--extensions-choose-by-data).
 
 ---
 
@@ -409,9 +232,24 @@ Descriptives are where you decide what later methods are plausible. Use these al
 | **Examples** | log-transform biomarkers; log(1+y) for counts *only descriptively* |
 | **Caution** | Transformation changes estimand; report scale clearly |
 
-## Where this chapter leads
+## Where we go next
 
-**Next:** [Chapter 4](04-comparing-groups.md) is the comparison reference. Bring your Table 1 insights (skew, missingness, n per arm) into every test choice.
+The DSMB slide is done: Table 1 balanced, violins on full scale, missingness noted. Rivera closes the laptop. *"So — can we call the primary?"* That question moves to **Chapter 4**, with the same CASTOR arms and the prespecified Welch estimand Mei has been defending since week one.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
+| [Chapter 5: Linear models](05-linear-models.md) | ANCOVA, adjusted continuous associations |
+| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
 
 ## Further reading
 
@@ -422,4 +260,3 @@ Descriptives are where you decide what later methods are plausible. Use these al
 
 ## Exercises ([Solutions](../solutions/ch03_solutions.md))
 
-**Next:** [Chapter 4](04-comparing-groups.md)

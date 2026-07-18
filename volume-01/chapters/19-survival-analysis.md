@@ -2,87 +2,15 @@
 
 > **Part VIII: Longitudinal, survival, and causal inference**
 
-## At a glance
+## Opening scene: "% with an event" on a bar chart
 
-| | |
-|---|---|
-| **Recurring dataset** | `data/time_to_exacerbation.csv` ([CASTOR extension](../RECURRING_COHORT.md)) |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Question** | Who reaches first exacerbation sooner, accounting for censoring? |
-| **Core methods** | Kaplan-Meier, log-rank test, Cox proportional hazards |
-| **R** | `R/examples/ch19_survival_analysis.R` |
-| **Figures** | KM by smoking (`ch19_km_by_smoking.png`), Cox forest (`ch19_cox_forest.png`) |
-| **Exercises** | [Chapter 19 exercises](../exercises/ch19_exercises.md) |
-
-**Also see:** [Ch 6](06-generalized-linear-models.md) (rates), [Ch 18](18-longitudinal-mixed-models.md), [Ch 12 Case E](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation)
+Twelve-month follow-up, censored at day 365, exacerbation events unevenly spaced. A bar chart of *"percent exacerbated"* throws away timing. Mei replaces it with Kaplan–Meier: curves, censoring marks, log-rank only if prespecified.
 
 ---
-
-## In this chapter
-
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): event, censoring, competing death
-2. [Method choice at a glance](#method-choice-at-a-glance): KM vs Cox vs logistic shortcut
-3. [Technique: Kaplan-Meier](#technique-kaplan-meier): Practice read on absolute risks
-4. [Reporting template](#reporting-template): events, person-time, HR + CI
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-time-to-exacerbation): censoring treated as cure
-
-**Analyst read:** Cox diagnostics, R lab, competing risks below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Kaplan-Meier + log-rank** | Compare time-to-first-event curves between groups | Uses all follow-up; handles censoring nonparametrically |
-| **Cox proportional hazards** | Adjust for covariates; report hazard ratios | Standard for time-to-event with censoring; check PH assumption |
-| **Logistic at fixed horizon (12 mo)** | Equal follow-up; only care about event Y/N at one date | Simpler; loses timing information |
-| **Fine–Gray / competing risks** | Death prevents future exacerbations; mortality differs by arm | Standard Cox censors death; may overstate event risk |
-| **Cause-specific Cox** | Distinct biological processes for competing events | Separates hazard of each event type |
-| **Stratified Cox** | Non-proportional hazards across subgroups | When PH fails for a covariate |
-| **Andersen-Gill / PWP** | **Recurrent** exacerbations (not first event only) | First-event Cox is wrong for repeats |
-
-**Extensions:** [Alternatives & extensions](#alternatives--extensions) at chapter end.
-
----
-
-## Learning objectives
-
-1. Define event, time origin, and censoring for respiratory endpoints.
-2. Choose survival methods over binary endpoints when timing matters.
-3. Plot and compare survival curves (Kaplan-Meier) with log-rank tests.
-4. Fit and interpret Cox hazard ratios with 95% CI and check proportional hazards.
-5. Report event counts, person-time, and absolute risks alongside HRs.
-6. Avoid treating censored patients as permanently event-free.
-
-## Prerequisites
-
-Chapters 4, 6 (rates and GLM intuition); Ch 8 (reporting).
-
----
-
-*The steering slide shows 12-month exacerbation proportions: 18% vs 22%. A statistician asks for dates of first event and censoring. The export has them. **This chapter** is why “any exacerbation Y/N” and “time to first exacerbation” are different estimands.*
 
 ## Why this chapter
 
-Sponsors often ask “exacerbation yes/no at 12 months” when dates of event and censoring are already in the database. Survival methods use follow-up time properly. This chapter also teaches when a hazard ratio is not enough on its own.
-
-### Other respiratory settings
-
-CASTOR uses time to **first COPD exacerbation** with one-year censoring. The same Kaplan-Meier and Cox workflow applies when the event is redefined:
-
-- **Asthma:** Time to first severe exacerbation or first oral steroid course (match the protocol definition).
-- **TB:** Time to culture conversion or treatment completion; deaths and loss to follow-up may need competing-risk methods in programme trials.
-
-Report event counts, censoring reasons, and absolute risks at fixed times, not hazard ratios alone.
-
-## Opening question (CASTOR extension)
-
-*Among adults with similar respiratory risk profiles, does smoking shorten time to **first** exacerbation within one year of follow-up?*
-
-Binary “any exacerbation Y/N” at 12 months discards **when** events occur and how follow-up differs. Survival methods use all follow-up time until event or censoring [@harrell2015rms].
-
-In the CASTOR extension cohort, **52 of 320** patients have a first exacerbation within 365 days; the remainder are censored at one year. That event rate is enough to teach the methods but still requires careful reporting (sparse events → wide CIs).
+Time-to-event endpoints need time in the model. CASTOR's `time_to_exacerbation.csv` teaches censoring, Cox models, and why a proportion bar is the wrong plot.
 
 ---
 
@@ -111,24 +39,7 @@ In the CASTOR extension cohort, **52 of 320** patients have a first exacerbation
 
 ## Technique: Kaplan-Meier
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | What fraction remain event-free over time, by group? |
-| **Outcome** | `Surv(time, event)`, time to first exacerbation |
-| **Effect measure** | Survival probabilities at prespecified times; median survival (if estimable) |
-| **R** | `survival::survfit(Surv(time_days, event) ~ smoking, data)` |
-| **Comparison** | Log-rank test (`survdiff`) |
-| **When to use** | Visual comparison; unadjusted survival curves; absolute risk extraction |
-| **When NOT to use** | Adjusted confounding control (use Cox) |
-| **Does NOT prove** | Causation; adjusted confounding control |
-
-### Dual interpretation
-
-**Plain language:** the curve shows the fraction of patients who had not yet had a first exacerbation at each day of follow-up.
-
-**Precise language:** Kaplan-Meier estimates the survival function \(S(t) = P(T > t)\) with right-censored data using the product-limit estimator.
+Kaplan-Meier estimates what fraction remain event-free over time by group using `Surv(time, event)` — the product-limit estimator for \(S(t) = P(T > t)\) with right-censored data. Report survival probabilities at prespecified times and median survival if estimable. In R: `survival::survfit(Surv(time_days, event) ~ smoking, data)` with log-rank comparison via `survdiff`. Use for visual comparison and absolute risk extraction; use Cox for adjusted confounding control. KM does not prove causation.
 
 **Practice read:** read off event-free probability at 6 and 12 months; compare arms visually before trusting a single *p*-value.
 
@@ -154,24 +65,7 @@ summary(fit_km, times = c(180, 365))
 
 ## Technique: Cox proportional hazards
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Instantaneous hazard of first exacerbation, adjusted for covariates |
-| **Outcome** | `Surv(time_days, event)` |
-| **Effect measure** | Hazard ratio (HR) with 95% CI |
-| **R** | `coxph(Surv(time_days, event) ~ smoking + fev1_pct + therapy + age, data)` |
-| **Assumptions** | Proportional hazards (test with `cox.zph`); independent censoring |
-| **When to use** | Time-to-first-event with right censoring; adjusted comparisons |
-| **When NOT to use** | Competing events (death) without competing-risks model |
-| **Does NOT prove** | Causation; absolute risk without extra reporting |
-
-### Dual interpretation
-
-**Plain language:** smokers tended to reach their first exacerbation sooner during follow-up; the adjusted hazard was higher for smokers.
-
-**Precise language:** the Cox model estimates hazard ratios as multiplicative shifts in the instantaneous event rate, holding other covariates fixed, under proportional hazards and independent censoring.
+Cox proportional hazards models the instantaneous hazard of first exacerbation adjusted for covariates, reporting hazard ratios with 95% CI. In R: `coxph(Surv(time_days, event) ~ smoking + fev1_pct + therapy + age, data)` with proportional hazards checked via `cox.zph`. Use for time-to-first-event with right censoring; avoid when competing events (death) dominate without a competing-risks model. HR > 1 means higher **rate**, not necessarily a specific absolute risk difference — report events and person-time. Cox does not prove causation.
 
 **Practice read:** HR > 1 for smoking means higher **rate** of first exacerbation, not necessarily a specific absolute risk difference. Report events and person-time.
 
@@ -308,24 +202,11 @@ If global *p* is small, consider stratified Cox or time-varying coefficients (ad
 
 ## Technique: Competing risks (death vs exacerbation) {#technique-competing-risks-death-vs-exacerbation}
 
-| | |
-|---|---|
-| **Answers** | What is the cumulative incidence of exacerbation when **death** is a competing event? |
-| **Outcome** | Time to first exacerbation **or** death (whichever first) |
-| **Design** | Observational cohort or trial with non-negligible mortality |
-| **Assumptions** | Competing events defined; censoring independent conditional on covariates |
-| **Methods** | **Cause-specific Cox** (hazard of exacerbation among those still alive); **Fine–Gray** subdistribution HR (cumulative incidence); **Cumulative incidence functions (CIF)** by group |
-| **R** | `cmprsk` (Fine–Gray); `survival` cause-specific Cox; `riskRegression` (advanced) |
-| **Report** | State whether standard Cox or competing-risk framework; CIF plots; event counts by type |
-| **Avoid when** | Mortality <1% and balanced; standard Cox may suffice with sensitivity note |
+When death prevents future exacerbations, standard Cox for "first exacerbation" treats death as censored and may **overstate** exacerbation risk. Use cause-specific Cox (hazard among survivors), Fine–Gray subdistribution HR (cumulative incidence), or cumulative incidence functions (CIF) by group — in R via `cmprsk`, `survival`, or `riskRegression`. When mortality is <1% and balanced, standard Cox may suffice with a sensitivity note.
 
-**Plain language:** patients who die cannot have later exacerbations; treating death as “lost to follow-up” distorts exacerbation rates.
+**Practice read:** ask for **cumulative incidence curves** by arm, not only hazard ratios, when death rates differ [@harrell2015rms].
 
-**Precise language:** standard Cox estimates **hazard of exacerbation** among survivors; Fine–Gray targets **subdistribution** relevant for prognosis when death competes [@harrell2015rms].
-
-**Practice read:** ask for **cumulative incidence curves** by arm, not only hazard ratios, when death rates differ.
-
-#### Wrong analysis ⚠
+### Wrong analysis ⚠
 
 | Mistake | Why it fails | Do instead |
 |---------|--------------|------------|
@@ -345,10 +226,27 @@ If global *p* is small, consider stratified Cox or time-varying coefficients (ad
 | Competing risk (death) | Fine–Gray; cause-specific Cox; CIF | [Technique above](#technique-competing-risks-death-vs-exacerbation) |
 | Recurrent exacerbations | Andersen-Gill / PWP | Not first-event Cox |
 | Non-proportional hazards | Stratified Cox, splines | Check `cox.zph` |
-| Discrete time | Complementary log-log | Links to [Ch 6](06-generalized-linear-models.md) |
+| Discrete time | Complementary log-log | Links to Ch 6 |
 | Equal follow-up, rare censoring | Logistic at fixed horizon | Simpler; loses timing detail |
 
 ---
+
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Kaplan-Meier + log-rank** | Compare time-to-first-event curves between groups | Uses all follow-up; handles censoring nonparametrically |
+| **Cox proportional hazards** | Adjust for covariates; report hazard ratios | Standard for time-to-event with censoring; check PH assumption |
+| **Logistic at fixed horizon (12 mo)** | Equal follow-up; only care about event Y/N at one date | Simpler; loses timing information |
+| **Fine–Gray / competing risks** | Death prevents future exacerbations; mortality differs by arm | Standard Cox censors death; may overstate event risk |
+| **Cause-specific Cox** | Distinct biological processes for competing events | Separates hazard of each event type |
+| **Stratified Cox** | Non-proportional hazards across subgroups | When PH fails for a covariate |
+| **Andersen-Gill / PWP** | **Recurrent** exacerbations (not first event only) | First-event Cox is wrong for repeats |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions) at chapter end.
+
+---
+
 
 ## Exercises ([Solutions](../solutions/ch19_solutions.md))
 
@@ -370,13 +268,26 @@ If global *p* is small, consider stratified Cox or time-varying coefficients (ad
 4. From the KM summary at 365 days, estimate absolute event risk by smoking group.
 5. Draft a Results paragraph using the reporting template with CASTOR numbers.
 
-**Capstone:** [Case E in Ch 12](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation).
+**Capstone:** Case E in Ch 12.
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
 **Next:** [Chapter 20](20-missing-data.md) for spirometry missingness; [Chapter 21](21-causal-inference.md) for observational effect language.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
+| [Chapter 12: Case studies](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation) | Integrated CASTOR narratives A–E |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 

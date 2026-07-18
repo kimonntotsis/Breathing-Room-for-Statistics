@@ -1,30 +1,26 @@
 # Part VI: High-dimensional biology and discovery {.unnumbered}
 
-This part extends the handbook workflow to datasets where \(p \gg n\) and technical variation can dominate biology:
+## In the room: the omics email
 
-- **Proteomics** (e.g. Olink-style panels): missingness near limits of detection, plate effects, multiplicity (FDR).
-- **RNA** (gene counts): count models, library size, normalization, differential expression, FDR.
-- **Flow cytometry**: summaries vs per-cell data, drift, gating vs automated phenotyping.
-- **Discovery screens** (antibodies): replicate agreement, hit calling, confirmation, ranking stability.
+Week one of the CASTOR-HD substudy: *“We have 920 proteins and forty-one significant hits.”* Mei is on the thread; the bioinformatics core is not. After batch QC and FDR, the list may shrink to honest zero — and that is still a result worth reporting **separately** from week-12 FEV₁.
 
-The goal is not to memorise methods. It is to make defensible claims:
+---
 
-1. **What changed (effect size)?**
-2. **How uncertain is it (CI / stability)?**
-3. **How many chances did we give ourselves to be wrong (FDR / multiplicity)?**
-4. **Could this be technical (batch / plate / run)?**
-5. **Does it generalise (honest validation / confirmation)?**
+CASTOR-HD extends the same patients into proteomics, RNA, flow, and screens. The questions that matter: **What changed? How uncertain? How many tests? Could it be batch? Does it replicate?**
 
-**Recurring datasets:** the CASTOR-HD synthetic files in `data/` (see [Ch 2](../chapters/02-respiratory-data.md) and [RECURRING_COHORT](../RECURRING_COHORT.md)).
+**Read this if:** you analyse or interpret omics, flow, or antibody screens — or review Methods sections that mention FDR and batch.
 
-**Read this if:** you analyse or interpret proteomics, RNA-seq, flow cytometry, or antibody screens; you review omics Methods sections; or you need FDR and batch vocabulary.
+**Skip this if:** spirometry and exacerbations are your only endpoints (Appendix H may suffice until omics appear).
 
-**Skip this if:** you work only on spirometry and exacerbation endpoints. [Appendix H](appendix-h-clinicians-route.md) may be enough; return here when omics or flow data appear.
+## Related chapters
 
-## In the room: the omics email (no bioinformatics on the thread)
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 2: Respiratory data](../chapters/02-respiratory-data.md) | CASTOR-HD file map and outcome types |
 
-At the start of the week: “We have 1,000 proteins and 200 DE hits.” The pulmonary PI is on the email chain; the bioinformatics core is not. After batch QC, the FDR-controlled list may be **empty**, and that is the honest result to report. **Part VI** walks proteomics, RNA, flow, and antibody screens with the same question: what are we willing to fund for validation, and what must we **not** merge with the clinical primary endpoint?
+## Handbook resources
 
-**Read this if:** you analyse or interpret proteomics, RNA-seq, flow cytometry, or antibody screens **without** embedded bioinformatics support.
-
-
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix H: Clinicians' route](../appendix-h-clinicians-route.md) | Endpoint routing without running R |
+| [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |

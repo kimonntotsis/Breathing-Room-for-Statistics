@@ -2,147 +2,37 @@
 
 > **Part IV: Evidence Quality and Transparency**
 
-## At a glance
+## Opening scene: the manuscript deadline
 
-| | |
-|---|---|
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Methods** | CI, bootstrap, multiplicity, CONSORT/STROBE/TRIPOD, sensitivity, reproducibility |
-| **Exercises** | [ch08](../exercises/ch08_exercises.md) |
+CONSORT checklist on one monitor, CASTOR Results on the other. Reviewer 2 will ask for confidence intervals, flow counts, and what the trial **did not** prove. Rivera drafts *"trend toward benefit"*; Mei replaces it with the CI against MCID and a Limits paragraph.
 
-**Also see:** [Appendix B](../appendix-b-quick-reference.md), [REFERENCES](../REFERENCES.md), Reporting checklists below
-
-> **Sounds like your lab?** [Story 4](../appendix-k-in-the-room-stories.md#story-4--training-set-auc-for-the-icu-board-slide) (training-set AUC on a governance slide) → [Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)](#technique-reporting-guidelines-consort--strobe--tripod) and [Technique: Multiplicity control](#technique-multiplicity-control).
-
----
-
-## In this chapter
-
-1. [Why this chapter](#why-this-chapter): evidence quality for sign-off
-2. [Method choice at a glance](#method-choice-at-a-glance): CONSORT/STROBE/TRIPOD routing
-3. [Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)](#technique-reporting-guidelines-consort--strobe--tripod): pick your guideline
-4. [Technique: Multiplicity control](#technique-multiplicity-control): endpoint families; unadjusted vs adjusted in the SAP
-5. **Practice read** on MCID and CIs vs *p*-values
-6. [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit)
-
-**Analyst read:** bootstrap, multiplicity, R examples below.
-
----
-
-## Method choice at a glance
-
-| Method / framework | When to use | Why |
-|-------------------|-------------|-----|
-| **95% confidence interval** | Any primary estimate | Shows precision; preferred over “NS” |
-| **Bootstrap CI** | Small *n*; skew; nonstandard estimators | Resampling when formulas are doubtful |
-| **CONSORT flow + checklist** | Randomised trials | Standard for enrolment, follow-up, analysis sets |
-| **STROBE** | Observational cohorts and case-control | Transparency on selection, confounding, missingness |
-| **TRIPOD** | Prediction model papers | Discrimination, calibration, validation stated |
-| **Multiplicity adjustment** | Secondary endpoints; omics screens | Controls false positives across families of tests |
-| **Prespecified sensitivity analyses** | MAR, batch, model form | Shows stability; not post hoc rescue |
-| **REMARK / omics reporting** | Biomarker discovery lists | Effect size + q + validation plan |
-
-**Extensions:** [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit) at chapter end.
-
----
-
-## Learning objectives
-
-1. Report estimates with uncertainty, not p-values alone.
-2. Use bootstrap when asymptotic CIs are doubtful.
-3. Apply the correct reporting guideline for your design.
-4. Prespecify sensitivity analyses.
-5. Document reproducible analysis workflows in R.
-
-## Prerequisites
-
-Chapters 4-7.
+This chapter is sign-off discipline: reporting frameworks, intervals, multiplicity, and honest language.
 
 ---
 
 ## Why this chapter
 
-A correct analysis reported badly is still unusable in a protocol or journal. This chapter is for anyone writing the Methods or Results: CONSORT, STROBE, TRIPOD, intervals instead of “p > 0.05 means no effect.” CASTOR examples show how to report evidence, not just significance.
-
-## Opening question (CASTOR)
-
-*You found p = 0.20 for FEV1 difference between arms. Has the trial "failed," or is that the wrong question?*
-
-This chapter is about **how to report evidence** - intervals, validation, transparency - so CASTOR analyses (and yours) can be trusted and interpreted correctly [@harrell2015rms].
+Correct analysis that is reported badly still misleads clinicians. CASTOR Case A's publishable narrative lives here — CONSORT-aligned tables, estimand-first sentences, and what to say when the primary is inconclusive.
 
 ---
 
 ## Technique: Confidence interval reporting
 
-### Technique card
+Every primary and key secondary analysis needs **point estimate + 95% CI + *n*** (and events for binary outcomes). The CI answers clinical questions better than *p* alone: does the interval exclude the MCID? straddle it? include only null? [@cazzola2008mcid]
 
-| | |
-|---|---|
-| **Answers** | What range of effect sizes is compatible with the data? |
-| **Report with** | Point estimate + 95% CI + n (+ events for binary) |
-| **When to use** | Always, for every primary and key secondary analysis |
-| **When NOT to use** | CI alone without clinical context (MCID) |
-| **Does NOT prove** | No effect if CI includes null - may be underpowered |
+**Practice read (CASTOR primary):** mean difference 0.09 L (95% CI −0.04 to 0.21) — the interval includes no effect and clinically small benefits; *p* = 0.20 is secondary to that sentence.
 
-### Dual interpretation
+Reviewers will ask for CIs even when you reported *p*-values. For RCTs, the CONSORT flow documents who entered the estimand — if week-12 FEV₁ excludes dropouts, say so in Methods and link to missing-data sensitivity. For non-inferiority submissions, report the **prespecified margin** and CI against Δ, not *p* alone.
 
-**Plain language:** the true mean FEV1 difference might plausibly be anywhere from −0.04 to +0.21 L.
+**Common mistakes:** *"p* > 0.05 therefore no effect"*; reporting only significant secondaries.
 
-**Precise language:** 95% CI procedure; under repeated sampling, ~95% of such intervals cover the true estimand.
-
-**Practice read:** is the entire CI below MCID? above MCID? straddling it? That drives interpretation more than p = 0.20 [@cazzola2008mcid].
-
-### Caveats box
-
-| Caveat | Detail |
-|--------|--------|
-| 95% is convention | Not 95% probability for this one interval (frequentist) |
-| Multiple CIs | Do not cherry-pick the narrowest |
-| Model-based CI | Assumes model correct |
-| Small n | Wald CI for OR can be poor - profile/likelihood or bootstrap [@efron1993bootstrap] |
-
-### In practice
-
-Reviewers will ask for CIs even when you reported p-values. Build tables with estimate, CI, and n from the start: retrofitting intervals before resubmission wastes a week and invites arithmetic errors.
-
-### In practice (CONSORT flow)
-
-For RCTs, the number analysed is often smaller than enrolled. The CONSORT flow is not bureaucracy; it documents who entered the estimand. If FEV1 at week 12 excludes patients who died or withdrew, say so explicitly and link to [Chapter 20](20-missing-data.md).
-
-### In practice (non-inferiority reporting)
-
-Regulatory and device submissions ask: “Did you demonstrate non-inferiority?” A Results paragraph with only “p = 0.08” fails that question. Report the **prespecified margin**, the **90% CI** (or TOST result), and a plain conclusion relative to Δ ([Ch 4 NI template](04-comparing-groups.md#technique-non-inferiority-and-equivalence-trials)).
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | "p > 0.05 therefore no effect" |
-| **Do instead** | Report CI; discuss power and MCID |
-
-| | |
-|---|---|
-| **Mistake** | Report only significant secondary endpoints |
-| **Do instead** | Pre-specify or label exploratory |
-
-### Reporting template
-
-**Results:** Mean difference 0.09 L (95% CI −0.04 to 0.21; n = 400). The interval includes no effect and clinically small benefits.
+**Results template:** Mean difference 0.09 L (95% CI −0.04 to 0.21; *n* = 400). The interval includes no effect and clinically small benefits.
 
 ---
 
 ## Technique: Bootstrap confidence intervals
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | CI for statistic without formula (complex estimands) |
-| **Method** | Resample rows with replacement B times; percentile CI |
-| **R** | `replicate` + `quantile` or `boot` package |
-| **When to use** | Non-normal statistic; median difference; small n robustness |
-| **Does NOT fix** | Bad design or wrong estimand |
+Resample rows with replacement when the statistic has no closed-form CI (median difference, complex estimands). Complements parametric CIs — does not fix wrong design.
 
 ```r
 B <- 2000
@@ -154,148 +44,56 @@ boot_diff <- replicate(B, {
 quantile(boot_diff, c(0.025, 0.975))
 ```
 
-### Dual interpretation
-
-**Plain language:** if we repeated the study many times, the mean difference would fall in this range about 95% of the time (percentile bootstrap interpretation) [@efron1993bootstrap].
-
-### Caveats
-
-Clustered data need cluster bootstrap ([Ch 18](18-longitudinal-mixed-models.md)). Percentile bootstrap can fail for skewed ORs - consider BCa.
-
-### Wrong analysis ⚠
-
-Bootstrap on 15 patients and treat as definitive → report wide CI honestly.
+Clustered data need cluster bootstrap. With *n* = 15, a wide bootstrap CI is honest, not a failure.
 
 ---
 
 ## Technique: Multiplicity control
 
-### Technique card
+One **prespecified primary** endpoint; secondaries in a **family** with Holm or gatekeeping; omics in a **separate** FDR family (Part VI). A steering deck with four lung endpoints each at α = 0.05 invites false positives.
 
-| | |
-|---|---|
-| **Answers** | How to control false positives across many tests? |
-| **Methods** | Prespecify primary endpoint; Holm; Bonferroni; gatekeeping [@benjamini1995fdr] |
-| **CASTOR context** | FEV1, FVC, symptoms, exacerbations - pick one primary |
-| **Does NOT mean** | Never run secondary analyses |
+| Structure | Example | Rule |
+|-----------|---------|------|
+| **Primary** | Week-12 FEV₁ | Powers the trial |
+| **Key secondaries** | FVC, CAT, exacerbation proportion | Prespecified order + Holm within clinical family |
+| **Exploratory** | Post hoc subgroup | Label hypothesis-generating |
+| **Omics** | ~1000 proteins | BH FDR, separate from FEV₁ |
 
-### Linking clinical outcomes (endpoint families)
-
-Pulmonary trials rarely have a single number of interest, but they should have **one primary estimand**. Related outcomes belong in a **prespecified hierarchy**, not on equal footing by default.
-
-| Structure | Example | Analysis rule |
-|-----------|---------|---------------|
-| **Primary** | Week-12 FEV1 (L), intervention − control | Powers the trial; unadjusted or ANCOVA per SAP ([Ch 4](04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints)) |
-| **Key secondaries** | FVC, CAT, exacerbation proportion | Test in **prespecified order** with Holm or gatekeeping within one **clinical family** |
-| **Exploratory** | Post hoc subgroup, biomarker subset | Label hypothesis-generating; no success claim |
-| **Omics family** | ~1000 proteins | **Separate** from clinical endpoints; BH FDR ([Ch 13](13-differential-analysis-fdr.md)) |
-| **Composite** | Responder on FEV1 **and** no exacerbation | Define components and missing-data rules **before** lock; not covered in depth here |
-
-**Practice read:** a steering-committee deck is not a statistical analysis plan. If four lung endpoints each carry α = 0.05, expect at least one false positive by chance. Prespecify which endpoint would change the label claim.
-
-**Unadjusted vs adjusted in the same table:** report both only when prespecified: e.g. unadjusted ITT mean difference as primary, ANCOVA with baseline FEV1 as supported secondary. Do not switch roles post hoc.
-
-### Caveats
-
-Bonferroni conservative; Holm less conservative. Exploratory analyses must be labelled. Composite endpoints need explicit rules for partial missingness (e.g. FEV1 missing but exacerbation observed).
-
-### Wrong analysis ⚠
-
-Test 20 biomarkers at α = 0.05; publish the three "significant" ones without correction.
-
-| | |
-|---|---|
-| **Mistake** | Re-rank secondary endpoints after unblinding |
-| **Do instead** | Freeze hierarchy in SAP; exploratory = labelled |
-
-### Reporting template
-
-**Methods:** The primary endpoint was 12-week FEV1 (unadjusted mean difference). Secondary endpoints (FVC, CAT, exacerbation proportion) were prespecified in that order with Holm adjustment within the clinical family. ANCOVA adjusting for baseline FEV1 was a prespecified supportive analysis. Exploratory proteomics used BH FDR and were hypothesis-generating.
+**Methods template:** The primary endpoint was 12-week FEV₁ (unadjusted mean difference). Secondaries (FVC, CAT, exacerbation proportion) were tested in prespecified order with Holm adjustment within the clinical family.
 
 ---
 
 ## Technique: Reporting guidelines (CONSORT / STROBE / TRIPOD)
 
-### Technique card
+| Guideline | Design | Key items |
+|-----------|--------|-----------|
+| **CONSORT** | RCT | Flow diagram, randomisation, primary outcome [@schulz2010consort] |
+| **STROBE** | Observational | Eligibility, confounding, missing data [@vonelm2007strobe] |
+| **TRIPOD** | Prediction | Validation, calibration, model specification [@moons2015tripod] |
 
-| Guideline | Design | Key items | Reference |
-|-----------|--------|-----------|-----------|
-| **CONSORT** | RCT | Flow diagram, randomisation, primary outcome | [@schulz2010consort] |
-| **STROBE** | Observational | Eligibility, confounding, missing data | [@vonelm2007strobe] |
-| **TRIPOD** | Prediction | Validation, calibration, model specification | [@moons2015tripod] |
+Checklists improve transparency — they do not replace correct analysis. Cite checklist version/year; full protocol in supplement.
 
-**Figure hygiene:** CONSORT/STROBE flow diagrams and TRIPOD calibration figures are part of evidence quality. Right vs wrong plot pairs: [Appendix I](../appendix-i-figure-hygiene.md), [Ch 3](03-descriptive-analysis.md#plot-choice-by-estimand).
-
-### Dual interpretation
-
-**Plain language:** checklists help reviewers and readers see what you did and what you might have hidden.
-
-**Statistician read:** not a substitute for correct analysis - you can follow CONSORT and still misuse ANCOVA.
-
-### Caveats
-
-Checklists evolve - cite version/year. Supplementary materials for full protocol.
-
-### Wrong analysis ⚠
-
-Report CONSORT flow diagram but change primary endpoint post hoc without disclosure.
-
-### Reporting template
-
-**Methods:** We followed CONSORT 2010 guidelines [@schulz2010consort]. The analysis plan was prespecified before unblinding (supplementary protocol).
+**Methods snippet:** We followed CONSORT 2010 guidelines [@schulz2010consort]. The analysis plan was prespecified before unblinding (supplementary protocol).
 
 ---
 
 ## Technique: Reproducible reporting
 
-### Technique card
-
-| | |
-|---|---|
-| **Minimum** | R version, key packages, seed, analysis script path |
-| **Better** | Quarto/R Markdown compiling Tables and Figures |
-| **CASTOR** | `source("R/run_all_examples.R")` reproduces book outputs |
-
-```r
-sessionInfo()
-```
-
-### Caveats
-
-`sessionInfo()` alone insufficient without shared data and script. Proprietary GUI-only steps not reproducible.
-
-### Wrong analysis ⚠
-
-"Data available on request" with no code → not reproducible science.
+Minimum: R version, key packages, seed, analysis script path. Better: Quarto/R Markdown compiling Tables and Figures. CASTOR: `source("R/run_all_examples.R")` reproduces book outputs. `sessionInfo()` alone is insufficient without shared data and script.
 
 ---
 
 ## Technique: Sensitivity analysis
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Are conclusions robust to reasonable analysis choices? |
-| **Examples** | Complete-case vs MI; Welch vs Mann-Whitney; logistic vs Firth |
-| **Rule** | **Prespecify** in protocol when possible |
-| **Does NOT mean** | Run analyses until one is significant |
-
-### CASTOR examples
+**Prespecified** alternatives when the primary is contested: complete-case vs MI; Welch vs Mann–Whitney; logistic vs Firth; Poisson vs NB. Not twelve models until one hits *p* < 0.05.
 
 | Primary | Sensitivity |
 |---------|-------------|
-| Welch t on FEV1 | Mann-Whitney; ANCOVA with baseline |
+| Welch *t* on FEV₁ | Mann–Whitney; ANCOVA with baseline |
 | Logistic OR smoking | Firth; log-binomial RR |
 | Poisson counts | Negative binomial |
 
-### Wrong analysis ⚠
-
-Run 12 models; report only the one with p < 0.05.
-
-### Reporting template
-
-**Results:** Primary analysis … Sensitivity analyses using [method] yielded similar conclusions (Table S2).
+**Results template:** Primary analysis … Sensitivity analyses using [method] yielded similar conclusions (Table S2).
 
 ---
 
@@ -381,21 +179,52 @@ sessionInfo()
 
 > The estimated difference was … (90% CI …). Because the CI [was / was not] entirely above Δ, non-inferiority [was / was not] demonstrated.
 
-Full technique card: [Chapter 4](04-comparing-groups.md#technique-non-inferiority-and-equivalence-trials).
+Full technique card: Chapter 4.
 
-### Missing data ([Ch 20](20-missing-data.md))
+### Missing data
 
-Multiple imputation (MICE) is the default modern sensitivity tool when missingness is plausibly MAR. [Ch 20](20-missing-data.md) introduces patterns and sensitivity; production analyses should use `mice` with pooled estimates.
+Multiple imputation (MICE) is the default modern sensitivity tool when missingness is plausibly MAR. Chapter 20 introduces patterns and sensitivity; production analyses should use `mice` with pooled estimates.
 
-## Chapter summary
+---
 
-- Intervals over dichotomous significance [@harrell2015rms].
-- Bootstrap and sensitivity analyses support robust conclusions [@efron1993bootstrap].
-- Match reporting guideline to design [@schulz2010consort; @vonelm2007strobe; @moons2015tripod]; document reproducibility.
+## Quick reference: methods in this chapter
 
-## Where this chapter leads
+| Method / framework | When to use | Why |
+|-------------------|-------------|-----|
+| **95% confidence interval** | Any primary estimate | Shows precision; preferred over “NS” |
+| **Bootstrap CI** | Small *n*; skew; nonstandard estimators | Resampling when formulas are doubtful |
+| **CONSORT flow + checklist** | Randomised trials | Standard for enrolment, follow-up, analysis sets |
+| **STROBE** | Observational cohorts and case-control | Transparency on selection, confounding, missingness |
+| **TRIPOD** | Prediction model papers | Discrimination, calibration, validation stated |
+| **Multiplicity adjustment** | Secondary endpoints; omics screens | Controls false positives across families of tests |
+| **Prespecified sensitivity analyses** | MAR, batch, model form | Shows stability; not post hoc rescue |
+| **REMARK / omics reporting** | Biomarker discovery lists | Effect size + q + validation plan |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions-evidence-quality-toolkit) at chapter end.
+
+---
+
+## Where we go next
 
 **Next:** Prediction workflows → [Chapter 9](09-prediction-vs-inference.md). Discovery on marker panels → [Chapters 10–12](10-dimensionality-reduction.md). Omics → [Chapter 13](13-differential-analysis-fdr.md).
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md#plot-choice-by-estimand) | Table 1, plots, distribution checks |
+| [Chapter 4: Comparing groups](04-comparing-groups.md#technique-non-inferiority-and-equivalence-trials) | Welch *t*, proportions, group comparisons |
+| [Chapter 9: Prediction vs inference](09-prediction-vs-inference.md) | AUC, calibration, nested CV |
+| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
+| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
+| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
 
 ## Further reading
 
@@ -405,4 +234,3 @@ Multiple imputation (MICE) is the default modern sensitivity tool when missingne
 
 ## Exercises ([Solutions](../solutions/ch08_solutions.md))
 
-**Next:** [Chapter 9](09-prediction-vs-inference.md)

@@ -2,72 +2,15 @@
 
 > **Part VI: Structure Discovery**
 
-## At a glance
+## Opening scene: thirty markers, one slide
 
-| | |
-|---|---|
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - `data/marker_panel.csv` |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Methods** | PCA + alternatives menu (PLS, sparse/robust PCA, MCA/FAMD, logistic PCA), scree, loadings, biplots |
-| **R** | `R/examples/ch10_pca.R` |
-| **Figures** | ch10_scree (`ch10_scree.png`), ch10_pca_biplot (`ch10_pca_biplot.png`); **figure hygiene:** `viz_pair_ch10_pca.png` |
-| **Exercises** | [ch10](../exercises/ch10_exercises.md) |
-
-**Also see:** [Appendix B](../appendix-b-quick-reference.md), Omics reporting: [@mcshane2011biomarker]
+CASTOR's marker panel arrives for exploratory work: thirty correlated proteins, true phenotype labels for teaching only. A translational postdoc runs PCA coloured by case/control; the ellipses separate beautifully. Mei asks: *"Colour by processing batch first. Then show me the scree."*
 
 ---
-
-## In this chapter
-
-1. [Why this chapter](#why-this-chapter): summarise before clustering
-2. [Method choice at a glance](#method-choice-at-a-glance): PCA vs alternatives
-3. Scree plot + **Practice read**; how many components?
-4. [Catalog of wrong analyses](#catalog-of-wrong-analyses): batch-coloured PCA without check
-
-**Analyst read:** loadings, biplots, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **PCA (scaled)** | Many correlated continuous markers; exploration | Unsupervised variance summary; not hypothesis test |
-| **Scree / variance explained** | Choose number of components | Defensible truncation; avoid eyeballing only |
-| **Sparse PCA** | p ≫ n; want interpretable loadings | Fewer noisy loadings; still exploratory |
-| **PLS** | Have outcome Y and many X (supervised reduction) | Maximises covariance with Y; not unsupervised PCA |
-| **FAMD / MCA** | Mixed numeric + categorical blocks | Extends PCA to heterogeneous columns |
-| **Biplot** | Visualise patients and variables together | Teaching QC; check batch colouring first |
-
-**Extensions:** robust PCA, logistic PCA in chapter alternatives.
-
----
-
-## Learning objectives
-
-1. Use PCA for exploratory summarisation of many correlated markers.
-2. Scale appropriately and choose number of components defensively.
-3. Interpret loadings and scores without overclaiming biology.
-4. Recognise exploratory limits and need for replication.
-5. Report PCA methods transparently.
-
-## Prerequisites
-
-Chapters 3, 5.
-
----
-
-*A collaborator emails: “Here is PCA on the 30-marker panel: two clear clusters.” You open the plot: points separate, but colour by processing batch shows the same split. **This chapter** is how you summarise markers without mistaking batch for biology.*
 
 ## Why this chapter
 
-Marker panels and omics produce too many correlated columns to inspect by eye. PCA and related tools help you **see** structure without pretending every axis is a new biomarker. Use this chapter for exploration; use Ch 13+ when the goal is formal differential analysis.
-
-## Opening question (CASTOR marker panel)
-
-*Thirty blood markers were measured in 120 CASTOR participants. Can we visualise patient similarity without thirty separate plots?*
-
-PCA is **exploratory**. It does not test hypotheses by itself [@jolliffe2016pca].
+High-dimensional summaries are exploration tools, not endpoints. PCA and friends reduce noise before clustering or hypothesis tests — when you use them with batch awareness and modest claims.
 
 ---
 
@@ -103,60 +46,17 @@ Use this menu first, then read the relevant technique section.
 
 ## Technique: Principal component analysis (PCA)
 
-### Technique card
+**Question:** What orthogonal directions capture most joint variation in many correlated continuous markers?
 
-| | |
-|---|---|
-| **Answers** | What orthogonal directions capture most joint variation? |
-| **Input** | n × p matrix of continuous features (markers) |
-| **Output** | Scores (patients), loadings (variables), eigenvalues |
-| **R** | `prcomp(X, scale. = TRUE)` |
-| **When to use** | Many correlated continuous features |
-| **When NOT to use** | Confirmatory endpoint; mixed binary/continuous without encoding |
-| **Does NOT prove** | Biological mechanism; validated endotype |
+PC1 is the weighted combination that separates patients most (eigenvector of the correlation matrix; scores are projections). Name an axis only after independent validation — it is a statistical summary, not a biological mechanism [@jolliffe2016pca].
 
-### Dual interpretation
+**Use when:** visualisation, noise reduction, preprocessing before clustering (train only). **Avoid when:** confirmatory endpoint; mixed binary/continuous without encoding; replacing clinical diagnosis.
 
-**Plain language:** PC1 is the weighted combination of markers that separates patients most.
+**Caveats:** always `scale. = TRUE` when units differ; outliers and batch can drive top PCs [@mcshane2011biomarker]; p ≫ n needs regularized PCA; fit PCA on **train** only, then rotate test.
 
-**Precise language:** eigenvector of covariance/correlation matrix; scores are projections; components uncorrelated [@jolliffe2016pca].
+**Practice read:** colour points by **batch** before phenotype. PCA on 30 markers dominated by one batch variable is a QC finding, not an endotype.
 
-**Practice read:** a statistical summary axis - name it only after independent validation.
-
-### Caveats box
-
-| Caveat | Detail |
-|--------|--------|
-| Scaling | Unscaled PCA dominated by largest units |
-| Outliers | Single patient can pull PC1 |
-| p >> n | Unstable; regularized PCA needed |
-| Batch effects | Can drive top PCs in omics [@mcshane2011biomarker] |
-| Circular analysis | Fit PCA on full data then "predict" outcome on same data |
-
-### In practice
-
-PCA on 30 markers can be dominated by one batch variable. Colour points by batch before colouring by phenotype: the same rule as omics, at smaller scale.
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | "PC1 is the asthma endotype axis" from one cohort |
-| **Do instead** | Label exploratory; replicate externally |
-
-| | |
-|---|---|
-| **Mistake** | PCA on training+test before split |
-| **Do instead** | Fit PCA on training; apply rotation to test |
-
-### Reporting template
-
-**Methods:** Markers were standardised (z-scores). PCA used the correlation matrix. Scree plot and cumulative variance guided component retention (exploratory) [@jolliffe2016pca].
-
-**Results:** PC1 explained 27% of variance. Loadings were highest on M1-M5 (Table S3). No confirmatory inference was drawn.
-
-
-### R lab
+**Methods template:** Markers were standardised (z-scores). PCA used the correlation matrix. Scree plot and cumulative variance guided component retention (exploratory) [@jolliffe2016pca].
 
 ```r
 source("R/examples/ch10_pca.R")
@@ -168,164 +68,42 @@ summary(pca)
 
 ---
 
-## Technique: Choosing number of components
+## Scree, loadings, and biplot (supporting PCA)
 
-### Technique card
-
-| Method | Rule |
-|--------|------|
-| **Scree plot** | Elbow in eigenvalues |
-| **Cumulative variance** | e.g. 80% (arbitrary) |
-| **Kaiser** | Eigenvalue > 1 (correlation PCA) |
-| **Domain** | Clinical interpretability - weak alone |
-
-### Caveats
-
-Many rules disagree; components are retained for **description**, not hypothesis tests.
-
-### Wrong analysis ⚠
-
-Keep components until outcome regression is significant → circular.
+**Choosing *k*:** scree elbow, cumulative variance (e.g. 80%), Kaiser (eigenvalue > 1) — rules disagree; retain components for **description**, not hypothesis tests. Never keep components until outcome regression is significant (circular).
 
 ![Scree plot: variance explained by component](../figures/ch10_scree.png)
 
-Use the scree elbow with domain judgment, not as a standalone stopping rule.
+**Loadings and scores:** scores = patient position on component *k*; loadings = variable weights. High loading on M3 → M3 contributes strongly to that axis. Sign is arbitrary; varimax rotation (`psych::principal`, `rotate = "varimax"`) simplifies loadings for exploration only.
 
----
-
-## Technique: Loadings and scores
-
-| Object | Meaning |
-|--------|---------|
-| **Score** | Patient position on component k |
-| **Loading** | Variable weight on component k |
-
-High loading on M3 → M3 contributes strongly to that axis.
-
-### Caveats
-
-Loadings sign arbitrary; rotation changes interpretation (varimax).
-
----
-
-## Technique: Varimax rotation
-
-### Technique card
-
-| | |
-|---|---|
-| **Purpose** | Simpler loading structure for interpretation |
-| **Use** | Exploratory only |
-| **R** | `psych::principal(..., rotate = "varimax")` or similar |
-
-Still not validation of biology.
-
----
-
-## Technique: Biplot
-
-Joint plot of patients (scores) and variables (loadings). Useful for CASTOR `true_phenotype` visual check - teaching only; real studies lack truth labels.
+**Biplot:** joint plot of patients and variables — useful for CASTOR `true_phenotype` visual check (teaching only). Colour by batch before phenotype.
 
 ![PCA biplot: CASTOR marker panel](../figures/ch10_pca_biplot.png)
 
-Colour by batch before phenotype when reviewing omics-style panels (Ch 14).
+**PC regression (preview):** regress outcome on first *k* PCs instead of all markers — loses direct marker interpretability; overfits if *k* chosen from same data.
 
 ---
 
-## Technique: PC regression (preview)
+## Advanced options (when PCA is not enough)
 
-Regress outcome on first k PCs instead of all markers.
+When the routing table above points beyond vanilla PCA, these are common in respiratory biomarker papers — decision logic only; none replace external validation.
 
-**Caveat:** components lose direct marker interpretability; risk of overfitting if k chosen from same data.
-
----
-
-## Advanced options (short technique cards)
-
-These are common in modern respiratory biomarker papers. This handbook includes the *decision logic* and minimal R pointers; do not treat them as confirmatory proof.
-
-### Technique: Sparse PCA
-
-| | |
-|---|---|
-| **Answers** | PCA-like components with many loadings forced to zero |
-| **When to use** | p >> n; interpretability focus |
-| **Common R** | `elasticnet::spca`, `PMA::SPC` |
-| **Caveat** | Tuning choices are flexible; report how chosen |
-| **Does NOT prove** | Biological axis; validated marker subset |
-
-### Technique: Robust PCA
-
-| | |
-|---|---|
-| **Answers** | Reduce influence of outliers/artefacts on components |
-| **When to use** | Outliers/batch artefacts likely; QC imperfect |
-| **Common R** | `rrcov::PcaHubert`, robust covariance approaches |
-| **Caveat** | Different robust methods yield different PCs |
-
-### Technique: MCA (multiple correspondence analysis): “PCA for categorical data”
-
-| | |
-|---|---|
-| **Data** | Categorical variables (including binary) |
-| **When to use** | Many categorical features; survey/symptom patterns |
-| **Common R** | `FactoMineR::MCA`, `factoextra` plotting |
-| **Caveat** | Interpret with care; axes reflect category frequencies |
-
-### Technique: FAMD: mixed continuous + categorical
-
-| | |
-|---|---|
-| **Data** | Mixed feature types |
-| **When to use** | Combine symptoms (categorical) + labs (continuous) |
-| **Common R** | `FactoMineR::FAMD` |
-| **Caveat** | Scaling/weighting decisions matter; document them |
-
-### Technique: Logistic PCA (binary matrix)
-
-| | |
-|---|---|
-| **Data** | Binary features (0/1) |
-| **When to use** | Binary “marker present/absent” panels |
-| **Common R** | `logisticPCA`-style packages / GLM-based latent factors |
-| **Caveat** | More complex; convergence and identifiability issues |
-
-### Technique: Kernel / nonlinear PCA (mention)
-
-| | |
-|---|---|
-| **When to consider** | Strong nonlinear manifolds suspected |
-| **Caveat** | Harder to interpret; higher overfitting risk |
-| **Modern alternatives** | UMAP/t-SNE for visualization only (do not call axes “biology”) |
+| Method | When | R pointer | Caveat |
+|--------|------|-----------|--------|
+| **Sparse PCA** | p ≫ n; interpretable loadings | `elasticnet::spca`, `PMA::SPC` | Tuning is flexible — document choices |
+| **Robust PCA** | Outliers / batch artefacts | `rrcov::PcaHubert` | Methods disagree on components |
+| **MCA** | Mostly categorical | `FactoMineR::MCA` | Axes reflect category frequencies |
+| **FAMD** | Mixed continuous + categorical | `FactoMineR::FAMD` | Scaling/weighting decisions matter |
+| **Logistic PCA** | Binary marker matrix | GLM-based latent packages | Convergence / identifiability |
+| **Kernel PCA / UMAP** | Nonlinear manifolds | Various | Visualisation only — not “biology axes” |
 
 ---
 
 ## Supervised dimension reduction: Partial Least Squares (PLS)
 
-PLS is **not** an “upgrade of PCA.” It changes the question: components are chosen to explain *covariation with an outcome*.
+PLS is **not** an upgrade of PCA — components maximise covariance with an outcome Y. Use for prediction/exploration when many correlated predictors exist (`pls::plsr`; `mixOmics` for omics workflows). Fit **inside training folds** only; p ≫ n with few events inflates performance; VIP importance ≠ causality. TRIPOD if the goal is prediction; otherwise label exploratory [@moons2015tripod].
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Which linear combinations of markers best predict/associate with Y? |
-| **Use when** | Many correlated predictors; prediction/exploration goal |
-| **Common variants** | PLS regression (continuous Y), PLS-DA (classification) |
-| **Common R** | `pls::plsr`; `mixOmics` for supervised omics workflows |
-| **Does NOT prove** | Causal mechanism; validated biomarker signature without external validation |
-
-### Caveats box (PLS in respiratory biomarker papers)
-
-| Caveat | Why it matters |
-|---|---|
-| Leakage | PLS must be fit inside training folds (like LASSO) |
-| Overfitting | p >> n with few events → inflated performance |
-| Interpretation | “VIP” importance is not causality |
-| Reporting | Use TRIPOD if goal is prediction; otherwise label exploratory [@moons2015tripod] |
-
-### Wrong analysis ⚠
-
-Fit PLS on the full dataset, show perfect separation, and call it “validated endotypes” → external validation required (Ch 11) [@mcshane2011biomarker; @wenzel2012asthma].
+Fit PLS on the full dataset, show perfect separation, and call it “validated endotypes” → external validation required (Chapter 11) [@mcshane2011biomarker; @wenzel2012asthma].
 
 ---
 
@@ -360,15 +138,36 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 
 ---
 
-## Chapter summary
+## Quick reference: methods in this chapter
 
-- PCA summarises correlated markers for exploration [@jolliffe2016pca].
-- Scale, scree, and loadings need careful reporting.
-- Never skip external validation for clinical claims [@mcshane2011biomarker].
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **PCA (scaled)** | Many correlated continuous markers; exploration | Unsupervised variance summary; not hypothesis test |
+| **Scree / variance explained** | Choose number of components | Defensible truncation; avoid eyeballing only |
+| **Sparse PCA** | p ≫ n; want interpretable loadings | Fewer noisy loadings; still exploratory |
+| **PLS** | Have outcome Y and many X (supervised reduction) | Maximises covariance with Y; not unsupervised PCA |
+| **FAMD / MCA** | Mixed numeric + categorical blocks | Extends PCA to heterogeneous columns |
+| **Biplot** | Visualise patients and variables together | Teaching QC; check batch colouring first |
 
-## Where this chapter leads
+**Extensions:** robust PCA, logistic PCA in chapter alternatives.
+
+---
+
+## Where we go next
 
 **Next:** [Chapter 11](11-clustering.md) for patient groups; [Chapter 13](13-differential-analysis-fdr.md) when the goal is formal per-feature inference with FDR.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups — claim discipline |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 
@@ -379,4 +178,3 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 
 ## Exercises ([Solutions](../solutions/ch10_solutions.md))
 
-**Next:** [Chapter 11](11-clustering.md)

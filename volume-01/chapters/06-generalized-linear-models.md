@@ -2,95 +2,21 @@
 
 > **Part III: Regression for Non-Continuous Outcomes**
 
-## At a glance
+## Opening scene: the secondary endpoint email
 
-| | |
-|---|---|
-| **Question type** | What factors are associated with binary/count outcomes? |
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Key methods** | Logistic, Firth, log-binomial, Poisson, NB, zero-inflated, offset |
-| **R scripts** | `R/examples/ch06_glm.R` |
-| **Figures** | logistic forest (`ch06_logistic_forest.png`), Poisson RR (`ch06_poisson_rate_ratio.png`); **figure hygiene:** `viz_pair_ch06_forest.png` |
-| **Exercises** | [Chapter 6 exercises](../exercises/ch06_exercises.md) |
+Regulatory affairs asks for exacerbation results. Binary: any vs none in twelve months. Count: events per person-year. A fellow already ran `lm()` on 0/1 exacerbation; coefficients look tidy and completely wrong.
 
-**Also see:** [Appendix B § Step 3-5](../appendix-b-quick-reference.md), [Decision table](#decision-table-which-glm)
-
-> **Sounds like your lab?** [Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) (`lm()` on 0/1 exacerbation) → [Binary outcomes: logistic regression](#binary-outcomes-logistic-regression).
-
----
-
-## In this chapter
-
-You do not need this entire chapter on first pass. Read in order:
-
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): OR vs RR, binary vs count, varying follow-up
-2. [Opening question](#opening-question): confirm the outcome is binary or count, not continuous
-3. [Method choice at a glance](#method-choice-at-a-glance): pick logistic, Poisson, or NB
-4. [Worked example: exacerbation logistic model](#worked-example-exacerbation-logistic-model): Practice read and reporting pattern
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-glm-chapter): especially `lm()` on 0/1 outcomes
-
-**Analyst read:** technique cards, GLM framework, R lab, and extensions in the sections below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Logistic regression** | Binary outcome (exacerbation Y/N); adjust covariates | Correct variance for 0/1; OR or predicted risks + CI |
-| **Firth penalized logistic** | Sparse events; separation (coefficients → ∞) | Stabilises MLE when tables are sparse |
-| **Log-binomial / modified Poisson** | Common binary outcome; want **risk ratio** | OR overstates when events are frequent |
-| **Poisson GLM** | Count exacerbations; equal follow-up | Models event counts; check overdispersion |
-| **Poisson + offset(log person-time)** | Count outcomes; **varying** follow-up | Converts counts to rates; required when exposure time differs |
-| **Negative binomial** | Count data; variance >> mean (overdispersion) | Default sensitivity to Poisson |
-| **Zero-inflated Poisson/NB** | Excess zeros beyond sampling | Separates “structural zero” from count process |
-| **Ordinal logistic** | Ordered categories (mMRC 0–4, CAT bands) | Respects ordering; not `lm()` on 0–4 |
-| **GEE / mixed logistic** | Clustered binary (centres, wards) | Correlated outcomes need cluster-aware SEs ([Ch 18](18-longitudinal-mixed-models.md)) |
-
-**Extensions** (hurdle models, complementary log-log): [Alternatives & extensions](#alternatives--extensions-choose-by-outcome-nuance) at chapter end.
-
----
-
-## Learning objectives
-
-1. Explain the three components of a GLM (distribution, link, linear predictor).
-2. Fit and interpret logistic regression for binary respiratory endpoints.
-3. Distinguish odds ratios from risk ratios and when each matters.
-4. Model exacerbation counts with Poisson and negative binomial regression.
-5. Use offsets for varying follow-up time.
-6. Compute adjusted predictions and recognize separation/overdispersion issues.
-
-## Prerequisites
-
-- [Chapter 4](04-comparing-groups.md) - comparing proportions
-- [Chapter 5](05-linear-models.md) - linear predictor, confounding
+Mei converts the thread into two families: **logistic** for proportions, **Poisson/negative binomial** for rates with exposure time. Rivera gets one slide with event tables, not six mislabelled *p*-values.
 
 ---
 
 ## Why this chapter
 
-Exacerbation yes/no, exacerbation counts, and ordinal symptoms do not belong on a Gaussian model. GLMs are where CASTOR’s binary and count endpoints live. If your outcome is 0/1 or a small non-negative integer, you are in this chapter.
+Respiratory endpoints are often binary or count-shaped. This chapter is where CASTOR's exacerbation variables get the model family they deserve — and where you learn why a Gaussian test on 0/1 is a silent failure.
 
-## Opening question
+**Odds ratios** mislead when exacerbations are common: prefer risk difference, RR, or predicted risks. Check **events per variable** in logistic models (~18 events in CASTOR — wide CIs). Default to **negative binomial** when Poisson shows overdispersion. Use **offset(log person-time)** when follow-up varies. *"Any exacerbation"* and *"exacerbations per year"* are different estimands — do not swap models for convenience.
 
-*Among COPD patients, is smoking associated with at least one exacerbation in 12 months after adjusting for age, lung function, and prior history?*
-
-The outcome is **binary**. Fitting `lm(exacerbation ~ ...)` predicts values outside [0,1] and wrong variance structure. We need a **GLM** [@hosmer2013applied].
-
-We continue with **[CASTOR](../RECURRING_COHORT.md)** - `data/exacerbation.csv`.
-
----
-
-## Clinical and biostatistics notes
-
-**Clinical:** **Odds ratios** mislead when exacerbations are common: prefer risk difference, RR, or predicted risks. Prior exacerbation history is clinically dominant. Observational smoking associations are not causal without design.
-
-**Biostatistics:** Check **events per variable** in logistic models. Default to **negative binomial** when Poisson shows overdispersion. Use **offset(log person-time)** when follow-up varies. Use **Firth** when separation or sparse events destabilise MLE.
-
-**Clinical nuance:** "any exacerbation" (binary) and "exacerbations per year" (count) answer different questions: do not swap models for convenience.
-
-**Biostat nuance:** `glm(..., family = binomial)` is the minimum correct model for 0/1 outcomes; `lm()` on binary Y remains a common submission error.
+> **How to read this chapter:** Jump to **logistic** (binary) or **Poisson/NB** (counts). [Quick reference](#quick-reference-methods-in-this-chapter) at the end lists all methods.
 
 ---
 
@@ -130,8 +56,6 @@ Estimation: **maximum likelihood** (iteratively reweighted least squares for man
 
 **Plain language:** smoking multiplies the odds of exacerbation by exp(β), holding other variables fixed.
 
-**Precise language:** under the model, a one-unit increase in X adds β to the log-odds of Y=1 [@hosmer2013applied].
-
 ```r
 logit_fit <- glm(
  exacerbation_12m ~ smoking + age +
@@ -142,36 +66,15 @@ logit_fit <- glm(
 broom::tidy(logit_fit, conf.int = TRUE, exponentiate = TRUE)
 ```
 
-#### Dual interpretation (CASTOR)
+**Practice read:** prior exacerbations are among the strongest predictors — consistent with clinic. OR is not “X% more likely” unless events are rare. When events are common (>10–15%), ask for risk differences or log-binomial RRs. CASTOR has ~18 events (~4.5 per variable) — consider Firth if separation appears [@firth1993bias]. Observational smoking associations are not causal without design.
 
-**Plain language:** after adjusting for age, lung function, and past flare-ups, prior exacerbations are linked to higher odds of another event in 12 months.
+**Common mistakes:** `lm()` on 0/1; reporting OR as RR when events are common; stepwise selection with 18 events.
 
-**Precise language:** adjusted odds ratio for prior_exacerbations = exp(β); conditions on other linear predictors; assumes logit link and independent observations.
-
-**Practice read:** history of exacerbations is among the strongest predictors - consistent with clinical practice. OR is not the same as "X% more likely" unless events are rare.
-
-#### Caveats box: logistic regression
-
-| Caveat | Why it matters |
-|--------|----------------|
-| **OR ≠ RR** when events common | Overstates relative risk |
-| **Low events (CASTOR ~18/350)** | Unstable estimates; wide CIs; consider Firth [@firth1993bias] |
-| **EPV** | ~18/4 ≈ 4.5 events per variable - below ideal 10-15 |
-| **Observational** | Smoking-exacerbation not causal without design |
-| **No clustering** | Patients at same centre may correlate |
-| **Linear on logit scale** | May miss nonlinear age effects - splines |
+Exacerbation counts of 0, 1, 2, 3 dominate COPD cohorts — Poisson may look fine and fail on overdispersion; check Pearson χ²/df before trusting rate ratios.
 
 ### In practice
 
-Exacerbation counts of 0, 1, 2, 3 dominate COPD cohorts. Poisson will look fine in R and fail on overdispersion. Always check observed vs fitted counts and consider negative binomial before trusting the rate ratio.
-
-### In practice (ordinal symptoms)
-
-mMRC dyspnoea (0–4) and CAT scores are **ordered categories**, not continuous measurements. A coefficient from `lm(mMRC ~ treatment)` implies equal spacing between “slightly breathless” and “housebound.” Use ordinal logistic regression ([technique below](#technique-ordinal-logistic-regression-mmrccat)) or report medians with ordinal-aware comparisons.
-
-### In practice (common events)
-
-When exacerbation rates exceed ~10–15%, odds ratios from logistic regression exaggerate relative to risk ratios. Ask for **risk differences** or log-binomial **rate ratios** for the practice read.
+mMRC (0–4) and CAT are **ordered categories**, not continuous measurements. `lm(mMRC ~ treatment)` implies equal spacing between categories — use [ordinal logistic](#technique-ordinal-logistic-regression-mmrccat) or median-based summaries instead.
 
 ### Other respiratory settings
 
@@ -182,33 +85,13 @@ Logistic and Poisson models in CASTOR target **COPD exacerbations**. The model f
 
 Report absolute risks or rate differences when events are common.
 
-#### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | `lm(exacerbation_12m ~ smoking)` |
-| **Why wrong** | Linear model for binary Y |
-| **Do instead** | `glm(..., family = binomial)` |
-
-| | |
-|---|---|
-| **Mistake** | Report OR as "smokers have 30% higher risk" |
-| **Why wrong** | OR ≠ risk difference; misstates scale |
-| **Do instead** | Marginal predicted risks via `emmeans`; or log-binomial RR |
-
-| | |
-|---|---|
-| **Mistake** | Stepwise selection of 20 predictors with 18 events |
-| **Why wrong** | Massive overfitting; invalid p-values |
-| **Do instead** | Prespecify confounders; penalized methods for prediction |
-
 #### Reporting template
 
 **Methods:** Logistic regression modelled 12-month exacerbation (yes/no) adjusting for smoking, age, FEV1 % predicted, and prior exacerbation count. We report odds ratios with 95% CIs (Wald). Model fit assessed by event count and residual deviance.
 
 **Results:** Among 350 patients (18 events), prior exacerbations were associated with higher odds of a new event (OR 1.70, 95% CI 1.12 to 2.59). FEV1 % predicted OR 0.95 per 1% (95% CI 0.91 to 0.99). Smoking OR imprecise (95% CI included 1).
 
-**Do not say:** "Smoking causes exacerbation" (observational); "logistic proved prediction model" (use Ch 9 metrics).
+**Do not say:** "Smoking causes exacerbation" (observational); treat high AUC as proof of causation when the goal was association.
 
 ### Odds vs risk
 
@@ -233,16 +116,9 @@ if (requireNamespace("emmeans", quietly = TRUE)) {
 
 ### Technique: Firth penalized logistic
 
-| | |
-|---|---|
-| **Answers** | Stable OR estimates when MLE diverges (separation, sparse events) |
-| **CASTOR trigger** | ~18 events / 350 - wide CIs; separation possible in subgroups |
-| **R** | `logistf::logistf(...)` |
-| **Effect measure** | OR (penalized) |
-| **When to use** | Complete/quasi separation; small event counts |
-| **Does NOT prove** | Stronger evidence - estimates are biased low |
+When a predictor perfectly predicts outcome in a category (**complete separation**), MLE coefficients diverge. **Firth penalized logistic** gives finite OR estimates via Jeffreys-prior penalized likelihood — stable when ordinary logistic "blows up," with slight shrinkage as the cost [@firth1993bias]. CASTOR has ~18 events / 350 — wide CIs; separation possible in subgroups.
 
-When a predictor perfectly predicts outcome in a category (**complete separation**), MLE coefficients diverge.
+**R:** `logistf::logistf(...)` **Effect measure:** OR (penalized). Use for complete/quasi separation or small event counts. Does **not** create information from sparse events — state penalization in Methods; evaluate calibration separately when the goal is risk scoring.
 
 ```r
 logistf::logistf(
@@ -252,25 +128,7 @@ logistf::logistf(
 )
 ```
 
-#### Dual interpretation
-
-**Plain language:** Firth gives finite ORs when ordinary logistic "blows up."
-
-**Precise language:** Jeffreys-prior penalized likelihood; reduces bias in small samples at cost of slight shrinkage.
-
-#### Caveats box
-
-| Caveat | Detail |
-|--------|--------|
-| Penalization | State in Methods |
-| Still low EPV | Does not create information from 18 events |
-| Not for prediction | Use calibration/AUC separately (Ch 9) |
-
-#### Wrong analysis ⚠
-
-Report Firth OR with narrow causal language and no event count.
-
-#### Reporting template
+**Common mistake:** report Firth OR with narrow causal language and no event count.
 
 **Methods:** Firth penalized logistic regression was used due to sparse events (n events = …).
 
@@ -280,13 +138,11 @@ Report Firth OR with narrow causal language and no event count.
 
 ### Technique: Log-binomial GLM
 
-| | |
-|---|---|
-| **Answers** | Adjusted **risk ratio** (not odds ratio) |
-| **Link** | log |
-| **R** | `glm(y ~ x, family = binomial(link = "log"))` |
-| **When to use** | Cohort/trial; outcome common (>10%) |
-| **Problem** | Convergence failures → modified Poisson + robust SE |
+**Log-binomial GLM** estimates an adjusted **risk ratio** (not odds ratio) on the log link — `glm(y ~ x, family = binomial(link = "log"))`. Use in cohorts and trials when the outcome is common (>10%); convergence failures may require modified Poisson with robust SE. Predicted risks must stay ≤ 1.
+
+**Plain language:** smokers have RR × exp(β) times the risk of exacerbation, adjusted. **Practice read:** RR is often closer to "percent increase in risk" than OR when events are common.
+
+**Common mistake:** report logistic OR as RR when 30% event rate → log-binomial or marginal RD.
 
 ```r
 glm(
@@ -296,27 +152,7 @@ glm(
 )
 ```
 
-#### Dual interpretation
-
-**Plain language:** smokers have RR × exp(β) times the risk of exacerbation, adjusted.
-
-**Practice read:** RR often closer to "percent increase in risk" than OR when events common.
-
-#### Caveats box
-
-| Caveat | Detail |
-|--------|--------|
-| Convergence | May need Poisson trick with robust variance |
-| Bounded | Predicted risks must stay ≤ 1 |
-| vs logistic | OR easier to fit; RR more interpretable |
-
-#### Wrong analysis ⚠
-
-Report logistic OR as RR when 30% event rate → log-binomial or marginal RD.
-
-#### Reporting template
-
-**Results:** Adjusted RR for smoking = … (95% CI …) from log-binomial model.
+**Results template:** Adjusted RR for smoking = … (95% CI …) from log-binomial model.
 
 | Model | Effect measure | When |
 |-------|----------------|------|
@@ -326,18 +162,7 @@ Report logistic OR as RR when 30% event rate → log-binomial or marginal RD.
 
 ### Technique: Probit regression
 
-| | |
-|---|---|
-| **Answers** | Same as logistic on latent scale |
-| **Link** | probit |
-| **R** | `family = binomial(link = "probit")` |
-| **Use when** | Field standard; latent variable interpretation |
-
-Probit and logistic usually rank predictors similarly; coefficients not directly comparable across links.
-
-#### Caveats
-
-Interpretation less intuitive than OR for many readers.
+Same role as logistic on a latent scale — coefficients not comparable to ORs across links. Use when a field standard requires probit: `family = binomial(link = "probit")`. Probit and logistic usually rank predictors similarly.
 
 ---
 
@@ -345,50 +170,19 @@ Interpretation less intuitive than OR for many readers.
 
 ### Technique: Poisson GLM
 
-| | |
-|---|---|
-| **Answers** | How do rates of count outcomes change with predictors? |
-| **Outcome** | Non-negative integer (exacerbations, ED visits) |
-| **Link** | log |
-| **Effect measure** | Rate ratio = exp(β) |
-| **Assumption** | Mean = variance (equidispersion) |
-| **R** | `glm(y ~ x, family = poisson)` |
+**Poisson GLM** models non-negative integer counts (exacerbations, ED visits) on a log link; **rate ratio** = exp(β). Assumes mean = variance (equidispersion) [@cameron2013regression]. **R:** `glm(y ~ x, family = poisson)`.
+
+**Plain language:** each unit increase in ICS adherence is associated with lower expected exacerbation counts when rate ratio < 1. **Precise language:** exp(β) multiplies expected count on a multiplicative scale.
+
+Watch for: **overdispersion** (exacerbation counts often more variable than Poisson); **unequal follow-up** without offset; excess **zeros** (consider ZIP/ZINB); matching exposure window to exacerbation definition.
+
+**Common mistakes:** *t*-test on counts; Poisson without checking dispersion (Pearson χ²/df > 1 → NB or quasi).
 
 ```r
 pois_fit <- glm(exacerbations_12m ~ smoking + ics_adherence,
  data = counts, family = poisson)
 broom::tidy(pois_fit, conf.int = TRUE, exponentiate = TRUE)
 ```
-
-#### Dual interpretation
-
-**Plain language:** each unit increase in ICS adherence is associated with lower expected exacerbation counts (if rate ratio < 1).
-
-**Precise language:** exp(β) multiplies expected count on multiplicative scale; assumes Poisson variance = mean [@cameron2013regression].
-
-#### Caveats box: Poisson regression
-
-| Caveat | Why it matters |
-|--------|----------------|
-| **Overdispersion** | Exacerbation counts often more variable than Poisson |
-| **Equal follow-up** | Without offset, unequal person-time biases rates |
-| **Zeros** | Many zero counts → consider ZIP/ZINB |
-| **Rate vs count** | Model is for counts; interpret as rates only with offset |
-| **Exposure window** | Exacerbation definition must match follow-up |
-
-#### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | t-test on exacerbation counts |
-| **Do instead** | Poisson / NB GLM |
-
-| | |
-|---|---|
-| **Mistake** | Poisson without checking dispersion |
-| **Do instead** | Check Pearson $\chi^2$/df; use NB if > 1 |
-
-#### Reporting template
 
 **Results:** In Poisson regression, ICS adherence was associated with lower exacerbation rate (rate ratio 0.28 per unit adherence scale, 95% CI …). Pearson dispersion 1.09 suggested mild overdispersion; negative binomial sensitivity gave similar inference.
 
@@ -398,18 +192,9 @@ Rate ratios belong on a multiplicative scale; pair with dispersion checks before
 
 ### Technique: Poisson offset (person-time)
 
-| | |
-|---|---|
-| **Answers** | Rate per person-year when follow-up varies |
-| **R** | `glm(... + offset(log(person_years)), family = poisson)` |
-| **CASTOR data** | `exacerbation_counts.csv` includes `person_years` |
-| **Does NOT** | Fix overdispersion alone |
+When follow-up varies, add **offset(log(person_years))** so the model estimates rate per person-year — required in `exacerbation_counts.csv`. Offset does not fix overdispersion alone; zero follow-up is invalid.
 
-When follow-up varies:
-
-$$
-\log(\mu_i) = \log(t_i) + \beta_0 + \beta_1 X_i
-$$
+$$\log(\mu_i) = \log(t_i) + \beta_0 + \beta_1 X_i$$
 
 ```r
 glm(
@@ -420,90 +205,19 @@ glm(
 )
 ```
 
-#### Dual interpretation
-
-**Plain language:** models exacerbation **rate** accounting for different follow-up length.
-
-#### Caveats
-
-Offset must be log(person-time); zero follow-up invalid.
-
-#### Wrong analysis ⚠
-
-Compare total counts without standardizing for 6 vs 12 month follow-up.
-
----
+**Common mistake:** compare total counts without standardizing for 6 vs 12 month follow-up.
 
 ## Overdispersion and alternatives
 
-### Technique: Quasi-Poisson
+**Quasi-Poisson** scales SEs when variance > mean — quick fix, not a generative model: `family = quasipoisson`.
 
-| | |
-|---|---|
-| **Answers** | Scale SEs when variance > mean |
-| **R** | `family = quasipoisson` |
-| **Use** | Quick fix; not full generative model |
-
-### Technique: Negative binomial (NB)
-
-| | |
-|---|---|
-| **Answers** | Count regression with extra dispersion parameter |
-| **R** | `MASS::glm.nb(...)` |
-| **When to use** | Overdispersed exacerbation counts (default over Poisson) |
-| **Effect measure** | Rate ratio = exp(β) |
+**Negative binomial** is the default sensitivity when Pearson χ²/df > 1 — `MASS::glm.nb(...)`. Still use offset when follow-up varies.
 
 ```r
 MASS::glm.nb(exacerbations_12m ~ smoking + ics_adherence, data = counts)
 ```
 
-#### Dual interpretation
-
-**Plain language:** allows exacerbation counts to vary more than Poisson expects [@hilbe2011nb].
-
-**Precise language:** gamma mixing distribution adds overdispersion parameter θ.
-
-#### Caveats box
-
-| Caveat | Detail |
-|--------|--------|
-| Still need offset | If follow-up varies |
-| Zeros | NB may still miss excess zeros → ZI models |
-| Interpretation | Rate ratios similar to Poisson |
-
-#### Wrong analysis ⚠
-
-Poisson p-values when dispersion = 1.09+ without sensitivity NB → anti-conservative inference.
-
-#### Reporting template
-
-**Results:** NB rate ratio for smoking = … (95% CI …). Poisson sensitivity similar; Pearson dispersion 1.09.
-
-### Technique: Zero-inflated Poisson (ZIP) / ZINB
-
-| | |
-|---|---|
-| **Answers** | Separate "structural zeros" from count process |
-| **R** | `pscl::zeroinfl(count ~ x | x)` |
-| **Data** | `exacerbation_zero_inflated.csv` |
-| **Use** | Excess zeros beyond Poisson/NB |
-| **Does NOT prove** | "Never exacerbator" phenotype without validation |
-
-```r
-pscl::zeroinfl(exacerbations_12m ~ smoking | smoking, data = counts_zi)
-```
-
-#### Dual interpretation
-
-**Plain language:** some patients never exacerbate (zero-inflation), others follow count model.
-
-#### Caveats
-
-Identifiability problems; exploratory; validate clinically.
-
-#### Wrong analysis ⚠
-
-Label ZIP clusters as validated COPD phenotypes from one dataset.
+**Zero-inflated Poisson/NB** (`pscl::zeroinfl`) — exploratory when structural zeros dominate; do not label clusters as validated phenotypes from one dataset.
 
 ---
 
@@ -524,7 +238,7 @@ Non-nested: **AIC/BIC** - predictive/in-sample comparison, not formal test.
 | Context | Tool |
 |---------|------|
 | Inference | Residual deviance, Pearson $\chi^2$, careful interpretation |
-| Prediction | Calibration plot, Brier score (Ch 9) |
+| Prediction | Calibration plot, Brier score (prediction chapter) |
 | Count | Check overdispersion; compare Poisson vs NB |
 
 **Hosmer-Lemeshow** for logistic calibration - useful but sensitive to group choice; prefer calibration plots for prediction.
@@ -541,8 +255,6 @@ Non-nested: **AIC/BIC** - predictive/in-sample comparison, not formal test.
 | Count, equal follow-up | Poisson | Overdispersion → NB or quasi |
 | Count, varying follow-up | Poisson + offset | Overdispersion → NB + offset |
 | Ordinal (mMRC 0-4) | Ordinal logistic (Vol II) | - |
-
-See [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) for the full outcome → model table.
 
 ![Logistic regression forest plot](../figures/ch06_logistic_forest.png)
 
@@ -656,8 +368,8 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 |---|---|---|
 | Want **risk ratio** (not OR) | Log-binomial or modified Poisson | OR can mislead when outcome common |
 | Need absolute risks | Marginal risks / risk differences | Often easier to interpret than OR alone |
-| Complementary hazard-type interpretation | complementary log-log link | [Ch 19](19-survival-analysis.md) |
-| Clustered binary outcomes | GEE / mixed logistic | [Ch 18](18-longitudinal-mixed-models.md) |
+| Complementary hazard-type interpretation | complementary log-log link | Ch 19 |
+| Clustered binary outcomes | GEE / mixed logistic | Ch 18 |
 
 ### Count outcomes: beyond Poisson/NB
 
@@ -672,23 +384,47 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 | Outcome | Why GLM may be wrong | Handbook chapter |
 |---|---|---|
 | Ordinal (mMRC 0-4) | ordered categories | [Ordinal logistic](#technique-ordinal-logistic-regression-mmrccat) (this chapter) |
-| Time-to-event | censoring | [Ch 19](19-survival-analysis.md) survival analysis |
-| Repeated counts over time | correlation + time trends | [Ch 18](18-longitudinal-mixed-models.md) mixed models / GEE |
+| Time-to-event | censoring | Ch 19 survival analysis |
+| Repeated counts over time | correlation + time trends | Ch 18 mixed models / GEE |
 
-## Chapter summary
+---
 
-- GLMs extend regression to binary and count outcomes via link functions.
-- Logistic → odds ratios; Poisson/NB → rate ratios.
-- Check overdispersion; use offsets for person-time.
-- Separation and sparse events need special handling.
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Logistic regression** | Binary outcome (exacerbation Y/N); adjust covariates | Correct variance for 0/1; OR or predicted risks + CI |
+| **Firth penalized logistic** | Sparse events; separation (coefficients → ∞) | Stabilises MLE when tables are sparse |
+| **Log-binomial / modified Poisson** | Common binary outcome; want **risk ratio** | OR overstates when events are frequent |
+| **Poisson GLM** | Count exacerbations; equal follow-up | Models event counts; check overdispersion |
+| **Poisson + offset(log person-time)** | Count outcomes; **varying** follow-up | Converts counts to rates; required when exposure time differs |
+| **Negative binomial** | Count data; variance >> mean (overdispersion) | Default sensitivity to Poisson |
+| **Zero-inflated Poisson/NB** | Excess zeros beyond sampling | Separates “structural zero” from count process |
+| **Ordinal logistic** | Ordered categories (mMRC 0–4, CAT bands) | Respects ordering; not `lm()` on 0–4 |
+| **GEE / mixed logistic** | Clustered binary (centres, wards) | Correlated outcomes need cluster-aware SEs ([Ch 18](18-longitudinal-mixed-models.md)) |
+
+**Extensions** (hurdle models, complementary log-log): [Alternatives & extensions](#alternatives--extensions-choose-by-outcome-nuance) at chapter end.
 
 ## Exercises
 
 [Chapter 6 exercises](../exercises/ch06_exercises.md); [Solutions](../solutions/ch06_solutions.md)
 
-## Where this chapter leads
+## Where we go next
 
-**Next:** [Chapter 7](07-model-building.md) for selection and LASSO; [Chapter 8](08-validation-reporting.md) for reporting ORs and rate ratios with intervals. Time-to-event endpoints → [Chapter 19](19-survival-analysis.md).
+The exacerbation models are fit; a fellow starts dropping non-significant covariates to “clean up” the table. **Chapter 7** is where Mei freezes the variable list that was in the SAP. Part IV (validation and reporting) arrives when the manuscript lands on her desk — not in the same afternoon as the GLM output.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
+| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 
@@ -698,4 +434,3 @@ Covers: logistic, probit, Firth (`logistf`), log-binomial, Poisson with offset, 
 - Cameron & Trivedi, *Regression Analysis of Count Data* [@cameron2013regression]
 - TRIPOD statement for prediction models using binary outcomes.
 
-**Next:** [Chapter 7 - Model Building](07-model-building.md)

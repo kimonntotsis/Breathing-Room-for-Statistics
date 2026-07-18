@@ -1,110 +1,77 @@
-# Chapter template: handbook signature format
+# Chapter template: story-first handbook format
 
-Every major technique in Chapters 4–11 and 13–22 uses this **seven-block structure**. Readers always know where to look.
+Technique chapters (4–22) teach **one CASTOR story in motion** and **one method family**. Reference tables belong at the **back** of the chapter, not the front.
+
+**Full philosophy:** [EDITORIAL_PRINCIPLES.md](EDITORIAL_PRINCIPLES.md) — Spiegelhalter-style story, Harrell-style cases, Bare Essentials routing, DRY end matter.
 
 ---
 
-## Editorial layer (glue between techniques)
+## Editorial order (required)
 
-These blocks sit **outside** the technique cards. They do not replace assumptions or reporting templates.
-
-| Block | Where | Purpose |
+| Order | Block | Purpose |
 |-------|--------|---------|
-| **Why this chapter** | After prerequisites, before opening question | 3–5 sentences: who needs this, what mistake it prevents |
-| **In this chapter** | After At a glance | Layered read: estimand, method table, Practice read, reporting |
-| **Method choice at a glance** | After In this chapter | **Method \| When to use \| Why**: canonical routing for the chapter |
-| **Figure hygiene** | Once per chapter (or cross-ref Appendix I) | Right vs wrong plot pair on same CASTOR data; what the wrong panel masks |
-| **In practice** | Once per chapter, before first Wrong analysis | Sponsor meeting / manuscript reality check |
-| **Before you open R** | Immediately before `## R lab` or `### R lab` | Estimand + unit + file + one sensitivity: then code |
-| **Where this chapter leads** | Before Further reading / Exercises | Two sentences linking to the next chapter(s) |
+| 1 | **Opening scene** | 2–4 paragraphs: meeting, email, or manuscript moment. Named roles (Dr Rivera, Mei). No links in paragraph one. **Advance the CASTOR timeline** — do not replay a prior chapter’s meeting. |
+| 2 | **Why this chapter** | 3–5 sentences: one mistake the scene exposes; what the reader can do after. Fold in clinical/biostat nuance here — not a separate four-bullet reference card. |
+| 3 | **Body** | Tiered techniques (see below). One wrong-analysis moment per chapter (prose or single table). |
+| 4 | **In practice** | **One** sponsor/reviewer reality check per chapter. |
+| 5 | **Quick reference** | Single **Method \| When \| Why** table. **No Chapter summary** if this table exists. |
+| 6 | **Where we go next** | Two sentences in cast voice; CASTOR timeline moves forward. **No second `**Next:**` in Exercises.** |
+| 7 | **Related chapters** | Cross-chapter links with purpose — not in body. |
+| 8 | **Handbook resources** | Appendix links with purpose — not in body. |
+| 9 | Exercises / Further reading | Bibliography only; no navigation duplicate. |
 
-Part intros include an **In the room** vignette (short narrative hook: meeting, email, review). See `parts/part-*.md`. Method chapters may open with a one-paragraph scene before **Why this chapter**; use when it grounds the mistake the chapter prevents.
-
-**Humane tone:** prefer specific situations (steering committee, reviewer line, vendor PDF) over generic “researchers often…” prose. First-person author voice belongs in the [Preface](chapters/00-preface.md), not in every technique card.
-
----
-
-## Block 1: Clinical question
-
-One sentence an investigator understands.
-
-*Example:* Does mean FEV1 at 12 weeks differ between intervention and standard care?
+**Do not put at the front:** At a glance, Also see, In this chapter, Method choice at a glance, Learning objectives, Prerequisites, Clinical and biostatistics notes (as a separate block).
 
 ---
 
-## Block 2: Technique card
+## Tiered techniques (replaces seven-block stack for every method)
 
-| Field | Content |
-|-------|---------|
-| **Answers** | What estimand/hypothesis? |
-| **Outcome type** | Continuous / binary / count / … |
-| **Design** | Independent, paired, clustered, RCT, cohort |
-| **Data required** | Variables, n, events, follow-up |
-| **Assumptions** | What must hold |
-| **Effect measure** | Mean diff, OR, RR, rate ratio, AUC, … |
-| **R function** | Minimal call |
-| **When to use** | Bullet list |
-| **When NOT to use** | Bullet list |
-| **What this does NOT prove** | Causation, prediction, subtypes, … |
+| Tier | Examples | Include |
+|------|----------|---------|
+| **A — Major** | Welch *t*, logistic, NB, Cox, mixed model, BH-FDR | Technique card → **one** Practice read → reporting template → R |
+| **B — Supporting** | Mann–Whitney, paired *t*, Fisher, bootstrap | 2–4 sentences + R + one common mistake |
+| **C — Pointer** | Pooled *t*, one-sample *t* | One line: when / avoid / see Tier A |
+
+**Never stack:** Plain language + Precise language + Dual interpretation + Practice read for the same estimand.
+
+**Wrong analysis:** once per chapter — inline at the decision point **or** a short prose catalog, not both plus per-section tables.
 
 ---
 
-## Block 3: Dual interpretation
+## Prose vs tables
 
-**Default (Ch 4–8):** **Plain language** + **Precise language** + **Practice read**.
+| Use a table when… | Use prose when… |
+|-------------------|-----------------|
+| Reader scans 4+ methods (Quick reference, master router) | One mistake, one Mei/Rivera exchange |
+| Methods/Results copy-paste templates | Why a sponsor slide misleads |
+| Appendix B / decision tree | Linking scene → technique |
 
-**Ch 10–22:** use a single **Takeaway** line when the technique card already states the estimand; keep **Practice read** for decision-changing interpretation. Drop redundant Plain/Precise pairs that repeat the card verbatim.
-
-**Practice read:** what would change in practice if the estimate were true?
-
----
-
-## Block 4: Caveats box (respiratory-specific)
-
-Table format:
-
-| Caveat | Why it matters in respiratory research |
-|--------|----------------------------------------|
-| … | … |
-
-Minimum **4 caveats** per major technique.
+**Humanize:** Prefer a **Practice read** paragraph over technique-card rows. Convert one-line wrong-analysis tables to: *Common mistake: … Instead: …*
 
 ---
 
-## Block 5: Wrong analysis ⚠
+## Narrative spine
 
-**Common mistake:** what analysts do wrong.
+One synthetic trial (**CASTOR**) carries Parts I–V and VIII. **CASTOR-HD** enters in Part VI. Act map: [RECURRING_COHORT.md](RECURRING_COHORT.md#narrative-spine-the-castor-trial).
 
-**Why it fails:** statistical or clinical reason.
+**Humane tone:** specific situations — not “researchers often…”. Author first-person only in the [Preface](chapters/00-preface.md).
 
-**Do instead:** correct approach + chapter reference.
-
----
-
-## Block 6: Reporting template
-
-**Methods sentence** (copy-ready):
-
-> We compared … using … adjusting for … . Two-sided α = 0.05; 95% CIs …
-
-**Results sentence** (copy-ready with placeholders):
-
-> Mean FEV1 was … (SD …) in group A and … in group B (n = …). The difference was … (95% CI … to …; p = …).
-
-**Do not say:** "proved", "no effect", "trend" (unless prespecified), "highly significant".
+**Capstone (Ch 12):** assumes Ch 1–11 read; cases start at **submission, reviewer, or sponsor** stage — not the same steering scene as Ch 4.
 
 ---
 
-## Block 7: R lab and sensitivity
+## Part openers
 
-- **Before you open R** checklist (see editorial layer above)
-- Primary code chunk
-- One **sensitivity analysis** (nonparametric, Firth, bootstrap, calibration, …)
-- Link to `R/examples/chXX_*.R`
-- Figure caption: one interpretive sentence after each teaching plot (what to look for, what would worry you)
+Lead with **In the room** (2–4 sentences). Move bullet syllabi to appendix or part Quick reference.
+
+---
+
+## Figure hygiene
+
+One right-vs-wrong pair or router figure per chapter where applicable; link from **Handbook resources**, not every technique section.
 
 ---
 
 ## Recurring cohort
 
-Chapters 4–9 reference the **CASTOR** synthetic COPD cohort (`data/spirometry.csv`, `exacerbation.csv`, etc.) so readers see one workflow evolve. See [RECURRING_COHORT.md](RECURRING_COHORT.md).
+[CASTOR](RECURRING_COHORT.md) synthetic data; extended stories via **Handbook resources** (Appendix K). Do not re-paste the CASTOR glossary paragraph — point to RECURRING_COHORT once.

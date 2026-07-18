@@ -11,6 +11,7 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | I need to… | Open |
 |------------|------|
 | **Install R and run scripts** | [Appendix A](appendix-a-r-setup.md) |
+| **Full beginner SOP (install → data I/O → basics)** | [R Getting Started SOP](R_GETTING_STARTED_SOP.md) |
 | **Choose a test or model** | [Appendix B](appendix-b-quick-reference.md) |
 | **See all methods by chapter** | [METHOD_MAP](METHOD_MAP.md) |
 | **Find a figure** | [FIGURE_INDEX](FIGURE_INDEX.md) |

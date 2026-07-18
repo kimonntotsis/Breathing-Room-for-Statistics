@@ -65,6 +65,24 @@ Reporting templates: [HIGH_DIM_REPORTING_TEMPLATES.md](HIGH_DIM_REPORTING_TEMPLA
 
 ---
 
+## Narrative spine: the CASTOR trial
+
+Read the handbook as **one programme unfolding**, not twenty-two isolated manuals. The synthetic CASTOR trial is the thread; CASTOR-HD is a substudy bolted on when the sponsor asks for “something omics.”
+
+| Act | Chapters | What happens in the story |
+|-----|----------|---------------------------|
+| **I — Before the first table** | [Ch 1–2](chapters/01-statistical-thinking.md) | Dr Rivera’s team locks the primary estimand; Mei classifies the export before any test names |
+| **II — Describe and compare** | [Ch 3–4](chapters/03-descriptive-analysis.md) | Steering committee wants Table 1; primary FEV1 at week 12 gets a prespecified comparison |
+| **III — Adjust and extend** | Ch 5–7 | Baseline imbalance pushes ANCOVA; regulatory email forces GLM family choice; fellow tries stepwise cleanup |
+| **IV — Sign-off** | Ch 8–9 | Manuscript internal review; reviewer asks for calibration on a risk model |
+| **V — Structure in markers** | [Ch 10–12](chapters/10-dimensionality-reduction.md) | Marker panel exploration; capstone cases replay the trial, cohort, and discovery arcs |
+| **VI — Omics arrives** | [Ch 13–17](chapters/13-differential-analysis-fdr.md) | CRO delivers proteomics/RNA; batch, FDR, and integration enter the same patients |
+| **VIII — Time and limits** | [Ch 18–22](chapters/18-longitudinal-mixed-models.md) | Extension visits, survival, missing FEV1, observational confounding, mediation |
+
+**Recurring cast (fiction):** **Dr Elena Rivera** (PI), **Mei Lin** (analyst), steering committee, and occasional **Dr Okonkwo** when the scene is a registry export rather than the trial. **APATE** is the cautionary tale of what real registries look like when CASTOR’s cleanliness is gone ([APATE_VIGNETTE](APATE_VIGNETTE.md)).
+
+---
+
 ## Scientific questions across the book
 
 | # | Question | Chapter |

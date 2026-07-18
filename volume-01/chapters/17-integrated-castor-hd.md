@@ -2,72 +2,15 @@
 
 > **Part VII: Integrated CASTOR-HD capstone**
 
-## At a glance
+## Opening scene: one Results section, two worlds
 
-| | |
-|---|---|
-| **Recurring datasets** | CASTOR-HD: proteomics, RNA-seq, flow, antibody screen/confirmation |
-| **Format** | End-to-end narrative + supervised \(p \gg n\) extension |
-| **Pipeline** | DE → batch QC → shortlist → flow summary → screen confirmation → reporting |
-| **R** | `R/examples/ch17_integrated_castor_hd.R`, `R/examples/ch17_elastic_net_proteomics.R` |
-| **Figures** | volcano (`ch13_volcano_proteomics.png`), batch PCA (`ch14_pca_proteomics_batch.png`), flow props (`ch15_flow_props_by_group.png`), screen threshold (`ch16_threshold_sensitivity.png`), nested CV AUC (`ch17_elastic_net_nested_cv.png`) |
-| **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
-| **Exercises** | [Chapter 17 exercises](../exercises/ch17_exercises.md) |
-
----
-
-## In this chapter
-
-1. [Why this chapter](#why-this-chapter): pipeline stop/go gates
-2. [Method choice at a glance](#method-choice-at-a-glance): step order and what each proves
-3. [The discovery claim ladder](#the-discovery-claim-ladder): what each step may claim
-4. [Step 6: Reporting (integrated)](#step-6-reporting-integrated): one paragraph per modality
-5. [Pipeline failure modes](#pipeline-failure-modes-what-to-report-honestly): stop/go gates
-
-**Analyst read:** elastic net nested CV, R scripts below.
-
----
-
-## Method choice at a glance
-
-| Step / method | When to use | Why |
-|---------------|-------------|-----|
-| **DE + FDR (proteomics/RNA)** | First biology screen | Per-feature effects with multiplicity control ([Ch 13](13-differential-analysis-fdr.md)) |
-| **Batch QC before DE** | Any multi-site omics | Prevents funding false hits ([Ch 14](14-batch-effects.md)) |
-| **Flow participant summaries** | Immune phenotyping arm | Inference at person level ([Ch 15](15-flow-cytometry.md)) |
-| **Antibody screen tiers** | Hybridoma / phage triage | PPV and confirmation ([Ch 16](16-antibody-discovery.md)) |
-| **Elastic net + nested CV** | p ≫ n prediction on proteins | Tuning without leakage ([Ch 9](09-prediction-vs-inference.md)) |
-| **Stop if batch = group** | Confounded design | No amount of stats replaces redesign |
-| **Separate discovery vs confirmation prose** | Manuscript writing | Different claim strength per modality |
-
----
-
-## Learning objectives
-
-1. Execute a coherent discovery workflow across omics, flow, and antibody data.
-2. State what each step proves vs suggests at each stage.
-3. Apply stopping rules when batch, overlap, or stability fail.
-4. Fit elastic net with nested cross-validation for \(p \gg n\) proteomics prediction.
-5. Draft an integrated Methods/Results section using the reporting templates.
-6. List claims that are **not** justified by an internal discovery pipeline alone.
-
-## Prerequisites
-
-Chapters 13–16 and Case D in [Ch 12](12-case-studies.md).
+Proteomics hits, RNA fold-changes, and trial FEV₁ all land in the same manuscript draft. Reviewer 2 will ask which claims are confirmatory. Mei splits Results into discovery and clinical paragraphs — and a limitations block that admits what integration **did not** establish.
 
 ---
 
 ## Why this chapter
 
-Real discovery is a pipeline, not a single heatmap. This chapter strings proteomics, batch QC, flow, antibody confirmation, and optional prediction into one honest narrative, including where to **stop** when batch and group are confounded.
-
-## Opening question (CASTOR-HD)
-
-*If we start with a proteomics differential analysis, how do batch checks, immune phenotyping, and antibody confirmation change what we are willing to claim?*
-
-This chapter is the **advanced capstone**: same CASTOR-HD cohort, one narrative thread, explicit stopping rules when batch or stability fail.
-
-Discovery is staged. A q < 0.05 protein is **not** the same as a Tier 1 confirmed antibody clone with stable ranking across replicates.
+Integrated omics capstones need stop/go gates. CASTOR-HD walks bulk matrices plus participant summaries without pretending one volcano plot replaces the SAP.
 
 ---
 
@@ -119,16 +62,7 @@ source("R/examples/ch17_integrated_castor_hd.R")
 
 ## Step 1–2: Proteomics DE with batch awareness
 
-Run differential analysis (Ch 13), then immediately run batch diagnostics (Ch 14). **Do not** interpret top hits until overlap is acceptable.
-
-### Technique card (Step 1–2 gate)
-
-| | |
-|---|---|
-| **Answers** | Are group differences identifiable after accounting for batch structure? |
-| **Checks** | PCA coloured by batch; group × batch contingency |
-| **Stopping rule** | If group and batch are perfectly confounded, report non-identifiability |
-| **Does NOT prove** | Clinical utility or causation |
+Run differential analysis (Ch 13), then immediately run batch diagnostics (Ch 14). **Do not** interpret top hits until overlap is acceptable. Ask whether group differences are identifiable after accounting for batch structure: check PCA coloured by batch and the group × batch contingency. If group and batch are perfectly confounded, report non-identifiability — no amount of statistics replaces redesign.
 
 ![Proteomics volcano (BH FDR)](../figures/ch13_volcano_proteomics.png)
 
@@ -140,31 +74,17 @@ If colour tracks batch more than group, technical structure dominates.
 
 **Stopping rule:** if group and batch are perfectly confounded, report non-identifiability and do not claim group-specific protein differences.
 
----
-
 ## Step 3: Shortlist for follow-up
 
 Export the top 20–50 features by q-value **and** absolute effect. Prioritise features stable with vs without batch adjustment.
 
-See `volume-01/tables/ch17_integrated_shortlist.csv` from the integrated script.
-
-**Plain language:** narrow thousands of proteins to a short list for cheaper assays.
-
-**Precise language:** prespecified ranking by adjusted effect size and BH q-value, with sensitivity to batch covariate inclusion.
+See `volume-01/tables/ch17_integrated_shortlist.csv` from the integrated script. Narrow thousands of proteins to a short list for cheaper assays — prespecified ranking by adjusted effect size and BH q-value, with sensitivity to batch covariate inclusion.
 
 ---
 
 ## Step 4: Flow cytometry summary
 
-Link immune phenotyping to the discovery story at the **participant** level (Ch 15). Cell embeddings are QC only.
-
-### Technique card (flow at participant level)
-
-| | |
-|---|---|
-| **Unit** | One row per participant (proportions), not per cell |
-| **Wrong unit** | Pooled cells across patients |
-| **Figure role** | Proportions by group; compositional awareness |
+Link immune phenotyping to the discovery story at the **participant** level (Ch 15). Cell embeddings are QC only. One row per participant (proportions), not per cell — pooled cells across patients inflate precision.
 
 ![Monocyte proportions by group](../figures/ch15_flow_props_by_group.png)
 
@@ -172,16 +92,7 @@ Link immune phenotyping to the discovery story at the **participant** level (Ch 
 
 ## Step 5: Antibody screen confirmation
 
-Translate screen hits into confirmation PPV and stability tiers (Ch 16).
-
-### Technique card (screen → confirm)
-
-| | |
-|---|---|
-| **Screen** | High-throughput ranking; many false positives expected |
-| **Confirmation** | Replicate binding; PPV among hits |
-| **Tiers** | Ranking stability across replicates |
-| **Does NOT prove** | In vivo neutralisation or treatment effect |
+Translate screen hits into confirmation PPV and stability tiers (Ch 16). The screen is high-throughput ranking with many false positives expected; confirmation uses replicate binding and PPV among hits. Ranking stability across replicates defines Tier 1 clones — this does not prove in vivo neutralisation or treatment effect.
 
 ![Threshold sensitivity: hits and PPV](../figures/ch16_threshold_sensitivity.png)
 
@@ -191,7 +102,7 @@ Prespecify thresholds. Post-hoc threshold tuning inflates apparent PPV.
 
 ## Step 6: Reporting (integrated)
 
-Use [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md):
+Use HIGH_DIM_REPORTING_TEMPLATES:
 
 - **Template A** for omics DE (*n*, model, FDR, batch handling)
 - **Template B** for batch sensitivity
@@ -208,27 +119,9 @@ Use [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md):
 
 ## Technique: Elastic net + nested CV (\(p \gg n\) prediction)
 
-### Technique card
+Elastic net with nested CV asks whether proteomics can predict case/control with honest internal performance when \(p \gg n\). Use `glmnet` inside nested CV for exploratory risk stratification or hypothesis for external validation — not for causal inference or diagnostic approval without an external cohort. Nested CV provides an internally honest AUC when tuning λ; optimism remains for external transport.
 
-| | |
-|---|---|
-| **Answers** | Can proteomics predict case/control with honest internal performance? |
-| **Outcome** | Binary group label |
-| **Predictors** | Many proteins (\(p \gg n\)) |
-| **Method** | `glmnet` elastic net inside nested CV |
-| **When to use** | Exploratory risk stratification; hypothesis for external validation |
-| **When NOT to use** | Causal inference; diagnostic approval without external cohort |
-| **Does NOT prove** | Mechanism; transportability; clinical utility |
-
-### Dual interpretation
-
-**Plain language:** can a small panel of proteins classify case vs control better than chance in cross-validation?
-
-**Precise language:** nested CV provides an internally honest estimate of discrimination (AUC) when tuning λ; optimism remains for external transport.
-
-### In practice
-
-Integrated omics slides often show only the volcano. Decision-makers need the stop/go gates: batch overlap, discovery count with/without adjustment, PPV, Tier 1 clones, in that order.
+**Practice read:** integrated omics slides often show only the volcano. Decision-makers need the stop/go gates: batch overlap, discovery count with/without adjustment, PPV, Tier 1 clones, in that order.
 
 ### Wrong analysis ⚠
 
@@ -275,6 +168,21 @@ Outer-fold AUC with variability across folds is the honest performance summary; 
 
 ---
 
+## Quick reference: methods in this chapter
+
+| Step / method | When to use | Why |
+|---------------|-------------|-----|
+| **DE + FDR (proteomics/RNA)** | First biology screen | Per-feature effects with multiplicity control ([Ch 13](13-differential-analysis-fdr.md)) |
+| **Batch QC before DE** | Any multi-site omics | Prevents funding false hits ([Ch 14](14-batch-effects.md)) |
+| **Flow participant summaries** | Immune phenotyping arm | Inference at person level ([Ch 15](15-flow-cytometry.md)) |
+| **Antibody screen tiers** | Hybridoma / phage triage | PPV and confirmation ([Ch 16](16-antibody-discovery.md)) |
+| **Elastic net + nested CV** | p ≫ n prediction on proteins | Tuning without leakage ([Ch 9](09-prediction-vs-inference.md)) |
+| **Stop if batch = group** | Confounded design | No amount of stats replaces redesign |
+| **Separate discovery vs confirmation prose** | Manuscript writing | Different claim strength per modality |
+
+---
+
+
 ## Exercises ([Solutions](../solutions/ch17_solutions.md))
 
 **E17.1** At which pipeline step would you stop if batch and group are confounded?
@@ -297,9 +205,16 @@ Outer-fold AUC with variability across folds is the honest performance summary; 
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
 **Next:** [Chapters 18–22](18-longitudinal-mixed-models.md) for repeated measures, survival, missing data, causal framing, and mediation on CASTOR extensions.
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
 
 ## Further reading
 

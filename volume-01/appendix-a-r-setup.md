@@ -4,7 +4,9 @@ number-sections: false
 
 # Appendix A: R environment {.unnumbered}
 
-This appendix is for readers who want to **run the CASTOR scripts** alongside the handbook. It is not a full R course. For dplyr, ggplot2, and workflow fundamentals, see [R for Data Science](https://r4ds.hadley.nz/).
+This appendix is for readers who want to **run the CASTOR scripts** alongside the handbook. It is **not** a full R course: it gets you from zero to a successful first plot. For a **complete beginner SOP** (install, navigation, data import/export, core functions, learning path, Word export), see [R Getting Started SOP](R_GETTING_STARTED_SOP.md). For dplyr, ggplot2, and workflow fundamentals, see [R for Data Science](https://r4ds.hadley.nz/).
+
+**How to use this appendix:** follow the numbered steps in order the first time. Screens are **labelled schematics** (not live screenshots) so they stay readable in print and do not go out of date when Posit tweaks menus. Your computer may look slightly different; match the **labels**, not every pixel.
 
 ---
 
@@ -13,35 +15,79 @@ This appendix is for readers who want to **run the CASTOR scripts** alongside th
 | Tool | Purpose | Download |
 |------|---------|----------|
 | **R** (≥ 4.2 recommended) | Language and packages | [https://cran.r-project.org](https://cran.r-project.org) |
-| **Posit Desktop** (optional) | Editor, console, plots, project manager | [https://posit.co/download/](https://posit.co/download/) |
+| **Posit Desktop** (recommended) | Editor, console, plots, project manager | [https://posit.co/download/](https://posit.co/download/) |
 | **This repository** | Chapters, `data/`, `R/examples/` | [github.com/kimonntotsis/Breathing-Room-for-Statistics](https://github.com/kimonntotsis/Breathing-Room-for-Statistics) |
 
-Posit Desktop was formerly called RStudio Desktop. Either name is fine; the workflow below is the same.
+Posit Desktop was formerly called **RStudio Desktop**. Either name is fine; the workflow below is the same.
 
 ---
 
-## Get the project on your computer
+## Install R and Posit Desktop (about 15 minutes)
 
-**Option 1: Git (recommended)**
+![Install order: R, then Posit Desktop, then the handbook repository](figures/appendix_a_install_steps.png){width=100%}
+
+### Step 1 — Install R
+
+1. Open [https://cran.r-project.org](https://cran.r-project.org).
+2. Click **Download R for macOS** or **Download R for Windows** (under “Download and Install R”).
+3. Run the installer with default options.
+4. Open **R** once from your Applications folder (macOS) or Start menu (Windows) and confirm a plain console window appears. Close it: you will use Posit Desktop from here on.
+
+### Step 2 — Install Posit Desktop
+
+1. Open [https://posit.co/download/](https://posit.co/download/).
+2. Choose **Posit Desktop** (free; formerly RStudio Desktop). Do **not** confuse this with Posit Cloud (paid/hosted) unless you already use a cloud account.
+3. Run the installer. On first launch, Posit may ask which R version to use: pick the R you installed in Step 1.
+
+### Step 3 — Get this handbook on your computer
+
+**Option A: Git (recommended)**
 
 ```bash
 git clone https://github.com/kimonntotsis/Breathing-Room-for-Statistics.git
 cd Breathing-Room-for-Statistics
 ```
 
-**Option 2: ZIP**
+**Option B: ZIP**
 
 Download the repository as a ZIP from [GitHub](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/archive/refs/heads/main.zip), unzip, and note the folder path (e.g. `~/Projects/Breathing-Room-for-Statistics`).
 
-**Open as a project (recommended)**
+---
 
-In Posit Desktop: **File → Open Project…** and choose the repository folder (or create a `.Rproj` file in the root if you use one). This sets the working directory automatically and is more reliable than `setwd()`.
+## Open the handbook as a project
+
+Opening the repository as a **project** sets the working directory automatically. That is more reliable than typing `setwd()` and prevents the most common error (`cannot open file 'R/00_setup.R'`).
+
+![File → Open Project… then select the repository root folder](figures/appendix_a_open_project.png){width=100%}
+
+1. In Posit Desktop: **File → Open Project…**
+2. Select the **repository root** folder `Breathing-Room-for-Statistics` (the folder that directly contains `R/`, `data/`, and `volume-01/`).
+3. Do **not** open only `volume-01/` or a single chapter folder.
+
+**Sanity check** — the **Files** pane (lower right) should show:
+
+![Files pane should list R/, data/, and volume-01/ at the top level](figures/appendix_a_project_tree.png){width=92%}
+
+If `R/` is missing, repeat **File → Open Project…** and pick the correct parent folder.
+
+---
+
+## Learn the four panes
+
+![Posit Desktop layout: Source, Console, Environment, Files/Plots](figures/appendix_a_posit_layout.png){width=100%}
+
+| Pane | What it does | Handbook habit |
+|------|--------------|----------------|
+| **Source (Script)** | Edit `.R` files | Open scripts from `R/examples/`; run with **Cmd+Enter** (macOS) or **Ctrl+Enter** (Windows) |
+| **Console** | Commands execute here | Paste `source("R/00_setup.R")` here first every session |
+| **Environment / History** | Objects and past commands | After **Session → Restart R**, re-run setup |
+| **Files / Plots / Packages** | Project tree; graphics; package installer | Confirm `R/` visible in **Files**; view chapter plots in **Plots** |
 
 ---
 
 ## Install R packages (once)
 
-Every chapter script expects the packages listed in `R/00_setup.R`. Run this **once** in the R console (from the project root):
+Every chapter script expects the packages listed in `R/00_setup.R`. Run this **once** in the **Console** (from the project root):
 
 ```r
 install.packages(c(
@@ -68,29 +114,34 @@ install.packages(c("pwr", "logistf", "mice", "emmeans"))
 
 **macOS:** if compilation fails, install Xcode Command Line Tools (`xcode-select --install` in Terminal).
 
+**Packages tab:** you can also tick packages in the **Packages** pane and click **Install**, but the `install.packages()` block above is the reproducible list for this handbook.
+
 ---
 
 ## First session (every time you work)
 
-From the **project root** in R:
+Paste into the **Console**:
 
 ```r
-source("R/00_setup.R") # paths + package check
-source("R/generate_data.R") # rebuild CASTOR CSV files in data/
-source("R/examples/generate_figures.R")
-# optional: all handbook figures
+source("R/00_setup.R")           # paths + package check
+source("R/generate_data.R")      # rebuild CASTOR CSV files in data/
+source("R/examples/ch04_comparing_groups.R")  # one chapter example
 ```
+
+You should see output like this:
+
+![Successful console output after setup and a chapter script](figures/appendix_a_first_run.png){width=92%}
 
 `00_setup.R` finds the project root automatically if you opened the folder as a project. It prints the path and stops with a clear message if a package is missing.
 
-To run **one chapter**:
+**Optional — regenerate all handbook figures:**
 
 ```r
 source("R/00_setup.R")
-source("R/examples/ch04_comparing_groups.R") # example
+source("R/examples/generate_figures.R")
 ```
 
-To run **all chapter scripts** (smoke test):
+**Smoke test — all chapter scripts:**
 
 ```r
 source("R/00_setup.R")
@@ -98,6 +149,20 @@ source("R/run_all_examples.R")
 ```
 
 Outputs land in `data/`, `volume-01/figures/`, and `volume-01/tables/` depending on the script.
+
+---
+
+## Working directory: wrong vs right
+
+![Wrong folder open vs correct project root](figures/appendix_a_wd_pair.png){width=100%}
+
+| Problem | Likely cause | Fix |
+|---------|--------------|-----|
+| `cannot open file 'R/00_setup.R'` | Wrong working directory | **File → Open Project…** → select `Breathing-Room-for-Statistics` |
+| `Install missing packages: …` | First-time setup | Run `install.packages(...)` block above |
+| `volume-01/tables/...` not found | Figures not generated yet | Run the chapter's `R/examples/chXX_*.R` script |
+| Script works in Console but not in Quarto | Different working directory | Always `source("R/00_setup.R")` first; use paths from `paths$data` in scripts |
+| Package update broke old code | Version drift | **Session → Restart R** after `update.packages()` |
 
 ---
 
@@ -110,20 +175,9 @@ Outputs land in `data/`, `volume-01/figures/`, and `volume-01/tables/` depending
 | Restart R (clear environment) | Session → Restart R | Session → Restart R |
 | Go to file | `Ctrl+.` | `Cmd+.` |
 | Comment / uncomment lines | `Ctrl+Shift+C` | `Cmd+Shift+C` |
+| Open project | File → Open Project… | File → Open Project… |
 
 Full cheat sheets: [Posit cheat sheets](https://posit.co/resources/cheatsheets/) (ggplot2, dplyr, etc.).
-
----
-
-## Troubleshooting
-
-| Problem | Likely cause | Fix |
-|---------|--------------|-----|
-| `cannot open file 'R/00_setup.R'` | Wrong working directory | Open the repo as a Posit **Project**, or `setwd("/full/path/to/Breathing-Room-for-Statistics")` |
-| `Install missing packages: …` | First-time setup | Run `install.packages(...)` block above |
-| `volume-01/tables/...` not found | Figures not generated yet | Run the chapter's `R/examples/chXX_*.R` script |
-| Script works in Console but not in Quarto | Different working directory | Always `source("R/00_setup.R")` first; use paths from `paths$data` in scripts |
-| Package update broke old code | Version drift | Restart R after `update.packages()`; pin versions only if you need exact reproduction for a paper |
 
 ---
 

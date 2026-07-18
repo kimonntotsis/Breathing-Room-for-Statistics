@@ -2,73 +2,17 @@
 
 > **Part IV: Building Defensible Models**
 
-## At a glance
+## Opening scene: the variable-selection workshop
 
-| | |
-|---|---|
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Key methods** | Prespecification, LRT, AIC/BIC, LASSO, splines, missing-data overview |
-| **R scripts** | `R/examples/ch07_model_building.R` |
-| **Exercises** | [ch07 exercises](../exercises/ch07_exercises.md) |
-| **Figure hygiene** | `viz_pair_ch07_model_building.png` |
+The CRO proposes "let the data tell us" which covariates belong in the FEV₁ model. Twelve baseline variables, stepwise AIC, one hour before the abstract deadline. Mei opens the prespecified SAP: age, sex, smoking, baseline FEV₁ — full stop.
 
-**Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md#inference-vs-prediction)
-
-> **Sounds like your lab?** [Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation): only 24 events but tempted to add predictors? → [Technique: Prespecified confounder adjustment](#technique-prespecified-confounder-adjustment).
-
----
-
-## In this chapter
-
-1. [Three model-building modes](#three-model-building-modes-choose-first): confirmatory vs exploratory vs prediction
-2. [Method choice at a glance](#method-choice-at-a-glance): prespecification vs LASSO vs splines
-3. **Practice read** on stepwise selection
-4. [Reporting template](#reporting-template) if present in main technique
-5. [Alternatives & extensions](#alternatives--extensions-model-building-menus)
-
-**Analyst read:** LRT, LASSO, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Prespecified covariate set** | Confirmatory trial or observational inference | Subject-matter confounders; avoids p-hacking |
-| **Likelihood ratio test (nested)** | Prespecified extra term | Valid comparison of nested models |
-| **AIC / BIC** | Exploratory ranking; prediction focus | In-sample; not for confirmatory p-values |
-| **LASSO / ridge / elastic net** | Many predictors; prediction goal ([Ch 9](09-prediction-vs-inference.md)) | Penalisation; use with CV |
-| **Splines for age/FEV1** | Non-linearity prespecified | Flexible; limit df to avoid overfit |
-| **Stepwise selection** | Avoid in confirmatory work | Inflates optimism; invalid CIs |
-| **Complete-case vs MI** | Predictors have missing values | MI inside resampling for prediction ([Ch 20](20-missing-data.md)) |
-| **EPV rule (events per variable)** | Logistic with few events | &lt;10–15 events per coefficient is fragile |
-
-**Extensions:** [Alternatives & extensions](#alternatives--extensions-model-building-menus) at chapter end.
-
----
-
-1. Match model-building strategy to inference vs prediction goal.
-2. Select confounders by subject-matter knowledge, not p-hacking.
-3. Compare nested models correctly (LRT / F-test).
-4. Use penalization and CV for prediction - not stepwise for confirmatory p-values.
-5. Handle nonlinearity and missing data at introductory level.
-
-## Prerequisites
-
-Chapters 5-6.
+*"The data can suggest sensitivity analyses,"* she says. *"It cannot rewrite the primary model after unblinding."*
 
 ---
 
 ## Why this chapter
 
-Model building is where optimism hides: too many predictors, data-driven selection, and overfitted “risk scores.” This chapter separates prespecified adjustment from fishing. Read it before adding “one more covariate” because it improved the p-value.
-
-## Opening question (CASTOR)
-
-*Which variables should enter the CASTOR exacerbation logistic model - and how do we choose without fooling ourselves?*
-
-Model building is where good studies become invalid: data dredging, stepwise selection, and tuning on test data [@harrell2015rms].
+Model building is where good studies leak degrees of freedom. This chapter separates prespecification from exploration — and gives you language for the meeting when someone wants "just one more predictor.
 
 ---
 
@@ -86,44 +30,13 @@ Model building is where good studies become invalid: data dredging, stepwise sel
 
 ## Technique: Prespecified confounder adjustment
 
-### Technique card
+Choose covariates from a causal DAG, clinical knowledge, and protocol — **not** from p < 0.20 screening. Use for observational COPD studies and secondary adjusted RCT analyses. Do **not** "shop" covariates until the exposure turns significant; prespecification reduces confounding only when confounders are measured — it does **not** prove causation.
 
-| | |
-|---|---|
-| **Answers** | Which covariates adjust the exposure-outcome association? |
-| **Basis** | Causal DAG, clinical knowledge, protocol - **not** p < 0.20 screening |
-| **When to use** | Observational COPD studies; secondary adjusted RCT analyses |
-| **When NOT to use** | To "shop" covariates until exposure is significant |
-| **Does NOT prove** | Causal effect - only reduces confounding if confounders measured |
+**Plain language:** adjust for factors that could distort the smoking–exacerbation link. **Precise language:** conditional association given measured covariates; unmeasured confounding may remain.
 
-### Dual interpretation
+Watch for: adjusting **colliders** or **mediators**; **overadjustment** on the causal path; the Table 2 fallacy (adding variables without theory); MRC/GOLD severity as mediators depending on the question.
 
-**Plain language:** we adjust for factors that could distort the smoking-exacerbation link.
-
-**Precise language:** conditional association given measured covariates; unmeasured confounding may remain.
-
-### Caveats box
-
-| Caveat | Detail |
-|--------|--------|
-| Colliders | Adjusting for mediators or colliders biases |
-| Overadjustment | Adjusting for variables on causal path |
-| Table 2 fallacy | Changing coefficients by adding variables without theory |
-| MRC / GOLD | Severity measures may be mediators depending on question |
-
-### In practice
-
-Stepwise selection after seeing results is still common in submitted manuscripts. If variables were not in the prespecified SAP, call the model exploratory and show stability (bootstrap or penalization), not a definitive p-value.
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | Univariate screen: keep vars with p < 0.2 |
-| **Why wrong** | Data-driven; inflates false positives |
-| **Do instead** | Prespecify minimal sufficient adjustment set |
-
-### Reporting template
+**Common mistake:** univariate screen keeping vars with p < 0.2 — data-driven and inflates false positives. Prespecify a minimal sufficient adjustment set. If variables were not in the SAP, label the model exploratory.
 
 **Methods:** The primary model adjusted for age, FEV1 % predicted, and prior exacerbation count, prespecified in the analysis plan. Smoking was the exposure of interest.
 
@@ -131,18 +44,7 @@ Stepwise selection after seeing results is still common in submitted manuscripts
 
 ## Technique: Nested model comparison (LRT / F-test)
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Does adding predictors improve fit significantly? |
-| **Linear** | `anova(m_small, m_big)` - F-test |
-| **GLM** | `anova(m_small, m_big, test = "Chisq")` - LRT |
-| **Requires** | Nested models (big contains small) |
-| **When to use** | Prespecified nested hypotheses (e.g. interaction term) |
-| **Does NOT prove** | That added variables are causal |
-
-### CASTOR example
+**Likelihood ratio tests** (GLM: `anova(m_small, m_big, test = "Chisq")`) and **F-tests** (linear: `anova(m_small, m_big)`) ask whether adding predictors improves fit — only for **nested** models and **prespecified** hypotheses (e.g. an interaction term). They do **not** prove added variables are causal.
 
 ```r
 reduced <- glm(
@@ -159,69 +61,23 @@ full <- glm(
 anova(reduced, full, test = "Chisq")
 ```
 
-### Caveats
-
-Multiple LRTs without multiplicity control inflate error. LRT after stepwise invalid.
-
-### Wrong analysis ⚠
-
-Compare non-nested models with LRT → use AIC or CV instead.
+Multiple LRTs without multiplicity control inflate error; LRT after stepwise is invalid. For non-nested models, use AIC or CV instead.
 
 ---
 
 ## Technique: AIC / BIC
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Which model balances fit and complexity in-sample? |
-| **Lower** | Preferred (with caution) |
-| **Use for** | Exploratory comparison; prediction prototyping |
-| **Avoid for** | Confirmatory p-values; causal inference |
-
-### Caveats
-
-AIC favours prediction; BIC penalizes complexity more. Neither replaces prespecification in trials.
+**AIC** and **BIC** rank models by in-sample fit penalized for complexity — lower is preferred with caution. Use for exploratory comparison and prediction prototyping; **avoid** for confirmatory p-values or causal inference. AIC favours prediction; BIC penalizes complexity more. Neither replaces prespecification in trials.
 
 ---
 
 ## Technique: LASSO (penalized regression)
 
-### Technique card
+**LASSO** (`glmnet::cv.glmnet(..., alpha = 1)`) applies an L1 penalty so some coefficients shrink to zero — useful when *p* is large relative to *n* and the goal is **prediction** [@james2023ISL]. Do **not** use for confirmatory inference on a prespecified OR; selected variables are not causal importance.
 
-| | |
-|---|---|
-| **Answers** | Which predictors predict outcome when p is large relative to n? |
-| **Method** | L1 penalty; some coefficients → 0 |
-| **R** | `glmnet::cv.glmnet(..., alpha = 1)` |
-| **When to use** | Prediction; many weak predictors [@james2023ISL] |
-| **When NOT to use** | Confirmatory inference on prespecified OR |
-| **Does NOT prove** | Causal importance of selected variables |
+**Plain language:** LASSO picks a sparse predictor set that predicts exacerbation in cross-validation. **Precise language:** penalized logistic regression with λ chosen by CV; coefficients are biased but prediction may improve.
 
-### Dual interpretation
-
-**Plain language:** LASSO picks a sparse set of predictors that predict exacerbation in cross-validation.
-
-**Precise language:** penalized logistic regression with λ chosen by CV; coefficients biased but prediction may improve.
-
-### Caveats box
-
-| Caveat | CASTOR note |
-|--------|-------------|
-| Low events | ~18 events - LASSO unstable; mostly teaching here |
-| Tuning leakage | Tune λ only on training folds |
-| Selected vars change | Bootstrap stability recommended |
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | LASSO-selected model → report unpenalized p-values |
-| **Why wrong** | Selection ignored in inference |
-| **Do instead** | Report prediction metrics (Ch 9) or use debiased methods |
-
-### R lab
+CASTOR has ~18 events — LASSO is unstable here (mostly teaching). Tune λ only on training folds; bootstrap stability helps. **Common mistake:** report unpenalized p-values from a LASSO-selected model — report prediction metrics (Ch 9) or debiased methods instead.
 
 ```r
 source("R/examples/ch07_model_building.R")
@@ -231,37 +87,15 @@ source("R/examples/ch07_model_building.R")
 
 ## Technique: Splines for nonlinearity
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Is the age-FEV1 relationship linear? |
-| **R** | `lm(fev1 ~ smoking + splines::ns(age, df = 3) + sex, data = spirometry)` |
-| **When to use** | Clear curvature; large n |
-| **Caution** | Overfitting with small n; df prespecify |
-
-### Wrong analysis ⚠
-
-Add spline, pick df that minimizes p-value without prespecification.
+Natural splines test whether the age–FEV1 relationship is linear: `lm(fev1 ~ smoking + splines::ns(age, df = 3) + sex, data = spirometry)`. Use when curvature is clear and *n* is adequate. Prespecify df; overfitting is a risk with small *n*. **Common mistake:** pick df to minimize p-value without prespecification.
 
 ---
 
 ## Technique: Why NOT stepwise selection
 
-### Technique card
+Forward, backward, and stepAIC selection inflate type I error, bias coefficients, and overfit [@harrell2015rms] — avoid for confirmatory trials and primary publications. Prefer prespecification for inference; LASSO for prediction [@james2023ISL].
 
-| | |
-|---|---|
-| **Methods** | forward, backward, stepAIC |
-| **Problem** | Inflated type I error; biased coefficients; overfit [@harrell2015rms] |
-| **Use** | Avoid for confirmatory clinical trials and primary publications |
-| **Alternative** | Prespecification; LASSO for prediction [@james2023ISL] |
-
-### Wrong analysis ⚠ (signature example)
-
-**Mistake:** stepwise logistic on 30 variables with 18 events → "significant" OR for exposure.
-
-**Do instead:** prespecify 4 confounders; report OR with CI; label exploratory scans separately.
+**Signature example:** stepwise logistic on 30 variables with 18 events → a "significant" OR for exposure. **Instead:** prespecify four confounders; report OR with CI; label exploratory scans separately.
 
 ---
 
@@ -269,7 +103,7 @@ Add spline, pick df that minimizes p-value without prespecification.
 
 Complete-case analysis drops rows with any missing covariate - may bias if missing not random.
 
-**Report:** n analysed vs n enrolled. **Missing data:** [Ch 20](20-missing-data.md) (multiple imputation).
+**Report:** n analysed vs n enrolled. **Missing data:** Ch 20 (multiple imputation).
 
 ### Caveats
 
@@ -345,21 +179,45 @@ source("R/examples/ch07_model_building.R")
 | **Bootstrap model averaging** | avoid single “best” exploratory model | report as exploratory |
 | **Pre-registered analysis plan** | confirmatory inference | reduces researcher degrees of freedom |
 
-### Causal selection ([Ch 21](21-causal-inference.md))
+### Causal selection (Ch 21)
 
 | Concept | Why it matters | Chapter |
 |---|---|---|
-| DAG-informed adjustment | avoid colliders/mediators | [Ch 21](21-causal-inference.md) |
+| DAG-informed adjustment | avoid colliders/mediators | Ch 21 |
 
-## Chapter summary
+---
 
-- Goal determines method: inference → prespecify; prediction → CV/penalize [@shmueli2010predict].
-- Stepwise is not a substitute for thinking [@harrell2015rms].
-- LRT for nested prespecified comparisons; LASSO for prediction with low EPV caution [@james2023ISL].
+## Quick reference: methods in this chapter
 
-## Where this chapter leads
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Prespecified covariate set** | Confirmatory trial or observational inference | Subject-matter confounders; avoids p-hacking |
+| **Likelihood ratio test (nested)** | Prespecified extra term | Valid comparison of nested models |
+| **AIC / BIC** | Exploratory ranking; prediction focus | In-sample; not for confirmatory p-values |
+| **LASSO / ridge / elastic net** | Many predictors; prediction goal ([Ch 9](09-prediction-vs-inference.md)) | Penalisation; use with CV |
+| **Splines for age/FEV1** | Non-linearity prespecified | Flexible; limit df to avoid overfit |
+| **Stepwise selection** | Avoid in confirmatory work | Inflates optimism; invalid CIs |
+| **Complete-case vs MI** | Predictors have missing values | MI inside resampling for prediction ([Ch 20](20-missing-data.md)) |
+| **EPV rule (events per variable)** | Logistic with few events | &lt;10–15 events per coefficient is fragile |
 
-**Next:** [Chapter 8](08-validation-reporting.md) for honest reporting; [Chapter 9](09-prediction-vs-inference.md) if the goal is risk prediction rather than association.
+
+## Where we go next
+
+Rivera signs the covariate list Mei defended. The first full manuscript draft goes to internal review — CONSORT flow, limits paragraphs, and whether a burst-risk model belongs in the same paper as the primary FEV₁ result. That is **Part IV**, not another tweak to tonight's `glm()` output.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
+| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
+| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 
@@ -369,4 +227,3 @@ source("R/examples/ch07_model_building.R")
 
 ## Exercises ([Solutions](../solutions/ch07_solutions.md))
 
-**Next:** [Chapter 8](08-validation-reporting.md)

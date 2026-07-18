@@ -2,88 +2,15 @@
 
 > **Part VIII: Longitudinal, survival, and causal inference**
 
-## At a glance
+## Opening scene: twelve percent missing FEV₁
 
-| | |
-|---|---|
-| **Recurring dataset** | `data/spirometry.csv` (MAR-like missingness induced in script) |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Question** | How does missing FEV1 affect regression coefficients, and what should we report? |
-| **Core methods** | MCAR/MAR/MNAR framing, complete-case, median sensitivity, **MICE + Rubin pooling** |
-| **R** | `R/examples/ch20_missing_data.R` (`install.packages("mice")` for full demo) |
-| **Figures** | missingness pattern (`ch20_missingness_pattern.png`), coef sensitivity (`ch20_smoking_coef_sensitivity.png`), MICE diagnostic (`ch20_mice_density.png`) |
-| **Links** | [Ch 8 reporting](08-validation-reporting.md), [Ch 13 LOD](13-differential-analysis-fdr.md), [Ch 18 dropout](18-longitudinal-mixed-models.md), [Appendix D checklists](../appendix-d-missing-data-checklists.md) |
-| **Exercises** | [Chapter 20 exercises](../exercises/ch20_exercises.md) |
-
----
-
-## In this chapter
-
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): MCAR/MAR/MNAR in plain language
-2. [Method choice at a glance](#method-choice-at-a-glance): complete-case vs MI vs sensitivity
-3. [Reporting template](#reporting-template): enrolled vs analysed *n*
-4. [Catalog of wrong analyses](#catalog-of-wrong-analyses-missing-data): listwise deletion by default
-5. [Appendix D](../appendix-d-missing-data-checklists.md) checklists
-
-**Analyst read:** MICE workflow, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Complete-case analysis** | &lt;5% missing; MCAR plausible; sensitivity only | Simple; can bias if missingness relates to severity |
-| **Median / single imputation (sensitivity)** | Quick robustness check | Shows whether coefficient is stable; not production default |
-| **Multiple imputation (MICE) + pool** | MAR plausible; regression inference | Rubin pooling gives valid SEs if model is correct |
-| **Pattern-mixture / tipping point** | MNAR suspected (sicker patients miss visits) | Stress-tests how extreme dropout would need to be |
-| **Mixed model (no explicit MI)** | Longitudinal MAR dropout | Uses all observed visits under MAR ([Ch 18](18-longitudinal-mixed-models.md)) |
-| **IPW for dropout** | Informative missingness modelled | Weights complete cases; sensitivity to model |
-| **MI inside CV folds** | Prediction with missing predictors ([Ch 9](09-prediction-vs-inference.md)) | Prevents leakage |
-| **Per-feature rules (omics)** | Platform LOD / detection limits | Do not MI 1000+ features blindly ([Ch 13](13-differential-analysis-fdr.md)) |
-
-**Extensions:** [Decision table](#decision-table) and [Alternatives & extensions](#alternatives--extensions) below.
-
----
-
-## Learning objectives
-
-1. Distinguish MCAR, MAR, and MNAR in plain language with respiratory examples.
-2. Report *n* enrolled vs *n* analysed vs missingness by variable and subgroup.
-3. Run complete-case vs imputation sensitivity and interpret bias direction.
-4. Describe the MICE workflow and Rubin's pooling rules at a high level.
-5. Know when multiple imputation is the production default.
-6. Avoid leakage when imputing before prediction or cross-validation.
-
-## Prerequisites
-
-Chapters 3, 5, 8 (reporting); Ch 18 (informative dropout context).
+Week-12 spirometry missing for forty-eight participants — clinic closure, COVID, plain refusal. ITT says analyse everyone randomised. Mei maps missingness by arm and diagnosis before choosing complete-case, multiple imputation, or a principled sensitivity.
 
 ---
 
 ## Why this chapter
 
-Missing FEV1 is rarely random in severe COPD. Complete-case analysis can quietly describe healthier subsets. This chapter makes missingness visible in tables and figures before you defend an association.
-
-## Opening question (CASTOR)
-
-*Among CASTOR participants, FEV1 is missing more often in severe obstruction. If we drop those rows, does the smoking–FEV1 association change, and is that change a feature or a bug?*
-
-Missing data is not a technical footnote. In spirometry trials and cohorts, **missing lung function often tracks disease severity**, therapy intolerance, or inability to perform the manoeuvre [@harrell2015rms].
-
-The teaching script induces missing FEV1 related to obstruction severity (MAR-like). **43 of 400** enrolled participants lack observed FEV1 in the analysis; complete-case and median-imputation analyses give **different smoking coefficients** (−0.40 vs −0.36 L), illustrating why the analysis population must be explicit.
-
----
-
-## Clinical and biostatistics notes
-
-**Clinical:** Missing spirometry in severe COPD often reflects **inability to test**, not random noise. LOCF on FEV1 trajectories can fake stability. Structural missingness (e.g. sputum in non-producers) must not be imputed to the full cohort.
-
-**Biostatistics:** **MAR is not testable**: defend with subject-matter reasoning. Median imputation is **sensitivity only**. Production default is **MICE + Rubin pooling** when MAR is plausible. Imputation belongs **inside CV folds** for prediction ([Ch 9](09-prediction-vs-inference.md)).
-
-**Clinical nuance:** Table 1 should show missingness by severity and arm before the primary model is debated.
-
-**Biostat nuance:** report enrolled *n*, analysed *n*, and sensitivity side-by-side: Appendix D checklists support DAP/manuscript sign-off.
+Missing data is where ITT meets reality. This chapter connects patterns, mechanisms, and sensitivity — so missingness is a result, not a footnote. Missing spirometry in severe COPD often reflects **inability to test**, not random noise; LOCF on FEV1 trajectories can fake stability. Structural missingness (e.g. sputum in non-producers) must not be imputed to the full cohort. **MAR is not testable** — defend with subject-matter reasoning. Median imputation is **sensitivity only**; production default is **MICE + Rubin pooling** when MAR is plausible. Imputation belongs **inside CV folds** for prediction (Ch 9). Table 1 should show missingness by severity and arm before the primary model is debated; report enrolled *n*, analysed *n*, and sensitivity side-by-side (Appendix D checklists support DAP/manuscript sign-off).
 
 ---
 
@@ -111,7 +38,7 @@ Not every empty cell should be imputed.
 
 **Wrong move:** imputing sputum biomarkers for participants who cannot produce sputum as if they were MCAR across the whole cohort.
 
-Full checklists for analysis plans and manuscripts: [Appendix D](../appendix-d-missing-data-checklists.md).
+Full checklists for analysis plans and manuscripts: Appendix D.
 
 ---
 
@@ -146,7 +73,7 @@ Distinguish **per-protocol deletion of missed visits** (changes estimand) from p
 
 ## LOD, below-detection, and ordinary missingness
 
-Proteomics and assay data conflate three different absences ([Ch 13](13-differential-analysis-fdr.md)):
+Proteomics and assay data conflate three different absences (Ch 13):
 
 | Situation | What it is | Do not |
 |-----------|------------|--------|
@@ -172,26 +99,7 @@ DAPs should state LOD handling **separately** from MAR/MNAR discussion. Sensitiv
 
 ## Technique: Missing data analysis and multiple imputation (overview)
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Estimates under explicit missingness assumptions; sensitivity to those assumptions |
-| **Outcome** | Any (here: continuous FEV1 in `lm`) |
-| **Key quantities** | % missing per variable; enrolled *n*; analysed *n* |
-| **MCAR** | Missingness unrelated to observed or unobserved values |
-| **MAR** | Missingness depends on observed data only (given a rich enough model) |
-| **MNAR** | Missingness depends on the unobserved value itself |
-| **Teaching script** | Complete-case `lm` vs median imputation |
-| **Production default** | MICE (`mice` package) + pooled estimates (Rubin's rules) when MAR is plausible |
-| **R (teaching)** | `R/examples/ch20_missing_data.R` |
-| **When to use** | Any non-trivial missingness in Table 1 or outcomes |
-| **When NOT to use** | Single imputation without sensitivity when MNAR is plausible |
-| **Does NOT prove** | That MAR holds: sensitivity and design discussion required |
-
-### Dual interpretation
-
-**Takeaway:** compare complete-case vs imputed FEV1; if conclusions change, missingness is driving the story (formal: MAR/MNAR assumptions matter for valid inference).
+Missing-data analysis produces estimates under explicit assumptions and stress-tests them with sensitivity analyses. Key quantities are % missing per variable, enrolled *n*, and analysed *n*. **MCAR** means missingness is unrelated to any values; **MAR** means it depends on observed data only; **MNAR** means it depends on the missing value itself. The teaching script contrasts complete-case `lm` vs median imputation; production default is MICE (`mice` package) with Rubin pooling when MAR is plausible. Use whenever Table 1 or outcomes have non-trivial missingness; never treat single imputation as final when MNAR is plausible. MAR assumptions are not provable — sensitivity and design discussion are required.
 
 **Practice read:** if sicker patients are missing spirometry, "complete-case FEV1" may describe **healthier** subsets, not the enrolled trial population.
 
@@ -215,24 +123,9 @@ miss <- readr::read_csv(
 )
 ```
 
-### Technique: MICE (production workflow)
+### MICE (production workflow)
 
-| Step | Action |
-|------|--------|
-| 1 | Specify imputation model for each variable with missing values |
-| 2 | Include predictors of missingness (diagnosis, baseline FEV1, arm) |
-| 3 | Create *m* imputed datasets (often 20–50) |
-| 4 | Fit analysis model in each dataset |
-| 5 | Pool estimates with Rubin's rules (`mice::pool`) |
-| 6 | Report enrolled *n*, imputation variables, and sensitivity |
-
-**Missing outcomes:** modern MI often **includes the outcome** in the imputation model (to preserve associations) when imputing covariates. Whether imputed outcomes enter the **final** analysis must match the estimand. For longitudinal outcomes, observed-data mixed models may be preferable to imputing outcomes directly.
-
-**Derived variables:** recalculate BMI categories, change scores, and responder flags **after** imputation from components (passive imputation), rather than imputing the derived variable alone.
-
-**Number of imputations:** practical minimum **m = 20** for most MI analyses; consider m at least on the order of the % of incomplete cases when missingness is moderate/high.
-
-**Never** impute using future outcomes or test-set labels in prediction workflows (Ch 9, 17). Imputation belongs **inside** training folds.
+Specify an imputation model for each variable with missing values, including predictors of missingness (diagnosis, baseline FEV1, arm). Create *m* imputed datasets (often 20–50), fit the analysis model in each, and pool with Rubin's rules (`mice::pool`). Report enrolled *n*, imputation variables, and sensitivity. Include the outcome in the imputation model when imputing covariates; recalculate derived variables (BMI, change scores) **after** imputation. Practical minimum **m = 20**; never impute using future outcomes or test-set labels (Ch 9, 17).
 
 ### Imputation diagnostics (minimum)
 
@@ -269,7 +162,7 @@ The analysis plan says “complete cases.” Translators for the DSMB: report en
 
 ### In practice (longitudinal dropout)
 
-Missed spirometry visits in extension trials are often **MAR** (sicker patients skip) or **MNAR** (cannot perform manoeuvre). A mixed model on observed visits is not a free pass; compare complete-case, available-case, and prespecified sensitivity ([Ch 18](18-longitudinal-mixed-models.md), [Ch 21](21-causal-inference.md) IPW pointer).
+Missed spirometry visits in extension trials are often **MAR** (sicker patients skip) or **MNAR** (cannot perform manoeuvre). A mixed model on observed visits is not a free pass; compare complete-case, available-case, and prespecified sensitivity (Ch 18, Ch 21 IPW pointer).
 
 ### Wrong analysis ⚠
 
@@ -281,7 +174,7 @@ Missed spirometry visits in extension trials are often **MAR** (sicker patients 
 | Impute using future/outcome information | Leakage | Imputation model uses only past/ baseline covariates per protocol |
 | "No missing data" when LOCF used | Hidden imputation | State imputation rule explicitly |
 | Structural missingness imputed like MCAR | Wrong estimand and population | Separate structural from random missing; define denominator |
-| Below-LOD coded as zero | Artificial group differences | Assay-aware handling ([Ch 13](13-differential-analysis-fdr.md)) |
+| Below-LOD coded as zero | Artificial group differences | Assay-aware handling (Ch 13) |
 
 ### Sensitivity analysis menu
 
@@ -325,7 +218,7 @@ If conclusions **change materially**, report that uncertainty explicitly: do not
 
 | Situation | Approach | Chapter |
 |-----------|----------|---------|
-| Structural missing (subgroup assay) | Define eligible *n*; no cohort-wide imputation | This chapter; [Appendix D](../appendix-d-missing-data-checklists.md) |
+| Structural missing (subgroup assay) | Define eligible *n*; no cohort-wide imputation | This chapter; Appendix D |
 | &lt;5% missing, MCAR plausible | Complete-case + document | This chapter |
 | MAR, regression inference | MICE + pool + diagnostics | This chapter |
 | Longitudinal intermittent/dropout | Mixed model; IPW sensitivity | Ch 18, 21 |
@@ -338,9 +231,9 @@ If conclusions **change materially**, report that uncertainty explicitly: do not
 
 ## High-dimensional and multi-centre notes
 
-**Omics:** standard MI on thousands of features with small *n* is often unstable. Prefer platform QC, feature filtering by detection rate, batch-aware models ([Ch 14](14-batch-effects.md)), and sensitivity with/without imputation. Treat heavy imputation in discovery as a **robustness check**, not the only analysis.
+**Omics:** standard MI on thousands of features with small *n* is often unstable. Prefer platform QC, feature filtering by detection rate, batch-aware models (Ch 14), and sensitivity with/without imputation. Treat heavy imputation in discovery as a **robustness check**, not the only analysis.
 
-**Multi-centre studies:** if core covariates (age, sex, site) are imputed for consortium-wide use, prefer a **documented central pipeline** with raw and imputed layers clearly labelled (`_imp` suffix or separate file). Analysts should not silently overwrite raw values. Details: [Appendix D](../appendix-d-missing-data-checklists.md).
+**Multi-centre studies:** if core covariates (age, sex, site) are imputed for consortium-wide use, prefer a **documented central pipeline** with raw and imputed layers clearly labelled (`_imp` suffix or separate file). Analysts should not silently overwrite raw values. Details: Appendix D.
 
 ---
 
@@ -447,6 +340,24 @@ Every paper should state enrolled *n* and analysed *n* explicitly.
 
 ---
 
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Complete-case analysis** | &lt;5% missing; MCAR plausible; sensitivity only | Simple; can bias if missingness relates to severity |
+| **Median / single imputation (sensitivity)** | Quick robustness check | Shows whether coefficient is stable; not production default |
+| **Multiple imputation (MICE) + pool** | MAR plausible; regression inference | Rubin pooling gives valid SEs if model is correct |
+| **Pattern-mixture / tipping point** | MNAR suspected (sicker patients miss visits) | Stress-tests how extreme dropout would need to be |
+| **Mixed model (no explicit MI)** | Longitudinal MAR dropout | Uses all observed visits under MAR ([Ch 18](18-longitudinal-mixed-models.md)) |
+| **IPW for dropout** | Informative missingness modelled | Weights complete cases; sensitivity to model |
+| **MI inside CV folds** | Prediction with missing predictors ([Ch 9](09-prediction-vs-inference.md)) | Prevents leakage |
+| **Per-feature rules (omics)** | Platform LOD / detection limits | Do not MI 1000+ features blindly ([Ch 13](13-differential-analysis-fdr.md)) |
+
+**Extensions:** [Decision table](#decision-table) and [Alternatives & extensions](#alternatives--extensions) below.
+
+---
+
+
 ## Exercises ([Solutions](../solutions/ch20_solutions.md))
 
 **E20.1** Define MAR in one sentence.
@@ -471,9 +382,26 @@ Every paper should state enrolled *n* and analysed *n* explicitly.
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
-**Next:** [Chapter 21](21-causal-inference.md) for confounding and IPW. Revisit [Chapter 18](18-longitudinal-mixed-models.md) if missing visits drove the sensitivity analysis. For DAP and manuscript checklists, use [Appendix D](../appendix-d-missing-data-checklists.md).
+**Next:** [Chapter 21](21-causal-inference.md) for confounding and IPW. Revisit [Chapter 18](18-longitudinal-mixed-models.md) if missing visits drove the sensitivity analysis. For DAP and manuscript checklists, use Appendix D.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 9: Prediction vs inference](09-prediction-vs-inference.md) | AUC, calibration, nested CV |
+| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
+| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
+| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
+| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix D: Missing data checklists](../appendix-d-missing-data-checklists.md) | Analysis-plan and manuscript checklists for missing data |
 
 ## Further reading
 

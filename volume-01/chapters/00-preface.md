@@ -22,18 +22,18 @@ I have sat in meetings where a clean volcano plot arrived before anyone wrote th
 
 This book is a **first starting point**: question-first, limits-last, reproducible where it helps understanding. It will not replace a statistician for your pivotal trial, and it will not turn you into a bioinformatician overnight. It should stop you from signing off analyses that are numerically runnable but scientifically beside the point.
 
-**Feasible fiction:** [Appendix K: In the room: short stories](appendix-k-in-the-room-stories.md): six invented situations (mixed columns + wrong tests, random forest without a goal, `lm()` on 0/1, training-set AUC, omics merged with FEV1, prediction quoted as causation) grounded in patterns respiratory journals and methods reviews see repeatedly.
+**Feasible fiction:** Appendix K: six invented situations (mixed columns + wrong tests, random forest without a goal, `lm()` on 0/1, training-set AUC, omics merged with FEV1, prediction quoted as causation) grounded in patterns respiratory journals and methods reviews see repeatedly.
 
 ## What you can learn here (without the deep math)
 
 | You want to… | This book helps you… | It does not require… |
 |--------------|----------------------|----------------------|
-| Pick a method for your endpoint | Route by outcome + design ([Appendix B](appendix-b-quick-reference.md)) | Proving asymptotic theory |
-| Adjust for baseline or confounders | Prespecify covariates; read adjusted CIs ([Ch 4–6](chapters/04-comparing-groups.md)) | Mastering every GLM extension |
-| Report for CONSORT/STROBE | Templates + intervals, not “NS” ([Ch 8](chapters/08-validation-reporting.md)) | Journal politics |
-| Handle a proteomics file someone emailed you | FDR, batch, honest discovery language ([Ch 13–17](chapters/13-differential-analysis-fdr.md)) | Building a genomics pipeline from scratch |
-| Run teaching R scripts | Reproduce CASTOR examples ([Appendix A](appendix-a-r-setup.md)) | Becoming a software engineer |
-| Say what was **not** proven | Case studies + APATE skepticism ([Ch 12](chapters/12-case-studies.md), [APATE](APATE_VIGNETTE.md)) | |
+| Pick a method for your endpoint | Route by outcome + design (Appendix B) | Proving asymptotic theory |
+| Adjust for baseline or confounders | Prespecify covariates; read adjusted CIs (Ch 4–6) | Mastering every GLM extension |
+| Report for CONSORT/STROBE | Templates + intervals, not “NS” (Ch 8) | Journal politics |
+| Handle a proteomics file someone emailed you | FDR, batch, honest discovery language (Ch 13–17) | Building a genomics pipeline from scratch |
+| Run teaching R scripts | Reproduce CASTOR examples (Appendix A) | Becoming a software engineer |
+| Say what was **not** proven | Case studies + APATE skepticism (Ch 12, APATE vignette) | |
 
 **R** is a **proof of understanding**, not the job description. Read the argument first; run code when it clarifies.
 
@@ -42,9 +42,9 @@ This book is a **first starting point**: question-first, limits-last, reproducib
 Many pulmonary labs now receive high-dimensional tables: Olink exports, RNA count matrices, flow summaries: without embedded bioinformatics support. That is normal, and it is where misuse is most common:
 
 - **Volume intimidation:** 1,000 columns feel “more scientific” than FEV1; the estimand did not change.
-- **Tool mismatch:** PCA or k-means run on raw exports with batch columns ignored ([Ch 10–11](chapters/10-dimensionality-reduction.md)).
-- **p-value fishing:** nominally significant features without FDR or effect sizes ([Ch 13](chapters/13-differential-analysis-fdr.md)).
-- **Confirmatory dressing:** volcano figures beside week-12 FEV1 in one Results section ([Ch 12 Case D](chapters/12-case-studies.md)).
+- **Tool mismatch:** PCA or k-means run on raw exports with batch columns ignored (Ch 10–11).
+- **p-value fishing:** nominally significant features without FDR or effect sizes (Ch 13).
+- **Confirmatory dressing:** volcano figures beside week-12 FEV1 in one Results section (Ch 12 Case D).
 - **Outsourced black boxes:** a vendor PDF with no batch table, no *n*, no missingness rule.
 
 **What you can do without a bioinformatics team:** classify the data type, ask for batch and plate metadata, prespecify discovery vs clinical endpoints, demand effect size + q-value + sensitivity, and use [Part VI](parts/part-06-highdim-biology.md) as a **review checklist** before funding validation. When analysis must be outsourced, this handbook gives you vocabulary to **review** deliverables, not just admire heatmaps.
@@ -69,7 +69,7 @@ Most training still runs software-first: a test is chosen, then justified. The r
 
 ## Accessibility and validity
 
-Precision and readability are not trade-offs. Each chapter pairs plain language with a formal statement, lists assumptions explicitly, and shows where respiratory studies commonly misstep. Terms are defined in [Appendix C](../appendix-c-glossary.md); use the plain-language column as a lookup, not a memorisation exercise.
+Precision and readability are not trade-offs. Each chapter pairs plain language with a formal statement, lists assumptions explicitly, and shows where respiratory studies commonly misstep. Terms are defined in Appendix C; use the plain-language column as a lookup, not a memorisation exercise.
 
 ## R as a teaching tool
 
@@ -77,7 +77,7 @@ R is used here as a **proof of understanding**, not as a software manual. If you
 
 We use the tidyverse for readability. Where base R is clearer, we use base R.
 
-**New to R?** See [Appendix A](../appendix-a-r-setup.md). You do not need it before Chapter 1 if you are only reading the statistical content.
+**New to R?** See Appendix A. You do not need it before Chapter 1 if you are only reading the statistical content.
 
 ## What this book is not
 
@@ -94,28 +94,59 @@ If you use this book in fellowship teaching, trial work, or translational progra
 
 ## How to use this handbook
 
-Use it by outcome and design, not by page order. [Appendix B](../appendix-b-quick-reference.md) routes a question to a chapter; [Appendix G](../appendix-g-handbook-navigation.md) lists datasets, files, and topics; [Appendix J](../appendix-j-investigator-minimum-path.md) is the **shortest route**; [Appendix H](../appendix-h-clinicians-route.md) expands endpoint routing without R. In the PDF, appendices appear in **reader-importance order** (G → J → **K** → H → I → B → …); letters stay fixed for citations. The [Welcome](../chapters/00-welcome.md) page summarises the eight parts. Each method chapter follows the same skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
+Use it by outcome and design, not by page order. Appendix B routes a question to a chapter; Appendix G lists datasets, files, and topics; Appendix J is the **shortest route**; Appendix H expands endpoint routing without R. In the PDF, appendices appear in **reader-importance order** (G → J → **K** → H → I → B → …); letters stay fixed for citations. The Welcome page summarises the eight parts. Each method chapter follows the same skeleton (CHAPTER_TEMPLATE): question, technique card, plain and precise interpretation, **Practice read**, caveats, common errors, reporting template, code.
 
 ## Circulating for feedback (reviewers) {#circulating-for-feedback-reviewers}
 
 This edition is a **candidate for targeted external review**, not a final sign-off. Please use the **[v1.1.0-review PDF release](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.1.0-review)** and [REVIEW_REQUEST.md](../../REVIEW_REQUEST.md).
 
-**Priority chapters (3–5 hours):** [Ch 4](chapters/04-comparing-groups.md), [Ch 6](chapters/06-generalized-linear-models.md), [Ch 13](chapters/13-differential-analysis-fdr.md), [Ch 18](chapters/18-longitudinal-mixed-models.md), [Ch 20](chapters/20-missing-data.md). Rubric: [REVIEWER_RUBRIC.md](../REVIEWER_RUBRIC.md).
+**Priority chapters (3–5 hours):** Ch 4, Ch 6, Ch 13, Ch 18, Ch 20. Rubric: [REVIEWER_RUBRIC.md](../REVIEWER_RUBRIC.md).
 
 **Please flag:** estimand errors, unsafe defaults, misleading omics claims, or reporting that would fail a grant or journal statistical review — not typos alone. **Out of scope for this pass:** full line edit, wet-lab/FASTQ pipelines, pipeline figure branding.
 
-**Data:** all examples use synthetic CASTOR / CASTOR-HD CSVs. Ch 13 teaching DE loops differ from [Appendix L](../appendix-l-omics-analyst-track.md) Bioconductor pipelines by design; compare both before judging discovery counts.
+**Data:** all examples use synthetic CASTOR / CASTOR-HD CSVs. Ch 13 teaching DE loops differ from Appendix L Bioconductor pipelines by design; compare both before judging discovery counts.
 
 **Feedback:** GitHub issue with label `review`, or email the author with chapter + section references.
 
-**Signposts in the chapters:** Each part opens with a short **In the room** vignette (a meeting, email, or review moment). Method chapters use a shared skeleton ([CHAPTER_TEMPLATE.md](../CHAPTER_TEMPLATE.md)): but openings vary: some start with a case, not a catalogue. Look for **Practice read** (what would change the decision), **In practice** (sponsor or manuscript reality), **Figure hygiene** ([Appendix I](../appendix-i-figure-hygiene.md)), and **Wrong analysis** panels. You do not need every signpost on first pass; [Appendix J](../appendix-j-investigator-minimum-path.md) lists the shortest route.
+**Signposts in the chapters:** Each part opens with a short **In the room** vignette (a meeting, email, or review moment). Method chapters use a shared skeleton (CHAPTER_TEMPLATE): but openings vary: some start with a case, not a catalogue. Look for **Practice read** (what would change the decision), **In practice** (sponsor or manuscript reality), **Figure hygiene** (Appendix I), and **Wrong analysis** panels. You do not need every signpost on first pass; Appendix J lists the shortest route.
 
 ## What CASTOR means {#what-castor-means}
 
-**CASTOR** is the analysis sequence used throughout the book: **C**linical question, **A**ssess design and data, **S**elect method, **T**est and fit, **O**utput estimand, **R**eport limits. The letters are unpacked in [Chapter 1](01-statistical-thinking.md) with an eight-step pipeline figure and a method decision tree at the selection step.
+**CASTOR** is the analysis sequence used throughout the book: **C**linical question, **A**ssess design and data, **S**elect method, **T**est and fit, **O**utput estimand, **R**eport limits. The letters are unpacked in Chapter 1 with an eight-step pipeline figure and a method decision tree at the selection step.
 
 **CASTOR** also names a **synthetic COPD-flavoured cohort** (spirometry, exacerbations, smoking, therapy) reused from descriptive tables through omics capstones; **CASTOR-HD** extends the same patients to high-dimensional biology. The workflow is fixed; only the data file changes. Readers working in **chronic lung disease (CLD)** or broader pulmonary research should treat CASTOR as a **method carrier**: keep the estimand, relabel the population in your protocol.
 
 ## About the data
 
 All examples use simulated data with realistic structure. This keeps the book fully reproducible. When you apply the methods, replace synthetic datasets with your study data and revisit every assumption.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
+| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
+| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
+| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
+| [Chapter 10: Dimensionality reduction](10-dimensionality-reduction.md) | PCA, exploration, p ≫ n |
+| [Chapter 12: Case studies](12-case-studies.md) | Integrated CASTOR narratives A–E |
+| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
+| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
+| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
+| [Welcome](00-welcome.md) | Book entry point, CASTOR cast, reading paths |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix A: R setup](../appendix-a-r-setup.md) | Install R, Posit Desktop, and run teaching scripts |
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix C: Glossary](../appendix-c-glossary.md) | Look up statistical and respiratory terms |
+| [Appendix G: Handbook navigation](../appendix-g-handbook-navigation.md) | Full file, dataset, and topic index |
+| [Appendix H: Clinicians' route](../appendix-h-clinicians-route.md) | Endpoint routing without running R |
+| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
+| [Appendix J: Investigator minimum path](../appendix-j-investigator-minimum-path.md) | Shortest read for investigators who will not run R |
+| [Appendix K: In the room — short stories](../appendix-k-in-the-room-stories.md) | Extended vignettes of common analysis mistakes |
+| [Appendix L: Omics analyst track](../appendix-l-omics-analyst-track.md) | Production DESeq2, limma-voom, fgsea, and ComBat pipelines |
+| [APATE vignette](../APATE_VIGNETTE.md) | Prose-only messy registry checklist (no CSV) |
+| [CHAPTER_TEMPLATE](../CHAPTER_TEMPLATE.md) | Editorial skeleton for method chapters |

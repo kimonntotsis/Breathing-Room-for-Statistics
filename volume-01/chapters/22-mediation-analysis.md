@@ -2,83 +2,15 @@
 
 > **Part VIII: Longitudinal, survival, and causal inference**
 
-## At a glance
+## Opening scene: "Is it mediated by FEV₁?"
 
-| | |
-|---|---|
-| **Recurring dataset** | `data/exacerbation.csv` |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Question** | How much of the smoking–exacerbation association runs **through** lung function (FEV1 % predicted)? |
-| **Core methods** | total vs direct effect, path models, natural indirect/direct effects, bootstrap mediation |
-| **R** | `R/examples/ch22_mediation.R` (`install.packages("mediation")`) |
-| **Figures** | path diagram (`ch22_mediation_path.png`), effect forest (`ch22_mediation_effects.png`), total vs direct OR (`ch22_total_vs_direct_or.png`); **figure hygiene:** `viz_pair_ch22_mediation.png` |
-| **Links** | [Ch 21 causal](21-causal-inference.md), [Ch 6 logistic](06-generalized-linear-models.md), [Ch 12 Case B](12-case-studies.md) |
-| **Exercises** | [Chapter 22 exercises](../exercises/ch22_exercises.md) |
-
----
-
-## In this chapter
-
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): when mediation is worth the complexity
-2. [Method choice at a glance](#method-choice-at-a-glance): total, direct, indirect, natural effects
-3. [Technique: path models and natural effects](#technique-path-models-and-natural-effects-castor): smoking → FEV1 % → exacerbation
-4. [Reporting template](#reporting-template): estimand-first mediation paragraph
-5. [Alternatives & extensions](#alternatives--extensions)
-
-**Analyst read:** R lab, bootstrap `mediate()`, figure hygiene below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Total effect model (omit mediator)** | Policy or exposure effect including all paths | Smoking OR without FEV1 % in the model |
-| **Direct effect model (adjust mediator)** | Effect **not through** measured mediator | Smoking OR with FEV1 % in the model |
-| **Product-of-coefficients (Baron–Kenny style)** | Teaching decomposition; continuous mediator on linear scale | Quick a×b intuition; fragile with GLMs |
-| **Natural effects (`mediate`)** | Prespecified binary exposure, continuous mediator, binary outcome | Bootstrap ACME, ADE, total on log-odds scale |
-| **Causal mediation with sensitivity** | Reviewer asks about unmeasured mediator–outcome confounding | VanderWeele sensitivity parameters |
-| **Do not run mediation** | Cross-sectional snapshot; mediator measured after outcome | Temporal order unclear; estimand not defensible |
-| **Do not adjust mediator for total effect** | Total smoking impact is the question | Blocks part of the causal path ([Ch 21](21-causal-inference.md)) |
-
-**Extensions:** longitudinal mediators, competing risks, and time-varying treatments in [Alternatives & extensions](#alternatives--extensions).
-
----
-
-## Learning objectives
-
-1. Distinguish **total**, **direct**, and **indirect** effects in a respiratory DAG.
-2. State why adjusting FEV1 changes the estimand from total to direct effect.
-3. Fit mediator and outcome models aligned to a prespecified path diagram.
-4. Run bootstrap mediation (`mediate`) and report ACME, ADE, and total effect with uncertainty.
-5. Avoid Baron–Kenny stepwise testing as a substitute for causal assumptions.
-6. Report mediation results with associational humility unless design supports stronger claims.
-
-## Prerequisites
-
-Chapters 5–6 (regression), 8 (reporting), 21 (confounders vs mediators, DAGs).
+Smoking associates with exacerbation; FEV₁ sits on the path. A PI asks how much is **direct** vs **through** lung function. Mediation decomposes associational paths — not mechanistic proof — when prespecified and interpreted with humility.
 
 ---
 
 ## Why this chapter
 
-[Chapter 21](21-causal-inference.md) warns that FEV1 sits on the path from smoking to exacerbation. Reviewers and clinicians then ask: *how much goes through lung function?* That is a **mediation** question, not a covariate-selection afterthought. This chapter gives a full, reproducible workflow on CASTOR so the estimand is named before the mediator enters the model.
-
-## Opening question (CASTOR)
-
-*Among CASTOR participants, does smoking increase 12-month exacerbation risk **because** it lowers FEV1 % predicted, and how large is that indirect path relative to a direct path not through measured lung function?*
-
-Case B in [Chapter 12](12-case-studies.md) and the logistic models in [Chapter 21](21-causal-inference.md) adjust FEV1 when the estimand is associational. **Mediation analysis** answers a different prespecified question: partition the smoking effect into **indirect** (via FEV1 %) and **direct** (not via FEV1 %) components, with assumptions stated up front [@vanderweele2015explanation; @tingley2014mediation].
-
----
-
-## Clinical and biostatistics notes
-
-**Clinical:** Lower FEV1 % is a plausible **mechanism** linking smoking to exacerbation in COPD. It is not the only mechanism (airway inflammation, colonisation, adherence). A mediation analysis quantifies association through **one measured mediator**, not the full biology.
-
-**Biostatistics:** Mediation requires **three no-confounding** structures (exposure–mediator, exposure–outcome, mediator–outcome) and correct **temporal ordering** (mediator before outcome). CASTOR `exacerbation.csv` is a **single time-point teaching snapshot**: treat results as **illustrative**, not as proof that smoking causes exacerbations through FEV1.
-
-**Practice read:** if the indirect effect is small and the direct path dominates, policy discussion may still focus on total smoking burden rather than lung-function pathways alone.
+Mediation answers a specific estimand question. CASTOR closes the volume here: total, direct, and indirect language tied to bootstrap CIs — and explicit limits on causal reading. Lower FEV1 % is a plausible **mechanism** linking smoking to exacerbation in COPD, but not the only one (airway inflammation, colonisation, adherence). A mediation analysis quantifies association through **one measured mediator**, not the full biology. Mediation requires **three no-confounding** structures (exposure–mediator, exposure–outcome, mediator–outcome) and correct **temporal ordering**. CASTOR `exacerbation.csv` is a **single time-point teaching snapshot** — treat results as **illustrative**, not as proof that smoking causes exacerbations through FEV1. If the indirect effect is small and the direct path dominates, policy discussion may still focus on total smoking burden rather than lung-function pathways alone.
 
 ---
 
@@ -117,33 +49,15 @@ Adjust the **same prespecified confounder set** in **both** the mediator and out
 | **FEV1 %** | Mediator | Outcome model only (not mediator model) |
 | **Therapy** | Possible confounder / collider | Prespecify; not in teaching script |
 
-**Never** adjust a **collider** or a **mediator–outcome confounder affected by smoking** without DAG guidance ([Ch 21](21-causal-inference.md)).
+**Never** adjust a **collider** or a **mediator–outcome confounder affected by smoking** without DAG guidance (Ch 21).
 
 ---
 
 ## Technique: Path models and natural effects (CASTOR)
 
-### Technique card
+Path models with natural effects ask how much of the smoking–exacerbation association is consistent with a path through FEV1 % predicted. Exposure (A) is smoking; mediator (M) is FEV1 % predicted; outcome (Y) is 12-month exacerbation; confounders (C) are age, sex, and prior exacerbations. Fit a linear mediator model and logistic outcome model, then bootstrap natural effects with `mediation::mediate(..., boot = TRUE)`. Use when a mechanism hypothesis is prespecified and the mediator precedes the outcome — not for exploratory mediator fishing or reverse causation. Does not prove smoking **causes** exacerbation through FEV1; biology is multi-path.
 
-| | |
-|---|---|
-| **Answers** | How much of the smoking–exacerbation association is consistent with a path through FEV1 % predicted? |
-| **Exposure (A)** | Smoking (binary) |
-| **Mediator (M)** | FEV1 % predicted (continuous) |
-| **Outcome (Y)** | 12-month exacerbation (binary) |
-| **Confounders (C)** | Age, sex, prior exacerbations |
-| **Assumptions** | No unmeasured confounding for each pair; mediator precedes outcome; correct functional form |
-| **Effect measures** | OR (total/direct models); ACME, ADE, total on log-odds scale; proportion mediated |
-| **R** | `lm` mediator + `glm` outcome + `mediation::mediate(..., boot = TRUE)` |
-| **When to use** | Mechanism hypothesis prespecified; mediator measured before outcome |
-| **When NOT to use** | Exploratory “throw FEV1 in”; reverse causation; mediator measured after events |
-| **Does NOT prove** | Smoking **causes** exacerbation through FEV1; biology is multi-path |
-
-### Dual interpretation
-
-**Takeaway:** in the teaching run, the **total** smoking OR is **2.11**; adjusting FEV1 % moves the OR to **1.33**; bootstrap **ACME** on the log-odds scale is **0.017** (95% bootstrap interval 0.000 to 0.048), suggesting a modest indirect component through measured lung function in this toy dataset.
-
-**Practice read:** if your steering committee cares about **total public-health burden of smoking**, report the total-effect model. If the scientific question is **lung-function pathway**, prespecify mediation and report ACME/ADE with sensitivity analysis.
+**Practice read:** in the teaching run, the **total** smoking OR is **2.11**; adjusting FEV1 % moves the OR to **1.33**; bootstrap **ACME** on the log-odds scale is **0.017** (95% bootstrap interval 0.000 to 0.048). If your steering committee cares about **total public-health burden of smoking**, report the total-effect model. If the scientific question is **lung-function pathway**, prespecify mediation and report ACME/ADE with sensitivity analysis.
 
 ### Worked example (CASTOR)
 
@@ -174,7 +88,7 @@ Path coefficients (`ch22_path_coefficients.csv`): smoking lowers FEV1 % (a path 
 
 **Common mistake:** adjust for FEV1 % in logistic regression and report the smoking OR as the **total effect of smoking**.
 
-**Why it fails:** conditioning on a mediator blocks part of the causal path from smoking to exacerbation. The coefficient is a **direct effect**, not the total effect ([Ch 21](21-causal-inference.md), E21.4).
+**Why it fails:** conditioning on a mediator blocks part of the causal path from smoking to exacerbation. The coefficient is a **direct effect**, not the total effect (Ch 21, E21.4).
 
 **Do instead:** prespecify total vs direct estimands; fit both models or use `mediate()`; label ORs correctly in tables and slides.
 
@@ -204,7 +118,7 @@ Path coefficients (`ch22_path_coefficients.csv`): smoking lowers FEV1 % (a path 
 
 ## In practice
 
-Sponsor question: *“Does smoking drive exacerbations through lung function?”*  
+Sponsor question: *“Does smoking drive exacerbations through lung function?”*
 Answer in two sentences: (1) name the estimand (indirect via FEV1 %); (2) show total vs direct ORs **and** bootstrap ACME with CI. Do not upgrade to causal language unless the protocol prespecified mediation and sensitivity analyses.
 
 ---
@@ -302,6 +216,23 @@ When reviewers worry about unmeasured confounding of the FEV1 % → exacerbation
 
 ---
 
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Total effect model (omit mediator)** | Policy or exposure effect including all paths | Smoking OR without FEV1 % in the model |
+| **Direct effect model (adjust mediator)** | Effect **not through** measured mediator | Smoking OR with FEV1 % in the model |
+| **Product-of-coefficients (Baron–Kenny style)** | Teaching decomposition; continuous mediator on linear scale | Quick a×b intuition; fragile with GLMs |
+| **Natural effects (`mediate`)** | Prespecified binary exposure, continuous mediator, binary outcome | Bootstrap ACME, ADE, total on log-odds scale |
+| **Causal mediation with sensitivity** | Reviewer asks about unmeasured mediator–outcome confounding | VanderWeele sensitivity parameters |
+| **Do not run mediation** | Cross-sectional snapshot; mediator measured after outcome | Temporal order unclear; estimand not defensible |
+| **Do not adjust mediator for total effect** | Total smoking impact is the question | Blocks part of the causal path ([Ch 21](21-causal-inference.md)) |
+
+**Extensions:** longitudinal mediators, competing risks, and time-varying treatments in [Alternatives & extensions](#alternatives--extensions).
+
+---
+
+
 ## Exercises ([Solutions](../solutions/ch22_solutions.md))
 
 **E22.1** What is the difference between total and direct effect of smoking on exacerbation?
@@ -322,13 +253,26 @@ When reviewers worry about unmeasured confounding of the FEV1 % → exacerbation
 4. From `ch22_path_coefficients.csv`, interpret the smoking coefficient in the mediator model.
 5. Write a one-paragraph Results section using the reporting template.
 
-**Capstone link:** [Case B](12-case-studies.md) logistic model vs this chapter's explicit decomposition.
+**Capstone link:** Case B logistic model vs this chapter's explicit decomposition.
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
-You have completed the extended causal path (Ch 18–22). Return to [Chapter 12](12-case-studies.md) for integrated case discussions, [Chapter 21](21-causal-inference.md) for IPW and DAGs without mediation, or [Appendix B](../appendix-b-quick-reference.md) for day-to-day method choice.
+You have completed the extended causal path (Ch 18–22). Return to [Chapter 12](12-case-studies.md) for integrated case discussions, [Chapter 21](21-causal-inference.md) for IPW and DAGs without mediation, or Appendix B for day-to-day method choice.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 12: Case studies](12-case-studies.md) | Integrated CASTOR narratives A–E |
+| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 

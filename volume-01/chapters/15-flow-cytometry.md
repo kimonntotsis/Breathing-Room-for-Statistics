@@ -2,77 +2,15 @@
 
 > **Part VI: High-dimensional biology and discovery**
 
-## At a glance
+## Opening scene: proportions that sum to one
 
-| | |
-|---|---|
-| **Recurring datasets** | `data/flowcytometry_summary.csv`, `data/flowcytometry_cells_toy.csv` |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Main decisions** | (1) unit of analysis, (2) compositional constraints, (3) drift/batch, (4) inference vs visualization |
-| **R** | `R/examples/ch15_flow_cytometry.R` |
-| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch15_*.png` |
-| **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
-| **Exercises** | [Chapter 15 exercises](../exercises/ch15_exercises.md) |
-
-**Also see:** [Ch 14 batch](14-batch-effects.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
-
----
-
-## In this chapter
-
-1. [Why this chapter](#why-this-chapter): participant-level inference
-2. [Method choice at a glance](#method-choice-at-a-glance): proportions vs cells
-3. **Practice read** on pseudo-replication
-4. [Wrong analysis](#wrong-analysis-): modelling cells as patients
-5. [Alternatives & extensions](#alternatives--extensions)
-
-**Analyst read:** compositional plots, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Participant-level proportions** | Compare arms on cell-type fractions | One row per person; defensible inference |
-| **Median / mean proportion by group** | Simple arm comparison | Clear estimand; report n participants |
-| **Linear model on proportions** | Adjust for covariates | Watch compositional constraint (sum to 1) |
-| **Compositional (log-ratio) transforms** | Formal compositional data analysis | Accounts for closure; specialist |
-| **Per-cell mixed models** | Rare; cells nested in patients | Harder to interpret than summaries |
-| **Drift plot by batch/run** | QC before biology | Technical drift mimics disease ([Ch 14](14-batch-effects.md)) |
-| **UMAP / PCA on cells** | Exploratory gating QC | Descriptive only; not primary inference |
-
-**Extensions:** Dirichlet models in [Alternatives & extensions](#alternatives--extensions).
-
----
-
-## Learning objectives
-
-1. Choose the correct **unit of analysis**: participant-level summaries vs cells.
-2. Recognise **compositional constraints** when proportions sum to 1.
-3. Compare groups on cell-type proportions with interpretable effect measures and drift adjustment.
-4. Use embeddings/clustering as **descriptive** tools unless validated.
-5. Avoid **pseudo-replication** and "UMAP as evidence" claims.
-6. Apply multiplicity control when testing many cell types (Ch 13 link).
-
-## Prerequisites
-
-Ch 4 (comparisons), Ch 5 (linear models), Ch 13 (multiplicity), Ch 14 (batch/drift logic).
+Flow summaries arrive: sixteen cell populations as percentages per participant. A bar chart shows "more neutrophils in cases." Mei asks whether the increase is composition — more neutrophils **within** patients — or different patient mix. Pseudoreplication waits in the per-cell file.
 
 ---
 
 ## Why this chapter
 
-Flow data are beautiful and easy to mis-analyse. A stunning UMAP is not evidence; pooling cells as if they were patients is pseudo-replication. This chapter keeps immune phenotyping at the **participant** level where results can be interpreted in plain language.
-
-## Opening question
-
-*Do cases differ in immune composition - and can we say it without turning UMAP into "evidence"?*
-
-Flow cytometry invites a common error: using an appealing picture (embedding) as a statistical result. This chapter separates:
-
-- **Inference** (estimates + uncertainty on **participant-level** summaries) from
-- **Visualization** (embeddings, clustering, gating diagnostics).
+Flow data are compositional and hierarchical. This chapter teaches participant-level summaries, drift checks, and when the per-cell toy file is only a warning — not the primary analysis.
 
 ---
 
@@ -80,7 +18,7 @@ Flow cytometry invites a common error: using an appealing picture (embedding) as
 
 1. **Panel & gating**: document manual or algorithmic strategy.
 2. **Summarise per participant**: proportions and/or median intensities.
-3. **Drift QC**: plot by batch/run day ([Ch 14](14-batch-effects.md)).
+3. **Drift QC**: plot by batch/run day (Ch 14).
 4. **Primary models**: participant-level `lm` or beta regression on prespecified cell types.
 5. **Multiplicity**: BH across cell types if many tested (Ch 13).
 6. **Embeddings**: UMAP/PCA for QC only unless validated.
@@ -149,27 +87,9 @@ The pseudo-replication model will show a much smaller p-value and misleading pre
 
 ## Technique: Participant-level summary analysis (default)
 
-### Technique card
+Participant-level summary analysis asks whether cell-type proportions or marker medians differ between groups. The unit of analysis is **one row per participant**; outcomes are proportions (0–1) or continuous marker summaries in independent groups, with optional adjustment for covariates and drift. Use `lm(logit(p) ~ group + batch)` for teaching or beta regression for publication. This is the primary reporting approach — transparent, supports CI and covariates — but it does not prove mechanistic cell identity or causal immune pathways, and it should not claim new cell types from one embedding.
 
-| | |
-|---|---|
-| **Answers** | Are cell-type proportions / marker medians different between groups? |
-| **Outcome type** | proportions (0-1), continuous marker summaries |
-| **Design** | independent groups; can adjust for covariates and drift |
-| **Unit of analysis** | **one row per participant** |
-| **Effect measure** | difference in mean proportion; logit-scale difference; median difference |
-| **R** | `lm(logit(p) ~ group + batch)` (simple) or beta regression (advanced) |
-| **When to use** | primary reporting; transparent; supports CI and covariates |
-| **When NOT to use** | claiming new cell types from one embedding |
-| **Does NOT prove** | mechanistic cell identity; causal immune pathways |
-
-### Dual interpretation
-
-**Plain language:** we compared the fraction of each major immune population between groups.
-
-**Precise language:** we modelled participant-level proportions, accounting for drift, and reported effect sizes with uncertainty.
-
-**Practice read:** these summaries are interpretable (e.g., "higher monocyte fraction"), but they are not a replacement for validated immunophenotyping.
+**Practice read:** summaries like "higher monocyte fraction" are interpretable, but they are not a replacement for validated immunophenotyping.
 
 ### Caveats box
 
@@ -217,7 +137,7 @@ A flow core returns 50,000 events per patient and a beautiful t-SNE. Summarise t
 
 ### Reporting template
 
-Use Template C in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md).
+Use Template C in HIGH_DIM_REPORTING_TEMPLATES.
 
 > Flow cytometry was performed on [panel]. Cells were gated [manual/algorithmic strategy]. For each participant we computed the proportion of [cell types] and median marker intensities. Group comparisons used participant-level models adjusting for run day/batch. Per-cell embeddings (PCA/UMAP) were used for **visual QC only**.
 
@@ -225,19 +145,7 @@ Use Template C in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES
 
 ## Technique: Compositional structure (proportions sum to 1)
 
-When you measure five cell-type proportions, they are **not independent**: if monocytes go up, something else must go down.
-
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | How should we interpret changes in one population given the whole? |
-| **When to use simple approach** | Prespecified primary population (e.g., % regulatory T cells) |
-| **When to extend** | Core question is about **overall immune rebalancing** |
-| **Alternatives** | compositional data analysis (log-ratio transforms), Dirichlet models (advanced) |
-| **Does NOT prove** | which population "caused" the shift |
-
-**Practical handbook rule:** for most respiratory papers, prespecify 1-3 populations for primary inference and treat the rest as exploratory.
+When you measure five cell-type proportions, they are **not independent**: if monocytes go up, something else must go down. For most respiratory papers, prespecify 1–3 populations for primary inference and treat the rest as exploratory. When the core question is overall immune rebalancing, consider compositional data analysis (log-ratio transforms, Dirichlet models). These methods help interpret changes in one population given the whole — not which population "caused" the shift.
 
 ---
 
@@ -328,13 +236,30 @@ Shifts in one population often accompany opposite shifts elsewhere because propo
 
 Batch-separated bars mean immunology and processing are confounded until drift is modelled or redesigned.
 
+---
+
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Participant-level proportions** | Compare arms on cell-type fractions | One row per person; defensible inference |
+| **Median / mean proportion by group** | Simple arm comparison | Clear estimand; report n participants |
+| **Linear model on proportions** | Adjust for covariates | Watch compositional constraint (sum to 1) |
+| **Compositional (log-ratio) transforms** | Formal compositional data analysis | Accounts for closure; specialist |
+| **Per-cell mixed models** | Rare; cells nested in patients | Harder to interpret than summaries |
+| **Drift plot by batch/run** | QC before biology | Technical drift mimics disease ([Ch 14](14-batch-effects.md)) |
+| **UMAP / PCA on cells** | Exploratory gating QC | Descriptive only; not primary inference |
+
+**Extensions:** Dirichlet models in [Alternatives & extensions](#alternatives--extensions).
+
+---
+
+
 ## Exercises ([Solutions](../solutions/ch15_solutions.md))
 
 **E15.1** Why is pooling 6,000 cells as n = 6,000 wrong?
 
 **E15.2** Name one compositional constraint when interpreting flow proportions.
-
-**E15.3** When is a UMAP figure acceptable in a paper?
 
 **E15.3** When is a UMAP figure acceptable in a paper?
 
@@ -350,18 +275,23 @@ Batch-separated bars mean immunology and processing are confounded until drift i
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
 **Next:** [Chapter 16](16-antibody-discovery.md) for confirmation assays; [Chapter 17](17-integrated-castor-hd.md) for the full CASTOR-HD story.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
 
 ## Further reading
 
 - Roederer & Moody flow cytometry guidelines; [Ch 14](14-batch-effects.md) for drift
-
-## Chapter summary
-
-- Default unit of analysis: **participant-level summaries**.
-- **Pseudo-replication** (cells as n) produces false precision.
-- **Compositional** structure matters when interpreting proportions.
-- **Drift** diagnostics are mandatory (Ch 14 logic applies).
-- Embeddings are for **QC and exploration**, not standalone proof.

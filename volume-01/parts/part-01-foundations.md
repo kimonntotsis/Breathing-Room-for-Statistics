@@ -1,11 +1,25 @@
 # Part I: Foundations {.unnumbered}
 
-Part I supplies the vocabulary the rest of the handbook assumes: the estimand, the outcome family, the design, and the CASTOR workflow before any formula. Read the [Preface](../chapters/00-preface.md) and [Welcome](../chapters/00-welcome.md) once; then [Chapter 1](../chapters/01-statistical-thinking.md) for CASTOR and [Chapter 2](../chapters/02-respiratory-data.md) for data types. After that, most readers route by outcome via [Appendix B](../appendix-b-quick-reference.md) or [METHOD_MAP](../METHOD_MAP.md).
+Dr Rivera’s team is three weeks from first patient in. The protocol draft says “compare FEV₁ at twelve weeks.” Mei asks for the estimand sentence. Part I is that conversation made explicit.
 
-**Read this if** you are drafting or reviewing an analysis plan, or need a shared language with your analyst before results exist.
+Read Chapter 1 for **CASTOR** — question before software — then Chapter 2 to classify every column in the export. After that, most readers jump to Chapter 3 or route by endpoint via Appendix B.
 
-**Skip this if** you only need a prespecified comparison table in [Appendix B](../appendix-b-quick-reference.md); still read the CASTOR section in [Chapter 1](../chapters/01-statistical-thinking.md) once.
+**Skip Part I only if** you already write estimands in one sentence and can classify outcome type without help — but read Chapter 1’s opening scene once anyway; it is the book’s origin story.
 
-## In the room: the analysis plan meeting
+## Related chapters
 
-The protocol lists “compare FEV1 at 12 weeks,” but the export has mixed bronchodilator timing, a secondary exacerbation column, and no written estimand. **Part I** is where the team agrees on one sentence for the primary estimand (Ch 1) and classifies each endpoint before anyone opens [Appendix B](../appendix-b-quick-reference.md) (Ch 2).
+Open these when the body points you to a technique chapter — not while reading the narrative.
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
+| [Chapter 2: Respiratory data](02-respiratory-data.md) | Outcome type, unit of analysis, CASTOR files |
+| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
+
+## Handbook resources
+
+Optional reference material for this chapter — use for lookup, not while reading the story.
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |

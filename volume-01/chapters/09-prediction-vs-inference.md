@@ -2,72 +2,15 @@
 
 > **Part IV: Validation, Reporting, and Prediction**
 
-## At a glance
+## Opening scene: the partner wants a risk score
 
-| | |
-|---|---|
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md), `data/exacerbation.csv` |
-| **Question type** | What is this patient's 12-month exacerbation risk? |
-| **Methods** | Logistic, LASSO, rpart, RF, gradient boosting (optional), AUC, Brier, calibration |
-| **R** | `R/examples/ch09_prediction.R` |
-| **Figures** | ch09_calibration_logistic (`ch09_calibration_logistic.png`); **figure hygiene:** `viz_pair_ch09_prediction.png` |
-| **Tables** | [ch09_model_comparison](../tables/ch09_model_comparison.csv) |
-| **Exercises** | [ch09](../exercises/ch09_exercises.md) |
-
-**Also see:** [Appendix B § Step 6](../appendix-b-quick-reference.md), Inference vs prediction: [Ch 1](01-statistical-thinking.md), High-dimensional prediction: [Ch 17](17-integrated-castor-hd.md)
+An industry collaborator loves the CASTOR baseline variables. *"Can we predict twelve-month exacerbation for clinic triage?"* Different question from *"Does treatment reduce exacerbation?"* Mei pulls up Story 2 from the grant appendix: random forest, training-set AUC, no calibration — a deck that cannot answer *"what risk for this patient?"*
 
 ---
-
-## In this chapter
-
-1. [Inference vs prediction: choose your lane](#inference-vs-prediction-choose-your-lane): pick the goal first
-2. [Method choice at a glance](#method-choice-at-a-glance): logistic, LASSO, trees
-3. [Technique: Binary prediction model](#technique-binary-prediction-model-general): Practice read on calibration
-4. [Reporting template](#reporting-template): TRIPOD-style wording
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-prediction-chapter): train AUC in abstract
-
-**Analyst read:** model shootout, R lab, validation extensions below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Logistic regression** | Few predictors; interpretable risk model | Baseline for binary prediction; coefficients have meaning |
-| **LASSO / elastic net** | Many predictors; moderate *n* | Penalisation; nested CV when tuning ([Ch 7](07-model-building.md)) |
-| **Classification trees (rpart)** | Nonlinear thresholds; explainability | Simple rules; unstable without CV |
-| **Random forest / boosting** | Flexible boundaries; prediction focus | Often higher AUC; harder to interpret |
-| **Train/test split** | Initial model comparison | Simple; unstable with small event counts |
-| **Bootstrap / k-fold CV** | Small *n*; unstable single split | More stable performance estimate |
-| **Nested CV** | p ≫ n omics prediction ([Ch 17](17-integrated-castor-hd.md)) | Tuning without leakage |
-| **Calibration plot + Brier** | Any risk model for clinical use | Discrimination (AUC) ≠ calibrated probabilities |
-| **External validation** | Deployment or multi-site claims | Required by TRIPOD for transportability |
-
-**Extensions:** DCA, recalibration in [Alternatives & extensions](#alternatives--extensions-prediction-reporting-and-validation).
-
----
-
-## Learning objectives
-
-1. State whether the goal is **inference** or **prediction** before modelling.
-2. Follow a prespecified prediction workflow (population → split → tune on train → evaluate on held-out data).
-3. Compare models on the **same** test set with AUC, Brier, and calibration.
-4. Interpret LASSO, trees, random forests, and gradient boosting with respiratory caveats (EPV, leakage, overinterpretation).
-5. Identify data leakage and unstable AUC with sparse events.
-6. Write TRIPOD-aligned Methods/Results and list what the model **does not** prove.
-
-## Prerequisites
-
-Chapters 6–8.
-
----
-
-> **In the room ([Story 2](../appendix-k-in-the-room-stories.md#story-2--just-run-random-forest--it-handles-mixed-data)):** 214 asthma patients, mixed baseline predictors, steroid-burst outcome. Random forest, AUC 0.81, no calibration, and a PI who asks both *“probability for this patient?”* and *“does ICS work?”* Two questions; one script. **This chapter** separates prediction from inference before you tune a forest.
 
 ## Why this chapter
 
-Prediction models are everywhere in respiratory research: admission risk, exacerbation scores, classifier AUCs, but they answer a different question than association. This chapter stops you from reporting an odds ratio when the clinical need is calibrated risk, and stops you from reporting training-set AUC when the clinical need is honest validation.
+Prediction and inference share code but not goals. This chapter is where you evaluate discrimination **and** calibration, and where you refuse causal language for a risk score.
 
 ---
 
@@ -95,7 +38,7 @@ That is a **prediction** question. The answer is a **risk score**, not an odds r
 
 ## How to do prediction / machine learning in respiratory research
 
-Use the same CASTOR habit as [Chapter 1](01-statistical-thinking.md), adapted for risk models:
+Use the same CASTOR habit as Chapter 1, adapted for risk models:
 
 1. **Clinical question:** Who needs a risk estimate, for what decision, at what time horizon (e.g. 12-month exacerbation)?
 2. **Design and data:** Baseline predictors only; define enrolment and follow-up; count **events** in train and test.
@@ -104,7 +47,7 @@ Use the same CASTOR habit as [Chapter 1](01-statistical-thinking.md), adapted fo
 5. **Evaluate:** AUC **and** calibration **and** Brier on held-out data; bootstrap CIs when events allow.
 6. **Report limits:** No causation, no external validation claim, no clinical deployment without transportability work.
 
-For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV as in [Chapter 17](17-integrated-castor-hd.md); not a single 70/30 split on four clinical variables.
+For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV as in Chapter 17; not a single 70/30 split on four clinical variables.
 
 ![Analysis pipeline](../figures/analysis_pipeline.png){width=75%}
 
@@ -114,43 +57,13 @@ For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV a
 
 ## Technique: Binary prediction model (general)
 
-### Technique card
+**Question:** What is P(exacerbation in 12 months | baseline predictors)? **Output:** predicted risk on **held-out** data — not an OR paragraph [@steyerberg2019clinical].
 
-| | |
-|---|---|
-| **Answers** | What is P(exacerbation in 12 months \| baseline predictors)? |
-| **Outcome** | Binary within prespecified horizon |
-| **Predictors** | Measured **before** outcome window |
-| **Design** | Cohort with follow-up; case-control only with care |
-| **Evaluation** | Train/test or nested CV; AUC + calibration on held-out data [@steyerberg2019clinical] |
-| **R** | `glm(..., family=binomial)` + `predict(..., type="response")` |
-| **When to use** | Risk stratification, screening tools, ML comparison |
-| **When NOT to use** | Causal treatment effects; tiny event count without regularization |
-| **Does NOT prove** | Causal impact of predictors; clinical utility without decision analysis |
+Use `glm(..., family=binomial)` + `predict(..., type="response")`. Predictors must be measured **before** the outcome window; tune and select features **inside train** only. Success = calibration **and** discrimination (AUC), not training-set fit.
 
-### Caveats box: prediction in respiratory research
+CASTOR has ~18 events / 350 — models overfit easily. Aim ≥10–15 events per predictor; be skeptical below [@harrell2015rms]. AUC of 0.85 on four test events is not deployable.
 
-| Caveat | Why it matters |
-|--------|----------------|
-| **Small event count** | CASTOR has ~18 events / 350; models overfit easily |
-| **EPV rule** | Aim ≥10–15 events per predictor; be skeptical below [@harrell2015rms] |
-| **Leakage** | Post-exacerbation labs must not enter baseline model |
-| **AUC alone** | High AUC with poor calibration misleads decision-makers [@steyerberg2019clinical] |
-| **Prevalence shift** | PPV/NPV change when applied to new populations |
-| **Transportability** | Model trained in one clinic may fail in another |
-
-### In practice
-
-AUC of 0.85 on four events in the test set is not deployable. Report calibration and event counts; plan external validation before anyone uses the score in clinic.
-
-### Wrong analysis ⚠
-
-| Mistake | Why it fails | Do instead |
-|---------|--------------|------------|
-| Report **training** AUC | Overoptimistic | Test-set or nested-CV AUC |
-| Tune λ or trees on full data, then split | Leakage | Tune **inside train** only |
-| "RF **discovered** drivers" | Prediction ≠ causation | "RF achieved AUC X for prediction" |
-| Trust OR-based risk without calibration | Wrong absolute risks | Calibration plot on held-out data |
+**Common mistakes:** report training AUC; tune λ or trees on full data then split; cite RF importance as biomarker discovery; trust OR-based risk without calibration.
 
 ---
 
@@ -205,151 +118,21 @@ Follow TRIPOD for transparent prediction reporting [@moons2015tripod]:
 | **Random forest** | Ensemble | Yes (ntree, mtry defaults) |
 | **XGBoost** (optional) | Gradient boosting | Yes (depth, η; package optional) |
 
+**Rule:** never compare models tuned on different information or evaluated on training rows. With CASTOR's low EPV (~3.5 events per predictor in the training split), **complex models often tie or lose to logistic**; that is a feature, not a bug.
+
+**LASSO** (`cv.glmnet`, λ~1se on train): pulls weak predictors toward zero when many candidates exist — not when CASTOR has four predictors and ~14 train events. **Trees** (`rpart`): interpretable if–then rules; unstable with sparse events — keep shallow (`cp`, `minbucket`). **Random forest** and **XGBoost** (optional): nonlinear ensembles; often better ranking but opaque; variable importance ≠ causality. Same calibration standards as logistic; install `xgboost` only for the teaching shootout.
+
 ```r
 source("R/examples/ch09_prediction.R")
 ```
 
-**Rule:** never compare models tuned on different information or evaluated on training rows. With CASTOR's low EPV (~3.5 events per predictor in the training split), **complex models often tie or lose to logistic**; that is a feature, not a bug.
-
 ---
 
-## Technique: LASSO (penalized logistic regression)
+## Technique: Discrimination and calibration (Tier A)
 
-### Technique card
+**Discrimination (AUC):** how well the model **ranks** cases above non-cases — good for triage ordering, not enough to trust the percentage shown to patients. With ~4 test events, bootstrap AUC CIs are wide or unstable.
 
-| | |
-|---|---|
-| **Answers** | Which predictors contribute to risk when many candidates exist? |
-| **Outcome** | Binary (exacerbation Y/N) |
-| **Method** | L1-penalized logistic; `cv.glmnet` chooses λ on **training data only** |
-| **R** | `cv.glmnet(x_train, y_train, family="binomial", alpha=1)`; predict at `lambda.1se` |
-| **When to use** | Many candidate predictors; need shrinkage |
-| **When NOT to use** | Few events (CASTOR n≈14 train events); may shrink everything to null |
-| **Does NOT prove** | Selected variables are causal; ORs from selected model are unbiased |
-
-**Plain language:** LASSO pulls weak predictors toward zero to reduce overfitting.
-
-**Precise language:** penalized likelihood with L1 constraint; λ chosen by cross-validation minimizes prediction error on train [@james2023ISL].
-
-**Practice read:** if LASSO drops all predictors, the data may be too sparse for variable selection; trust the simpler logistic model.
-
-#### Wrong analysis ⚠
-
-| Mistake | Do instead |
-|---------|------------|
-| Run `cv.glmnet` on full dataset before split | Split first; CV inside train |
-| Report LASSO ORs as confirmatory biology | Report prediction metrics; label exploratory |
-
----
-
-## Technique: Classification tree (`rpart`)
-
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | What simple rules split high- vs low-risk patients? |
-| **Outcome** | Binary |
-| **Method** | Recursive partitioning; `method="class"` |
-| **R** | `rpart::rpart(form, data=train, method="class")` |
-| **When to use** | Need interpretable rules; exploratory nonlinear structure |
-| **When NOT to use** | Small event count; unstable splits |
-| **Does NOT prove** | Split points are clinically optimal thresholds |
-
-**Plain language:** a flowchart of if–then rules (e.g. prior exacerbations ≥ 2 → higher risk).
-
-**Practice read:** one split often dominates; verify stability with bootstrap or larger *n*.
-
-#### Caveats
-
-High variance with sparse events; deep trees overfit. Prefer shallow trees (`cp`, `minbucket`) prespecified in the SAP.
-
----
-
-## Technique: Random forest
-
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Nonlinear risk from an ensemble of trees |
-| **Outcome** | Binary |
-| **Method** | Bagged trees with random feature subsets [@breiman2001rf] |
-| **R** | `randomForest(..., ntree=500)` |
-| **When to use** | Moderate *n*, enough events; unknown interactions |
-| **When NOT to use** | Very sparse events; need interpretable coefficients |
-| **Does NOT prove** | Variable importance = causal drivers |
-
-**Plain language:** many trees vote on risk; often good ranking, opaque mechanism.
-
-**Practice read:** ask for calibration, not "the AI found smoking matters" from importance plots.
-
-#### Wrong analysis ⚠
-
-| Mistake | Do instead |
-|---------|------------|
-| Cite **variable importance** as biomarker discovery | Report AUC + calibration; validate hits separately |
-| Train on test patients indirectly via preprocessing | All preprocessing fit on train |
-
----
-
-## Technique: Gradient boosting (XGBoost) {#technique-gradient-boosting-xgboost}
-
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Sequential tree ensemble often strong for tabular prediction |
-| **Outcome** | Binary |
-| **Method** | Gradient boosted trees (`xgboost`); shallow trees, tuned on train |
-| **R** | `xgboost::xgb.train` on train matrix; evaluate on test (see `ch09_prediction.R`) |
-| **When to use** | Many weak predictors; nonlinearities; enough events for tuning |
-| **When NOT to use** | CASTOR-scale events (~14 train); often no gain over logistic |
-| **Does NOT prove** | "State-of-the-art AI"; still needs calibration and external validation |
-
-**Install (optional):** `install.packages("xgboost")`. Script runs without it and skips this row.
-
-**Plain language:** boosts focus on patients the current model gets wrong; powerful but easy to overfit.
-
-#### Wrong analysis ⚠
-
-| Mistake | Do instead |
-|---------|------------|
-| Report test AUC after hand-tuning on test | Nested CV or single held-out test with train-only tuning |
-| Skip calibration because boosting "is accurate" | Same calibration standards as logistic |
-
----
-
-## Technique: Discrimination (AUC / ROC)
-
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | How well does the model **rank** cases above non-cases? |
-| **Metric** | AUC = P(score~case~ > score~control~) |
-| **R** | `pROC::roc(y, pred); pROC::auc(roc)` |
-| **Does NOT tell you** | Absolute risk accuracy (need calibration) |
-
-**Practice read:** good for triage ordering; not enough to trust the percentage shown to patients.
-
-**Sparse events:** bootstrap AUC CIs may be wide or unstable (see `ch09_model_comparison.csv` when test events ≈ 4).
-
----
-
-## Technique: Calibration
-
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Do predicted probabilities match observed event rates? |
-| **Method** | Risk bins (3–5 when events sparse); mean predicted vs observed |
-| **Figure** | `ch09_calibration_logistic.png` |
-| **Pair** | `viz_pair_ch09_prediction.png` (AUC shootout vs calibration) |
-| **Metric** | Brier = mean($(y - \hat{p})^2$); lower is better [@steyerberg2019clinical] |
-
-### Figure hygiene: AUC hero vs calibration
+**Calibration:** do predicted probabilities match observed event rates? TRIPOD expects calibration when a model informs treatment thresholds [@steyerberg2019clinical]. Report binned predicted vs observed (3–5 bins when events sparse), Brier score, and figure `ch09_calibration_logistic.png`.
 
 ![Right vs wrong: prediction performance](../figures/viz_pair_ch09_prediction.png)
 
@@ -358,7 +141,7 @@ High variance with sparse events; deep trees overfit. Prefer shallow trees (`cp`
 | **Wrong** | Model AUC bar chart shootout | Whether predicted **risks** match observed event rates |
 | **Right** | Calibration plot on test set | Discrimination (AUC) if shown without calibration |
 
-**Practice read:** TRIPOD expects calibration or strong justification when a model informs treatment thresholds [@steyerberg2019clinical]. High AUC alone does not tell a pulmonologist whether “20% risk” means 20% or 5%.
+**Practice read:** high AUC alone does not tell a pulmonologist whether “20% risk” means 20% or 5%.
 
 ---
 
@@ -376,7 +159,7 @@ Default 0.5 is often **not** the clinical optimum. With rare events, sensitivity
 
 - **LASSO:** `cv.glmnet` selects λ; never use the test set for λ [@james2023ISL].
 - **Single split:** simple but noisy when test events are few.
-- **Nested CV (p ≫ n):** outer fold = performance; inner fold = tuning. Required for elastic net on proteomics. [Chapter 17](17-integrated-castor-hd.md).
+- **Nested CV (p ≫ n):** outer fold = performance; inner fold = tuning. Required for elastic net on proteomics. Chapter 17.
 
 ---
 
@@ -467,7 +250,7 @@ Optional: `install.packages("xgboost")` to include gradient boosting in the shoo
 | Bootstrap / CV on train | Unstable single split | Complement, not replace, held-out test |
 | Temporal validation | Later cohort, same protocol | Mimics future deployment |
 | Geographic validation | Different centres | Key in multi-centre respiratory research |
-| **Nested CV** | p ≫ n, many tunable hyperparameters | [Ch 17](17-integrated-castor-hd.md) elastic net |
+| **Nested CV** | p ≫ n, many tunable hyperparameters | Ch 17 elastic net |
 | External validation | Independent cohort | Required for clinical deployment claims [@moons2015tripod] |
 
 ### Model families (summary)
@@ -475,9 +258,9 @@ Optional: `install.packages("xgboost")` to include gradient boosting in the shoo
 | Situation | Alternative | Handbook location |
 |-----------|-------------|-------------------|
 | Few predictors, low EPV | **Logistic** (primary) | This chapter |
-| Many predictors, moderate *n* | LASSO / ridge | This chapter; [Ch 7](07-model-building.md) |
+| Many predictors, moderate *n* | LASSO / ridge | This chapter; Ch 7 |
 | Nonlinear rules | Trees, RF, boosting | This chapter |
-| p ≫ n omics | Elastic net + **nested CV** | [Ch 17](17-integrated-castor-hd.md) |
+| p ≫ n omics | Elastic net + **nested CV** | Ch 17 |
 
 ---
 
@@ -489,21 +272,48 @@ Optional: `install.packages("xgboost")` to include gradient boosting in the shoo
 | 2 | ML beats logistic because AUC 0.01 higher on 4 test events | Report CIs; prefer simpler prespecified model |
 | 3 | Importance plot = biomarker hit list | Separate discovery pipeline (Ch 13+) |
 | 4 | No calibration figure | Binned plot + Brier |
-| 5 | Impute/test leakage in CV folds | Impute inside train folds ([Ch 20](20-missing-data.md)) |
+| 5 | Impute/test leakage in CV folds | Impute inside train folds (Ch 20) |
 | 6 | Claim deployment-ready without external data | Label internal validation only |
 
 ---
 
-## Chapter summary
+## Quick reference: methods in this chapter
 
-- Prediction needs held-out evaluation, calibration, and clear predictor timing [@moons2015tripod; @steyerberg2019clinical].
-- Compare models fairly on one test set; report AUC **and** Brier/calibration.
-- ML complexity does not help when EPV is low. CASTOR demonstrates that honestly.
-- Avoid leakage and causal overinterpretation of ML output [@shmueli2010predict].
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Logistic regression** | Few predictors; interpretable risk model | Baseline for binary prediction; coefficients have meaning |
+| **LASSO / elastic net** | Many predictors; moderate *n* | Penalisation; nested CV when tuning ([Ch 7](07-model-building.md)) |
+| **Classification trees (rpart)** | Nonlinear thresholds; explainability | Simple rules; unstable without CV |
+| **Random forest / boosting** | Flexible boundaries; prediction focus | Often higher AUC; harder to interpret |
+| **Train/test split** | Initial model comparison | Simple; unstable with small event counts |
+| **Bootstrap / k-fold CV** | Small *n*; unstable single split | More stable performance estimate |
+| **Nested CV** | p ≫ n omics prediction ([Ch 17](17-integrated-castor-hd.md)) | Tuning without leakage |
+| **Calibration plot + Brier** | Any risk model for clinical use | Discrimination (AUC) ≠ calibrated probabilities |
+| **External validation** | Deployment or multi-site claims | Required by TRIPOD for transportability |
 
-## Where this chapter leads
+**Extensions:** DCA, recalibration in [Alternatives & extensions](#alternatives--extensions-prediction-reporting-and-validation).
+
+---
+
+## Where we go next
 
 **Next:** Unsupervised structure → [Chapters 10–11](10-dimensionality-reduction.md). End-to-end CASTOR stories → [Chapter 12](12-case-studies.md). High-dimensional omics prediction → [Chapter 17](17-integrated-castor-hd.md).
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
+| [Chapter 7: Model building](07-model-building.md) | Covariate choice, LASSO, prespecification |
+| [Chapter 10: Dimensionality reduction](10-dimensionality-reduction.md) | PCA, exploration, p ≫ n |
+| [Chapter 17: Integrated CASTOR-HD](17-integrated-castor-hd.md) | Full omics pipeline story |
+| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 
@@ -515,4 +325,3 @@ Optional: `install.packages("xgboost")` to include gradient boosting in the shoo
 
 ## Exercises ([Solutions](../solutions/ch09_solutions.md))
 
-**Next:** [Chapter 10 - PCA](10-dimensionality-reduction.md)

@@ -2,77 +2,15 @@
 
 > **Part VIII: Longitudinal, survival, and causal inference**
 
-## At a glance
+## Opening scene: "Smoking reduces exacerbation risk"
 
-| | |
-|---|---|
-| **Recurring dataset** | `data/exacerbation.csv` |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Question** | When can we interpret an adjusted association as closer to a causal effect? |
-| **Core methods** | confounding diagram, target trial, associational vs causal estimands, introductory IPW |
-| **R** | `R/examples/ch21_causal_inference.R` |
-| **Figures** | covariate balance (`ch21_covariate_balance.png`), naive vs IPW OR (`ch21_or_naive_vs_ipw.png`); **figure hygiene:** `viz_pair_ch21_causal.png` |
-| **Links** | [Ch 6 logistic](06-generalized-linear-models.md), [Ch 12 Case B](12-case-studies.md) |
-| **Exercises** | [Chapter 21 exercises](../exercises/ch21_exercises.md) |
-
----
-
-## In this chapter
-
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): association ≠ causation
-2. [Method choice at a glance](#method-choice-at-a-glance): IPW vs adjusted regression
-3. [Technique: IPW](#technique-inverse-probability-weighting-ipw-toy): balance and weights
-4. [Reporting template](#reporting-template): associational vs causal wording
-5. [Alternatives & extensions](#alternatives--extensions)
-
-**Analyst read:** DAGs, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Adjusted logistic / Cox (associational)** | Observational; report adjusted OR/HR | Controls measured confounders; still not RCT |
-| **IPW (propensity weights)** | Treatment/exposure imbalance; overlap adequate | Reweights to pseudo-population with balance |
-| **Propensity score matching** | Want comparable treated/untreated pairs | Visual overlap; reduces model dependence |
-| **Target trial emulation** | Framing observational analysis | Aligns time zero, eligibility, treatment strategies |
-| **DAG + confounder set** | Planning adjustment | Separates confounders from mediators/colliders |
-| **E-value / sensitivity** | Unmeasured confounding concern | Quantifies how strong hidden bias would need to be |
-| **No causal adjustment** | RCT primary analysis | Randomisation supports causal contrast ([Case A](12-case-studies.md)) |
-| **Do not adjust mediators** | Total effect estimand | Blocks part of causal path |
-| **Mediation analysis** | Mechanism through measured mediator prespecified | Total vs direct decomposition ([Ch 22](22-mediation-analysis.md)) |
-
-**Extensions:** MSM, matching details in [Alternatives & extensions](#alternatives--extensions).
-
----
-
-## Learning objectives
-
-1. State the difference between association and causation in observational respiratory studies.
-2. Draw a simple confounding structure (smoking, FEV1, exacerbation).
-3. Distinguish confounders, mediators, and colliders in a respiratory DAG.
-4. Run a toy IPW sensitivity for smoking exposure and compare to naive logistic regression.
-5. Describe target trial emulation in plain language.
-6. List requirements for causal language (design, assumptions, diagnostics, sensitivity).
-
-## Prerequisites
-
-Chapters 1 (estimands), 6–7 (logistic regression), 8 (STROBE reporting).
+The observational CASTOR cohort shows a significant adjusted OR after `lm()` on 0/1 was finally replaced by logistic regression. A fellow drafts causation language. Mei rewrites: **association**, confounding, positivity — and what randomisation would have required to claim more.
 
 ---
 
 ## Why this chapter
 
-Observational smoking and therapy comparisons invite causal language. This chapter separates associational estimands from causal claims, introduces IPW as sensitivity (not proof), and points back to randomised Case A when you need real causal evidence.
-
-## Opening question (CASTOR)
-
-*Does smoking **cause** higher 12-month exacerbation risk, or is low FEV1 a common consequence of smoking and severe disease that also drives exacerbations?*
-
-Standard logistic regression adjusts for measured covariates, but **which** covariates belong in the model is a causal question, not a significance question [@harrell2015rms].
-
-Case B in [Chapter 12](12-case-studies.md) fits an associational logistic model. This chapter makes the **estimand explicit** and introduces inverse probability weighting as a sensitivity analysis, not a magic causal proof.
+Observational respiratory studies dominate the literature. This chapter gives IPW, matching, and honest limits — without selling association as intervention effect.
 
 ---
 
@@ -127,34 +65,9 @@ Smoking -----> Exacerbation (12m)
 
 ## Technique: Associational vs causal estimands; introductory IPW
 
-### Technique card (associational)
+**Associational logistic regression** asks whether smoking is associated with exacerbation after adjusting for measured covariates. The estimand is a conditional odds ratio — hypothesis generation and STROBE cohort descriptions, not proof that smoking causes exacerbations. In R: `glm(exacerbation_12m ~ smoking + fev1_pct, family = binomial)`.
 
-| | |
-|---|---|
-| **Answers** | Is smoking associated with exacerbation after adjusting for measured covariates? |
-| **Estimand** | Conditional odds ratio (logistic) (**associational**) |
-| **R** | `glm(exacerbation_12m ~ smoking + fev1_pct, family = binomial)` |
-| **When to use** | Hypothesis generation; STROBE cohort descriptions |
-| **Does NOT prove** | Smoking causes exacerbations |
-
-### Technique card (IPW, introductory)
-
-| | |
-|---|---|
-| **Answers** | Weighted pseudo-population where exposure is balanced on measured confounders (toy) |
-| **Steps** | Model exposure ~ confounders → weights = 1/P(exposure\|confounders) → weighted outcome model |
-| **Teaching script** | IPW for smoking using FEV1 tertile marginal weights |
-| **Assumptions** | No unmeasured confounding; positivity (all exposure levels possible within confounder strata); correct exposure model |
-| **R** | `R/examples/ch21_causal_inference.R` |
-| **When to use** | Sensitivity to covariate adjustment; motivation for propensity methods |
-| **When NOT to use** | As automatic proof of causation; with extreme weights untrimmed |
-| **Does NOT prove** | Causation without design + unmeasured confounding sensitivity |
-
-### Dual interpretation
-
-**Plain language:** we reweighted patients so smoking groups looked more comparable on FEV1 strata, then re-estimated the smoking–exacerbation association.
-
-**Precise language:** IPW estimates a marginal or appropriately weighted estimand under a structural model where conditioning on measured confounders blocks back-door paths; residual confounding remains if unmeasured common causes exist.
+**Introductory IPW** reweights patients so exposure groups look more comparable on measured confounders, then re-estimates the smoking–exacerbation association. Model exposure ~ confounders → weights = 1/P(exposure|confounders) → weighted outcome model. Assumes no unmeasured confounding, positivity, and a correct exposure model. Use as sensitivity to covariate adjustment; do not treat as automatic proof of causation, and trim extreme weights.
 
 **Practice read:** "Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
 
@@ -297,9 +210,28 @@ When unmeasured confounding is plausible, E-values quantify how strong an unmeas
 | Time-varying treatment | Marginal structural models | Advanced |
 | Unmeasured confounding | Sensitivity analysis (E-values) | Report bounds |
 | RCT subgroup | No causal adjustment needed for randomisation | Case A |
-| Mechanism through FEV1 % | Mediation (total / direct / indirect) | [Chapter 22](22-mediation-analysis.md) |
+| Mechanism through FEV1 % | Mediation (total / direct / indirect) | Chapter 22 |
 
 ---
+
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Adjusted logistic / Cox (associational)** | Observational; report adjusted OR/HR | Controls measured confounders; still not RCT |
+| **IPW (propensity weights)** | Treatment/exposure imbalance; overlap adequate | Reweights to pseudo-population with balance |
+| **Propensity score matching** | Want comparable treated/untreated pairs | Visual overlap; reduces model dependence |
+| **Target trial emulation** | Framing observational analysis | Aligns time zero, eligibility, treatment strategies |
+| **DAG + confounder set** | Planning adjustment | Separates confounders from mediators/colliders |
+| **E-value / sensitivity** | Unmeasured confounding concern | Quantifies how strong hidden bias would need to be |
+| **No causal adjustment** | RCT primary analysis | Randomisation supports causal contrast ([Case A](12-case-studies.md)) |
+| **Do not adjust mediators** | Total effect estimand | Blocks part of causal path |
+| **Mediation analysis** | Mechanism through measured mediator prespecified | Total vs direct decomposition ([Ch 22](22-mediation-analysis.md)) |
+
+**Extensions:** MSM, matching details in [Alternatives & extensions](#alternatives--extensions).
+
+---
+
 
 ## Exercises ([Solutions](../solutions/ch21_solutions.md))
 
@@ -321,13 +253,26 @@ When unmeasured confounding is plausible, E-values quantify how strong an unmeas
 4. From the balance plot, did IPW improve FEV1 balance in this toy run?
 5. Rewrite a causal-sounding sentence as an associational sentence suitable for STROBE.
 
-**Capstone link:** [Case B](12-case-studies.md) (associational logistic) vs this chapter (explicit causal framing).
+**Capstone link:** Case B (associational logistic) vs this chapter (explicit causal framing).
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
-When FEV1 sits on the smoking → exacerbation path and reviewers ask *how much goes through lung function*, continue to [Chapter 22: Mediation analysis](22-mediation-analysis.md). Otherwise return to [Chapter 12](12-case-studies.md) for integrated discussions or [Appendix B](../appendix-b-quick-reference.md) for day-to-day method choice.
+When FEV1 sits on the smoking → exacerbation path and reviewers ask *how much goes through lung function*, continue to [Chapter 22: Mediation analysis](22-mediation-analysis.md). Otherwise return to [Chapter 12](12-case-studies.md) for integrated discussions or Appendix B for day-to-day method choice.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 12: Case studies](12-case-studies.md) | Integrated CASTOR narratives A–E |
+| [Chapter 22: Mediation](22-mediation-analysis.md) | Direct vs indirect effects |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 
 ## Further reading
 

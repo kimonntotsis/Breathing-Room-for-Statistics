@@ -2,81 +2,15 @@
 
 > **Part VI: High-dimensional biology and discovery**
 
-## At a glance
+## Opening scene: PCA that looks too good
 
-| | |
-|---|---|
-| **Recurring datasets** | `data/proteomics_olink_like.csv`, `data/rnaseq_counts.csv`, `data/flowcytometry_summary.csv` |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Core idea** | diagnose technical structure first, then decide how (or whether) to adjust |
-| **Primary tools** | QC plots, PCA by batch, batch as covariate, sensitivity analysis |
-| **R** | `R/examples/ch14_batch_effects.R` |
-| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch14_*.png` |
-| **Exercises** | [Chapter 14 exercises](../exercises/ch14_exercises.md) |
-
-**Also see:** [Ch 13 DE](13-differential-analysis-fdr.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
-
----
-
-## In this chapter
-
-1. [Clinical and biostatistics notes](#clinical-and-biostatistics-notes): batch vs biology
-2. [Method choice at a glance](#method-choice-at-a-glance): diagnose before you adjust
-3. [Wrong analysis](#wrong-analysis-): confounded group × batch is a stop rule
-4. [Reporting template](#reporting-template): discoveries with vs without batch
-
-**Analyst read:** R lab, ComBat caveats, and extensions below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **PCA coloured by batch** | First QC on any omics matrix | Fast visual: does technical structure dominate? |
-| **Group × batch table** | Before any DE or ML | Empty cells → group effect not identifiable after batch adjustment |
-| **Batch as covariate in DE model** | Batch measured; valid overlap design | Adjusts technical signal while estimating group ([Ch 13](13-differential-analysis-fdr.md)) |
-| **Sensitivity: DE with vs without batch** | Any hit list going to validation | Unstable hits should not drive spend |
-| **ComBat / SVA (specialist)** | Measured batch; not fully confounded | Can help; never skip overlap checks; not automatic |
-| **Blocked redesign / re-run** | Batch perfectly confounded with group | Statistics cannot fix confounding; redesign |
-| **Batch correction inside CV folds** | Prediction on omics ([Ch 9](09-prediction-vs-inference.md)) | Prevents leakage from global correction |
-| **Do not remove “site” blindly** | Multi-site biology may be real | Site can be effect modifier, not nuisance |
-
-**Extensions:** [Alternatives & extensions](#alternatives--extensions-when-covariates-are-not-enough) at chapter end.
-
----
-
-## Learning objectives
-
-1. Recognise when "discoveries" are likely technical.
-2. Use **PCA/QC plots** to detect batch/plate/run effects.
-3. Distinguish **adjustable batch** from **confounded batch** (not identifiable).
-4. Apply three defensible strategies: covariate adjustment, adjustment inside resampling (prediction), or redesign.
-5. Avoid overcorrection when batch removal would erase real site differences.
-6. Report discovery counts with and without batch adjustment.
-
-## Prerequisites
-
-Ch 10 (PCA intuition), Ch 13 (differential analysis logic), Ch 8 (reporting).
+The first PCA separates cases and controls cleanly — until Mei colours points by plate. The same separation tracks batch, not biology. The CRO insists normalisation is "proprietary." This chapter is the vocabulary for that fight.
 
 ---
 
 ## Why this chapter
 
-Batch effects are the default in proteomics, RNA, and flow, not the exception. This chapter asks the uncomfortable question first: did we rediscover the lab calendar? Read it before interpreting any hit list from Chapter 13.
-
-## Opening question
-
-*Are my "signals" biological - or did I just rediscover the lab calendar?*
-
-Batch effects are not a niche issue; they are the default in real omics and cytometry:
-
-- site differences (sample handling)
-- run day / instrument drift
-- plate effects
-- processing batches
-
-If batch aligns with group (e.g., all cases measured later), adjustment cannot create truth from confounding. At that point the honest conclusion is: **the study is not identifiable without stronger design.**
+Batch is the commonest confounder in omics. You will diagnose it, adjust with prespecified methods, and report sensitivity — before anyone names an endotype.
 
 ---
 
@@ -135,49 +69,17 @@ Imagine a study where **all controls** were run on Batch1 and **all cases** on B
 
 ## Technique: Diagnose batch with PCA + simple QC
 
-### Technique card
+**Question:** Is technical structure large enough to distort inference?
 
-| | |
-|---|---|
-| **Answers** | Is technical structure large enough to distort inference? |
-| **Outcome type** | many features (proteins/genes/cytometry markers) |
-| **Design** | any, but batch variables must be recorded |
-| **Data required** | feature matrix + batch labels (plate/run/day/site) |
-| **Assumptions** | PCA is descriptive; large PCs tracking batch suggests trouble |
-| **Effect measure** | none (diagnostic) |
-| **R** | `prcomp(X, scale.=TRUE)` + plot colored by batch |
-| **When to use** | always before DE/ML on high-dimensional data |
-| **When NOT to use** | never "skip" this step |
-| **Does NOT prove** | that correction fixes the problem |
-
-### Dual interpretation
-
-**Takeaway:** check whether samples cluster by lab process (batch) rather than disease before trusting group colours on a PCA plot.
+Always before DE/ML on high-dimensional data: `prcomp(X, scale.=TRUE)` coloured by batch **and** group. Tabulate `group × batch`. PCA is descriptive — large PCs tracking batch suggests trouble; it does not prove correction fixes the problem.
 
 **Practice read:** if batch drives the main variation, a "biomarker panel" is probably not real.
 
-### Caveats box
+ComBat on the full dataset before train/test split has sunk prediction papers. Any correction must respect the same leakage rules as prediction workflows.
 
-| Caveat | Why it matters |
-|--------|----------------|
-| PCA is descriptive | it does not tell you what to adjust, only what to worry about |
-| Confounding | if batch == group, adjustment is guesswork |
-| Overcorrection | removing batch can remove real biology if biology differs by site |
-| Leakage | correction must be inside resampling when doing prediction |
-| Missingness | LOD missingness can mimic batch clustering (proteomics) |
-| Reporting | you must say what batch variables existed and what you did |
+**Methods template:** Batch and plate variables were recorded. We tabulated group × batch overlap and examined PCA colored by batch and group. Per-feature models included batch/plate as covariates where identifiable. Sensitivity analyses with and without batch adjustment [changed/did not change] the number of discoveries at FDR q < 0.05.
 
-### In practice
-
-ComBat on the full dataset before train/test split has sunk prediction papers. Any correction: covariate or ComBat: must respect the same leakage rules as Chapter 9.
-
-### Wrong analysis ⚠
-
-| | |
-|---|---|
-| **Mistake** | "ComBat everything" without checking confounding or sensitivity |
-| **Why it fails** | correction can manufacture group differences or erase biology |
-| **Do instead** | show PCA by batch and group, run sensitivity, and state limits |
+See [Catalog of wrong analyses (batch effects)](#catalog-of-wrong-analyses-batch-effects) below.
 
 ### Catalog of wrong analyses (batch effects)
 
@@ -202,40 +104,20 @@ ComBat on the full dataset before train/test split has sunk prediction papers. A
 
 ## Technique: Adjust batch by including it as a covariate
 
-This is the most defensible "first-line" strategy for **inference** when batch is not perfectly confounded with group.
+Most defensible first-line strategy for **inference** when batch is not perfectly confounded with group: `lm(feature ~ group + batch + plate + covariates)` per feature.
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Group effect after accounting for measured technical variables |
-| **R (concept)** | `lm(feature ~ group + batch + plate + covariates)` |
-| **When to use** | DE/DA when batch is measured and partially overlaps both groups |
-| **When NOT to use** | batch fully confounded with group; batch unmeasured |
-| **Does NOT prove** | transportability; that unmeasured artefacts are absent |
-
-### Dual interpretation
-
-**Plain language:** we estimated the group difference while allowing for known lab differences.
-
-**Precise language:** group effect is conditional on batch/plate indicators in a per-feature linear model; interpretability requires overlap in the group × batch table.
-
-**Practice read:** this is a reasonable attempt to separate signal from process - but only if both groups were measured across batches.
+**Practice read:** reasonable only if both groups were measured across batches — if batch == group, report non-identifiability instead of forcing ComBat.
 
 ![PCA colored by batch (proteomics subset)](../figures/ch14_pca_proteomics_batch.png)
 
-Separation along PC1 by colour (batch) means batch-aware models or redesign, not a raw hit list: come first.
-
-### Figure hygiene: group-coloured PCA vs batch-first QC
+Separation along PC1 by colour (batch) means batch-aware models or redesign, not a raw hit list.
 
 ![Right vs wrong: proteomics PCA](../figures/viz_pair_ch14_batch_pca.png)
 
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | PCA coloured by case/control only | Plate/batch structure driving PC1 |
-| **Right** | PCA coloured by batch, shape = group |: (QC before DE list) |
-
-**Practice read:** if the wrong panel were your omics slide, would a biologist call it “a disease axis”? Check batch colour before naming biology.
+| **Right** | PCA coloured by batch, shape = group | QC before DE list |
 
 ![Valid overlap vs confounded group × batch design](../figures/ch14_group_batch_overlap.png)
 
@@ -303,7 +185,7 @@ When batch explains more variance than group on PC1, prioritise batch QC over in
 
 ### Analyst track (optional): ComBat before/after PCA
 
-After overlap checks pass, see [Appendix L](../appendix-l-omics-analyst-track.md) for hands-on ComBat (not a substitute for balanced design).
+After overlap checks pass, see Appendix L for hands-on ComBat (not a substitute for balanced design).
 
 ```r
 source("R/examples/ch14_analyst_combat.R")
@@ -312,6 +194,28 @@ source("R/examples/ch14_analyst_combat.R")
 ![Proteomics PCA before vs after ComBat](../figures/ch14_analyst_combat_pca.png)
 
 ![PC1 R² explained by batch before vs after ComBat](../figures/ch14_analyst_combat_r2.png)
+
+---
+
+---
+
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **PCA coloured by batch** | First QC on any omics matrix | Fast visual: does technical structure dominate? |
+| **Group × batch table** | Before any DE or ML | Empty cells → group effect not identifiable after batch adjustment |
+| **Batch as covariate in DE model** | Batch measured; valid overlap design | Adjusts technical signal while estimating group ([Ch 13](13-differential-analysis-fdr.md)) |
+| **Sensitivity: DE with vs without batch** | Any hit list going to validation | Unstable hits should not drive spend |
+| **ComBat / SVA (specialist)** | Measured batch; not fully confounded | Can help; never skip overlap checks; not automatic |
+| **Blocked redesign / re-run** | Batch perfectly confounded with group | Statistics cannot fix confounding; redesign |
+| **Batch correction inside CV folds** | Prediction on omics ([Ch 9](09-prediction-vs-inference.md)) | Prevents leakage from global correction |
+| **Do not remove “site” blindly** | Multi-site biology may be real | Site can be effect modifier, not nuisance |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions-when-covariates-are-not-enough) at chapter end.
+
+---
+
 
 ## Exercises ([Solutions](../solutions/ch14_solutions.md))
 
@@ -335,17 +239,17 @@ source("R/examples/ch14_analyst_combat.R")
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
 **Next:** [Chapter 15](15-flow-cytometry.md) for immune summaries; [Chapter 16](16-antibody-discovery.md) for screens. Return to [Chapter 13](13-differential-analysis-fdr.md) sensitivity after batch QC.
 
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix L: Omics analyst track](../appendix-l-omics-analyst-track.md) | Production DESeq2, limma-voom, fgsea, and ComBat pipelines |
+
 ## Further reading
 
-- Leek et al. on batch effects; [Ch 13](13-differential-analysis-fdr.md) for DE context
-
-## Chapter summary
-
-- Batch effects are expected; **diagnosis comes before correction**.
-- Covariate adjustment is valid when **group and batch overlap**.
-- Perfect confounding makes group effects **not identifiable** after adjusting for batch.
-- Always report **sensitivity** (with vs without batch) and avoid "batch corrected" as a black box.
+- Leek et al. on batch effects; [Chapter 13](13-differential-analysis-fdr.md) for DE context

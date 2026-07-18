@@ -2,117 +2,41 @@
 
 > **Part I: Foundations**
 
-## At a glance
+## Opening scene: the data dictionary meeting
 
-| | |
-|---|---|
-| **Focus** | Classify variables, outcomes, and study structures |
-| **Key idea** | Outcome type → method (see [Appendix B](../appendix-b-quick-reference.md)) |
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) (`data/*.csv`); messy reality → [APATE](../APATE_VIGNETTE.md) (prose only) |
-| **Exercises** | [ch02](../exercises/ch02_exercises.md), [Solutions](../solutions/ch02_solutions.md) |
+Mei spreads a printout across Dr Rivera's desk. CASTOR's first clean export: patient ID, age, sex, smoking, therapy line, FEV₁, FVC, exacerbation yes/no, exacerbation counts, visit week. The protocol mentions a primary endpoint; the spreadsheet mentions twelve other columns that could become "exploratory primaries" if someone is tired on a Friday.
 
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [Appendix C](../appendix-c-glossary.md), Decision tree (`method_decision_tree.png`)
+*"Which column is the outcome?"* Rivera asks. *"All of them,"* Mei says, *"until we decide which one answers the protocol. That's today."*
 
----
-
-## In this chapter
-
-1. [Outcome types: the master routing table](#outcome-types-the-master-routing-table): binary vs count vs time-to-event
-2. [Teaching datasets: CASTOR, CASTOR-HD, and APATE](#teaching-datasets-castor-castor-hd-and-apate): what has CSV files
-3. [Method choice at a glance](#method-choice-at-a-glance): route to the right chapter
-4. [Data structures](#data-structures): independence and unit of analysis
-5. Decision tree figure: visual router
-6. [Alternatives & extensions](#alternatives--extensions-data-structures-that-change-the-method)
-
-**Analyst read:** CASTOR files, quality checks below.
-
----
-
-## Method choice at a glance
-
-| Outcome / structure | When you see it | Route to |
-|--------------------|-----------------|----------|
-| **Continuous FEV1** | Spirometry litres; cross-section or one visit | [Ch 4](04-comparing-groups.md), [Ch 5](05-linear-models.md) |
-| **Binary exacerbation** | Any vs none in follow-up | [Ch 4](04-comparing-groups.md), [Ch 6](06-generalized-linear-models.md) |
-| **Count exacerbations** | Events per person-time | [Ch 6](06-generalized-linear-models.md) |
-| **Repeated FEV1 visits** | Same patient, multiple rows | [Ch 18](18-longitudinal-mixed-models.md) |
-| **Time to first event** | Dates + censoring | [Ch 19](19-survival-analysis.md) |
-| **Proteomics / RNA / flow** | Thousands of features | [Ch 13](13-differential-analysis-fdr.md)–[17](17-integrated-castor-hd.md) |
-| **Clustered (wards, centres)** | Nested units | [Ch 4](04-comparing-groups.md), [Ch 18](18-longitudinal-mixed-models.md) |
-| **Observational exposure** | No randomisation | [Ch 5](05-linear-models.md)–[6](06-generalized-linear-models.md); causal [Ch 21](21-causal-inference.md) |
-
-Full router: [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md).
-
----
-
-## Teaching datasets: CASTOR, CASTOR-HD, and APATE
-
-| Name | Files in `data/`? | Used for |
-|------|-------------------|----------|
-| **CASTOR** | Yes: spirometry, exacerbation, markers, longitudinal, survival | Learn and reproduce methods (Ch 3–12, 18–22). **COPD-flavoured** data; workflow applies to **CLD** and broader pulmonary research when endpoints and design match |
-| **CASTOR-HD** | Yes: proteomics, RNA, flow, antibody screens | Omics discovery pipeline (Ch 13–17) |
-| **APATE** | **No**: vignette text only | **Apate** (Greek deceit): fictional messy registry; CASTOR vs reality table; sign-off questions before real data |
-
-CASTOR is clean **on purpose**. APATE describes the illusions real registries create (perfect visit tables, hidden QC drops, batch masquerading as biology). Details: [APATE_VIGNETTE](../APATE_VIGNETTE.md), [RECURRING_COHORT](../RECURRING_COHORT.md).
-
-> **CLD note:** CASTOR’s synthetic patients are labelled COPD-style, but the handbook targets **chronic lung disease (CLD)** and mixed pulmonary cohorts. If you measure FEV1, exacerbations, or omics on a defined population, you are in scope: regardless of whether your protocol says COPD, asthma, or CLD.
-
----
-
-## Worked vignette: asthma biologic trial (same routing, different estimand)
-
-CASTOR data are COPD-flavoured; **asthma programmes** use the same outcome families with different primary estimands. Example protocol sentence:
-
-> *Among adults with severe eosinophilic asthma on background ICS/LABA, what is the difference in mean post-BD FEV1 (L) at week 12 between biologic and placebo, in the intention-to-treat population?*
-
-| Decision | Asthma-specific nuance | Handbook route |
-|----------|------------------------|----------------|
-| Primary endpoint | Often exacerbation rate **or** FEV1: pick **one** before unblinding | [Ch 4](04-comparing-groups.md#unadjusted-adjusted-and-multiple-endpoints), [Ch 8](08-validation-reporting.md) |
-| MCID | Asthma FEV1 margins differ from COPD; use protocol margin | [Ch 4](04-comparing-groups.md) |
-| Exacerbation secondary | Count or time-to-first event, not interchangeable | [Ch 6](06-generalized-linear-models.md), [Ch 19](19-survival-analysis.md) |
-| Biomarker subgroup | Eosinophil stratum is **prespecified**, not post hoc clustering | [Ch 11](11-clustering.md) claim ladder |
-| Airway + omics | Same patient, two **families** of tests (clinical vs discovery) | [Ch 13–17](13-differential-analysis-fdr.md) |
-
-**Practice read:** if the grant promises “multi-omics endotypes” but the SAP has only FEV1, resolve that mismatch **before** samples are assayed, not in the Discussion.
-
----
-
-## Learning objectives
-
-1. Distinguish outcome, exposure, and covariate roles.
-2. Classify respiratory outcomes (continuous, binary, count, ordinal, time-to-event, high-dimensional).
-3. Recognise data structures: cross-sectional, longitudinal, clustered, case-control.
-4. Apply respiratory-specific quality checks (spirometry, exacerbations, omics).
-5. Map outcome type to handbook chapter using the quick reference.
-6. Complete the pre-analysis checklist before any model.
-
-## Prerequisites
-
-[Chapter 1](01-statistical-thinking.md) - estimands and design.
+This chapter is that meeting. You classify outcome type, unit of analysis, and design **before** any test name.
 
 ---
 
 ## Why this chapter
 
-The wrong method usually starts with the wrong **outcome type**, not the wrong R function. This chapter is where you classify continuous FEV1, binary exacerbation, counts, survival, and omics before opening a test. Keep [Appendix B](../appendix-b-quick-reference.md) closed until you can complete the checklist at the end of this chapter.
+The wrong method usually starts with the wrong **outcome type**, not the wrong R function. When you finish here, you can complete the pre-analysis checklist at chapter end and route to the right technique chapter — not to a menu of tests.
 
-## Opening question
+---
 
-You receive a spreadsheet with patient ID, age, smoking status, therapy, and FEV1. Is that enough to know which methods apply?
+## The cohort you are classifying
 
-**No.** You need the **outcome type**, **study design**, **unit of analysis**, and **research question**. This chapter classifies respiratory data so [appendix-b-quick-reference.md](../appendix-b-quick-reference.md) and Chapters 3-11 can match methods correctly.
+**CASTOR** is the synthetic COPD-oriented trial cohort in `data/*.csv` — clean **on purpose** so you can learn routing. **CASTOR-HD** adds omics files for Part VI. **POLLUX** / **APATE** is prose-only messy-registry fiction (Handbook resources).
+
+CASTOR’s disease labels say COPD; the routing logic applies across **chronic lung disease** and asthma programmes whenever endpoints and design match — FEV₁ arms, binary or count exacerbations, survival, omics.
+
+**Asthma example (same routing, different estimand):** *Among adults with severe eosinophilic asthma on ICS/LABA, what is the mean difference in post-BD FEV₁ (L) at week 12, biologic vs placebo, ITT?* Pick **one** primary before unblinding; route exacerbation secondaries to count or survival chapters, not a parallel primary.
 
 ---
 
 ## The data classification workflow
 
-1. **Name the estimand** in one sentence ([Ch 1](01-statistical-thinking.md)).
+1. **Name the estimand** in one sentence (Ch 1).
 2. **Identify the outcome** column and its type (continuous, binary, count, …).
 3. **Identify the unit of analysis** (patient, visit, cell, protein).
 4. **Map design**: cross-sectional, paired, longitudinal, clustered, survival.
 5. **List roles**: exposure, confounders, mediators (do not fish).
 6. **QC**: ranges, IDs, missingness, units.
-7. **Route**: [Appendix B](../appendix-b-quick-reference.md) → chapter.
+7. **Route** to the right chapter (Handbook resources).
 
 ---
 
@@ -122,37 +46,23 @@ Same CASTOR columns (`patient_id`, `age`, `sex`, `smoking`, `therapy`, `fev1`): 
 
 | Question | Outcome | Unit | Route |
 |----------|---------|------|-------|
-| Mean FEV1 by smoking? | `fev1` (continuous) | Patient | Welch *t*-test [Ch 4](04-comparing-groups.md) |
-| 12-month exacerbation by smoking? | `exacerbation_12m` (binary) | Patient | Logistic [Ch 6](06-generalized-linear-models.md) |
-| FEV1 trajectory on therapy? | `fev1` at each visit | Patient (repeated) | Mixed model [Ch 18](18-longitudinal-mixed-models.md) |
+| Mean FEV1 by smoking? | `fev1` (continuous) | Patient | Welch *t*-test Ch 4 |
+| 12-month exacerbation by smoking? | `exacerbation_12m` (binary) | Patient | Logistic Ch 6 |
+| FEV1 trajectory on therapy? | `fev1` at each visit | Patient (repeated) | Mixed model Ch 18 |
 
 **Wrong:** run all three and report whichever has the smallest *p*-value.
 
-**Related story:** [Story 1: one export, every column gets a t-test](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test); [Story 3: `lm()` on 0/1](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation).
+**Related story:** Appendix K, Stories 1 and 3 (Handbook resources).
 
 ---
 
 ## Variables: outcome, exposure, covariate
 
-### Technique card
+Every column has a **role** that depends on the question. The **outcome** is what you measure as the result — FEV1, exacerbation, death, hospitalisation. The **exposure/predictor** is the factor hypothesised to influence it — treatment, smoking, biomarker, air pollution. A **covariate/confounder** is what you account for so the exposure–outcome link is not distorted — age, sex, height, severity, centre.
 
-| Role | Definition | Respiratory examples |
-|------|------------|----------------------|
-| **Outcome** | What you measure as the result | FEV1, exacerbation, death, hospitalisation |
-| **Exposure/predictor** | Factor hypothesised to influence outcome | Treatment, smoking, biomarker, air pollution |
-| **Covariate/confounder** | Other factors to account for | Age, sex, height, severity, centre |
+The same variable **changes role by question**. *Therapy* is an **exposure** in a treatment-effect analysis and a **covariate** when studying biomarkers on a background of standard care. In `exacerbation.csv`, `smoking` may be exposure when predicting `exacerbation_12m`, but a **confounder** when studying a biomarker's association with FEV1 if smoking affects both.
 
-The same variable **changes role by question**. *Therapy* is an **exposure** in a treatment-effect analysis and a **covariate** when studying biomarkers on a background of standard care.
-
-**CASTOR example:** In `exacerbation.csv`, `smoking` may be exposure when predicting `exacerbation_12m`, but a **confounder** when studying a biomarker's association with FEV1 if smoking affects both.
-
-### Dual interpretation
-
-**Plain language:** know which column is the "answer" and which columns might distort the link.
-
-**Precise language:** causal diagrams ([Ch 21](21-causal-inference.md)) formalise which variables must be adjusted; earlier chapters use subject-matter knowledge and protocol [@harrell2015rms].
-
-**Practice read:** if you adjust for a variable **caused by** the exposure (a mediator), you may hide a real effect - discuss with your analyst.
+Know which column is the "answer" and which might distort the link. Causal diagrams (Ch 21) formalise which variables must be adjusted; earlier chapters use subject-matter knowledge and protocol [@harrell2015rms]. If you adjust for a variable **caused by** the exposure (a mediator), you may hide a real effect — discuss with your analyst.
 
 ### In practice
 
@@ -163,7 +73,7 @@ Real spreadsheets mix litres and millilitres, duplicate IDs, and “exacerbation
 | | |
 |---|---|
 | **Mistake** | Treat every column as a predictor in a fishing expedition |
-| **Do instead** | Prespecify outcome, exposure, confounders ([Ch 7](07-model-building.md)) |
+| **Do instead** | Prespecify outcome, exposure, prespecified confounders |
 
 ---
 
@@ -186,8 +96,6 @@ Choosing the wrong outcome type - treating a **count** as **binary**, or a **bin
 
 Start at the outcome node, not at “we always use a t-test”: the tree routes to the chapter that matches your estimand.
 
-**Handbook link:** full routing tables in [appendix-b-quick-reference.md](../appendix-b-quick-reference.md).
-
 ### Other respiratory settings
 
 CASTOR is a **COPD-oriented** teaching cohort (FEV1, exacerbations, smoking, triple therapy). The routing table still applies elsewhere if you relabel the outcome:
@@ -199,7 +107,7 @@ One estimand per analysis. Do not swap endpoints after seeing the tables.
 
 ### Practice check
 
-If the protocol defines exacerbations as a **count** but the analyst runs a *t*-test on raw counts, the p-value may be wrong and the effect size uninterpretable → insist on Poisson/NB models ([Ch 6](06-generalized-linear-models.md)).
+If the protocol defines exacerbations as a **count** but the analyst runs a *t*-test on raw counts, the p-value may be wrong and the effect size uninterpretable → insist on Poisson/NB models (Ch 6).
 
 ---
 
@@ -208,12 +116,12 @@ If the protocol defines exacerbations as a **count** but the analyst runs a *t*-
 | Structure | Definition | Unit of analysis | Handbook note |
 |-----------|------------|------------------|---------------|
 | **Cross-sectional** | One row per person, one time point | Patient | Independence assumed in Ch 4-6 |
-| **Longitudinal** | Repeated measures per person | Patient-visit | Mixed models ([Ch 18](chapters/18-longitudinal-mixed-models.md)) |
-| **Survival** | Time to event with censoring | Patient | Kaplan-Meier, Cox ([Ch 19](chapters/19-survival-analysis.md)) |
-| **Clustered** | Units nested (patients in hospitals) | Patient (with cluster adjustment) | Cluster-robust SE / mixed models ([Ch 18](chapters/18-longitudinal-mixed-models.md)) |
+| **Longitudinal** | Repeated measures per person | Patient-visit | Mixed models (Ch 18) |
+| **Survival** | Time to event with censoring | Patient | Kaplan-Meier, Cox (Ch 19) |
+| **Clustered** | Units nested (patients in hospitals) | Patient (with cluster adjustment) | Cluster-robust SE / mixed models (Ch 18) |
 | **Case-control** | Sample enriched for cases | Case or control | OR natural; incidence not estimable [@agresti2018introduction] |
-| **Paired** | Two measurements same subject | Patient | Paired *t*, McNemar ([Ch 4](chapters/04-comparing-groups.md)) |
-| **Per-cell omics/flow** | Many rows per person | **Not** independent patients | Summarise to participant first ([Ch 15](chapters/15-flow-cytometry.md)) |
+| **Paired** | Two measurements same subject | Patient | Paired *t*, McNemar (Ch 4) |
+| **Per-cell omics/flow** | Many rows per person | **Not** independent patients | Summarise to participant first (Ch 15) |
 
 ### Dual interpretation
 
@@ -236,15 +144,7 @@ If the protocol defines exacerbations as a **count** but the analyst runs a *t*-
 
 Always document **definitions** in Methods. An exacerbation in one COPD trial is not necessarily the same in another [@hurst2010exacerbation].
 
-### Technique card: spirometry essentials
-
-| | |
-|---|---|
-| **Must specify** | Pre- or post-bronchodilator; reference equation for % predicted; quality flags |
-| **Common error** | Mix pre-BD in one arm and post-BD in another |
-| **When to use % predicted** | Comparing across age/sex/height |
-| **When to use litres** | Within-trial mean differences with narrow eligibility |
-| **Standard** | ATS/ERS spirometry standardisation [@graham2019spirometry] |
+**Spirometry essentials:** always specify pre- or post-bronchodilator timing, the reference equation for % predicted, and quality flags [@graham2019spirometry]. Mixing pre-BD in one arm and post-BD in another is a common trial failure. Use **% predicted** when comparing across age, sex, and height; use **litres** for within-trial mean differences when eligibility is narrow.
 
 ---
 
@@ -271,7 +171,7 @@ Before any model:
 
 ## From question to data checklist
 
-Complete **before** opening [Appendix B](../appendix-b-quick-reference.md):
+Complete **before** choosing a model:
 
 | # | Question | If unclear → |
 |---|----------|--------------|
@@ -279,8 +179,8 @@ Complete **before** opening [Appendix B](../appendix-b-quick-reference.md):
 | 2 | What is the **unit of analysis** (patient, visit, cluster)? | Ch 2 §2.3 |
 | 3 | Are observations **independent**, **paired**, or **clustered**? | Ch 4 design row |
 | 4 | Was **randomisation** used? | Limits causal language |
-| 5 | What **confounders** are available and justified? | Ch 7 |
-| 6 | How much **missing data** and what pattern? | [Ch 20](20-missing-data.md) |
+| 5 | What **confounders** are available and justified? | prespecify in SAP |
+| 6 | How much **missing data** and what pattern? | Ch 20 |
 | 7 | What is the **estimand** in one sentence? | Ch 1 |
 
 ---
@@ -298,8 +198,6 @@ Complete **before** opening [Appendix B](../appendix-b-quick-reference.md):
 | `longitudinal_spirometry.csv` | fev1 by visit, group | Continuous, repeated | Ch 18 |
 | `time_to_exacerbation.csv` | time_days, event | Time-to-event | Ch 19 |
 
-See [RECURRING_COHORT.md](../RECURRING_COHORT.md).
-
 ---
 
 ## CASTOR-HD datasets (high-dimensional biology preview)
@@ -315,7 +213,7 @@ These files are designed for later "advanced discovery" chapters in a single-vol
 | `antibody_screen.csv` | Screening signals (replicates) | Hit calling, ranking stability |
 | `antibody_confirmation.csv` | Confirmation assay (KD + positives) | PPV, confirmation discipline |
 
-Reporting templates for these analyses are in [HIGH_DIM_REPORTING_TEMPLATES.md](../HIGH_DIM_REPORTING_TEMPLATES.md).
+Reporting templates for these analyses are in HIGH_DIM_REPORTING_TEMPLATES.
 
 ---
 
@@ -327,11 +225,11 @@ Reporting templates for these analyses are in [HIGH_DIM_REPORTING_TEMPLATES.md](
 | *t*-test on exacerbation **counts** | Count, skewed, bounded | Poisson / NB [Ch 6] |
 | `lm()` on 0/1 outcome | Predictions outside [0,1] | Logistic [Ch 6] |
 | Ignore pairing in pre/post BD | Inflated false positives | Paired *t* [Ch 4] |
-| Analyse repeated FEV1 as independent | Wrong SEs | Mixed models [Ch 18](18-longitudinal-mixed-models.md) |
-| Analyse survival as 12-month binary only | Loses timing | [Ch 19](19-survival-analysis.md) |
-| Pool flow cells as n | Pseudo-replication | [Ch 15](15-flow-cytometry.md) |
+| Analyse repeated FEV1 as independent | Wrong SEs | Mixed models Ch 18 |
+| Analyse survival as 12-month binary only | Loses timing | Ch 19 |
+| Pool flow cells as n | Pseudo-replication | Ch 15 |
 | Cluster on markers + FEV1, then "predict" FEV1 | Circular | Cluster on markers only [Ch 11] |
-| Omics heatmap without batch check | Technical artefacts | [Ch 14](14-batch-effects.md) |
+| Omics heatmap without batch check | Technical artefacts | Ch 14 |
 
 ---
 
@@ -341,10 +239,10 @@ If any of these apply, the “default” methods in Vol I need an extension.
 
 | Data feature | What breaks | What to do |
 |---|---|---|
-| Repeated FEV1 over time | independence | [Ch 18](18-longitudinal-mixed-models.md): mixed models / GEE |
-| Time to exacerbation | censoring | [Ch 19](19-survival-analysis.md): survival analysis |
-| Multi-centre clustering | SEs too small | [Ch 18](18-longitudinal-mixed-models.md): cluster-robust / mixed |
-| High-dimensional omics p>>n | unstable estimates | Ch 7, 10, [13–17](13-differential-analysis-fdr.md) |
+| Repeated FEV1 over time | independence | Ch 18: mixed models / GEE |
+| Time to exacerbation | censoring | Ch 19: survival analysis |
+| Multi-centre clustering | SEs too small | Ch 18: cluster-robust / mixed |
+| High-dimensional omics p>>n | unstable estimates | Ch 7, 10, 13–17 |
 | Routine EHR data | selection/measurement bias | RECORD-style reporting [@benchimol2015record] + sensitivity |
 
 ---
@@ -390,16 +288,48 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 
 ---
 
-## Chapter summary
+## Quick reference: route by outcome and structure
 
-- Classify **outcome type** and **data structure** before choosing any test.
-- Respiratory data require domain definitions (spirometry, exacerbations, omics).
-- Use the pre-analysis checklist (§2.6) every time.
-- Route to methods via [appendix-b-quick-reference.md](../appendix-b-quick-reference.md).
+| Outcome / structure | When you see it | Route to |
+|--------------------|-----------------|----------|
+| **Continuous FEV₁** | Spirometry litres; one visit | [Ch 4](04-comparing-groups.md), [Ch 5](05-linear-models.md) |
+| **Binary exacerbation** | Any vs none in follow-up | [Ch 4](04-comparing-groups.md), [Ch 6](06-generalized-linear-models.md) |
+| **Count exacerbations** | Events per person-time | [Ch 6](06-generalized-linear-models.md) |
+| **Repeated FEV₁ visits** | Same patient, multiple rows | [Ch 18](18-longitudinal-mixed-models.md) |
+| **Time to first event** | Dates + censoring | [Ch 19](19-survival-analysis.md) |
+| **Proteomics / RNA / flow** | Thousands of features | [Ch 13](13-differential-analysis-fdr.md)–[17](17-integrated-castor-hd.md) |
 
-## Where this chapter leads
+## Where we go next
 
 **Next:** [Chapter 3](03-descriptive-analysis.md) describes the cohort before [Chapter 4](04-comparing-groups.md) compares groups. If you already know you need survival or mixed models, skim [Ch 18–19](18-longitudinal-mixed-models.md) after the checklist here.
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
+| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
+| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
+| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
+| [Chapter 7: Model building](07-model-building.md) | Covariate choice, LASSO, prespecification |
+| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
+| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
+| [Chapter 15: Flow cytometry](15-flow-cytometry.md) | Immune summaries at participant level |
+| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
+| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
+| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
+| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix K: In the room — short stories](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) | Story 1: one export, every column gets a *t*-test |
+| [Appendix K: Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) | Story 3: `lm()` on 0/1 exacerbation |
+| [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
+| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry — what CASTOR deliberately hides |
+| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
 
 ## Further reading
 
@@ -423,4 +353,3 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 2. Complete the seven-item checklist for a hypothetical smoking–FEV1 question.
 3. For each CASTOR file in the outcome map, state outcome type in one word.
 
-**Next:** [Chapter 3 - Descriptive Analysis and Visualization](03-descriptive-analysis.md)

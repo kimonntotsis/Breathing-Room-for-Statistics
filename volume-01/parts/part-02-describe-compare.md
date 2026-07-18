@@ -1,24 +1,9 @@
 # Part II: Describe, then Compare {.unnumbered}
 
-Respiratory papers often fail for predictable reasons:
+The DSMB wants baseline balance before CASTOR’s interim look. Mei builds Table 1; Dr Rivera resists the cropped *y*-axis slide. Only then do they prespecify the week-12 FEV₁ comparison.
 
-- the sample is not described (missingness, units, protocol differences)
-- the wrong outcome type is analysed (counts treated as continuous)
-- comparisons ignore pairing, clustering, or multiplicity
+**Chapter 3** is description — who is in the trial, what the distributions look like, what missingness would hide. **Chapter 4** is inference — the primary and secondary comparisons, with effect sizes and CIs, not a loop of *p*-values.
 
-This part is the antidote:
+If you read only two chapters before analysing, read **3 and 4**. They are the steering-committee story the rest of the book refers back to.
 
-- **Chapter 3** makes description explicit (Table 1 + plots + missingness)
-- **Chapter 4** is the “which test?” chapter for common outcomes, with alternatives and sensitivity options
-
-If you only read two chapters before running an analysis, read **Ch 3–4**.
-
-**Read this if:** you are drafting a week-12 readout, comparing arms on FEV1 or exacerbation, or reviewing an analyst's first table of p-values.
-
-**Skip this if:** your question is repeated visits (→ [Part VIII](part-08-longitudinal-survival.md)), time-to-event (→ Ch 19), or omics hits (→ [Part VI](part-06-highdim-biology.md)). Still read **Ch 3** for Table 1 first.
-
-## In the room: the week-12 readout
-
-Dr Chen’s COPD extension trial is due a week-12 snapshot for the steering committee. The CRA exports a spreadsheet: FEV1, arm, smoking, three patients with missing post-BD spirometry, one site using different visit windows. **Part II** is where the team decides whether to describe first (Ch 3) and which comparison estimand the protocol actually specifies (Ch 4): before anyone runs a t-test in Excel. *(See [Story 1](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test).)*
-
-
+**Skip ahead if** your question is repeated visits ([Part VIII](part-08-longitudinal-survival.md)), survival (Ch 19), or omics (Part VI) — but still skim **Ch 3** for Table 1 discipline.

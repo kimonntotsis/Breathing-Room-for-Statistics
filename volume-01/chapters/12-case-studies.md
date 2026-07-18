@@ -2,116 +2,45 @@
 
 > **Part V: Discovery (core CASTOR capstone)**
 
-## At a glance
+## Opening scene: five manuscripts, one cohort
 
-| | |
-|---|---|
-| **Recurring cohort** | [CASTOR](../RECURRING_COHORT.md) - full workflow |
-| **Format** | End-to-end narratives with caveats, wrong analyses, reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Cases** | A: RCT FEV1, B: Exacerbation logistic, C: PCA + clustering, D: CASTOR-HD (Ch 13–17), **E: Longitudinal + survival (Ch 18–19)** |
-| **R** | `R/examples/ch12_case_*.R` |
-| **Navigation** | [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md) |
+By now you have met CASTOR as trial, registry, and omics substudy. This chapter is **five manuscripts at different stages** — interim deck, journal submission, sponsor omics thread — each walked through estimand, analysis path, Results template, and explicit **does not prove**.
 
-**Also see:** [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), [Appendix B](../appendix-b-quick-reference.md), [METHOD_MAP](../METHOD_MAP.md), [REFERENCES](../REFERENCES.md)
-
----
-
-## In this chapter
-
-1. [Master workflow](#master-workflow-every-castor-analysis) (eight steps) every case follows
-2. [Method choice at a glance](#method-choice-at-a-glance); which case matches your study
-3. [Investigator sign-off checklist](#investigator-sign-off-checklist): before submission
-4. [Case A](#case-study-a-randomised-trial-fev1-comparison): RCT FEV1 (minimum read)
-5. [Catalog of wrong analyses](#catalog-of-wrong-analyses-case-studies): published-style traps
-
-**Minimum path:** [Appendix J](../appendix-j-investigator-minimum-path.md). **APATE vignette (no CSV):** [APATE_VIGNETTE](../APATE_VIGNETTE.md).
-
----
-
-## Method choice at a glance
-
-| Your study looks like… | Read case | Chapters to open |
-|------------------------|-----------|------------------|
-| Parallel RCT, continuous FEV1 | **Case A** | 3 → 4 → 8 |
-| Cohort, binary exacerbation | **Case B** | 3 → 6 → 21 (if observational) |
-| Marker subgroups (unsupervised) | **Case C** | 10 → 11 |
-| CASTOR-HD omics pipeline | **Case D** | 13 → 14 → 15 → 16 → 17 |
-| Repeated FEV1 + time to event | **Case E** | 18 → 19 → 20 |
-
-**Sign-off figure:** `viz_signoff_checklist.png` ([below](#investigator-sign-off-checklist)).
-
----
-
-1. Execute the full analysis pipeline from question to report.
-2. Apply the [METHOD_MAP](../METHOD_MAP.md) to real CASTOR scenarios.
-3. Write integrated Methods/Results paragraphs with appropriate citations.
-4. Identify wrong analyses in published-style scenarios.
-
-## Prerequisites
-
-Chapters 1-11.
+Read Case A if you read nothing else. You saw the week-12 numbers in Chapter 4; here the question is whether the **Discussion** survives a reviewer who reads MCID before *p*-values.
 
 ---
 
 ## Why this chapter
 
-Technique cards teach atoms; case studies teach **workflow**. You will walk **five** complete CASTOR narratives (Cases A–E) with **In the room** notes: fictional steering comments, reviewer lines, and lab emails that mirror what pulmonary teams actually hear. Practice saying what each analysis does **not** prove before your first manuscript discussion section.
-
-## Opening question
-
-*How do the CASTOR analyses from Chapters 3–11 fit together in **five publishable-style case reports** (Cases A–E)?*
-
-This chapter is the **capstone**: same workflow as [HANDBOOK_GUIDE](../HANDBOOK_GUIDE.md), five complete narratives (Cases A–E), and explicit limits on what each analysis proves. Role-based reading paths: [Welcome](../chapters/00-welcome.md) and [Appendix G](../appendix-g-handbook-navigation.md).
+Technique chapters teach parts. Case studies teach **sequence** — and the sign-off checklist investigators use before Methods goes to the journal.
 
 ---
 
-## Master workflow (every CASTOR analysis)
+## Sign-off workflow (CASTOR)
 
-![Analysis pipeline](../figures/analysis_pipeline.png){width=85%}
-
-| Step | Action | Chapter |
-|------|--------|---------|
-| 1 | Clinical question (one sentence) | 1 |
-| 2 | Estimand + population | 1-2 |
-| 3 | Describe sample (Table 1, plots) | 3 |
-| 4 | Choose method via [Appendix B](../appendix-b-quick-reference.md) | 4-11 |
-| 5 | Fit model / test with R script | R/examples |
-| 6 | Diagnostics + sensitivity | 7-8 |
-| 7 | Report estimate + CI + limitations | 8 |
-| 8 | State what was **not** proven | All |
-
-Reporting frameworks by design: CONSORT (RCT) [@schulz2010consort]; STROBE (cohort) [@vonelm2007strobe]; TRIPOD (prediction) [@moons2015tripod]; biomarker discovery [@mcshane2011biomarker].
-
----
-
-## Investigator sign-off checklist
-
-Before protocol lock, steering committee, or journal submission, walk the seven gates on the same CASTOR workflow:
+The eight-step pipeline lives in Chapter 1 (`analysis_pipeline.png`). Before protocol lock, steering committee, or journal submission, walk these seven gates:
 
 ![CASTOR investigator sign-off checklist](../figures/viz_signoff_checklist.png){width=78%}
 
 | Gate | Question | If no → |
 |------|----------|---------|
-| 1 | Is the estimand one sentence? | [Ch 1](01-statistical-thinking.md) |
-| 2 | Table 1 + missingness done? | [Ch 3](03-descriptive-analysis.md) |
-| 3 | Method matches outcome type? | [Appendix B](../appendix-b-quick-reference.md) |
-| 4 | Does Figure 1 match the estimand? | [Appendix I](../appendix-i-figure-hygiene.md) |
-| 5 | Effect + CI + *n*/events reported? | [Ch 8](08-validation-reporting.md) |
-| 6 | At least one sensitivity named? | Chapter technique / [Ch 20](20-missing-data.md) |
+| 1 | Is the estimand one sentence? | Ch 1 |
+| 2 | Table 1 + missingness done? | Ch 3 |
+| 3 | Method matches outcome type? | Appendix B |
+| 4 | Does Figure 1 match the estimand? | Appendix I |
+| 5 | Effect + CI + *n*/events reported? | report CIs + limits in Results |
+| 6 | At least one sensitivity named? | Chapter technique / Ch 20 |
 | 7 | Limits (“not proven”) written? | Case narratives below |
 
-**Real cohorts:** add site clustering, QC exclusions, and protocol deviations; see [APATE](../APATE_VIGNETTE.md) for the checklist CASTOR does not model.
+Reporting frameworks by design: CONSORT (RCT) [@schulz2010consort]; STROBE (cohort) [@vonelm2007strobe]; TRIPOD (prediction) [@moons2015tripod]; biomarker discovery [@mcshane2011biomarker].
 
-### In practice
-
-Manuscripts often mix discovery language (omics hits) with confirmatory language (trial primary endpoint). Use separate paragraphs, and separate limitations: for each CASTOR case narrative you mirror.
+**In practice:** Manuscripts often mix discovery language (omics hits) with confirmatory language (trial primary endpoint). Use separate paragraphs and separate limitations for each CASTOR case narrative you mirror. Real cohorts: add site clustering, QC exclusions, and protocol deviations; see APATE vignette for the checklist CASTOR does not model.
 
 ---
 
 # Case study A: Randomised trial: FEV1 comparison
 
-> **In the room (steering committee):** *"The intervention arm looks better on the forest plot snippet. Can we call this a win? p is 0.20."*
-> **Response:** Report mean difference and 95% CI against the prespecified MCID (0.10 L). Non-significant superiority is **inconclusive**, not proof of equivalence. ANCOVA with baseline FEV1 was prespecified as supportive, not as a post hoc rescue.
+> **In the room (journal submission):** Reviewer 2 highlights the forest-plot colour and writes: *“Non-significant but numerically favourable — discuss clinical relevance.”* Rivera forwards the line to Mei. *“They want MCID language, not another *t*-test,”* Mei replies. *“We report the prespecified mean difference and CI; superiority was inconclusive at α = 0.05 — we do not claim equivalence unless the SAP said so.”*
 
 ### Clinical question
 
@@ -133,9 +62,9 @@ Parallel RCT; independent groups; continuous outcome [@schulz2010consort].
 | Histogram / QQ FEV1 | Ch 3 |
 | Welch t-test (prespecified primary) | Ch 4 [@welch1947t] |
 | ANCOVA sensitivity (`spirometry_trial.csv`) | Ch 4-5 |
-| Secondary endpoints (FVC, CAT) in Holm family | Ch 4, 8 |
-| Bootstrap CI | Ch 8 [@efron1993bootstrap] |
-| Power note (if negative) | Ch 4, 8 |
+| Secondary endpoints (FVC, CAT) in Holm family | Ch 4 + SAP |
+| Bootstrap CI | optional sensitivity [@efron1993bootstrap] |
+| Power note (if negative) | Ch 4 + SAP |
 
 ### Before you run the case scripts
 
@@ -178,7 +107,7 @@ Causal effect in broader population; long-term FEV1 decline; symptom benefit.
 # Case study B: Observational cohort: exacerbation risk
 
 > **In the room (Reviewer #2):** *"Smoking is your exposure, but you adjusted for FEV1 % predicted: doesn't that block the effect?"*
-> **Response:** FEV1 is a prespecified confounder on the causal path smoking → lung function → exacerbation risk; report adjusted OR as primary and crude proportions in supplementary. Associational language only ([Ch 8](08-validation-reporting.md)).
+> **Response:** FEV1 is a prespecified confounder on the causal path smoking → lung function → exacerbation risk; report adjusted OR as primary and crude proportions in supplementary. Associational language only; state limits in Discussion.
 
 ### Clinical question
 
@@ -200,7 +129,7 @@ Observational cohort; binary outcome; logistic regression [@vonelm2007strobe; @h
 | Logistic regression (prespecified covariates) | Ch 6 |
 | Marginal risks (`emmeans`) | Ch 6 |
 | Firth sensitivity if sparse | Ch 6 [@firth1993bias] |
-| No stepwise selection | Ch 7 |
+| No stepwise selection | prespecify covariates in SAP |
 
 ```r
 source("R/examples/ch12_case_b_exacerbation.R")
@@ -240,7 +169,7 @@ Causal effect of smoking; prediction model performance (see Case C / Ch 9).
 # Case study C: Multi-marker panel: PCA + clustering
 
 > **In the room (PI email):** *"Cluster 1 separates well: can we call it the Th2-high endotype in the grant renewal?"*
-> **Response:** Unsupervised k-means on 30 markers is **exploratory**; batch colouring and stability checks come first ([Ch 11](11-clustering.md)). Name subgroups only after external replication and outcome linkage.
+> **Response:** Unsupervised k-means on 30 markers is **exploratory**; batch colouring and stability checks come first (Ch 11). Name subgroups only after external replication and outcome linkage.
 
 ### Clinical question
 
@@ -303,7 +232,7 @@ Biological subtypes; treatment response groups; diagnostic categories.
 # Case study D: CASTOR-HD discovery bridge (Ch 13–17)
 
 > **In the room (lab manager):** *"The CRO sent 47 'significant' proteins and a volcano PDF: no plate map. Can we add it beside the week-12 FEV1 figure for the primary paper?"*
-> **Response:** No batch metadata → stop at QC gate ([Ch 14](14-batch-effects.md)). Discovery results get a **separate** paragraph and limitations; they do not upgrade the trial primary endpoint ([Ch 17](17-integrated-castor-hd.md)).
+> **Response:** No batch metadata → stop at QC gate (Ch 14). Discovery results get a **separate** paragraph and limitations; they do not upgrade the trial primary endpoint (Ch 17).
 
 ### Clinical question
 
@@ -357,14 +286,14 @@ source("R/examples/ch17_integrated_castor_hd.R")
 
 Causal mechanisms; clinical utility; transportability; antibody therapeutic potential.
 
-**Continue:** [Ch 17 integrated pipeline](17-integrated-castor-hd.md); [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md)
+**Continue:** Ch 17 integrated pipeline; HIGH_DIM_REPORTING_TEMPLATES
 
 ---
 
 # Case study E: Longitudinal FEV1 + time to exacerbation
 
 > **In the room (CRA):** *"We already have week-52 FEV1: why fit a mixed model on four visits?"*
-> **Response:** Pooling visits as independent rows inflates precision ([Ch 18](18-longitudinal-mixed-models.md)). Prespecified primary uses mixed model; week-52 *t*-test is **sensitivity** only (Case E table).
+> **Response:** Pooling visits as independent rows inflates precision (Ch 18). Prespecified primary uses mixed model; week-52 *t*-test is **sensitivity** only (Case E table).
 
 ### Clinical question
 
@@ -421,7 +350,7 @@ source("R/examples/ch12_case_e_longitudinal_survival.R")
 
 That improving FEV1 trajectory prevents exacerbations (different endpoints); causal effect of smoking; transportability to other healthcare systems.
 
-**Continue:** [Ch 20 missing data](20-missing-data.md); [Ch 21 causal inference](21-causal-inference.md)
+**Continue:** Ch 20 missing data; Ch 21 causal inference
 
 ---
 
@@ -443,7 +372,7 @@ The sign-off figure above is the visual version of this list:
 
 - [ ] Clinical question and estimand stated
 - [ ] Table 1 and missingness [@schulz2010consort; @vonelm2007strobe]
-- [ ] Method matches outcome type ([Appendix B](../appendix-b-quick-reference.md))
+- [ ] Method matches outcome type (Appendix B)
 - [ ] Effect size + 95% CI [@harrell2015rms]
 - [ ] Event count / n
 - [ ] Sensitivity analysis or limitation noted
@@ -454,10 +383,10 @@ The sign-off figure above is the visual version of this list:
 
 ## Extended methods (now in this handbook)
 
-- Longitudinal FEV1 → [Ch 18](18-longitudinal-mixed-models.md)
-- Time-to-exacerbation → [Ch 19](19-survival-analysis.md)
-- Missing data / MICE → [Ch 20](20-missing-data.md)
-- Causal inference → [Ch 21](21-causal-inference.md)
+- Longitudinal FEV1 → Ch 18
+- Time-to-exacerbation → Ch 19
+- Missing data / MICE → Ch 20
+- Causal inference → Ch 21
 
 ---
 
@@ -473,16 +402,55 @@ Adapt CASTOR details to your cohort and have an analyst and investigator review 
 
 | If your real study has… | Case change | Where it’s covered |
 |---|---|---|
-| Multiple follow-up visits | Case A → Case E longitudinal | [Ch 18](18-longitudinal-mixed-models.md), Case E |
-| Time to first exacerbation | Case B → Case E survival | [Ch 19](19-survival-analysis.md), Case E |
+| Multiple follow-up visits | Case A → Case E longitudinal | Ch 18, Case E |
+| Time to first exacerbation | Case B → Case E survival | Ch 19, Case E |
 | Many more predictors (omics) | Case C/D: penalization + validation | Ch 7, 9–11, 13–17 |
-| Clustered multi-centre design | SEs must account for centre | [Ch 18](18-longitudinal-mixed-models.md) |
+| Clustered multi-centre design | SEs must account for centre | Ch 18 |
 | Clinical decision thresholds | Add decision-curve / net benefit | Ch 9 extensions |
 | Proteomics + flow + screens | Case D → Ch 17 pipeline | Ch 13–17 |
 
-## Where this chapter leads
+---
+
+## Quick reference: which case to read
+
+| Your study looks like… | Read case | Chapters to open |
+|------------------------|-----------|------------------|
+| Parallel RCT, continuous FEV1 | **Case A** | 3 → 4 → 8 |
+| Cohort, binary exacerbation | **Case B** | 3 → 6 → 21 (if observational) |
+| Marker subgroups (unsupervised) | **Case C** | 10 → 11 |
+| CASTOR-HD omics pipeline | **Case D** | 13 → 14 → 15 → 16 → 17 |
+| Repeated FEV1 + time to event | **Case E** | 18 → 19 → 20 |
+
+Sign-off figure: `viz_signoff_checklist.png` ([Sign-off workflow](#sign-off-workflow-castor)).
+
+## Where we go next
 
 **Next:** CASTOR-HD omics pipeline → [Chapters 13–17](13-differential-analysis-fdr.md). Longitudinal and survival extensions → [Chapters 18–19](18-longitudinal-mixed-models.md).
+
+## Related chapters
+
+| Chapter | When to open it |
+|---------|------------------|
+| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
+| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
+| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
+| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups — claim discipline |
+| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
+| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
+| [Chapter 17: Integrated CASTOR-HD](17-integrated-castor-hd.md) | Full omics pipeline story |
+| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
+| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
+| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
+| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
+| [APATE vignette](../APATE_VIGNETTE.md) | Prose-only messy registry checklist (no CSV) |
+| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
 
 ## Further reading
 
@@ -492,4 +460,4 @@ Adapt CASTOR details to your cohort and have an analyst and investigator review 
 
 ## Exercises ([Solutions](../solutions/ch12_solutions.md))
 
-**End of core path (Ch 1–12)**. Continue with [Ch 13](13-differential-analysis-fdr.md) (CASTOR-HD) or [Ch 18](18-longitudinal-mixed-models.md) (longitudinal/survival).
+**End of core path (Ch 1–12)**. Continue with Ch 13 (CASTOR-HD) or Ch 18 (longitudinal/survival).

@@ -2,74 +2,15 @@
 
 > **Part VI: High-dimensional biology and discovery**
 
-## At a glance
+## Opening scene: the hit list
 
-| | |
-|---|---|
-| **Recurring datasets** | `data/antibody_screen.csv`, `data/antibody_confirmation.csv` |
-| **Format** | Technique cards + Caveats + Wrong analysis + Reporting ([template](../CHAPTER_TEMPLATE.md)) |
-| **Core idea** | treat screening as triage; confirmation is where claims begin |
-| **Primary tools** | replicate agreement, prespecified thresholds, PPV, stability tiers |
-| **R** | `R/examples/ch16_antibody_screening.R` |
-| **Figures** | [FIGURE_INDEX](../FIGURE_INDEX.md) - `ch16_*.png`; **figure hygiene:** `viz_pair_ch16_screen.png` |
-| **Templates** | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) |
-| **Exercises** | [Chapter 16 exercises](../exercises/ch16_exercises.md) |
-
-**Also see:** [Ch 13 FDR](13-differential-analysis-fdr.md), [Ch 17 pipeline](17-integrated-castor-hd.md)
-
----
-
-## In this chapter
-
-1. [Why this chapter](#why-this-chapter): screen is triage, not truth
-2. [Method choice at a glance](#method-choice-at-a-glance): thresholds, PPV, tiers
-3. **Practice read** on rank #7 vs #9
-4. [Reporting template](#reporting-template): Tier 1 clones wording
-5. [Alternatives & extensions](#alternatives--extensions)
-
-**Analyst read:** replicate agreement, R lab below.
-
----
-
-## Method choice at a glance
-
-| Method | When to use | Why |
-|--------|-------------|-----|
-| **Prespecified hit threshold** | Primary screen analysis | Avoids post hoc cutoff on ranked list |
-| **Replicate agreement** | Two screen runs available | Separates signal from noise before confirmation |
-| **PPV at threshold** | Budget for validation | Expected true positives among called hits |
-| **Stability tiers (high/med/low)** | Prioritise confirmation spend | Honest triage; not all hits equal |
-| **Confirmation assay** | Before binding/clinical claims | Screen OR ≠ validated reagent |
-| **Ranking stability across replicates** | Avoid storytelling on small rank shifts | Top-20 overlap more informative than #7 vs #9 |
-
-**Extensions:** [Alternatives & extensions](#alternatives--extensions) at chapter end.
-
----
-
-## Learning objectives
-
-1. Combine replicates and quantify replicate agreement before hit calling.
-2. Define hits using **prespecified thresholds** (or control-based rules), not post hoc cutoffs.
-3. Evaluate screen performance with **confirmation PPV**, not screen p-values alone.
-4. Assign **stability tiers** when ranks change under replicate resampling.
-5. Report shortlists as tiers, not fragile 1..K rankings.
-6. Distinguish screen triage from confirmation endpoints.
-
-## Prerequisites
-
-Ch 8 (reporting), Ch 13 (multiplicity mindset), Ch 14 (batch), Ch 11 (do not overclaim discovery).
+A screen ranks four hundred clones; the PI wants the top ten in validation by Friday. Mei asks for replicate agreement, prespecified hit rules, and confirmation positivity before anyone says *"lead candidate."* PPV matters more than the prettiest rank plot.
 
 ---
 
 ## Why this chapter
 
-Screens are triage, not truth. This chapter is for teams deciding which clones to pay to validate: using PPV, prespecified thresholds, and stability tiers instead of rank #7 versus #9 storytelling.
-
-## Opening question
-
-*Which clones should we spend money validating - and how confident are we that the top of the list stays the top when noise is resampled?*
-
-Discovery screens are not hypothesis tests. They are **prioritisation pipelines**. The "result" is not a p-value; it is a defensible shortlist and a confirmation plan.
+Antibody and biomarker screens are triage exercises. This chapter connects screen thresholds, confirmation assays, and honest PPV — CASTOR's `antibody_screen.csv` carries the teaching example.
 
 ---
 
@@ -147,25 +88,7 @@ Recompute top-20 lists using replicate 1, 2, and 3 separately. Assign each clone
 
 ## Technique: Hit calling + confirmation as the estimand
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Which candidates exceed a prespecified screen criterion, and how many confirm? |
-| **Outcome type** | continuous screen signal; binary confirmed positive (after follow-up assay) |
-| **Design** | replicates + batches; often multiple antigens |
-| **Data required** | replicates, controls, batch IDs, confirmation readout |
-| **Effect measure** | PPV of screen; tiered shortlist; confirmation rate |
-| **R** | replicate summaries + thresholding; confusion table vs confirmation |
-| **When to use** | any screening/triage workflow (antibodies, CRISPR, drug screens) |
-| **When NOT to use** | claiming "best antibody" from screen alone |
-| **Does NOT prove** | clinical utility; in vivo efficacy; specificity without orthogonal tests |
-
-### Dual interpretation
-
-**Plain language:** we used the screen to shortlist candidates, then checked which of those actually worked in a stronger assay.
-
-**Precise language:** the screen defines a ranking/threshold; confirmation defines the target endpoint. Screen utility is summarised by PPV and stability of the shortlist under replicate noise.
+Hit calling with confirmation asks which candidates exceed a prespecified screen criterion and how many confirm in a stronger assay. Screen signal is continuous; confirmation is binary after follow-up. You need replicates, controls, batch IDs, and a confirmation readout. Summarise with PPV among hits, tiered shortlists, and confirmation rates — not screen *p*-values alone. This applies to any screening workflow (antibodies, CRISPR, drug screens) but does not prove clinical utility, in vivo efficacy, or specificity without orthogonal tests.
 
 **Practice read:** a screen is like a triage test: useful if it reliably enriches true positives, but it is not the final diagnosis.
 
@@ -215,7 +138,7 @@ Changing the hit threshold after seeing the plate layout is post hoc tuning. Pre
 
 ### Reporting template
 
-Use Template D in [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md).
+Use Template D in HIGH_DIM_REPORTING_TEMPLATES.
 
 > Screening used [R] technical replicates per clone against [antigens]. Replicate agreement was assessed [correlation/plot]. Hits were defined prespecification as mean signal > [threshold] (or control-based rule). Confirmation used [assay] with positivity defined as KD < [X] nM. We report PPV among hits and stability tiers based on overlap of top-[K] lists across replicates.
 
@@ -242,15 +165,7 @@ A cliff edge in PPV means the shortlist is threshold-dependent: show the curve, 
 
 ## Technique: Stability tiers (ranking under replicate resampling)
 
-### Technique card
-
-| | |
-|---|---|
-| **Answers** | Which clones are consistently top-ranked under noise? |
-| **Input** | replicate-level signals per clone |
-| **Output** | Tier 1/2/3 shortlist |
-| **When to use** | whenever confirmation budget is limited |
-| **Does NOT prove** | clone is "best"; only that it is **stable** in the screen |
+Stability tiers identify clones consistently top-ranked under replicate noise. Recompute top-*K* lists from each replicate and assign Tier 1 (top in all replicates), Tier 2 (two of three), Tier 3 (one of three). Use when confirmation budget is limited — tiers show **stability**, not that a clone is objectively "best."
 
 ---
 
@@ -332,13 +247,29 @@ Tier 1 clones are the only defensible primary shortlist; lower tiers belong in s
 
 Low overlap between replicate top-20 lists means ranking noise, not biology.
 
+---
+
+## Quick reference: methods in this chapter
+
+| Method | When to use | Why |
+|--------|-------------|-----|
+| **Prespecified hit threshold** | Primary screen analysis | Avoids post hoc cutoff on ranked list |
+| **Replicate agreement** | Two screen runs available | Separates signal from noise before confirmation |
+| **PPV at threshold** | Budget for validation | Expected true positives among called hits |
+| **Stability tiers (high/med/low)** | Prioritise confirmation spend | Honest triage; not all hits equal |
+| **Confirmation assay** | Before binding/clinical claims | Screen OR ≠ validated reagent |
+| **Ranking stability across replicates** | Avoid storytelling on small rank shifts | Top-20 overlap more informative than #7 vs #9 |
+
+**Extensions:** [Alternatives & extensions](#alternatives--extensions) at chapter end.
+
+---
+
+
 ## Exercises ([Solutions](../solutions/ch16_solutions.md))
 
 **E16.1** What is PPV among screen hits, and why is it more useful than a screen p-value?
 
 **E16.2** Define Tier 1 stability in this chapter's rule.
-
-**E16.3** Why is post hoc threshold tuning dangerous?
 
 **E16.3** Why is post hoc threshold tuning dangerous?
 
@@ -354,18 +285,17 @@ Low overlap between replicate top-20 lists means ranking noise, not biology.
 
 ---
 
-## Where this chapter leads
+## Where we go next
 
 **Next:** [Chapter 17](17-integrated-castor-hd.md) stitches omics, flow, and antibody steps into one report.
+
+## Handbook resources
+
+| Resource | When to use it |
+|----------|----------------|
+| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
 
 ## Further reading
 
 - Confirmation assay standards; [Ch 17](17-integrated-castor-hd.md) integrated pipeline
-
-## Chapter summary
-
-- Screens are for **triage**, not final proof.
-- Prespecify **hit rules** and **confirmation positivity**.
-- Report **PPV among hits**, not just rankings.
-- Use **stability tiers** when replicate resampling changes the top list.
-- Batch QC and replicate agreement are part of the estimand, not optional extras.
