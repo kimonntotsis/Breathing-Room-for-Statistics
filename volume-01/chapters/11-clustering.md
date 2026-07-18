@@ -4,13 +4,13 @@
 
 ## Opening scene: "Cluster B is the T2-high endotype"
 
-k-means on PCA scores yields three colourful groups. Marketing language writes itself. Mei asks for silhouette, stability, and whether cluster membership was defined **before** looking at treatment response. The claim ladder goes up one rung at a time — or stops.
+k-means on PCA scores yields three colourful groups. Marketing language writes itself. Mei asks for silhouette, stability, and whether cluster membership was defined **before** looking at treatment response. The claim ladder goes up one rung at a time, or stops.
 
 ---
 
 ## Why this chapter
 
-Clustering sells endotypes; statistics asks whether groups replicate and what they predict. CASTOR Case C lives here — discovery language only until external validation.
+Clustering sells endotypes; statistics asks whether groups replicate and what they predict. CASTOR Case C lives here, discovery language only until external validation.
 
 ---
 
@@ -24,7 +24,7 @@ Clustering sells endotypes; statistics asks whether groups replicate and what th
 | **Typical claim** | “Exploratory subgroups” | “Predictor of outcome” |
 | **Validation** | Replication, stability, external cohort | Cross-validation, calibration, TRIPOD [@moons2015tripod] |
 
-**Practice read:** clustering is hypothesis-generating. It does not replace a diagnostic label or a validated risk score.
+Clustering is hypothesis-generating. It does not replace a diagnostic label or a validated risk score.
 
 ---
 
@@ -32,7 +32,7 @@ Clustering sells endotypes; statistics asks whether groups replicate and what th
 
 Partition *n* patients into *k* groups minimising within-cluster variation on **scaled** continuous features. Requires *k* in advance; works best for roughly spherical, similar-sized clusters. `kmeans(X, centers = k, nstart = 25)`.
 
-**Practice read:** useful for generating hypotheses about subgroups — not for changing care until replicated and linked to outcomes or treatment. Clusters that align with processing batch are a QC finding, not an endotype.
+useful for generating hypotheses about subgroups; not for changing care until replicated and linked to outcomes or treatment. Clusters that align with processing batch are a QC finding, not an endotype.
 
 **Caveats:** document how *k* was chosen; never cluster on markers **and** FEV₁ then claim clusters “predict” lung function; small asthma/COPD omics (*n* < 100) → unstable clusters.
 
@@ -44,23 +44,23 @@ source("R/examples/ch11_clustering.R")
 
 ![k-means clusters coloured by true phenotype (teaching only)](../figures/ch11_kmeans_clusters.png)
 
-**Would this change management today?** Almost always **no** — until clusters replicate elsewhere and predict treatment response in a trial.
+**Would this change management today?** Almost always **no** until clusters replicate elsewhere and predict treatment response in a trial.
 
 ---
 
-## Other clustering methods (Tier B)
+## Other clustering methods 
 
 **Hierarchical clustering** builds a patient “family tree” via agglomerative merging (`hclust(dist(X), method = "ward.D2")`; cut at *k*). Excellent for dendrograms and heatmaps; cut height is subjective; early merges are irreversible; memory *O(n²)* limits large *n*.
 
-**PAM (k-medoids)** uses actual patients as cluster centres — more robust to outliers than k-means means (`cluster::pam`). Medoids are data points, not clinical archetypes until validated.
+**PAM (k-medoids)** uses actual patients as cluster centres, more robust to outliers than k-means means (`cluster::pam`). Medoids are data points, not clinical archetypes until validated.
 
-**Silhouette width** compares within- vs nearest-cluster distance (`cluster::silhouette`) — higher is better separation, but low values (< 0.25) mean overlapping groups. Do not pick *k* with highest silhouette then test outcomes on the same data.
+**Silhouette width** compares within- vs nearest-cluster distance (`cluster::silhouette`), higher is better separation, but low values (< 0.25) mean overlapping groups. Do not pick *k* with highest silhouette then test outcomes on the same data.
 
 ![Mean silhouette width by k](../figures/ch11_silhouette_k.png)
 
 **Bootstrap item stability:** resample rows → re-cluster → proportion of draws with same assignment after label alignment [@hennig2007cluster]. Report mean (and min) stability before naming subgroups in a paper.
 
-**Heatmaps** (`pheatmap`, `ComplexHeatmap`): visualise patient × marker matrices — supplement only. If colours align with processing site rather than diagnosis, fix batch before interpreting biology.
+**Heatmaps** (`pheatmap`, `ComplexHeatmap`): visualise patient × marker matrices, supplement only. If colours align with processing site rather than diagnosis, fix batch before interpreting biology.
 
 ![Right vs wrong: clustering claims](../figures/viz_pair_ch11_clustering.png)
 
@@ -118,7 +118,7 @@ Trial teams use rich labels; clustering may or may not recover them:
 
 A cluster earns a clinical name only after replication and outcome linkage. Internal stability only → “validated endotype” in the abstract is overclaiming; batch can be stable but technical [@hennig2007cluster].
 
-**Bootstrap template:** Resample *B* = 200 with k-means (*k* = 2) at each draw; item stability = proportion of draws with same assignment after label alignment. Mean item stability = 0.78 (range 0.52–0.94) is illustrative — low-stability patients warrant sensitivity analysis.
+**Bootstrap template:** Resample *B* = 200 with k-means (*k* = 2) at each draw; item stability = proportion of draws with same assignment after label alignment. Mean item stability = 0.78 (range 0.52–0.94) is illustrative, low-stability patients warrant sensitivity analysis.
 
 ---
 

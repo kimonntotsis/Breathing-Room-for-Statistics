@@ -4,7 +4,7 @@
 
 ## Opening scene: one Results section, two worlds
 
-Proteomics hits, RNA fold-changes, and trial FEV₁ all land in the same manuscript draft. Reviewer 2 will ask which claims are confirmatory. Mei splits Results into discovery and clinical paragraphs — and a limitations block that admits what integration **did not** establish.
+Proteomics hits, RNA fold-changes, and trial FEV₁ all land in the same manuscript draft. Reviewer 2 will ask which claims are confirmatory. Mei splits Results into discovery and clinical paragraphs, and a limitations block that admits what integration **did not** establish.
 
 ---
 
@@ -62,7 +62,7 @@ source("R/examples/ch17_integrated_castor_hd.R")
 
 ## Step 1–2: Proteomics DE with batch awareness
 
-Run differential analysis (Ch 13), then immediately run batch diagnostics (Ch 14). **Do not** interpret top hits until overlap is acceptable. Ask whether group differences are identifiable after accounting for batch structure: check PCA coloured by batch and the group × batch contingency. If group and batch are perfectly confounded, report non-identifiability — no amount of statistics replaces redesign.
+Run differential analysis (Ch 13), then immediately run batch diagnostics (Ch 14). **Do not** interpret top hits until overlap is acceptable. Ask whether group differences are identifiable after accounting for batch structure: check PCA coloured by batch and the group × batch contingency. If group and batch are perfectly confounded, report non-identifiability, no amount of statistics replaces redesign.
 
 ![Proteomics volcano (BH FDR)](../figures/ch13_volcano_proteomics.png)
 
@@ -78,13 +78,13 @@ If colour tracks batch more than group, technical structure dominates.
 
 Export the top 20–50 features by q-value **and** absolute effect. Prioritise features stable with vs without batch adjustment.
 
-See `volume-01/tables/ch17_integrated_shortlist.csv` from the integrated script. Narrow thousands of proteins to a short list for cheaper assays — prespecified ranking by adjusted effect size and BH q-value, with sensitivity to batch covariate inclusion.
+See `volume-01/tables/ch17_integrated_shortlist.csv` from the integrated script. Narrow thousands of proteins to a short list for cheaper assays, prespecified ranking by adjusted effect size and BH q-value, with sensitivity to batch covariate inclusion.
 
 ---
 
 ## Step 4: Flow cytometry summary
 
-Link immune phenotyping to the discovery story at the **participant** level (Ch 15). Cell embeddings are QC only. One row per participant (proportions), not per cell — pooled cells across patients inflate precision.
+Link immune phenotyping to the discovery story at the **participant** level (Ch 15). Cell embeddings are QC only. One row per participant (proportions), not per cell, pooled cells across patients inflate precision.
 
 ![Monocyte proportions by group](../figures/ch15_flow_props_by_group.png)
 
@@ -92,7 +92,7 @@ Link immune phenotyping to the discovery story at the **participant** level (Ch 
 
 ## Step 5: Antibody screen confirmation
 
-Translate screen hits into confirmation PPV and stability tiers (Ch 16). The screen is high-throughput ranking with many false positives expected; confirmation uses replicate binding and PPV among hits. Ranking stability across replicates defines Tier 1 clones — this does not prove in vivo neutralisation or treatment effect.
+Translate screen hits into confirmation PPV and stability tiers (Ch 16). The screen is high-throughput ranking with many false positives expected; confirmation uses replicate binding and PPV among hits. Ranking stability across replicates defines Tier 1 clones, this does not prove in vivo neutralisation or treatment effect.
 
 ![Threshold sensitivity: hits and PPV](../figures/ch16_threshold_sensitivity.png)
 
@@ -109,7 +109,7 @@ Use HIGH_DIM_REPORTING_TEMPLATES:
 - **Template C** for flow proportions
 - **Template D** for antibody discovery
 
-**Practice read:** one paragraph per modality; separate “discovery” from “confirmed binding.”
+Write one paragraph per modality; separate “discovery” from “confirmed binding.”
 
 ### Example integrated Results paragraph (skeleton)
 
@@ -119,9 +119,9 @@ Use HIGH_DIM_REPORTING_TEMPLATES:
 
 ## Technique: Elastic net + nested CV (\(p \gg n\) prediction)
 
-Elastic net with nested CV asks whether proteomics can predict case/control with honest internal performance when \(p \gg n\). Use `glmnet` inside nested CV for exploratory risk stratification or hypothesis for external validation — not for causal inference or diagnostic approval without an external cohort. Nested CV provides an internally honest AUC when tuning λ; optimism remains for external transport.
+Elastic net with nested CV asks whether proteomics can predict case/control with honest internal performance when \(p \gg n\). Use `glmnet` inside nested CV for exploratory risk stratification or hypothesis for external validation; not for causal inference or diagnostic approval without an external cohort. Nested CV provides an internally honest AUC when tuning λ; optimism remains for external transport.
 
-**Practice read:** integrated omics slides often show only the volcano. Decision-makers need the stop/go gates: batch overlap, discovery count with/without adjustment, PPV, Tier 1 clones, in that order.
+Integrated omics slides often show only the volcano. Decision-makers need the stop/go gates: batch overlap, discovery count with/without adjustment, PPV, Tier 1 clones, in that order.
 
 ### Wrong analysis ⚠
 

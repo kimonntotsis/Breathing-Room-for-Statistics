@@ -4,13 +4,13 @@
 
 ## Opening scene: proportions that sum to one
 
-Flow summaries arrive: sixteen cell populations as percentages per participant. A bar chart shows "more neutrophils in cases." Mei asks whether the increase is composition — more neutrophils **within** patients — or different patient mix. Pseudoreplication waits in the per-cell file.
+Flow summaries arrive: sixteen cell populations as percentages per participant. A bar chart shows "more neutrophils in cases." Mei asks whether the increase is composition, more neutrophils **within** patients, or different patient mix. Pseudoreplication waits in the per-cell file.
 
 ---
 
 ## Why this chapter
 
-Flow data are compositional and hierarchical. This chapter teaches participant-level summaries, drift checks, and when the per-cell toy file is only a warning — not the primary analysis.
+Flow data are compositional and hierarchical. This chapter teaches participant-level summaries, drift checks, and when the per-cell toy file is only a warning; not the primary analysis.
 
 ---
 
@@ -39,7 +39,7 @@ The chapter script compares two analysis units on the same CASTOR-HD toy per-cel
 | 4 | Adjust for drift (run day/batch) when measured |
 | **n in CASTOR-HD** | 120 participants in `flowcytometry_summary.csv` |
 
-**Practice read:** "Among 120 people, cases had a higher median monocyte fraction" - this is the claim you can defend.
+"Among 120 people, cases had a higher median monocyte fraction" - this is the claim you can defend.
 
 ### Worked example (CASTOR-HD participant models)
 
@@ -63,7 +63,7 @@ Report **participant *n***, not cell event counts. The pseudo-replication demo i
 | 3 | Report **n = thousands of cells** and tiny p-values |
 | **Why it fails** | Cells from the same person are correlated; SEs are far too small |
 
-**Practice read:** "We studied 6,000 cells" sounds impressive but does **not** mean 6,000 independent patients.
+"We studied 6,000 cells" sounds impressive but does **not** mean 6,000 independent patients.
 
 ### Teaching demonstration (script output)
 
@@ -87,9 +87,9 @@ The pseudo-replication model will show a much smaller p-value and misleading pre
 
 ## Technique: Participant-level summary analysis (default)
 
-Participant-level summary analysis asks whether cell-type proportions or marker medians differ between groups. The unit of analysis is **one row per participant**; outcomes are proportions (0–1) or continuous marker summaries in independent groups, with optional adjustment for covariates and drift. Use `lm(logit(p) ~ group + batch)` for teaching or beta regression for publication. This is the primary reporting approach — transparent, supports CI and covariates — but it does not prove mechanistic cell identity or causal immune pathways, and it should not claim new cell types from one embedding.
+Participant-level summary analysis asks whether cell-type proportions or marker medians differ between groups. The unit of analysis is **one row per participant**; outcomes are proportions (0–1) or continuous marker summaries in independent groups, with optional adjustment for covariates and drift. Use `lm(logit(p) ~ group + batch)` for teaching or beta regression for publication. This is the primary reporting approach, transparent, supports CI and covariates, but it does not prove mechanistic cell identity or causal immune pathways, and it should not claim new cell types from one embedding.
 
-**Practice read:** summaries like "higher monocyte fraction" are interpretable, but they are not a replacement for validated immunophenotyping.
+summaries like "higher monocyte fraction" are interpretable, but they are not a replacement for validated immunophenotyping.
 
 ### Caveats box
 
@@ -145,7 +145,7 @@ Use Template C in HIGH_DIM_REPORTING_TEMPLATES.
 
 ## Technique: Compositional structure (proportions sum to 1)
 
-When you measure five cell-type proportions, they are **not independent**: if monocytes go up, something else must go down. For most respiratory papers, prespecify 1–3 populations for primary inference and treat the rest as exploratory. When the core question is overall immune rebalancing, consider compositional data analysis (log-ratio transforms, Dirichlet models). These methods help interpret changes in one population given the whole — not which population "caused" the shift.
+When you measure five cell-type proportions, they are **not independent**: if monocytes go up, something else must go down. For most respiratory papers, prespecify 1–3 populations for primary inference and treat the rest as exploratory. When the core question is overall immune rebalancing, consider compositional data analysis (log-ratio transforms, Dirichlet models). These methods help interpret changes in one population given the whole; not which population "caused" the shift.
 
 ---
 

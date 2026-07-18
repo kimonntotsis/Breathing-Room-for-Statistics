@@ -4,13 +4,13 @@
 
 ## Opening scene: the partner wants a risk score
 
-An industry collaborator loves the CASTOR baseline variables. *"Can we predict twelve-month exacerbation for clinic triage?"* Different question from *"Does treatment reduce exacerbation?"* Mei pulls up Story 2 from the grant appendix: random forest, training-set AUC, no calibration — a deck that cannot answer *"what risk for this patient?"*
+An industry collaborator loves the CASTOR baseline variables. *"Can we predict twelve-month exacerbation for clinic triage?"* Different question from *"Does treatment reduce exacerbation?"* Mei pulls up Story 2 from the grant appendix: random forest, training-set AUC, no calibration, a deck that cannot answer *"what risk for this patient?"*
 
 ---
 
 ## Why this chapter
 
-Prediction and inference share code but not goals. This chapter is where you evaluate discrimination **and** calibration, and where you refuse causal language for a risk score.
+Prediction and inference share code but not goals. Evaluate discrimination **and** calibration here, and refuse causal language for a risk score.
 
 ---
 
@@ -57,11 +57,11 @@ For **p ≫ n** omics prediction (1000+ proteins, few patients), use nested CV a
 
 ## Technique: Binary prediction model (general)
 
-**Question:** What is P(exacerbation in 12 months | baseline predictors)? **Output:** predicted risk on **held-out** data — not an OR paragraph [@steyerberg2019clinical].
+**Question:** What is P(exacerbation in 12 months | baseline predictors)? **Output:** predicted risk on **held-out** data; not an OR paragraph [@steyerberg2019clinical].
 
 Use `glm(..., family=binomial)` + `predict(..., type="response")`. Predictors must be measured **before** the outcome window; tune and select features **inside train** only. Success = calibration **and** discrimination (AUC), not training-set fit.
 
-CASTOR has ~18 events / 350 — models overfit easily. Aim ≥10–15 events per predictor; be skeptical below [@harrell2015rms]. AUC of 0.85 on four test events is not deployable.
+CASTOR has ~18 events / 350, models overfit easily. Aim ≥10–15 events per predictor; be skeptical below [@harrell2015rms]. AUC of 0.85 on four test events is not deployable.
 
 **Common mistakes:** report training AUC; tune λ or trees on full data then split; cite RF importance as biomarker discovery; trust OR-based risk without calibration.
 
@@ -120,7 +120,7 @@ Follow TRIPOD for transparent prediction reporting [@moons2015tripod]:
 
 **Rule:** never compare models tuned on different information or evaluated on training rows. With CASTOR's low EPV (~3.5 events per predictor in the training split), **complex models often tie or lose to logistic**; that is a feature, not a bug.
 
-**LASSO** (`cv.glmnet`, λ~1se on train): pulls weak predictors toward zero when many candidates exist — not when CASTOR has four predictors and ~14 train events. **Trees** (`rpart`): interpretable if–then rules; unstable with sparse events — keep shallow (`cp`, `minbucket`). **Random forest** and **XGBoost** (optional): nonlinear ensembles; often better ranking but opaque; variable importance ≠ causality. Same calibration standards as logistic; install `xgboost` only for the teaching shootout.
+**LASSO** (`cv.glmnet`, λ~1se on train): pulls weak predictors toward zero when many candidates exist; not when CASTOR has four predictors and ~14 train events. **Trees** (`rpart`): interpretable if–then rules; unstable with sparse events, keep shallow (`cp`, `minbucket`). **Random forest** and **XGBoost** (optional): nonlinear ensembles; often better ranking but opaque; variable importance ≠ causality. Same calibration standards as logistic; install `xgboost` only for the teaching shootout.
 
 ```r
 source("R/examples/ch09_prediction.R")
@@ -128,9 +128,9 @@ source("R/examples/ch09_prediction.R")
 
 ---
 
-## Technique: Discrimination and calibration (Tier A)
+## Technique: Discrimination and calibration 
 
-**Discrimination (AUC):** how well the model **ranks** cases above non-cases — good for triage ordering, not enough to trust the percentage shown to patients. With ~4 test events, bootstrap AUC CIs are wide or unstable.
+**Discrimination (AUC):** how well the model **ranks** cases above non-cases, good for triage ordering, not enough to trust the percentage shown to patients. With ~4 test events, bootstrap AUC CIs are wide or unstable.
 
 **Calibration:** do predicted probabilities match observed event rates? TRIPOD expects calibration when a model informs treatment thresholds [@steyerberg2019clinical]. Report binned predicted vs observed (3–5 bins when events sparse), Brier score, and figure `ch09_calibration_logistic.png`.
 
@@ -141,7 +141,7 @@ source("R/examples/ch09_prediction.R")
 | **Wrong** | Model AUC bar chart shootout | Whether predicted **risks** match observed event rates |
 | **Right** | Calibration plot on test set | Discrimination (AUC) if shown without calibration |
 
-**Practice read:** high AUC alone does not tell a pulmonologist whether “20% risk” means 20% or 5%.
+High AUC alone does not tell a pulmonologist whether “20% risk” means 20% or 5%.
 
 ---
 
@@ -241,7 +241,7 @@ Optional: `install.packages("xgboost")` to include gradient boosting in the shoo
 | **Decision curve analysis (DCA)** | Threshold-based treat/don't-treat | Separates discrimination from **net benefit** |
 | Net benefit | Screening or triage policies | Requires explicit harm/cost of false positives |
 
-**Plain language:** DCA asks whether using the model improves decisions versus treating everyone or no one at a given risk threshold [@steyerberg2019clinical]. You do not need DCA in every teaching exercise, but reviewers increasingly ask for it in deployment claims.
+DCA asks whether using the model improves decisions versus treating everyone or no one at a given risk threshold [@steyerberg2019clinical]. You do not need DCA in every teaching exercise, but reviewers increasingly ask for it in deployment claims.
 
 ### Validation designs
 

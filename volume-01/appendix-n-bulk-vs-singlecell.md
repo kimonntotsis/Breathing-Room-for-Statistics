@@ -21,7 +21,7 @@ number-sections: false
 - **DE:** DESeq2 / limma-voom on integer counts ([Appendix L](appendix-l-omics-analyst-track.md))
 - **Limit:** cell-type mixing: a DE signal might be driven by **composition** (more neutrophils in cases) not within-cell expression
 
-**Practice read:** bulk DE in severe asthma/COPD often needs **cell proportion covariates** or deconvolution before claiming within-cell regulation.
+bulk DE in severe asthma/COPD often needs **cell proportion covariates** or deconvolution before claiming within-cell regulation.
 
 ## Single-cell RNA-seq (out of scope: but here is the routing)
 

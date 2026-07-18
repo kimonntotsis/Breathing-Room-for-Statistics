@@ -6,17 +6,17 @@
 
 Nine hundred twenty proteins. Forty-one nominally significant. No batch column attached. Dr Rivera forwards the PDF to Mei with one line: *"Is this our subgroup analysis now?"*
 
-This chapter is the omics discovery workflow: per-feature models, FDR, volcano plots as **triage**, and language that separates discovery from the week-12 FEV₁ primary.
+The omics discovery workflow: per-feature models, FDR, volcano plots as **triage**, and language that separates discovery from the week-12 FEV₁ primary.
 
 ---
 
 ## Why this chapter
 
-Volume intimidates; estimands do not change. CASTOR-HD teaches defensible differential analysis when features outnumber patients — and what to demand before you fund validation.
+Volume intimidates; estimands do not change. CASTOR-HD teaches defensible differential analysis when features outnumber patients, and what to demand before you fund validation.
 
-**Two tracks:** Figures and code here use per-feature `lm` / `glm.nb` loops to teach FDR workflow. **Appendix L** reruns the same files with DESeq2, limma-voom, and fgsea — trust Appendix L for production RNA counts; use this chapter's teaching volcanoes for investigator literacy only.
+**Two tracks:** Figures and code here use per-feature `lm` / `glm.nb` loops to teach FDR workflow. **Appendix L** reruns the same files with DESeq2, limma-voom, and fgsea, trust Appendix L for production RNA counts; use this chapter's teaching volcanoes for investigator literacy only.
 
-Volcano plots are **triage**, not treatment decisions. Zero FDR hits after batch adjustment is honest. BH-FDR controls a **family** — state how many features were tested. Run batch sensitivity (Chapter 14) before biological interpretation. LOD/absent proteins are not "low expression"; do not code below-detection as zero without an assay rule.
+Volcano plots are **triage**, not treatment decisions. Zero FDR hits after batch adjustment is honest. BH-FDR controls a **family**, state how many features were tested. Run batch sensitivity (Chapter 14) before biological interpretation. LOD/absent proteins are not "low expression"; do not code below-detection as zero without an assay rule.
 
 > **How to read this chapter:** Workflow and one full FDR technique first; RNA/proteomics decision table second; R lab last. [Quick reference](#quick-reference-methods-in-this-chapter) before exercises. Production pipelines: Appendix L.
 
@@ -37,9 +37,9 @@ Volcano plots are **triage**, not treatment decisions. Zero FDR hits after batch
 
 **Question:** Which features differ between groups, by how much, with multiplicity control?
 
-One model per protein/gene with group + prespecified covariates (+ batch when identifiable). Report estimate, 95% CI, *p*, *n* used. Apply BH FDR across **all** features tested (`p.adjust(p, method="BH")`). Discovery list for follow-up — not mechanistic proof.
+One model per protein/gene with group + prespecified covariates (+ batch when identifiable). Report estimate, 95% CI, *p*, *n* used. Apply BH FDR across **all** features tested (`p.adjust(p, method="BH")`). Discovery list for follow-up; not mechanistic proof.
 
-**Practice read:** FDR limits false discoveries across many tests — it does not tell you which marker is clinically useful or which volcano point is causal.
+FDR limits false discoveries across many tests, it does not tell you which marker is clinically useful or which volcano point is causal.
 
 **Caveats:** batch/plate often drives "significant" features; LOD missingness can mimic group differences; small *n* with huge *p* → unstable ranks; confounding from smoking/age/therapy.
 
@@ -63,7 +63,7 @@ top <- readr::read_csv("volume-01/tables/ch13_proteomics_top_table.csv")
 sum(top$q < 0.05, na.rm = TRUE) # ~25 on prespecified panel (teaching data)
 
 rna <- readr::read_csv("volume-01/tables/ch13_rnaseq_top_table.csv")
-sum(rna$q < 0.05, na.rm = TRUE) # over-calls vs DESeq2 — see method compare
+sum(rna$q < 0.05, na.rm = TRUE) # over-calls vs DESeq2, see method compare
 ```
 
 A collaborator emails “we have 47 significant proteins.” Ask for effect sizes, q-values, and whether batch was in the model. Zero FDR hits after batch adjustment is a valid result worth reporting.

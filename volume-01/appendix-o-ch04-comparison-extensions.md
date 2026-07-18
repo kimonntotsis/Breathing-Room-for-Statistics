@@ -54,11 +54,11 @@ Standard Ch 4 tests assume **independent** observations. Respiratory studies oft
 | **Report** | Number of **clusters** and patients; ICC if reported; CI from cluster-aware model |
 | **Avoid when** | Only 2–3 clusters (unstable); treating cluster members as independent (SE too small) |
 
-**Plain language:** patients in the same ICU ward correlate; analyse at ward level or use a model that respects nesting.
+patients in the same ICU ward correlate; analyse at ward level or use a model that respects nesting.
 
-**Precise language:** ignore clustering → anti-conservative SEs and inflated significance [@harrell2015rms].
+Formally: ignore clustering → anti-conservative SEs and inflated significance [@harrell2015rms].
 
-**Practice read:** “n = 400 patients” may hide “8 wards”; ask how many **units** were randomised.
+“n = 400 patients” may hide “8 wards”; ask how many **units** were randomised.
 
 #### Wrong analysis ⚠
 
@@ -80,9 +80,9 @@ Standard Ch 4 tests assume **independent** observations. Respiratory studies oft
 | **Report** | Mean change + 95% CI; *n* pairs; BD protocol (dose, wait time) |
 | **Avoid when** | Carryover between periods in multi-period crossover without washout |
 
-**Plain language:** same patient, two manoeuvres; use a **paired** test, not two independent groups.
+same patient, two manoeuvres; use a **paired** test, not two independent groups.
 
-**Practice read:** ATS/ERS BD reversibility uses within-patient change; do not split pre and post into fictional “groups.”
+ATS/ERS BD reversibility uses within-patient change; do not split pre and post into fictional “groups.”
 
 CASTOR paired example: `R/examples/ch04_comparing_groups.R` and Figure (`ch04_paired_bronchodilator.png`).
 
@@ -99,9 +99,9 @@ CASTOR paired example: `R/examples/ch04_comparing_groups.R` and Figure (`ch04_pa
 | **Report** | Margin Δ, NI conclusion yes/no, CI relative to Δ |
 | **Avoid when** | Declaring equivalence from superiority *p* > 0.05 |
 
-**Plain language:** “Not significantly different” ≠ “equivalent.” You must prespecify how much worse is acceptable.
+“Not significantly different” ≠ “equivalent.” You must prespecify how much worse is acceptable.
 
-**Practice read:** device and inhaler NI trials live or die on the **margin**, not the *p*-value from a superiority test.
+device and inhaler NI trials live or die on the **margin**, not the *p*-value from a superiority test.
 
 #### Reporting template (non-inferiority, continuous FEV1)
 
@@ -118,10 +118,10 @@ See also [Chapter 8](chapters/08-validation-reporting.md) reporting checklist fo
 | Design feature | Why Ch 4 methods fail | Handbook chapter |
 |---|---|---|
 | Repeated measures | observations not independent | [Ch 18](chapters/18-longitudinal-mixed-models.md) mixed models / GEE |
-| Multi-centre clustering | SEs too small if ignored | Cluster-robust SE / `(1 \| centre)` ; this chapter + Ch 18 |
+| Multi-centre clustering | SEs too small if ignored | Cluster-robust SE / `(1 \| centre)`; this chapter + Ch 18 |
 | Time-to-event endpoints | censoring | [Ch 19](chapters/19-survival-analysis.md) survival analysis |
 
 ### Equivalence (superiority test insufficient)
 
-If the scientific goal is **equivalence** (two-sided margin), prespecify bounds and use an equivalence framework. A non-significant *p*-value from a superiority test is not evidence of equivalence [@harrell2015rms] ; use the [NI template above](#technique-non-inferiority-and-equivalence-trials).
+If the scientific goal is **equivalence** (two-sided margin), prespecify bounds and use an equivalence framework. A non-significant *p*-value from a superiority test is not evidence of equivalence [@harrell2015rms]; use the [NI template above](#technique-non-inferiority-and-equivalence-trials).
 

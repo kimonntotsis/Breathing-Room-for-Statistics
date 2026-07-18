@@ -4,7 +4,7 @@
 
 ## Opening scene: five manuscripts, one cohort
 
-By now you have met CASTOR as trial, registry, and omics substudy. This chapter is **five manuscripts at different stages** — interim deck, journal submission, sponsor omics thread — each walked through estimand, analysis path, Results template, and explicit **does not prove**.
+By now you have met CASTOR as trial, registry, and omics substudy. You get **five manuscripts at different stages**: interim deck, journal submission, sponsor omics thread, each walked through estimand, analysis path, Results template, and explicit **does not prove**.
 
 Read Case A if you read nothing else. You saw the week-12 numbers in Chapter 4; here the question is whether the **Discussion** survives a reviewer who reads MCID before *p*-values.
 
@@ -12,7 +12,7 @@ Read Case A if you read nothing else. You saw the week-12 numbers in Chapter 4; 
 
 ## Why this chapter
 
-Technique chapters teach parts. Case studies teach **sequence** — and the sign-off checklist investigators use before Methods goes to the journal.
+Technique chapters teach parts. Case studies teach **sequence**, and the sign-off checklist investigators use before Methods goes to the journal.
 
 ---
 
@@ -40,7 +40,7 @@ Reporting frameworks by design: CONSORT (RCT) [@schulz2010consort]; STROBE (coho
 
 # Case study A: Randomised trial: FEV1 comparison
 
-> **In the room (journal submission):** Reviewer 2 highlights the forest-plot colour and writes: *“Non-significant but numerically favourable — discuss clinical relevance.”* Rivera forwards the line to Mei. *“They want MCID language, not another *t*-test,”* Mei replies. *“We report the prespecified mean difference and CI; superiority was inconclusive at α = 0.05 — we do not claim equivalence unless the SAP said so.”*
+> **In the room (journal submission):** Reviewer 2 highlights the forest-plot colour and writes: *“Non-significant but numerically favourable, discuss clinical relevance.”* Rivera forwards the line to Mei. *“They want MCID language, not another *t*-test,”* Mei replies. *“We report the prespecified mean difference and CI; superiority was inconclusive at α = 0.05, we do not claim equivalence unless the SAP said so.”*
 
 ### Clinical question
 
@@ -434,7 +434,7 @@ Sign-off figure: `viz_signoff_checklist.png` ([Sign-off workflow](#sign-off-work
 | [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
 | [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
 | [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
-| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups — claim discipline |
+| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups; claim discipline |
 | [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
 | [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
 | [Chapter 17: Integrated CASTOR-HD](17-integrated-castor-hd.md) | Full omics pipeline story |

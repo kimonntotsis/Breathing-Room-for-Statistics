@@ -4,15 +4,15 @@
 
 ## Opening scene: twelve percent missing FEV₁
 
-Week-12 spirometry missing for forty-eight participants — clinic closure, COVID, plain refusal. ITT says analyse everyone randomised. Mei maps missingness by arm and diagnosis before choosing complete-case, multiple imputation, or a principled sensitivity.
+Week-12 spirometry missing for forty-eight participants, clinic closure, COVID, plain refusal. ITT says analyse everyone randomised. Mei maps missingness by arm and diagnosis before choosing complete-case, multiple imputation, or a principled sensitivity.
 
 ---
 
 ## Why this chapter
 
-Missing data is where ITT meets reality. This chapter connects patterns, mechanisms, and sensitivity — so missingness is a result, not a footnote. Missing spirometry in severe COPD often reflects **inability to test**, not random noise; LOCF on FEV1 trajectories can fake stability. Structural missingness (e.g. sputum in non-producers) must not be imputed to the full cohort. **MAR is not testable** — defend with subject-matter reasoning. Median imputation is **sensitivity only**; production default is **MICE + Rubin pooling** when MAR is plausible. Imputation belongs **inside CV folds** for prediction (Ch 9). Table 1 should show missingness by severity and arm before the primary model is debated; report enrolled *n*, analysed *n*, and sensitivity side-by-side (Appendix D checklists support DAP/manuscript sign-off).
+Missing data is where ITT meets reality. This chapter connects patterns, mechanisms, and sensitivity, so missingness is a result, not a footnote. Missing spirometry in severe COPD often reflects **inability to test**, not random noise; LOCF on FEV1 trajectories can fake stability. Structural missingness (e.g. sputum in non-producers) must not be imputed to the full cohort. **MAR is not testable**, defend with subject-matter reasoning. Median imputation is **sensitivity only**; production default is **MICE + Rubin pooling** when MAR is plausible. Imputation belongs **inside CV folds** for prediction (Ch 9). Table 1 should show missingness by severity and arm before the primary model is debated; report enrolled *n*, analysed *n*, and sensitivity side-by-side (Appendix D checklists support DAP/manuscript sign-off).
 
-> **Consult a statistician when:** MNAR tipping-point analysis, joint modelling of dropout, pattern-mixture models, or imputation in cluster/survival settings is on the SAP. This chapter teaches **describe → assume → sensitivity** — not every missing-data method.
+> **Consult a statistician when:** MNAR tipping-point analysis, joint modelling of dropout, pattern-mixture models, or imputation in cluster/survival settings is on the SAP. This chapter teaches **describe → assume → sensitivity**; not every missing-data method.
 
 ---
 
@@ -101,9 +101,9 @@ DAPs should state LOD handling **separately** from MAR/MNAR discussion. Sensitiv
 
 ## Technique: Missing data analysis and multiple imputation (overview)
 
-Missing-data analysis produces estimates under explicit assumptions and stress-tests them with sensitivity analyses. Key quantities are % missing per variable, enrolled *n*, and analysed *n*. **MCAR** means missingness is unrelated to any values; **MAR** means it depends on observed data only; **MNAR** means it depends on the missing value itself. The teaching script contrasts complete-case `lm` vs median imputation; production default is MICE (`mice` package) with Rubin pooling when MAR is plausible. Use whenever Table 1 or outcomes have non-trivial missingness; never treat single imputation as final when MNAR is plausible. MAR assumptions are not provable — sensitivity and design discussion are required.
+Missing-data analysis produces estimates under explicit assumptions and stress-tests them with sensitivity analyses. Key quantities are % missing per variable, enrolled *n*, and analysed *n*. **MCAR** means missingness is unrelated to any values; **MAR** means it depends on observed data only; **MNAR** means it depends on the missing value itself. The teaching script contrasts complete-case `lm` vs median imputation; production default is MICE (`mice` package) with Rubin pooling when MAR is plausible. Use whenever Table 1 or outcomes have non-trivial missingness; never treat single imputation as final when MNAR is plausible. MAR assumptions are not provable, sensitivity and design discussion are required.
 
-**Practice read:** if sicker patients are missing spirometry, "complete-case FEV1" may describe **healthier** subsets, not the enrolled trial population.
+If sicker patients are missing spirometry, "complete-case FEV1" may describe **healthier** subsets, not the enrolled trial population.
 
 ### Worked example (CASTOR)
 
@@ -260,7 +260,7 @@ Higher missingness in severe obstruction supports MAR-like missingness tied to o
 | **Wrong** | Enrolled vs analysed *n* bars only | **Who** is missing and whether pattern clusters |
 | **Right** | Missingness strip by diagnosis × arm |: (informs MAR/MNAR scepticism) |
 
-**Practice read:** if analysed *n* drops mainly in severe obstruction, complete-case regression is not a neutral default.
+If analysed *n* drops mainly in severe obstruction, complete-case regression is not a neutral default.
 
 ![Smoking coefficient: complete-case vs median imputation](../figures/ch20_smoking_coef_sensitivity.png)
 

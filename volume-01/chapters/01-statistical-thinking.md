@@ -4,7 +4,7 @@
 
 ## Opening scene: Monday morning, wrong tests on every column
 
-Dr Okonkwo’s registry export lands in Mei Lin’s inbox: twelve columns, four hundred rows, one instruction from a student — *“Run stats on everything by smoking.”* The slide deck for lab meeting shows six *p*-values. FEV₁ looks “significant.” So does exacerbation coded 0/1, analysed as if it were a Gaussian outcome. Exacerbation **counts** get the same Welch *t*-test. No one has written the estimand.
+Dr Okonkwo’s registry export lands in Mei Lin’s inbox: twelve columns, four hundred rows, one instruction from a student, *“Run stats on everything by smoking.”* The slide deck for lab meeting shows six *p*-values. FEV₁ looks “significant.” So does exacerbation coded 0/1, analysed as if it were a Gaussian outcome. Exacerbation **counts** get the same Welch *t*-test. No one has written the estimand.
 
 Dr Rivera stops on slide 4. *“So smoking affects everything?”* Mei replies: *“We tested everything. We answered nothing. Pick one question first.”*
 
@@ -14,7 +14,7 @@ That hallway moment is why this chapter exists. Later chapters assume you have a
 
 ## Why this chapter
 
-Investigators use this chapter to align with their analyst before recruitment closes. Analysts use it to push back when a protocol says only “compare groups.” You will separate three layers every analysis has — clinical, statistical, and data — and you will meet **CASTOR**, the workflow and synthetic cohort that carry the rest of the book.
+Investigators use this chapter to align with their analyst before recruitment closes. Analysts use it to push back when a protocol says only “compare groups.” You will separate three layers every analysis has, clinical, statistical, and data, and you will meet **CASTOR**, the workflow and synthetic cohort that carry the rest of the book.
 
 *"Is FEV₁ lower in smokers?"* is not yet an analysis until you specify population, contrast, timing, and what decision the answer would inform. Write the estimand in one sentence **before** you open a method router.
 
@@ -24,11 +24,11 @@ Investigators use this chapter to align with their analyst before recruitment cl
 
 Every analysis has three layers. When they disagree, the output looks fine and the conclusion is still wrong. Mei checks alignment **before** opening R.
 
-**Clinical layer:** what would change in practice if the answer were known? Dr Rivera might need a regulatory story on exacerbations while a steering deck highlights symptom scores — that is a protocol conversation, not a menu choice in SPSS.
+**Clinical layer:** what would change in practice if the answer were known? Dr Rivera might need a regulatory story on exacerbations while a steering deck highlights symptom scores, that is a protocol conversation, not a menu choice in SPSS.
 
 **Statistical layer:** what exact contrast are you estimating? Mean FEV₁ at week 12 is not the same estimand as risk difference on ≥1 exacerbation, even on the same spreadsheet.
 
-**Data layer:** what was measured, in whom, when — and what is missing? Post-bronchodilator FEV₁ in one arm and pre-BD in another is a data failure no test repairs.
+**Data layer:** what was measured, in whom, when, and what is missing? Post-bronchodilator FEV₁ in one arm and pre-BD in another is a data failure no test repairs.
 
 The table below is a checklist when layers drift apart:
 
@@ -48,7 +48,7 @@ Sponsor timelines compress analysis into a test name. The durable step is five m
 
 > **Chronic lung disease (CLD) and beyond.** CASTOR is **COPD-flavoured** in the synthetic data so examples stay comparable. The same CASTOR path applies to **CLD** and to other pulmonary work when endpoints align: spirometry, exacerbation rates, longitudinal follow-up, survival, not only when the protocol says “COPD.” Match **estimand and design** first; swap disease wording in your Methods.
 
-**Real registries deceive if you analyse them like CASTOR.** CASTOR omits site clustering, spirometry QC failures, and protocol deviations on purpose. **POLLUX** / **APATE** is the handbook’s prose-only vignette of that mess — read it before signing off real Methods (Handbook resources). Extended “in the room” stories: Appendix K (Handbook resources).
+**Real registries deceive if you analyse them like CASTOR.** CASTOR omits site clustering, spirometry QC failures, and protocol deviations on purpose. **POLLUX** / **APATE** is the handbook’s prose-only vignette of that mess: read it before signing off real Methods (Handbook resources). Extended “in the room” stories: Appendix K (Handbook resources).
 
 **C. Clinical question.** One sentence on what would change in practice if the answer were known. Endpoints and estimands follow from that sentence, not from a software menu.
 
@@ -74,7 +74,7 @@ The figure below expands the six letters into eight operational steps (descripti
 
 ## PICO for respiratory studies
 
-PICO is not a test — it is a **target**. Mei asks investigators to fill four cells on one slide before anyone names a model:
+PICO is not a test, it is a **target**. Mei asks investigators to fill four cells on one slide before anyone names a model:
 
 | Element | Question | COPD example |
 |---------|----------|--------------|
@@ -83,7 +83,7 @@ PICO is not a test — it is a **target**. Mei asks investigators to fill four c
 | **C** Comparator | Compared to what? | Standard care, placebo, active control |
 | **O** Outcome | What endpoint? | FEV1 at 12 weeks; ≥1 moderate/severe exacerbation in 12 months |
 
-If the **O** cell holds three endpoints, you do not have a PICO yet — you have a wish list. Write PICO before choosing software [@celli2015copdresearch].
+If the **O** cell holds three endpoints, you do not have a PICO yet, you have a wish list. Write PICO before choosing software [@celli2015copdresearch].
 
 ### Reporting template
 
@@ -95,7 +95,7 @@ If the **O** cell holds three endpoints, you do not have a PICO yet — you have
 
 ## Estimands: the target of inference
 
-The **estimand** is the number you would put in the abstract if you could know the truth — not the *p*-value, not “significance,” not the test statistic. Under trial guidance (ICH E9(R1)), estimands tie treatment, population, variable, and intercurrent events; this handbook uses plain language first [@schulz2010consort].
+The **estimand** is the number you would put in the abstract if you could know the truth; not the *p*-value, not “significance,” not the test statistic. Under trial guidance (ICH E9(R1)), estimands tie treatment, population, variable, and intercurrent events; this handbook uses plain language first [@schulz2010consort].
 
 Ask your analyst: *“What one number answers my question?”* If they cannot say, pause.
 
@@ -104,9 +104,9 @@ Ask your analyst: *“What one number answers my question?”* If they cannot sa
 | COPD RCT | Mean difference in FEV1 (L) at 12 weeks: intervention − control, ITT population |
 | Observational cohort | Adjusted odds ratio for ≥1 exacerbation comparing current smokers to never-smokers, conditional on age and FEV1 % predicted |
 | Bronchodilator test | Mean change in FEV1 (post − pre) on same visit |
-| Prediction model (Ch 9) | 12-month exacerbation risk for a patient with specified covariates — **not** the same as an OR estimand |
+| Prediction model (Ch 9) | 12-month exacerbation risk for a patient with specified covariates, **not** the same as an OR estimand |
 
-Reporting *p* = 0.06 without an effect size is not reporting an estimand. Report the estimate and 95% CI in Results — not *p* alone.
+Reporting *p* = 0.06 without an effect size is not reporting an estimand. Report the estimate and 95% CI in Results; not *p* alone.
 
 ---
 
@@ -120,7 +120,7 @@ Reporting *p* = 0.06 without an effect size is not reporting an estimand. Report
 | **Cross-sectional** | Prevalence, description | No temporal order for causation | Ch 3-5 |
 | **Clustered** | Real-world multi-centre | Wrong SEs if ignored | Vol II |
 
-Design **limits language**. An adjusted logistic OR from an observational cohort is an **association** — Mei will not let you call it proof that stopping smoking **causes** fewer exacerbations without a design that supports that claim [@vonelm2007strobe].
+Design **limits language**. An adjusted logistic OR from an observational cohort is an **association**. Mei will not let you call it proof that stopping smoking **causes** fewer exacerbations without a design that supports that claim [@vonelm2007strobe].
 
 Full data-structure detail: Chapter 2.
 
@@ -308,10 +308,10 @@ The CASTOR trial protocol is taking shape: primary FEV₁ at week 12, secondary 
 |----------|----------------|
 | [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
 | [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
-| [Appendix K: In the room — short stories](../appendix-k-in-the-room-stories.md) | Extended vignettes of common analysis mistakes |
+| [Appendix K: In the room, short stories](../appendix-k-in-the-room-stories.md) | Extended vignettes of common analysis mistakes |
 | [METHOD_MAP](../METHOD_MAP.md) | Full method inventory and decision-tree text |
 | [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
-| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry — what CASTOR deliberately hides |
+| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry, what CASTOR deliberately hides |
 
 ## Further reading
 

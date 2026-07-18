@@ -12,7 +12,7 @@ Twelve-month follow-up, censored at day 365, exacerbation events unevenly spaced
 
 Time-to-event endpoints need time in the model. CASTOR's `time_to_exacerbation.csv` teaches censoring, Cox models, and why a proportion bar is the wrong plot.
 
-> **Consult a statistician when:** you have competing events (death vs exacerbation), recurrent events, interval censoring, time-varying covariates, or fragile proportional-hazards assumptions. This chapter covers **first-event Cox** basics — not the full competing-risks literature.
+> **Consult a statistician when:** you have competing events (death vs exacerbation), recurrent events, interval censoring, time-varying covariates, or fragile proportional-hazards assumptions. This chapter covers **first-event Cox** basics; not the full competing-risks literature.
 
 ---
 
@@ -41,9 +41,9 @@ Time-to-event endpoints need time in the model. CASTOR's `time_to_exacerbation.c
 
 ## Technique: Kaplan-Meier
 
-Kaplan-Meier estimates what fraction remain event-free over time by group using `Surv(time, event)` — the product-limit estimator for \(S(t) = P(T > t)\) with right-censored data. Report survival probabilities at prespecified times and median survival if estimable. In R: `survival::survfit(Surv(time_days, event) ~ smoking, data)` with log-rank comparison via `survdiff`. Use for visual comparison and absolute risk extraction; use Cox for adjusted confounding control. KM does not prove causation.
+Kaplan-Meier estimates what fraction remain event-free over time by group using `Surv(time, event)`, the product-limit estimator for \(S(t) = P(T > t)\) with right-censored data. Report survival probabilities at prespecified times and median survival if estimable. In R: `survival::survfit(Surv(time_days, event) ~ smoking, data)` with log-rank comparison via `survdiff`. Use for visual comparison and absolute risk extraction; use Cox for adjusted confounding control. KM does not prove causation.
 
-**Practice read:** read off event-free probability at 6 and 12 months; compare arms visually before trusting a single *p*-value.
+Read off event-free probability at 6 and 12 months; compare arms visually before trusting a single *p*-value.
 
 ### Worked example (CASTOR extension)
 
@@ -67,9 +67,9 @@ summary(fit_km, times = c(180, 365))
 
 ## Technique: Cox proportional hazards
 
-Cox proportional hazards models the instantaneous hazard of first exacerbation adjusted for covariates, reporting hazard ratios with 95% CI. In R: `coxph(Surv(time_days, event) ~ smoking + fev1_pct + therapy + age, data)` with proportional hazards checked via `cox.zph`. Use for time-to-first-event with right censoring; avoid when competing events (death) dominate without a competing-risks model. HR > 1 means higher **rate**, not necessarily a specific absolute risk difference — report events and person-time. Cox does not prove causation.
+Cox proportional hazards models the instantaneous hazard of first exacerbation adjusted for covariates, reporting hazard ratios with 95% CI. In R: `coxph(Surv(time_days, event) ~ smoking + fev1_pct + therapy + age, data)` with proportional hazards checked via `cox.zph`. Use for time-to-first-event with right censoring; avoid when competing events (death) dominate without a competing-risks model. HR > 1 means higher **rate**, not necessarily a specific absolute risk difference; report events and person-time. Cox does not prove causation.
 
-**Practice read:** HR > 1 for smoking means higher **rate** of first exacerbation, not necessarily a specific absolute risk difference. Report events and person-time.
+HR > 1 for smoking means higher **rate** of first exacerbation, not necessarily a specific absolute risk difference. Report events and person-time.
 
 ### Worked example (CASTOR extension)
 
@@ -168,7 +168,7 @@ The y-axis is zoomed to the observed event-free range so curve separation is vis
 | **Wrong** | Bar chart of ever/never event % | When events occur; censored follow-up |
 | **Right** | KM curve with time on *x* |: (censoring explicit on step plot) |
 
-**Practice read:** treating censored patients as “no event” inflates the wrong bar; KM keeps them on the risk set until censoring.
+Treating censored patients as “no event” inflates the wrong bar; KM keeps them on the risk set until censoring.
 
 ![Cox model hazard ratios](../figures/ch19_cox_forest.png)
 
@@ -204,9 +204,9 @@ If global *p* is small, consider stratified Cox or time-varying coefficients (ad
 
 ## Technique: Competing risks (death vs exacerbation) {#technique-competing-risks-death-vs-exacerbation}
 
-When death prevents future exacerbations, standard Cox for "first exacerbation" treats death as censored and may **overstate** exacerbation risk. Use cause-specific Cox (hazard among survivors), Fine–Gray subdistribution HR (cumulative incidence), or cumulative incidence functions (CIF) by group — in R via `cmprsk`, `survival`, or `riskRegression`. When mortality is <1% and balanced, standard Cox may suffice with a sensitivity note.
+When death prevents future exacerbations, standard Cox for "first exacerbation" treats death as censored and may **overstate** exacerbation risk. Use cause-specific Cox (hazard among survivors), Fine–Gray subdistribution HR (cumulative incidence), or cumulative incidence functions (CIF) by group, in R via `cmprsk`, `survival`, or `riskRegression`. When mortality is <1% and balanced, standard Cox may suffice with a sensitivity note.
 
-**Practice read:** ask for **cumulative incidence curves** by arm, not only hazard ratios, when death rates differ [@harrell2015rms].
+Ask for **cumulative incidence curves** by arm, not only hazard ratios, when death rates differ [@harrell2015rms].
 
 ### Wrong analysis ⚠
 

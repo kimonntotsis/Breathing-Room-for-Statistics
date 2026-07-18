@@ -4,9 +4,9 @@ number-sections: false
 
 # Welcome {.unnumbered}
 
-You opened this book with a concrete problem. Good — that is how it is meant to work.
+You opened this book with a concrete problem. Good. That is how it is meant to work.
 
-Imagine a Tuesday steering meeting. Dr Elena Rivera presents interim CASTOR trial data: 400 adults with COPD, randomised to a new inhaled regimen or standard care, primary endpoint mean FEV₁ at week 12. A forest plot snippet is on slide 3. Someone asks, *“Can we call this a win?”* The statistician, Mei Lin, asks a different question first: *“What exactly are we estimating — and for whom?”*
+Imagine a Tuesday steering meeting. Dr Elena Rivera presents interim CASTOR trial data: 400 adults with COPD, randomised to a new inhaled regimen or standard care, primary endpoint mean FEV₁ at week 12. A forest plot snippet is on slide 3. Someone asks, *“Can we call this a win?”* The statistician, Mei Lin, asks a different question first: *“What exactly are we estimating, and for whom?”*
 
 That exchange is the whole handbook in miniature. **Question first. Method second. Software last. Limits always.**
 
@@ -22,7 +22,7 @@ It is **not** a linear statistics textbook from page 1 to page 800. It is a **st
 
 ## How to read it
 
-**If you want the narrative spine** — read in order:
+**If you want the narrative spine**: read in order:
 
 **Preface** → **Chapter 1** → **Chapter 2** → **Chapter 3** → **Chapter 4** → branch by your endpoint.
 
@@ -30,24 +30,24 @@ That path follows CASTOR from protocol argument to Table 1 to the primary compar
 
 ### Investigator fast path (before your next steering meeting)
 
-About **90 minutes**, no R required — same sequence as [Appendix J](appendix-j-investigator-minimum-path.md):
+About **90 minutes**, no R required, same sequence as [Appendix J](appendix-j-investigator-minimum-path.md):
 
 | # | Read | Time |
 |---|------|------|
-| 1 | [Chapter 1](chapters/01-statistical-thinking.md) — estimand + three layers | 20 min |
-| 2 | [Chapter 2](chapters/02-respiratory-data.md) — outcome routing table | 15 min |
-| 3 | [Chapter 3](chapters/03-descriptive-analysis.md) — Table 1 + missingness | 15 min |
-| 4 | [Chapter 4](chapters/04-comparing-groups.md) — opening + Quick reference | 20 min |
-| 5 | [Chapter 8](chapters/08-validation-reporting.md) — CIs + multiplicity | 15 min |
+| 1 | [Chapter 1](chapters/01-statistical-thinking.md), estimand + three layers | 20 min |
+| 2 | [Chapter 2](chapters/02-respiratory-data.md), outcome routing table | 15 min |
+| 3 | [Chapter 3](chapters/03-descriptive-analysis.md). Table 1 + missingness | 15 min |
+| 4 | [Chapter 4](chapters/04-comparing-groups.md), opening + Quick reference | 20 min |
+| 5 | [Chapter 8](chapters/08-validation-reporting.md). CIs + multiplicity | 15 min |
 | 6 | [Chapter 12 Case A](chapters/12-case-studies.md#case-study-a-randomised-trial-fev1-comparison) + sign-off checklist | 15 min |
 
 Then open Appendix B when a new endpoint appears on the slide deck.
 
-**If you already know your endpoint** — open Appendix B, find your outcome type, jump to that chapter. Read the **opening scene** anyway; it tells you what mistake the chapter exists to prevent.
+**If you already know your endpoint**, open Appendix B, find your outcome type, jump to that chapter. Read the **opening scene** anyway; it tells you what mistake the chapter exists to prevent.
 
-**If you are an investigator who will never run R** — Appendix J is the short read. Return here when you want the full estimand language in Chapter 1.
+**If you are an investigator who will never run R**. Appendix J is the short read. Return here when you want the full estimand language in Chapter 1.
 
-**If you are lost** — Appendix G lists every file. Use it once, then go back to the chapters.
+**If you are lost**. Appendix G lists every file. Use it once, then go back to the chapters.
 
 ---
 
@@ -59,7 +59,7 @@ Then open Appendix B when a new endpoint appears on the slide deck.
 | **Mei Lin** | Analyst; pushes estimands before test names |
 | **CASTOR** | Synthetic COPD-oriented trial data (`data/*.csv`) |
 | **CASTOR-HD** | Omics substudy on the same patients (Part VI) |
-| **APATE** | Prose-only messy registry — what CASTOR deliberately hides (POLLUX / APATE vignette) |
+| **APATE** | Prose-only messy registry, what CASTOR deliberately hides (POLLUX / APATE vignette) |
 
 Teaching names **CASTOR** (clean cohort) and **APATE** / **POLLUX** (messy reality) are explained in Chapter 1 and RECURRING_COHORT.
 
@@ -90,4 +90,4 @@ Teaching names **CASTOR** (clean cohort) and **APATE** / **POLLUX** (messy reali
 | [Appendix G: Handbook navigation](appendix-g-handbook-navigation.md) | Full file, dataset, and topic index |
 | [Appendix J: Investigator minimum path](appendix-j-investigator-minimum-path.md) | Shortest read for investigators who will not run R |
 | [RECURRING_COHORT](RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
-| [POLLUX / APATE vignette](POLLUX_VIGNETTE.md) | Prose-only messy registry — what CASTOR deliberately hides |
+| [POLLUX / APATE vignette](POLLUX_VIGNETTE.md) | Prose-only messy registry, what CASTOR deliberately hides |

@@ -10,7 +10,7 @@ CASTOR's marker panel arrives for exploratory work: thirty correlated proteins, 
 
 ## Why this chapter
 
-High-dimensional summaries are exploration tools, not endpoints. PCA and friends reduce noise before clustering or hypothesis tests — when you use them with batch awareness and modest claims.
+High-dimensional summaries are exploration tools, not endpoints. PCA and friends reduce noise before clustering or hypothesis tests, when you use them with batch awareness and modest claims.
 
 ---
 
@@ -48,13 +48,13 @@ Use this menu first, then read the relevant technique section.
 
 **Question:** What orthogonal directions capture most joint variation in many correlated continuous markers?
 
-PC1 is the weighted combination that separates patients most (eigenvector of the correlation matrix; scores are projections). Name an axis only after independent validation — it is a statistical summary, not a biological mechanism [@jolliffe2016pca].
+PC1 is the weighted combination that separates patients most (eigenvector of the correlation matrix; scores are projections). Name an axis only after independent validation, it is a statistical summary, not a biological mechanism [@jolliffe2016pca].
 
 **Use when:** visualisation, noise reduction, preprocessing before clustering (train only). **Avoid when:** confirmatory endpoint; mixed binary/continuous without encoding; replacing clinical diagnosis.
 
 **Caveats:** always `scale. = TRUE` when units differ; outliers and batch can drive top PCs [@mcshane2011biomarker]; p ≫ n needs regularized PCA; fit PCA on **train** only, then rotate test.
 
-**Practice read:** colour points by **batch** before phenotype. PCA on 30 markers dominated by one batch variable is a QC finding, not an endotype.
+Colour points by **batch** before phenotype. PCA on 30 markers dominated by one batch variable is a QC finding, not an endotype.
 
 **Methods template:** Markers were standardised (z-scores). PCA used the correlation matrix. Scree plot and cumulative variance guided component retention (exploratory) [@jolliffe2016pca].
 
@@ -70,38 +70,38 @@ summary(pca)
 
 ## Scree, loadings, and biplot (supporting PCA)
 
-**Choosing *k*:** scree elbow, cumulative variance (e.g. 80%), Kaiser (eigenvalue > 1) — rules disagree; retain components for **description**, not hypothesis tests. Never keep components until outcome regression is significant (circular).
+**Choosing *k*:** scree elbow, cumulative variance (e.g. 80%), Kaiser (eigenvalue > 1), rules disagree; retain components for **description**, not hypothesis tests. Never keep components until outcome regression is significant (circular).
 
 ![Scree plot: variance explained by component](../figures/ch10_scree.png)
 
 **Loadings and scores:** scores = patient position on component *k*; loadings = variable weights. High loading on M3 → M3 contributes strongly to that axis. Sign is arbitrary; varimax rotation (`psych::principal`, `rotate = "varimax"`) simplifies loadings for exploration only.
 
-**Biplot:** joint plot of patients and variables — useful for CASTOR `true_phenotype` visual check (teaching only). Colour by batch before phenotype.
+**Biplot:** joint plot of patients and variables, useful for CASTOR `true_phenotype` visual check (teaching only). Colour by batch before phenotype.
 
 ![PCA biplot: CASTOR marker panel](../figures/ch10_pca_biplot.png)
 
-**PC regression (preview):** regress outcome on first *k* PCs instead of all markers — loses direct marker interpretability; overfits if *k* chosen from same data.
+**PC regression (preview):** regress outcome on first *k* PCs instead of all markers, loses direct marker interpretability; overfits if *k* chosen from same data.
 
 ---
 
 ## Advanced options (when PCA is not enough)
 
-When the routing table above points beyond vanilla PCA, these are common in respiratory biomarker papers — decision logic only; none replace external validation.
+When the routing table above points beyond vanilla PCA, these are common in respiratory biomarker papers, decision logic only; none replace external validation.
 
 | Method | When | R pointer | Caveat |
 |--------|------|-----------|--------|
-| **Sparse PCA** | p ≫ n; interpretable loadings | `elasticnet::spca`, `PMA::SPC` | Tuning is flexible — document choices |
+| **Sparse PCA** | p ≫ n; interpretable loadings | `elasticnet::spca`, `PMA::SPC` | Tuning is flexible, document choices |
 | **Robust PCA** | Outliers / batch artefacts | `rrcov::PcaHubert` | Methods disagree on components |
 | **MCA** | Mostly categorical | `FactoMineR::MCA` | Axes reflect category frequencies |
 | **FAMD** | Mixed continuous + categorical | `FactoMineR::FAMD` | Scaling/weighting decisions matter |
 | **Logistic PCA** | Binary marker matrix | GLM-based latent packages | Convergence / identifiability |
-| **Kernel PCA / UMAP** | Nonlinear manifolds | Various | Visualisation only — not “biology axes” |
+| **Kernel PCA / UMAP** | Nonlinear manifolds | Various | Visualisation only; not “biology axes” |
 
 ---
 
 ## Supervised dimension reduction: Partial Least Squares (PLS)
 
-PLS is **not** an upgrade of PCA — components maximise covariance with an outcome Y. Use for prediction/exploration when many correlated predictors exist (`pls::plsr`; `mixOmics` for omics workflows). Fit **inside training folds** only; p ≫ n with few events inflates performance; VIP importance ≠ causality. TRIPOD if the goal is prediction; otherwise label exploratory [@moons2015tripod].
+PLS is **not** an upgrade of PCA, components maximise covariance with an outcome Y. Use for prediction/exploration when many correlated predictors exist (`pls::plsr`; `mixOmics` for omics workflows). Fit **inside training folds** only; p ≫ n with few events inflates performance; VIP importance ≠ causality. TRIPOD if the goal is prediction; otherwise label exploratory [@moons2015tripod].
 
 Fit PLS on the full dataset, show perfect separation, and call it “validated endotypes” → external validation required (Chapter 11) [@mcshane2011biomarker; @wenzel2012asthma].
 
@@ -161,7 +161,7 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 
 | Chapter | When to open it |
 |---------|------------------|
-| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups — claim discipline |
+| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups; claim discipline |
 
 ## Handbook resources
 

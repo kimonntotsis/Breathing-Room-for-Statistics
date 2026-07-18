@@ -10,7 +10,7 @@ A screen ranks four hundred clones; the PI wants the top ten in validation by Fr
 
 ## Why this chapter
 
-Antibody and biomarker screens are triage exercises. This chapter connects screen thresholds, confirmation assays, and honest PPV — CASTOR's `antibody_screen.csv` carries the teaching example.
+Antibody and biomarker screens are triage exercises. This chapter connects screen thresholds, confirmation assays, and honest PPV. CASTOR's `antibody_screen.csv` carries the teaching example.
 
 ---
 
@@ -74,7 +74,7 @@ Recompute top-20 lists using replicate 1, 2, and 3 separately. Assign each clone
 | **Tier 3** | Top 20 in **1 of 3** replicates | Exploratory only |
 | **Below tier** | Never top 20 in any replicate | Do not emphasise in main text |
 
-**Practice read:** tiers are like "high / medium / low confidence shortlist" - more honest than pretending rank #7 is meaningfully better than rank #9.
+Tiers are like "high / medium / low confidence shortlist": more honest than pretending rank #7 is meaningfully better than rank #9.
 
 ### Decision rule (screen to confirmation)
 
@@ -88,9 +88,9 @@ Recompute top-20 lists using replicate 1, 2, and 3 separately. Assign each clone
 
 ## Technique: Hit calling + confirmation as the estimand
 
-Hit calling with confirmation asks which candidates exceed a prespecified screen criterion and how many confirm in a stronger assay. Screen signal is continuous; confirmation is binary after follow-up. You need replicates, controls, batch IDs, and a confirmation readout. Summarise with PPV among hits, tiered shortlists, and confirmation rates — not screen *p*-values alone. This applies to any screening workflow (antibodies, CRISPR, drug screens) but does not prove clinical utility, in vivo efficacy, or specificity without orthogonal tests.
+Hit calling with confirmation asks which candidates exceed a prespecified screen criterion and how many confirm in a stronger assay. Screen signal is continuous; confirmation is binary after follow-up. You need replicates, controls, batch IDs, and a confirmation readout. Summarise with PPV among hits, tiered shortlists, and confirmation rates; not screen *p*-values alone. This applies to any screening workflow (antibodies, CRISPR, drug screens) but does not prove clinical utility, in vivo efficacy, or specificity without orthogonal tests.
 
-**Practice read:** a screen is like a triage test: useful if it reliably enriches true positives, but it is not the final diagnosis.
+a screen is like a triage test: useful if it reliably enriches true positives, but it is not the final diagnosis.
 
 ### Caveats box
 
@@ -165,7 +165,7 @@ A cliff edge in PPV means the shortlist is threshold-dependent: show the curve, 
 
 ## Technique: Stability tiers (ranking under replicate resampling)
 
-Stability tiers identify clones consistently top-ranked under replicate noise. Recompute top-*K* lists from each replicate and assign Tier 1 (top in all replicates), Tier 2 (two of three), Tier 3 (one of three). Use when confirmation budget is limited — tiers show **stability**, not that a clone is objectively "best."
+Stability tiers identify clones consistently top-ranked under replicate noise. Recompute top-*K* lists from each replicate and assign Tier 1 (top in all replicates), Tier 2 (two of three), Tier 3 (one of three). Use when confirmation budget is limited, tiers show **stability**, not that a clone is objectively "best."
 
 ---
 

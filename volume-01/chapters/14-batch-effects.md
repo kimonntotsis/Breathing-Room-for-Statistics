@@ -4,13 +4,13 @@
 
 ## Opening scene: PCA that looks too good
 
-The first PCA separates cases and controls cleanly — until Mei colours points by plate. The same separation tracks batch, not biology. The CRO insists normalisation is "proprietary." This chapter is the vocabulary for that fight.
+The first PCA separates cases and controls cleanly until Mei colours points by plate. The same separation tracks batch, not biology. The CRO insists normalisation is "proprietary." The vocabulary for that batch-versus-biology fight.
 
 ---
 
 ## Why this chapter
 
-Batch is the commonest confounder in omics. You will diagnose it, adjust with prespecified methods, and report sensitivity — before anyone names an endotype.
+Batch is the commonest confounder in omics. You will diagnose it, adjust with prespecified methods, and report sensitivity, before anyone names an endotype.
 
 ---
 
@@ -40,7 +40,7 @@ In `proteomics_olink_like.csv`, cases and controls appear in **both** batches. B
 | Covariate adjustment | **Defensible** as sensitivity: `y ~ group + batch + plate + covariates` |
 | Interpretation | Group effects are **conditional on measured technical variables**; still need replication |
 
-**Practice read:** we can attempt to separate biology from lab process because both patient types were measured under multiple conditions.
+We can attempt to separate biology from lab process because both patient types were measured under multiple conditions.
 
 **Teaching numbers** (`ch14_batch_mini_case_summary.csv`): with batch overlap, **3** proteomics discoveries at FDR *q* < 0.05 **with** batch adjustment and **3 without** in this synthetic run. Stability across adjustment is reassuring; a large flip (e.g. 50 → 0) would signal an unstable conclusion.
 
@@ -55,7 +55,7 @@ Imagine a study where **all controls** were run on Batch1 and **all cases** on B
 | Covariate adjustment | **Not identifiable**: `group` and `batch` are redundant |
 | Interpretation | You cannot claim a group effect "after adjusting for batch" |
 
-**Practice read:** if disease status and lab day are inseparable, the analysis cannot tell you whether the signal is biology or processing.
+If disease status and lab day are inseparable, the analysis cannot tell you whether the signal is biology or processing.
 
 ### Decision rule (use before any "ComBat" or covariate adjustment)
 
@@ -71,9 +71,9 @@ Imagine a study where **all controls** were run on Batch1 and **all cases** on B
 
 **Question:** Is technical structure large enough to distort inference?
 
-Always before DE/ML on high-dimensional data: `prcomp(X, scale.=TRUE)` coloured by batch **and** group. Tabulate `group × batch`. PCA is descriptive — large PCs tracking batch suggests trouble; it does not prove correction fixes the problem.
+Always before DE/ML on high-dimensional data: `prcomp(X, scale.=TRUE)` coloured by batch **and** group. Tabulate `group × batch`. PCA is descriptive, large PCs tracking batch suggests trouble; it does not prove correction fixes the problem.
 
-**Practice read:** if batch drives the main variation, a "biomarker panel" is probably not real.
+If batch drives the main variation, a "biomarker panel" is probably not real.
 
 ComBat on the full dataset before train/test split has sunk prediction papers. Any correction must respect the same leakage rules as prediction workflows.
 
@@ -106,7 +106,7 @@ See [Catalog of wrong analyses (batch effects)](#catalog-of-wrong-analyses-batch
 
 Most defensible first-line strategy for **inference** when batch is not perfectly confounded with group: `lm(feature ~ group + batch + plate + covariates)` per feature.
 
-**Practice read:** reasonable only if both groups were measured across batches — if batch == group, report non-identifiability instead of forcing ComBat.
+Adjustment is reasonable only if both groups were measured across batches; if batch == group, report non-identifiability instead of forcing ComBat.
 
 ![PCA colored by batch (proteomics subset)](../figures/ch14_pca_proteomics_batch.png)
 

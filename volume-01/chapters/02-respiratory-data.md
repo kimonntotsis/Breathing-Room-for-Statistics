@@ -8,21 +8,21 @@ Mei spreads a printout across Dr Rivera's desk. CASTOR's first clean export: pat
 
 *"Which column is the outcome?"* Rivera asks. *"All of them,"* Mei says, *"until we decide which one answers the protocol. That's today."*
 
-This chapter is that meeting. You classify outcome type, unit of analysis, and design **before** any test name.
+Classify outcome type, unit of analysis, and design **before** any test name.
 
 ---
 
 ## Why this chapter
 
-The wrong method usually starts with the wrong **outcome type**, not the wrong R function. When you finish here, you can complete the pre-analysis checklist at chapter end and route to the right technique chapter — not to a menu of tests.
+The wrong method usually starts with the wrong **outcome type**, not the wrong R function. When you finish here, you can complete the pre-analysis checklist at chapter end and route to the right technique chapter; not to a menu of tests.
 
 ---
 
 ## The cohort you are classifying
 
-**CASTOR** is the synthetic COPD-oriented trial cohort in `data/*.csv` — clean **on purpose** so you can learn routing. **CASTOR-HD** adds omics files for Part VI. **POLLUX** / **APATE** is prose-only messy-registry fiction (Handbook resources).
+**CASTOR** is the synthetic COPD-oriented trial cohort in `data/*.csv`, clean **on purpose** so you can learn routing. **CASTOR-HD** adds omics files for Part VI. **POLLUX** / **APATE** is prose-only messy-registry fiction (Handbook resources).
 
-CASTOR’s disease labels say COPD; the routing logic applies across **chronic lung disease** and asthma programmes whenever endpoints and design match — FEV₁ arms, binary or count exacerbations, survival, omics.
+CASTOR’s disease labels say COPD; the routing logic applies across **chronic lung disease** and asthma programmes whenever endpoints and design match, FEV₁ arms, binary or count exacerbations, survival, omics.
 
 **Asthma example (same routing, different estimand):** *Among adults with severe eosinophilic asthma on ICS/LABA, what is the mean difference in post-BD FEV₁ (L) at week 12, biologic vs placebo, ITT?* Pick **one** primary before unblinding; route exacerbation secondaries to count or survival chapters, not a parallel primary.
 
@@ -58,11 +58,11 @@ Same CASTOR columns (`patient_id`, `age`, `sex`, `smoking`, `therapy`, `fev1`): 
 
 ## Variables: outcome, exposure, covariate
 
-Every column has a **role** that depends on the question. The **outcome** is what you measure as the result — FEV1, exacerbation, death, hospitalisation. The **exposure/predictor** is the factor hypothesised to influence it — treatment, smoking, biomarker, air pollution. A **covariate/confounder** is what you account for so the exposure–outcome link is not distorted — age, sex, height, severity, centre.
+Every column has a **role** that depends on the question. The **outcome** is what you measure as the result, FEV1, exacerbation, death, hospitalisation. The **exposure/predictor** is the factor hypothesised to influence it, treatment, smoking, biomarker, air pollution. A **covariate/confounder** is what you account for so the exposure–outcome link is not distorted, age, sex, height, severity, centre.
 
 The same variable **changes role by question**. *Therapy* is an **exposure** in a treatment-effect analysis and a **covariate** when studying biomarkers on a background of standard care. In `exacerbation.csv`, `smoking` may be exposure when predicting `exacerbation_12m`, but a **confounder** when studying a biomarker's association with FEV1 if smoking affects both.
 
-Know which column is the "answer" and which might distort the link. Causal diagrams (Ch 21) formalise which variables must be adjusted; earlier chapters use subject-matter knowledge and protocol [@harrell2015rms]. If you adjust for a variable **caused by** the exposure (a mediator), you may hide a real effect — discuss with your analyst.
+Know which column is the "answer" and which might distort the link. Causal diagrams (Ch 21) formalise which variables must be adjusted; earlier chapters use subject-matter knowledge and protocol [@harrell2015rms]. If you adjust for a variable **caused by** the exposure (a mediator), you may hide a real effect, discuss with your analyst.
 
 ### In practice
 
@@ -125,9 +125,9 @@ If the protocol defines exacerbations as a **count** but the analyst runs a *t*-
 
 ### Dual interpretation
 
-**Plain language:** repeated FEV1 on the same patients is **not** the same as two independent groups of people.
+Repeated FEV1 on the same patients is **not** the same as two independent groups of people.
 
-**Precise language:** longitudinal and clustered data violate independence assumptions of standard *t*-tests and GLMs unless extended [@harrell2015rms].
+Formally: longitudinal and clustered data violate independence assumptions of standard *t*-tests and GLMs unless extended [@harrell2015rms].
 
 ---
 
@@ -325,10 +325,10 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 | Resource | When to use it |
 |----------|----------------|
 | [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix K: In the room — short stories](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) | Story 1: one export, every column gets a *t*-test |
+| [Appendix K: In the room, short stories](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) | Story 1: one export, every column gets a *t*-test |
 | [Appendix K: Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) | Story 3: `lm()` on 0/1 exacerbation |
 | [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
-| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry — what CASTOR deliberately hides |
+| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry, what CASTOR deliberately hides |
 | [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
 
 ## Further reading

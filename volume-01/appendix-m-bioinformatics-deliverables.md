@@ -21,14 +21,14 @@ number-sections: false
 
 You do not need to run STAR yourself, but your DAP should name who owns each step:
 
-1. **Extraction & library prep** — documented kit/protocol version
-2. **Sequencing** — read length, depth per sample, spike-ins if any
-3. **QC** — FastQC/MultiQC summary; failed lanes excluded?
-4. **Alignment / quantification** — tool + reference genome build (e.g. GRCh38)
-5. **Count matrix** — **un-normalized integer counts** for DE (DESeq2/edgeR)
-6. **Metadata join** — sample IDs in matrix == metadata table
+1. **Extraction & library prep**, documented kit/protocol version
+2. **Sequencing**: read length, depth per sample, spike-ins if any
+3. **QC**. FastQC/MultiQC summary; failed lanes excluded?
+4. **Alignment / quantification**, tool + reference genome build (e.g. GRCh38)
+5. **Count matrix**, **un-normalized integer counts** for DE (DESeq2/edgeR)
+6. **Metadata join**, sample IDs in matrix == metadata table
 
-**Accept for DE:** `counts.csv` + `colData.csv`  
+**Accept for DE:** `counts.csv` + `colData.csv` 
 **Do not accept as sole DE input:** TPM-only matrix (use for exploration; re-request counts)
 
 ## Proteomics (Olink-like / targeted panels)

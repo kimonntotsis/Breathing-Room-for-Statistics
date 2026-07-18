@@ -4,15 +4,15 @@
 
 ## Opening scene: "Smoking reduces exacerbation risk"
 
-The observational CASTOR cohort shows a significant adjusted OR after `lm()` on 0/1 was finally replaced by logistic regression. A fellow drafts causation language. Mei rewrites: **association**, confounding, positivity — and what randomisation would have required to claim more.
+The observational CASTOR cohort shows a significant adjusted OR after `lm()` on 0/1 was finally replaced by logistic regression. A fellow drafts causation language. Mei rewrites: **association**, confounding, positivity, and what randomisation would have required to claim more.
 
 ---
 
 ## Why this chapter
 
-Observational respiratory studies dominate the literature. This chapter gives IPW, matching, and honest limits — without selling association as intervention effect.
+Observational respiratory studies dominate the literature. This chapter gives IPW, matching, and honest limits, without selling association as intervention effect.
 
-> **Consult a statistician when:** target-trial emulation, g-methods, IV analysis, or causal claims will appear in a label, guideline, or HTA submission. This chapter is **associational framing + introductory IPW** — not a causal inference textbook.
+> **Consult a statistician when:** target-trial emulation, g-methods, IV analysis, or causal claims will appear in a label, guideline, or HTA submission.
 
 ---
 
@@ -67,11 +67,11 @@ Smoking -----> Exacerbation (12m)
 
 ## Technique: Associational vs causal estimands; introductory IPW
 
-**Associational logistic regression** asks whether smoking is associated with exacerbation after adjusting for measured covariates. The estimand is a conditional odds ratio — hypothesis generation and STROBE cohort descriptions, not proof that smoking causes exacerbations. In R: `glm(exacerbation_12m ~ smoking + fev1_pct, family = binomial)`.
+**Associational logistic regression** asks whether smoking is associated with exacerbation after adjusting for measured covariates. The estimand is a conditional odds ratio: hypothesis generation and STROBE cohort descriptions, not proof that smoking causes exacerbations. In R: `glm(exacerbation_12m ~ smoking + fev1_pct, family = binomial)`.
 
 **Introductory IPW** reweights patients so exposure groups look more comparable on measured confounders, then re-estimates the smoking–exacerbation association. Model exposure ~ confounders → weights = 1/P(exposure|confounders) → weighted outcome model. Assumes no unmeasured confounding, positivity, and a correct exposure model. Use as sensitivity to covariate adjustment; do not treat as automatic proof of causation, and trim extreme weights.
 
-**Practice read:** "Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
+"Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
 
 ### Worked example (CASTOR)
 

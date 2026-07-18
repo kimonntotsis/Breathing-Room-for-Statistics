@@ -2,7 +2,7 @@
 
 ## In the room: the prediction manuscript review
 
-The CASTOR risk-model paper comes back from the journal: *“Training-set AUC is insufficient. Show calibration and discuss transport.”* Mei splits the revision into two tracks — **inference reporting** (Ch 8: CIs, multiplicity, limits) and **prediction standards** (Ch 9: held-out performance, calibration, leakage). Same GLM syntax; different success criteria.
+The CASTOR risk-model paper comes back from the journal: *“Training-set AUC is insufficient. Show calibration and discuss transport.”* Mei splits the revision into two tracks, **inference reporting** (Ch 8: CIs, multiplicity, limits) and **prediction standards** (Ch 9: held-out performance, calibration, leakage). Same GLM syntax; different success criteria.
 
 ---
 

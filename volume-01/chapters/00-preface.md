@@ -10,7 +10,7 @@ Respiratory research rests on incompatible data shapes in the same programme: sp
 
 **Investigators** and **analysts** who need to match a research question to a defensible analysis: especially **early- and mid-career** respiratory researchers, and **senior clinicians** who want statistics and coding to feel **purposeful**, not like a second degree in mathematics or computer science.
 
-You do not need to derive every estimator or write production-grade software. You **do** need to know: what question the method answers, when it fits your data, what to check, what to report, what alternatives exist, and what the result does **not** prove. Investigators can use opening scenes, **Practice read** paragraphs, and reporting templates without running R; analysts follow the same workflow with reproducible R on CASTOR.
+You do not need to derive every estimator or write production-grade software. You **do** need to know: what question the method answers, when it fits your data, what to check, what to report, what alternatives exist, and what the result does **not** prove. Investigators can use opening scenes, worked examples, and reporting templates without running R; analysts follow the same workflow with reproducible R on CASTOR.
 
 **CASTOR** is a **COPD-flavoured** synthetic teaching cohort (spirometry, exacerbations, smoking, therapy) so examples stay comparable from Table 1 through survival and omics; the workflow applies across **chronic lung disease (CLD)** and other respiratory settings when the **outcome type and design** match, including asthma trials and mixed pulmonary programmes.
 
@@ -94,7 +94,7 @@ If you use this book in fellowship teaching, trial work, or translational progra
 
 ## How to use this handbook
 
-Use it by outcome and design, not by page order. Appendix B routes a question to a chapter; Appendix G lists datasets, files, and topics; **Appendix J** is the **shortest investigator path** (six sections before your next steering meeting — also on the Welcome page); Appendix H expands endpoint routing without R. In the PDF, appendices appear in **reader-importance order** (G → J → **K** → H → I → B → …); letters stay fixed for citations. Each method chapter follows [CHAPTER_TEMPLATE](CHAPTER_TEMPLATE.md): opening scene, tiered technique prose, one **Practice read**, Quick reference at the end, and **Related chapters / Handbook resources** for lookup.
+Use it by outcome and design, not by page order. Appendix B routes a question to a chapter; Appendix G lists datasets, files, and topics; **Appendix J** is the **shortest investigator path** (six sections before your next steering meeting, also on the Welcome page); Appendix H expands endpoint routing without R. In the PDF, appendices appear in **reader-importance order** (G → J → **K** → H → I → B → …); letters stay fixed for citations. Each method chapter follows [CHAPTER_TEMPLATE](CHAPTER_TEMPLATE.md): opening scene, tiered technique prose, one clinical check-in sentence, Quick reference at the end, and **Related chapters / Handbook resources** for lookup.
 
 ## Circulating for feedback (reviewers) {#circulating-for-feedback-reviewers}
 
@@ -102,13 +102,13 @@ This edition is a **candidate for targeted external review**, not a final sign-o
 
 **Priority chapters (3–5 hours):** Ch 4, Ch 6, Ch 13, Ch 18, Ch 20. Rubric: [REVIEWER_RUBRIC.md](../REVIEWER_RUBRIC.md).
 
-**Please flag:** estimand errors, unsafe defaults, misleading omics claims, or reporting that would fail a grant or journal statistical review — not typos alone. **Out of scope for this pass:** full line edit, wet-lab/FASTQ pipelines, pipeline figure branding.
+**Please flag:** estimand errors, unsafe defaults, misleading omics claims, or reporting that would fail a grant or journal statistical review; not typos alone. **Out of scope for this pass:** full line edit, wet-lab/FASTQ pipelines, pipeline figure branding.
 
 **Data:** all examples use synthetic CASTOR / CASTOR-HD CSVs. Ch 13 teaching DE loops differ from Appendix L Bioconductor pipelines by design; compare both before judging discovery counts.
 
 **Feedback:** GitHub issue with label `review`, or email the author with chapter + section references.
 
-**Signposts in the chapters:** Each part opens with a short **In the room** vignette (a meeting, email, or review moment). Method chapters vary in depth — major methods get a full worked example; supporting methods are shorter prose. Look for **Practice read** (what would change the decision), **Figure hygiene** (Appendix I), and wrong-analysis catalogs. You do not need every section on first pass; Appendix J lists the shortest route.
+**Signposts in the chapters:** Each part opens with a short **In the room** vignette (a meeting, email, or review moment). Method chapters vary in depth; major methods get a full worked example, supporting methods are shorter prose. Look for **Figure hygiene** (Appendix I) and wrong-analysis catalogs. You do not need every section on first pass; Appendix J lists the shortest route.
 
 ## What CASTOR means {#what-castor-means}
 
@@ -146,7 +146,7 @@ All examples use simulated data with realistic structure. This keeps the book fu
 | [Appendix H: Clinicians' route](../appendix-h-clinicians-route.md) | Endpoint routing without running R |
 | [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
 | [Appendix J: Investigator minimum path](../appendix-j-investigator-minimum-path.md) | Shortest read for investigators who will not run R |
-| [Appendix K: In the room — short stories](../appendix-k-in-the-room-stories.md) | Extended vignettes of common analysis mistakes |
+| [Appendix K: In the room, short stories](../appendix-k-in-the-room-stories.md) | Extended vignettes of common analysis mistakes |
 | [Appendix L: Omics analyst track](../appendix-l-omics-analyst-track.md) | Production DESeq2, limma-voom, fgsea, and ComBat pipelines |
 | [APATE vignette](../APATE_VIGNETTE.md) | Prose-only messy registry checklist (no CSV) |
 | [CHAPTER_TEMPLATE](../CHAPTER_TEMPLATE.md) | Editorial skeleton for method chapters |

@@ -26,20 +26,20 @@ Posit Desktop was formerly called **RStudio Desktop**. Either name is fine; the 
 
 ![Install order: R, then Posit Desktop, then the handbook repository](figures/appendix_a_install_steps.png){width=100%}
 
-### Step 1 — Install R
+### Step 1. Install R
 
 1. Open [https://cran.r-project.org](https://cran.r-project.org).
 2. Click **Download R for macOS** or **Download R for Windows** (under “Download and Install R”).
 3. Run the installer with default options.
 4. Open **R** once from your Applications folder (macOS) or Start menu (Windows) and confirm a plain console window appears. Close it: you will use Posit Desktop from here on.
 
-### Step 2 — Install Posit Desktop
+### Step 2. Install Posit Desktop
 
 1. Open [https://posit.co/download/](https://posit.co/download/).
 2. Choose **Posit Desktop** (free; formerly RStudio Desktop). Do **not** confuse this with Posit Cloud (paid/hosted) unless you already use a cloud account.
 3. Run the installer. On first launch, Posit may ask which R version to use: pick the R you installed in Step 1.
 
-### Step 3 — Get this handbook on your computer
+### Step 3. Get this handbook on your computer
 
 **Option A: Git (recommended)**
 
@@ -64,7 +64,7 @@ Opening the repository as a **project** sets the working directory automatically
 2. Select the **repository root** folder `Breathing-Room-for-Statistics` (the folder that directly contains `R/`, `data/`, and `volume-01/`).
 3. Do **not** open only `volume-01/` or a single chapter folder.
 
-**Sanity check** — the **Files** pane (lower right) should show:
+**Sanity check**, the **Files** pane (lower right) should show:
 
 ![Files pane should list R/, data/, and volume-01/ at the top level](figures/appendix_a_project_tree.png){width=92%}
 
@@ -98,7 +98,7 @@ install.packages(c(
 # Optional (Chapter 20 MICE demo):
 # install.packages("mice")
 
-# Optional (Appendix L omics analyst track — Bioconductor):
+# Optional (Appendix L omics analyst track. Bioconductor):
 # if (!requireNamespace("BiocManager", quietly = TRUE)) install.packages("BiocManager")
 # BiocManager::install(c("DESeq2", "limma", "edgeR", "fgsea", "sva"))
 # install.packages(c("ggrepel", "msigdbr"))
@@ -134,14 +134,14 @@ You should see output like this:
 
 `00_setup.R` finds the project root automatically if you opened the folder as a project. It prints the path and stops with a clear message if a package is missing.
 
-**Optional — regenerate all handbook figures:**
+**Optional, regenerate all handbook figures:**
 
 ```r
 source("R/00_setup.R")
 source("R/examples/generate_figures.R")
 ```
 
-**Smoke test — all chapter scripts:**
+**Smoke test, all chapter scripts:**
 
 ```r
 source("R/00_setup.R")

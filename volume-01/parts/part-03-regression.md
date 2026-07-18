@@ -2,7 +2,7 @@
 
 ## In the room: the exacerbation endpoint
 
-The protocol labels exacerbations as a **count**, but the first draft manuscript reports logistic “any exacerbation” because the PI prefers odds ratios. Mei stops the thread: *“Pick the estimand, then the GLM family.”* Part III is that discipline — adjusted associations on the right outcome scale, without stepwise fishing (Ch 7).
+The protocol labels exacerbations as a **count**, but the first draft manuscript reports logistic “any exacerbation” because the PI prefers odds ratios. Mei stops the thread: *“Pick the estimand, then the GLM family.”* Part III is that discipline; adjusted associations on the right outcome scale, without stepwise fishing (Ch 7).
 
 ---
 

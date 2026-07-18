@@ -6,13 +6,13 @@
 
 CONSORT checklist on one monitor, CASTOR Results on the other. Reviewer 2 will ask for confidence intervals, flow counts, and what the trial **did not** prove. Rivera drafts *"trend toward benefit"*; Mei replaces it with the CI against MCID and a Limits paragraph.
 
-This chapter is sign-off discipline: reporting frameworks, intervals, multiplicity, and honest language.
+Sign-off discipline: reporting frameworks, intervals, multiplicity, and honest language.
 
 ---
 
 ## Why this chapter
 
-Correct analysis that is reported badly still misleads clinicians. CASTOR Case A's publishable narrative lives here — CONSORT-aligned tables, estimand-first sentences, and what to say when the primary is inconclusive.
+Correct analysis that is reported badly still misleads clinicians. CASTOR Case A's publishable narrative lives here. CONSORT-aligned tables, estimand-first sentences, and what to say when the primary is inconclusive.
 
 ---
 
@@ -20,9 +20,9 @@ Correct analysis that is reported badly still misleads clinicians. CASTOR Case A
 
 Every primary and key secondary analysis needs **point estimate + 95% CI + *n*** (and events for binary outcomes). The CI answers clinical questions better than *p* alone: does the interval exclude the MCID? straddle it? include only null? [@cazzola2008mcid]
 
-**Practice read (CASTOR primary):** mean difference 0.09 L (95% CI −0.04 to 0.21) — the interval includes no effect and clinically small benefits; *p* = 0.20 is secondary to that sentence.
+For CASTOR, mean difference 0.09 L (95% CI −0.04 to 0.21). The interval includes no effect and clinically small benefits; *p* = 0.20 is secondary to that sentence.
 
-Reviewers will ask for CIs even when you reported *p*-values. For RCTs, the CONSORT flow documents who entered the estimand — if week-12 FEV₁ excludes dropouts, say so in Methods and link to missing-data sensitivity. For non-inferiority submissions, report the **prespecified margin** and CI against Δ, not *p* alone.
+Reviewers will ask for CIs even when you reported *p*-values. For RCTs, the CONSORT flow documents who entered the estimand, if week-12 FEV₁ excludes dropouts, say so in Methods and link to missing-data sensitivity. For non-inferiority submissions, report the **prespecified margin** and CI against Δ, not *p* alone.
 
 **Common mistakes:** *"p* > 0.05 therefore no effect"*; reporting only significant secondaries.
 
@@ -32,7 +32,7 @@ Reviewers will ask for CIs even when you reported *p*-values. For RCTs, the CONS
 
 ## Technique: Bootstrap confidence intervals
 
-Resample rows with replacement when the statistic has no closed-form CI (median difference, complex estimands). Complements parametric CIs — does not fix wrong design.
+Resample rows with replacement when the statistic has no closed-form CI (median difference, complex estimands). Complements parametric CIs; does not fix wrong design.
 
 ```r
 B <- 2000
@@ -71,7 +71,7 @@ One **prespecified primary** endpoint; secondaries in a **family** with Holm or 
 | **STROBE** | Observational | Eligibility, confounding, missing data [@vonelm2007strobe] |
 | **TRIPOD** | Prediction | Validation, calibration, model specification [@moons2015tripod] |
 
-Checklists improve transparency — they do not replace correct analysis. Cite checklist version/year; full protocol in supplement.
+Checklists improve transparency; they do not replace correct analysis. Cite checklist version/year; full protocol in supplement.
 
 **Methods snippet:** We followed CONSORT 2010 guidelines [@schulz2010consort]. The analysis plan was prespecified before unblinding (supplementary protocol).
 

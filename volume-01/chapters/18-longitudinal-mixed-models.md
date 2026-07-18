@@ -10,9 +10,9 @@ The extension study has four FEV₁ visits per patient. A collaborator pools all
 
 ## Why this chapter
 
-Longitudinal spirometry is the commonest place independence assumptions break. CASTOR's `longitudinal_spirometry.csv` and Case E teach trajectories, random intercepts, and when a single visit snapshot is prespecified instead. Prespecify whether the estimand is **week-52 level**, **slope**, or **change from baseline** — they answer different trial questions. Missed visits and inability to perform manoeuvres are clinical missingness (Ch 20). **Random intercept** is the minimum for repeated FEV1; a significant `weeks:group` term means **differential slope**, not automatically week-52 benefit. Stacking visits in `lm()` or Welch *t* inflates precision. Population fitted lines are **average trajectories**, not individual forecasts for clinic. CASTOR teaching output: intervention × time coefficient ≈ **+0.00054 L/week** (95% CI roughly −0.00015 to +0.00122); modelled week-52 separation is modest — illustrate workflow, not a powered trial result.
+Longitudinal spirometry is the commonest place independence assumptions break. CASTOR's `longitudinal_spirometry.csv` and Case E teach trajectories, random intercepts, and when a single visit snapshot is prespecified instead. Prespecify whether the estimand is **week-52 level**, **slope**, or **change from baseline**; they answer different trial questions. Missed visits and inability to perform manoeuvres are clinical missingness (Ch 20). **Random intercept** is the minimum for repeated FEV1; a significant `weeks:group` term means **differential slope**, not automatically week-52 benefit. Stacking visits in `lm()` or Welch *t* inflates precision. Population fitted lines are **average trajectories**, not individual forecasts for clinic. CASTOR teaching output: intervention × time coefficient ≈ **+0.00054 L/week** (95% CI roughly −0.00015 to +0.00122); modelled week-52 separation is modest; illustrate workflow, not a powered trial result.
 
-> **Consult a statistician when:** you need random slopes, unstructured covariance, GEE vs mixed-model choice, cluster-randomised longitudinal designs, or MMRM for regulatory submission. This chapter is the **minimum vocabulary** for repeated FEV₁ — not the full trial SAP.
+> **Consult a statistician when:** you need random slopes, unstructured covariance, GEE vs mixed-model choice, cluster-randomised longitudinal designs, or MMRM for regulatory submission.
 
 ---
 
@@ -46,7 +46,7 @@ Every repeated-measures analysis should follow these steps:
 
 A linear mixed model answers mean trajectory over time and group differences in level or slope for repeated continuous FEV1 (litres). The unit of inference is participants (*n* patients); visits are correlated. You need `patient_id`, visit time, outcome, and optional covariates in randomised or observational designs with ≥2 visits per person. Assume a linear trend in time (or splines), random intercepts ~ Normal, and discuss MAR for dropout. Fixed effects for `weeks`, `group`, and `weeks:group` give litres or litres-per-week effects. In R: `lme4::lmer(fev1 ~ weeks * group + covariates + (1 | patient_id), data)`. Use for repeated continuous outcomes; skip when one visit per person (Ch 4–5) or survival is primary (Ch 19). This does not prove causal treatment effect without randomisation, adherence, and a missing-data audit.
 
-**Practice read:** is the modelled gap at 52 weeks clinically meaningful (MCID ~0.1 L in many COPD contexts)? Trajectory matters more than a single visit snapshot [@cazzola2008mcid].
+Ask whether the modelled gap at 52 weeks is clinically meaningful (MCID ~0.1 L in many COPD contexts). Trajectory matters more than a single visit snapshot [@cazzola2008mcid].
 
 ### Worked example (CASTOR extension)
 
@@ -75,7 +75,7 @@ summary(fit)
 
 ### Random intercept and slope (extension)
 
-Add `(weeks | patient_id)` or `(1 + weeks | patient_id)` when patients differ substantially in decline rates — but with only four time points, start with random intercept only; random slopes need more visits and stable convergence.
+Add `(weeks | patient_id)` or `(1 + weeks | patient_id)` when patients differ substantially in decline rates, but with only four time points, start with random intercept only; random slopes need more visits and stable convergence.
 
 ### GEE (population-averaged alternative)
 
@@ -165,7 +165,7 @@ Each line is one participant. Use this plot to spot outliers, dropout, and wheth
 | **Wrong** | Boxplot at week 52 only | Earlier visits, dropout, heterogeneous slopes |
 | **Right** | Spaghetti across scheduled visits |: (motivates mixed model / GEE) |
 
-**Practice read:** a week-52 *t*-test figure should not be your only longitudinal slide if the estimand is change over time.
+a week-52 *t*-test figure should not be your only longitudinal slide if the estimand is change over time.
 
 ![Mixed model fitted population trajectories](../figures/ch18_mixed_model_fitted.png)
 
@@ -199,7 +199,7 @@ Compare `std.error` for `groupintervention` across models. Smaller SE in the cro
 
 ## Technique: Mixed models vs GEE {#technique-mixed-models-vs-gee}
 
-Mixed models let each patient have their own baseline FEV1 and estimate **conditional** (subject-specific) trajectories; GEE averages over patients with a chosen correlation pattern and yields **marginal** (population-averaged) coefficients. For parallel-group trials with linear FEV1 trends, both usually give **similar direction** — prespecify one primary approach in the SAP ([`geepack`](https://cran.r-project.org/package=geepack) sensitivity on the same `longitudinal_spirometry.csv`).
+Mixed models let each patient have their own baseline FEV1 and estimate **conditional** (subject-specific) trajectories; GEE averages over patients with a chosen correlation pattern and yields **marginal** (population-averaged) coefficients. For parallel-group trials with linear FEV1 trends, both usually give **similar direction**; prespecify one primary approach in the SAP ([`geepack`](https://cran.r-project.org/package=geepack) sensitivity on the same `longitudinal_spirometry.csv`).
 
 | | **Mixed model** | **GEE** |
 |---|---|---|

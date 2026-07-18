@@ -4,7 +4,7 @@
 
 ## Opening scene: "Can we adjust for baseline?"
 
-The primary Welch *t*-test on week-12 FEV₁ is prespecified; the sponsor now asks whether baseline FEV₁ changes the story. That is not a post hoc rescue — it is ANCOVA, if it was in the SAP. Separately, an observational question arrives from the same cohort: *Is FEV₁ lower in smokers after age and height?* Different estimand, same regression family.
+The primary Welch *t*-test on week-12 FEV₁ is prespecified; the sponsor now asks whether baseline FEV₁ changes the story. That is not a post hoc rescue, it is ANCOVA, if it was in the SAP. Separately, an observational question arrives from the same cohort: *Is FEV₁ lower in smokers after age and height?* Different estimand, same regression family.
 
 Mei draws two columns on the whiteboard: **trial contrast** vs **adjusted association**. Same `lm()` syntax; different sentences in the abstract.
 
@@ -12,7 +12,7 @@ Mei draws two columns on the whiteboard: **trial contrast** vs **adjusted associ
 
 ## Why this chapter
 
-Linear models carry adjusted mean differences, ANCOVA, and diagnostic discipline. You need them when a *t*-test is too crude or when confounders are part of the question — not when you are fishing for significance.
+Linear models carry adjusted mean differences, ANCOVA, and diagnostic discipline. You need them when a *t*-test is too crude or when confounders are part of the question; not when you are fishing for significance.
 
 ---
 
@@ -29,19 +29,19 @@ Linear models carry adjusted mean differences, ANCOVA, and diagnostic discipline
 
 ## Technique: Multiple linear regression (MLR)
 
-Multiple linear regression estimates the **adjusted association** between predictors and a mean continuous outcome — FEV1 litres, change in FEV1, symptom scores — in cross-sectional, trial follow-up (with care), or cohort designs. Assumes linearity in parameters, independent homoscedastic errors, and approximate normality of residuals (especially with small *n*) [@harrell2015rms]. Report **β** as mean difference or slope with 95% CI.
+Multiple linear regression estimates the **adjusted association** between predictors and a mean continuous outcome, FEV1 litres, change in FEV1, symptom scores, in cross-sectional, trial follow-up (with care), or cohort designs. Assumes linearity in parameters, independent homoscedastic errors, and approximate normality of residuals (especially with small *n*) [@harrell2015rms]. Report **β** as mean difference or slope with 95% CI.
 
 **R:** `lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry)`
 
 Use MLR when multiple confounders matter and the outcome is continuous. Do **not** use it for binary/count outcomes, repeated measures without extension, or causal claims from observational data without design support. It does **not** prove causation, prediction accuracy (Ch 9), or mechanism.
 
-**Plain language:** after accounting for age, sex, and height, smokers have lower average FEV1 by about 0.39 L. **Precise language:** the smoking coefficient is the expected difference in mean FEV1 between smokers and non-smokers with other covariates held fixed.
+After adjustment for age, sex, and height, smokers have lower average FEV1 by about 0.39 L. Formally: the smoking coefficient is the expected difference in mean FEV1 between smokers and non-smokers with other covariates held fixed.
 
-**Practice read:** is ~0.4 L meaningful given MCID (~0.1 L in many COPD contexts)? Possibly — but this is observational; unmeasured confounding may remain [@cazzola2008mcid].
+Check whether ~0.4 L is meaningful given MCID (~0.1 L in many COPD contexts). Possibly, but this is observational; unmeasured confounding may remain [@cazzola2008mcid].
 
 Watch for: association ≠ causation; FEV1 vs age non-linearity (splines); collinearity when FEV1 and FVC are both in the model; extrapolation outside observed ranges; cross-sectional models ≠ longitudinal decline (Ch 18); mixing % predicted and litres. "Adjust for baseline FEV1" usually means ANCOVA, not change scores unless prespecified.
 
-**Common mistakes:** `lm(exacerbation_12m ~ smoking)` on 0/1 outcomes (predictions outside [0,1]; use Ch 6 logistic); dropping non-significant covariates after fitting (inflates type I error — prespecify in the SAP); causal language from cross-sectional data ("smoking **causes** lower FEV1" → "smoking was **associated with** lower FEV1 after adjustment…").
+**Common mistakes:** `lm(exacerbation_12m ~ smoking)` on 0/1 outcomes (predictions outside [0,1]; use Ch 6 logistic); dropping non-significant covariates after fitting (inflates type I error; prespecify in the SAP); causal language from cross-sectional data ("smoking **causes** lower FEV1" → "smoking was **associated with** lower FEV1 after adjustment…").
 
 **Methods:** FEV1 (litres) was modelled with multiple linear regression adjusting for age, sex, and height. We report coefficients with 95% CIs; residual diagnostics were examined.
 
@@ -86,7 +86,7 @@ spirometry$sex <- factor(spirometry$sex) # reference: female
 
 `fev1 ~ smoking * age` - smoking effect **varies by age**.
 
-**Plain language:** the FEV1 gap between smokers and non-smokers may be larger in older patients.
+The FEV1 gap between smokers and non-smokers may be larger in older patients.
 
 **Report:** stratified coefficients or marginal effects - not only the interaction p-value.
 
@@ -259,7 +259,7 @@ Linear regression (Gaussian errors) is the default for continuous outcomes, but 
 
 ## Where we go next
 
-Regulatory affairs wants the exacerbation tables by Friday — binary and count versions of the same flare-up story. **Chapter 6** is where `lm()` on 0/1 finally gets retired. If the team starts adding predictors after unblinding, **Chapter 7** is the argument you will need before the next steering call.
+Regulatory affairs wants the exacerbation tables by Friday, binary and count versions of the same flare-up story. **Chapter 6** is where `lm()` on 0/1 finally gets retired. If the team starts adding predictors after unblinding, **Chapter 7** is the argument you will need before the next steering call.
 
 ## Related chapters
 
