@@ -107,7 +107,7 @@ Did you run `source("R/examples/chXX_*.R")`? Any path, package, or teaching-data
 
 - Structural missingness (sputum subgroup)?
 - Complete-case vs MI sensitivity?
-- MICE as production default when MAR plausible?
+- MICE as one principled MAR option (with alternatives per estimand)?
 - Leakage in prediction (Ch 9)?
 
 ---

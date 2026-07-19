@@ -117,9 +117,9 @@ Write one paragraph per modality; separate “discovery” from “confirmed bin
 
 ---
 
-## Technique: Elastic net + nested CV (\(p \gg n\) prediction)
+## Technique: Elastic net + nested CV (p ≫ n prediction)
 
-Elastic net with nested CV asks whether proteomics can predict case/control with honest internal performance when \(p \gg n\). Use `glmnet` inside nested CV for exploratory risk stratification or hypothesis for external validation; not for causal inference or diagnostic approval without an external cohort. Nested CV provides an internally honest AUC when tuning λ; optimism remains for external transport.
+Elastic net with nested CV asks whether proteomics can predict case/control with honest internal performance when p ≫ n. Use `glmnet` inside nested CV for exploratory risk stratification or hypothesis for external validation; not for causal inference or diagnostic approval without an external cohort. Nested CV provides an internally honest AUC when tuning λ; optimism remains for external transport.
 
 Integrated omics slides often show only the volcano. Decision-makers need the stop/go gates: batch overlap, discovery count with/without adjustment, PPV, Tier 1 clones, in that order.
 

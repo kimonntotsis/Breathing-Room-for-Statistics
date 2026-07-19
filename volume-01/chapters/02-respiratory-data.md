@@ -221,7 +221,7 @@ Complete **before** choosing a model:
 
 ## CASTOR-HD datasets (high-dimensional biology preview)
 
-These files are designed for later "advanced discovery" chapters in a single-volume book. They illustrate recurring problems: \(p \gg n\), batch/plate/run effects, censored/missing values, multiplicity (FDR), and honest validation.
+These files are designed for later "advanced discovery" chapters in a single-volume book. They illustrate recurring problems: p ≫ n, batch/plate/run effects, censored/missing values, multiplicity (FDR), and honest validation.
 
 | File | What it represents | Key teaching points |
 |------|---------------------|---------------------|

@@ -60,6 +60,25 @@ def main() -> int:
     if not ok:
         return 1
 
+    # Symbol rendering: catch common LuaLaTeX Unicode failures
+    full_text = "\n".join((page.extract_text() or "") for page in reader.pages)
+    symbol_failures = []
+    if re.search(r"Hern[`´]an", full_text):
+        symbol_failures.append("Hernàn grave accent")
+    if re.search(r"\(p\s*�\s*n\)", full_text):
+        symbol_failures.append("≫ missing in p ≫ n (replacement char)")
+    if re.search(r"Pearson\s+²/df", full_text):
+        symbol_failures.append("χ missing before ²/df")
+    if "Hernán" not in full_text and "Hernan" not in full_text:
+        symbol_failures.append("Hernán not found in PDF text")
+    if symbol_failures:
+        for msg in symbol_failures:
+            print(f"PDF symbol check failed: {msg}", file=sys.stderr)
+        ok = False
+
+    if not ok:
+        return 1
+
     print(f"OK: PDF {pages} pages, {figures} figure labels (baseline pages>={min_pages}, figures>={min_figures}).")
     return 0
 

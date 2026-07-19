@@ -145,7 +145,7 @@ Points in the upper corners are large effects with small q-values; the grey band
 
 ### Mini-lab: sparse PCA pointer (exploratory)
 
-When \(p \gg n\), dense PCA loadings are noisy. For exploratory views only, try sparse PCA (`elasticnet` / `PMA` packages) with a prespecified sparsity penalty; never treat as confirmatory DE.
+When p ≫ n, dense PCA loadings are noisy. For exploratory views only, try sparse PCA (`elasticnet` / `PMA` packages) with a prespecified sparsity penalty; never treat as confirmatory DE.
 
 ```r
 # Teaching pointer (not run in ch13 script):
