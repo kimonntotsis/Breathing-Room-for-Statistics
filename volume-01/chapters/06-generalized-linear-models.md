@@ -87,7 +87,7 @@ Report absolute risks or rate differences when events are common.
 
 #### Reporting template
 
-**Methods:** Logistic regression modelled 12-month exacerbation (yes/no) adjusting for smoking, age, FEV1 % predicted, and prior exacerbation count. We report odds ratios with 95% CIs (Wald). With only ~18 events, intervals are wide; consider exact or bootstrap CIs for primary inference if prespecified. Model fit assessed by event count and residual deviance.
+**Methods:** Logistic regression modelled 12-month exacerbation (yes/no) adjusting for smoking, age, FEV1 % predicted, and prior exacerbation count. We report odds ratios with 95% CIs (Wald). With only ~18 events, intervals are wide; **Firth penalized logistic** (`logistf`) or profile-likelihood CIs are preferred for primary inference when prespecified. Model fit assessed by event count and residual deviance.
 
 **Results:** Among 350 patients (18 events), prior exacerbations were associated with higher odds of a new event (OR 1.70, 95% CI 1.12 to 2.59). FEV1 % predicted OR 0.95 per 1% (95% CI 0.91 to 0.99). Smoking OR imprecise (95% CI included 1).
 

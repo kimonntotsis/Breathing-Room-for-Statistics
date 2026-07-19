@@ -401,7 +401,7 @@ Standard Ch 4 tests assume **independent** observations.
 
 **Crossover / paired bronchodilator:** same patient, two manoeuvres: use **paired** *t* or Wilcoxon signed-rank, not two independent groups. Document BD dose and wait time [@graham2019spirometry].
 
-**Non-inferiority / equivalence:** prespecify margin Δ and test CI against Δ (often 90% CI for NI); *p* > 0.05 from a superiority test is **not** equivalence. Methods template: *Non-inferiority of [intervention] vs [control] on [endpoint] tested with margin Δ = … using [TOST / CI against margin].* Full NI/equivalence detail: [Appendix O](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials).
+**Non-inferiority / equivalence:** prespecify margin Δ and compare the CI to Δ — **match CI level to one-sided α** (95% two-sided CI when α = 0.025; 90% when α = 0.05). Non-inferiority is a **one-sided** test on the relevant bound; **equivalence** uses **TOST** (two one-sided tests). *p* > 0.05 from a superiority test is **not** NI or equivalence. Full templates: [Appendix O](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials).
 
 **Repeated visits / time-to-event:** use Part VIII (mixed models, survival); not a week-52 *t*-test on stacked rows.
 
@@ -415,7 +415,7 @@ Standard Ch 4 tests assume **independent** observations.
 | 2 | t-test on count of exacerbations | Poisson / NB |
 | 3 | Ignore pairing in pre/post BD | Paired t or Wilcoxon signed-rank |
 | 4 | ANOVA then all pairwise without plan | Prespecified contrasts or Tukey with multiplicity awareness |
-| 5 | Claim equivalence from p > 0.05 | NI trial with prespecified margin (TOST) |
+| 5 | Claim equivalence from p > 0.05 | NI trial with prespecified margin, or equivalence with TOST |
 | 6 | Pool sites without clustering check | Mixed model `(1 \| centre)` or GEE (Ch 18) |
 | 7 | Cluster RCT analysed with patient-level Welch *t* | Cluster-aware mixed model / GEE |
 

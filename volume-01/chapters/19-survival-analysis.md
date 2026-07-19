@@ -41,7 +41,7 @@ Time-to-event endpoints need time in the model. CASTOR's `time_to_exacerbation.c
 
 ## Technique: Kaplan-Meier
 
-Kaplan-Meier estimates what fraction remain event-free over time by group using `Surv(time, event)`, the product-limit estimator for \(S(t) = P(T > t)\) with right-censored data. Report survival probabilities at prespecified times and median survival if estimable. In R: `survival::survfit(Surv(time_days, event) ~ smoking, data)` with log-rank comparison via `survdiff`. Use for visual comparison and absolute risk extraction; use Cox for adjusted confounding control. KM does not prove causation.
+Kaplan-Meier estimates what fraction remain event-free over time by group using `Surv(time, event)`, the product-limit estimator for \(S(t) = P(T > t)\) with right-censored data. Report survival probabilities at prespecified times and median survival if estimable. In R: `survival::survfit(Surv(time_days, event) ~ smoking, data)` with log-rank comparison via `survdiff`. In **randomized trials**, unadjusted KM curves and log-rank by arm are **valid ITT** comparisons; covariate-adjusted Cox is optional for precision or prespecified adjustment, not automatically more valid. Use Cox when confounding control or adjusted estimands are prespecified (observational cohorts). KM does not prove causation.
 
 Read off event-free probability at 6 and 12 months; compare arms visually before trusting a single *p*-value.
 
@@ -133,11 +133,11 @@ In severe COPD, **death prevents future exacerbations**. Standard Cox for “fir
 
 ### Catalog of wrong analyses (time-to-exacerbation)
 
-| Wrong analysis | Why it fails | Do instead |
+| Analysis | Issue | When it is acceptable |
 |---|---|---|
-| **Fixed 12-month binary endpoint only** | Loses timing information | KM + Cox on time-to-event |
-| **Exclude early censoring** | Selection bias | Intention-to-follow-up population |
-| **Unadjusted KM in RCT** | Ignores randomisation balance | Pre-specified covariate adjustment in Cox |
+| **Fixed 12-month binary endpoint only** | Different estimand — discards **when** events occur | Prespecified risk-by-365-days endpoint (report with CI, not as time-to-event) |
+| **Exclude early censoring** | Selection bias | Never for ITT-style follow-up |
+| **Unadjusted KM + log-rank in RCT** | Different estimand from adjusted Cox — not invalid | **Valid** prespecified ITT comparison by randomized arm; adjusted Cox may improve precision or match SAP covariates |
 | **Present HR as “% risk reduction”** without context | Misleading with frequent events | HR + absolute risks or NNT if appropriate |
 | **Cox for first exacerbation; death coded as censored** | Death competes with exacerbation | Competing-risk model or cause-specific Cox ([below](#technique-competing-risks-death-vs-exacerbation)) |
 

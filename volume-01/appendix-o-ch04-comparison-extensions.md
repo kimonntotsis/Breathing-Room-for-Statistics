@@ -95,7 +95,7 @@ CASTOR paired example: `R/examples/ch04_comparing_groups.R` and Figure (`ch04_pa
 | **Design** | Parallel NI/ equivalence trial with **prespecified Δ** |
 | **Assumptions** | Margin clinically justified; powered for NI (not superiority) |
 | **Effect measure** | Mean difference vs margin; or proportion difference vs margin |
-| **Methods** | Two one-sided tests (TOST) at one-sided α = 0.025, **or** compare the **lower bound** of a **two-sided 95% CI** to the prespecified margin Δ when the estimand is (new − control) and Δ is the maximum acceptable loss (e.g. Δ = −0.10 L). A **90% two-sided CI** corresponds to one-sided α = **0.05**, not 0.025 — match CI level to the prespecified α. |
+| **Methods** | **Non-inferiority:** compare the **lower bound** of a **two-sided 95% CI** to prespecified margin Δ when the estimand is (new − control) and one-sided α = **0.025** (equivalent to a one-sided 2.5% test on that bound). If one-sided α = **0.05**, use a **90% two-sided CI** instead. **Equivalence:** **TOST** (two one-sided tests) with two prespecified margins — do not label NI as TOST. |
 | **Report** | Margin Δ, NI conclusion yes/no, CI relative to Δ |
 | **Avoid when** | Declaring equivalence from superiority *p* > 0.05 |
 
@@ -123,5 +123,5 @@ See also [Chapter 8](chapters/08-validation-reporting.md) reporting checklist fo
 
 ### Equivalence (superiority test insufficient)
 
-If the scientific goal is **equivalence** (two-sided margin), prespecify bounds and use an equivalence framework. A non-significant *p*-value from a superiority test is not evidence of equivalence [@harrell2015rms]; use the [NI template above](#technique-non-inferiority-and-equivalence-trials).
+If the scientific goal is **equivalence** (two-sided margin), prespecify **both** bounds and use **TOST** (two one-sided tests) or an equivalent CI entirely within the equivalence region. A non-significant *p*-value from a superiority test is not evidence of equivalence [@harrell2015rms]. For **non-inferiority** (one margin, one-sided claim), use the [NI template above](#technique-non-inferiority-and-equivalence-trials), not TOST.
 

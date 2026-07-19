@@ -41,7 +41,7 @@ Randomised trials (Case A) support causal **treatment** claims for the randomise
 
 ## Confounding structure (CASTOR)
 
-**Smoking** → lower **FEV1** and higher **exacerbation** risk. FEV1 is also on the causal path from smoking to exacerbation (partial mediator) and a **confounder** if other factors affect both FEV1 and exacerbation.
+**Smoking** → lower **FEV1** and higher **exacerbation** risk. In this cross-sectional snapshot, **post-exposure FEV1 %** lies on the smoking → exacerbation pathway (partial **mediator** for a total smoking effect). **Prior lung function measured before smoking exposure** could be a **confounder**; measured FEV1 here is **not** a confounder of smoking → exacerbation merely because other factors also predict FEV1 and exacerbation — those are **mediator–outcome confounders** (adjust in mediation if prespecified), not reasons to put FEV1 in a total-effect propensity model.
 
 ```
 Smoking -----> Exacerbation (12m)
@@ -188,19 +188,20 @@ Material movement between naive and IPW-adjusted ORs is a sensitivity flag, not 
 Full propensity score workflow: estimate `e(X) = P(smoking=1|X)`, check overlap, weight or match, then outcome model. Packages: `WeightIt`, `MatchIt`. Always report balance diagnostics (standardised mean differences).
 
 ```r
-# Illustrative only, not the teaching script:
+# Illustrative only — match total-effect estimand (FEV1 is a mediator, not in PS):
 # library(WeightIt)
 # w <- weightit(
-# smoking ~ fev1_percent_predicted + age,
-# data = exac,
-# method = "ps"
+#   smoking ~ age + sex + prior_exacerbations,
+#   data = exac,
+#   method = "ps"
 # )
 # summary(w)
+# # Outcome: exacerbation_12m ~ smoking with robust SEs; do not adjust FEV1 for total effect
 ```
 
 ### Mini-lab: E-value pointer
 
-When unmeasured confounding is plausible, E-values quantify how strong an unmeasured confounder would need to be to explain away the observed association (advanced; see Hernán & Robins).
+When unmeasured confounding is plausible, E-values quantify how strong an unmeasured confounder would need to be to explain away the observed association (advanced; see [@hernan2020whatif]).
 
 ---
 
@@ -278,6 +279,6 @@ When FEV1 sits on the smoking → exacerbation path and reviewers ask *how much 
 
 ## Further reading
 
-- Hernán & Robins, *Causal Inference: What If* (free online)
+- Hernán & Robins, *Causal Inference: What If* [@hernan2020whatif]
 - Harrell, *Regression Modeling Strategies* [@harrell2015rms]
 - STROBE reporting for observational studies [@vonelm2007strobe]

@@ -59,6 +59,20 @@ See [Ch 8: Validation & reporting](chapters/08-validation-reporting.md).
 | Multiple comparisons | Benjamini & Hochberg, 1995 | `benjamini1995fdr` |
 | PCA | Jolliffe & Cadima, 2016 | `jolliffe2016pca` |
 | Cluster validation | Hennig, 2007 | `hennig2007cluster` |
+| Causal inference | Hernán & Robins, *Causal Inference: What If* | `hernan2020whatif` |
+| Multiple imputation | van Buuren, *Flexible Imputation of Missing Data* | `vanbuuren2011mice` |
+
+---
+
+## Omics (analyst track)
+
+| Method | Reference | Key |
+|--------|-----------|-----|
+| DESeq2 | Love, Huber & Anders, 2014 | `love2014deseq2` |
+| limma-voom | Ritchie et al., 2015 | `ritchie2015limma` |
+| ComBat batch correction | Johnson, Li & Rabinovic, 2007 | `johnson2007combat` |
+
+See [Appendix L: Omics analyst track](appendix-l-omics-analyst-track.md).
 
 ---
 

@@ -6,7 +6,7 @@ number-sections: false
 
 # References {.unnumbered}
 
-This appendix lists every source **cited** in handbook chapters (`[@key]` citations). Entries are drawn from [`references.bib`](../references.bib). Formatted with APA (7th ed.).
+This appendix lists every source **cited** in handbook chapters (BibTeX citation keys in `references.bib`). Entries are drawn from [`references.bib`](../references.bib). Formatted with APA (7th ed.).
 
 For a **topic-organized reading guide** (textbooks, CONSORT/STROBE/TRIPOD, respiratory methods), see [REFERENCES.md](REFERENCES.md).
 

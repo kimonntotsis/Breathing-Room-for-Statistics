@@ -74,6 +74,28 @@ def check_appendix_o() -> None:
     )
     assert "lower bound" in text.lower(), "appendix-o NI lower bound"
     assert "upper bound" not in text.lower(), "appendix-o NI upper bound stale"
+    assert "do not label ni as tost" in text.lower(), "appendix-o NI vs TOST"
+
+
+def check_ni_harmonized() -> None:
+    ch4 = (CH / "04-comparing-groups.md").read_text(encoding="utf-8")
+    ch8 = (CH / "08-validation-reporting.md").read_text(encoding="utf-8")
+    assert "95% two-sided CI when α = 0.025" in ch4 or "95% two-sided CI" in ch4
+    assert "90% CI for NI (convention)" not in ch8, "ch8 NI 90% convention stale"
+    assert "TOST / CI against margin" not in ch8, "ch8 NI TOST conflation stale"
+
+
+def check_ch21_causal() -> None:
+    text = (CH / "21-causal-inference.md").read_text(encoding="utf-8")
+    mini = text.split("Illustrative only")[1][:400]
+    assert "fev1_percent_predicted" not in mini.lower(), "ch21 PS mini-lab includes FEV1"
+    assert "prior_exacerbations" in mini, "ch21 PS mini-lab confounders"
+
+
+def check_ch19_survival() -> None:
+    text = (CH / "19-survival-analysis.md").read_text(encoding="utf-8")
+    assert "ignores randomisation balance" not in text.lower(), "ch19 KM RCT stale"
+    assert "valid itt" in text.lower() or "valid ITT" in text, "ch19 RCT KM guidance"
 
 
 def check_ch18() -> None:
@@ -86,7 +108,18 @@ def check_ch18() -> None:
 
 
 def main() -> int:
-    checks = [check_ch09, check_ch14, check_ch15, check_ch16, check_ch18, check_ch22, check_appendix_o]
+    checks = [
+        check_ch09,
+        check_ch14,
+        check_ch15,
+        check_ch16,
+        check_ch18,
+        check_ch19_survival,
+        check_ch21_causal,
+        check_ch22,
+        check_appendix_o,
+        check_ni_harmonized,
+    ]
     failed = []
     for fn in checks:
         try:

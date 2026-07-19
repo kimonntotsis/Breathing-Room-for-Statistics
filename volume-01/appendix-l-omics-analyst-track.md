@@ -4,7 +4,7 @@ number-sections: false
 
 # Appendix L: Omics analyst track {.unnumbered}
 
-> **Optional parallel path** for analysts who want production Bioconductor workflows alongside the investigator-focused Chapters 13–17. Investigator chapters teach *what to ask and how to report*; this appendix teaches *how to run DESeq2, limma-voom, fgsea, and ComBat* on the same CASTOR-HD files.
+> **Optional parallel path** for analysts who want production Bioconductor workflows alongside the investigator-focused Chapters 13–17. Investigator chapters teach *what to ask and how to report*; this appendix teaches *how to run DESeq2, limma-voom, fgsea, and ComBat* on the same CASTOR-HD files [@love2014deseq2; @ritchie2015limma; @johnson2007combat].
 
 ## Who should read this
 

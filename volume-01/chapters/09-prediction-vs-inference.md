@@ -182,7 +182,7 @@ Run `source("R/examples/ch09_prediction.R")` and read [ch09_model_comparison.csv
 | Random forest | 0.81 (0.68–0.99) | 0.044 |
 | XGBoost (if installed) | ~0.83 (wide CI) | ~0.034 |
 
-**Interpretation:** with so few test events, **penalized and tree models may collapse to constant predictions** (AUC = 0.50; bootstrap CI also 0.50–0.50). Logistic remains the defensible primary model; forest/boost may rank better but with **very wide** bootstrap intervals. This illustrates low-EPV warnings better than a synthetic "RF wins" story.
+**Interpretation:** with so few test events, **penalized and tree models may collapse to constant predictions** (AUC = 0.50; bootstrap CI also 0.50–0.50). Logistic remains the defensible primary model; forest/boost may rank better but with **very wide** bootstrap intervals — **do not interpret model-to-model AUC differences** as meaningful with four events. This illustrates low-EPV warnings better than a synthetic "RF wins" story.
 
 **Calibration:** binned calibration plot with **3–5 risk groups** given four test events (figure `ch09_calibration_logistic.png`); inspect highest-risk bin event counts. Do not label this a decile plot when events are too sparse for ten bins.
 

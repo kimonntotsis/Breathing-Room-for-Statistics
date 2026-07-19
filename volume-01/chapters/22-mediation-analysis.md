@@ -281,4 +281,4 @@ You have completed the extended causal path (Ch 18–22). Return to [Chapter 12]
 
 - VanderWeele, *Explanation in Causal Inference* [@vanderweele2015explanation]
 - Imai, Keele, and Tingley on causal mediation [@imai2010identification; @tingley2014mediation]
-- Hernán & Robins, *Causal Inference: What If* (free online)
+- Hernán & Robins, *Causal Inference: What If* [@hernan2020whatif]

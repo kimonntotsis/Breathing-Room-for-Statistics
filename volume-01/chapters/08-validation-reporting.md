@@ -166,18 +166,19 @@ sessionInfo()
 | Element | Report |
 |---|---|
 | **Margin Δ** | Prespecified clinical margin (e.g. −0.10 L FEV1) |
-| **Hypothesis** | NI: H0: difference ≤ Δ vs Ha: difference > Δ (example for continuous) |
-| **Interval** | 90% CI for NI (convention) or two one-sided tests |
+| **Hypothesis (NI)** | H₀: difference ≤ Δ vs Hₐ: difference > Δ (example for continuous, new − control) |
+| **Interval (NI)** | **Match CI level to one-sided α:** α = 0.025 → **95% two-sided CI**; α = 0.05 → **90% two-sided CI**. Compare the **relevant bound** to Δ (lower bound for NI when worse = lower). |
+| **Equivalence** | Two prespecified margins; **TOST** (two one-sided tests) or equivalent CI entirely within bounds |
 | **Conclusion** | NI demonstrated / not demonstrated. **not** “no difference” from *p* > 0.05 |
 | **Power** | NI trials must be powered for the margin, not superiority |
 
-**Methods sentence (template):**
+**Methods sentence (template, NI at α = 0.025):**
 
-> Non-inferiority of [intervention] vs [control] on [endpoint] was tested with prespecified margin Δ = …. We used [TOST / CI against margin] at one-sided α = 0.025.
+> Non-inferiority of [intervention] vs [control] on [endpoint] was tested with prespecified margin Δ = …. We compared the **lower bound of the two-sided 95% CI** to Δ at one-sided α = 0.025.
 
-**Results sentence (template):**
+**Results sentence (template, NI at α = 0.025):**
 
-> The estimated difference was … (90% CI …). Because the CI [was / was not] entirely above Δ, non-inferiority [was / was not] demonstrated.
+> The estimated difference was … (95% CI …). Because the **lower bound** [was / was not] greater than Δ, non-inferiority [was / was not] demonstrated.
 
 Full NI/equivalence templates: [Appendix O](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials).
 

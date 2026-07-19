@@ -6,7 +6,7 @@ link-citations: true
 
 # Appendix C: Glossary {.unnumbered}
 
-Plain-language and precise definitions for terms used across Chapters 0–21. For method choice, see [Appendix B](appendix-b-quick-reference.md).
+Plain-language and precise definitions for terms used across Chapters 1–22. For method choice, see [Appendix B](appendix-b-quick-reference.md).
 
 ```{=latex}
 \footnotesize
