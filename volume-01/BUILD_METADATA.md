@@ -1,9 +1,9 @@
 | Field | Value |
 |-------|-------|
 | **Edition** | v1.2 (major revision pass) |
-| **Build date** | 2026-07-18 23:44 UTC |
-| **Git commit** | `bc443f8` |
-| **Git describe** | `v1.1.0-review-5-gbc443f8-dirty` |
+| **Build date** | 2026-07-19 10:16 UTC |
+| **Git commit** | `56027cd` |
+| **Git describe** | `v1.1.0-review-7-g56027cd` |
 | **Branch** | `chore/archive-cleanup` |
 | **Repository** | [https://github.com/kimonntotsis/Breathing-Room-for-Statistics](https://github.com/kimonntotsis/Breathing-Room-for-Statistics) |
 | **Licence** | Open handbook source; see repository `LICENSE` for terms. |
