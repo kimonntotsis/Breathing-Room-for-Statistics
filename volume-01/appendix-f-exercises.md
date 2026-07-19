@@ -4,7 +4,7 @@ number-sections: false
 
 # Appendix F: Exercises {.unnumbered}
 
-Practice problems for Chapters 1–21. **Solutions** (repository only): `volume-01/solutions/`; [INSTRUCTOR_PACK.md](INSTRUCTOR_PACK.md).
+Practice problems for Chapters 1–22. **Solutions** (repository only): `volume-01/solutions/`; [INSTRUCTOR_PACK.md](INSTRUCTOR_PACK.md).
 
 ---
 

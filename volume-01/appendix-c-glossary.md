@@ -27,7 +27,7 @@ When you see an unfamiliar word:
 
 Every major technique in the main chapters also has a **Practice read** line in the technique card. Use this appendix when the word appears outside that chapter: in someone else’s abstract, a steering-committee deck, or an omics email.
 
-**If you are not running R:** skip [Appendix A](appendix-a-r-setup.md); you can still use this glossary and the statistical content in Chapters 1–21.
+**If you are not running R:** skip [Appendix A](appendix-a-r-setup.md); you can still use this glossary and the statistical content in Chapters 1–22.
 
 ---
 

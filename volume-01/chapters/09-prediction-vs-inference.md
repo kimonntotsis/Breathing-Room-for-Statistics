@@ -42,7 +42,7 @@ Use the same CASTOR habit as Chapter 1, adapted for risk models:
 
 1. **Clinical question:** Who needs a risk estimate, for what decision, at what time horizon (e.g. 12-month exacerbation)?
 2. **Design and data:** Baseline predictors only; define enrolment and follow-up; count **events** in train and test.
-3. **Prespecify the workflow:** Train/test split or nested CV; all tuning **inside train**; same test set for every model.
+3. **Prespecify validation:** For moderate *n*, a hold-out test set **or** bootstrap / repeated CV on all data; with tuning, use **nested CV**. CASTOR uses a **70/30 split for illustration only** (~18 total events); production work should prefer resampling or nested CV.
 4. **Select model family:** Start with logistic; add LASSO / trees / ensembles only when EPV and biology justify complexity.
 5. **Evaluate:** AUC **and** calibration **and** Brier on held-out data; bootstrap CIs when events allow.
 6. **Report limits:** No causation, no external validation claim, no clinical deployment without transportability work.
@@ -249,11 +249,12 @@ DCA asks whether using the model improves decisions versus treating everyone or 
 
 | Validation | When to use | Note |
 |------------|-------------|------|
-| Bootstrap / CV on train | Unstable single split | Complement, not replace, held-out test |
+| Bootstrap / repeated CV | Small *n*; unstable single split | Can **replace** random split for **internal** validation; **nested** when tuning |
+| Hold-out test set | Adequate events; simple teaching demo | CASTOR 70/30 is **illustrative** with four test events |
 | Temporal validation | Later cohort, same protocol | Mimics future deployment |
 | Geographic validation | Different centres | Key in multi-centre respiratory research |
-| **Nested CV** | p ≫ n, many tunable hyperparameters | Ch 17 elastic net |
-| External validation | Independent cohort | Required for clinical deployment claims [@moons2015tripod] |
+| **Nested CV** | p ≫ n, many tunable hyperparameters | Outer = performance; inner = tuning (Ch 17) |
+| External validation | Independent cohort | **Required** for clinical deployment; internal validation never substitutes [@moons2015tripod] |
 
 ### Model families (summary)
 

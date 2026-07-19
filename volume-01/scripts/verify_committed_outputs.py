@@ -107,6 +107,23 @@ def check_ch18() -> None:
     assert "different standard error" not in text.lower(), "ch18 pseudo-replication wording stale"
 
 
+def check_review_pass3() -> None:
+    ch4 = (CH / "04-comparing-groups.md").read_text(encoding="utf-8")
+    ch9 = (CH / "09-prediction-vs-inference.md").read_text(encoding="utf-8")
+    ch19 = (CH / "19-survival-analysis.md").read_text(encoding="utf-8")
+    ch20 = (CH / "20-missing-data.md").read_text(encoding="utf-8")
+    bib = (ROOT / "references.bib").read_text(encoding="utf-8")
+    preamble = (ROOT / "volume-01" / "latex" / "pdf-preamble.tex").read_text(encoding="utf-8")
+    assert "Table 1 shows acceptable balance" not in ch4, "ch4 RCT balance stale"
+    assert "complement, not replace, held-out test" not in ch9.lower(), "ch9 validation stale"
+    assert "ignores randomisation balance" not in ch19.lower(), "ch19 KM RCT stale"
+    assert "production default is MICE" not in ch20, "ch20 MICE default stale"
+    assert "Hern{\\'a}n" in bib, "bib Hernán accent"
+    assert "Hern{\\`a}n" not in bib, "bib Hernàn grave accent"
+    for sym in ("lambda", "chi", "gg", "Delta"):
+        assert sym in preamble, f"pdf-preamble missing {sym}"
+
+
 def main() -> int:
     checks = [
         check_ch09,
@@ -119,6 +136,7 @@ def main() -> int:
         check_ch22,
         check_appendix_o,
         check_ni_harmonized,
+        check_review_pass3,
     ]
     failed = []
     for fn in checks:

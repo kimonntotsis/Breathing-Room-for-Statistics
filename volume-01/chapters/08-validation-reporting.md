@@ -158,7 +158,9 @@ sessionInfo()
 
 | Context | Option | Why / note |
 |---|---|---|
-| Prediction models | optimism correction / bootstrap validation | complements single split |
+| Prediction models (small *n*, few events) | Bootstrap or **nested/repeated CV** using all observations | May **replace** a random train/test split for **internal** validation; use **nested** CV when tuning hyperparameters |
+| Prediction models (adequate *n*) | Hold-out test set **or** resampling | Hold-out is one design; resampling can be equally valid internally |
+| All prediction models | External validation in independent cohort | **Required** for deployment claims; never substitute internal resampling alone [@moons2015tripod] |
 | Clustering / PCA | stability + external replication | Ch 10-11 |
 
 ### Non-inferiority and equivalence reporting

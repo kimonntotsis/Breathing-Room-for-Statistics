@@ -42,12 +42,12 @@ Sponsor slides often mix three distinct decisions: a **crude arm difference**, a
 
 | Analysis | Estimand (plain) | When it is primary | Report with |
 |----------|------------------|--------------------|-------------|
-| **Unadjusted** | Raw mean or proportion difference between groups | Balanced RCT with prespecified simple comparison; Table 1 shows acceptable balance (Ch 3) | Point estimate + 95% CI + **n** (and **events** for binary outcomes) |
-| **Adjusted** | Difference **holding prespecified covariates fixed** (age, sex, baseline FEV1, centre, …) | Observational cohorts; baseline imbalance; pulmonary RCTs using ANCOVA | Same + **list covariates**; residual checks (Ch 5) |
+| **Unadjusted** | Raw mean or proportion difference between groups | **Prespecified** ITT simple comparison in an RCT (randomization supports the contrast regardless of chance baseline imbalance) | Point estimate + 95% CI + **n** (and **events** for binary outcomes) |
+| **Adjusted** | Difference **holding prespecified covariates fixed** (age, sex, baseline FEV1, centre, …) | Observational cohorts; **prespecified** ANCOVA or covariate adjustment in pulmonary RCTs for precision | Same + **list covariates**; residual checks (Ch 5) |
 
-**RCT rule:** prespecify in the SAP whether the primary analysis is unadjusted ITT, **ANCOVA with baseline FEV1**, or a prespecified change score. Do not run all three and promote the smallest *p*.
+**RCT rule:** prespecify in the SAP whether the primary analysis is unadjusted ITT, **ANCOVA with baseline FEV1**, or a prespecified change score. **Do not choose the primary model after inspecting Table 1 balance.** Prespecified adjustment for strong prognostic baseline covariates may improve precision; observed imbalance alone is not a post hoc reason to switch from a prespecified unadjusted ITT analysis.
 
-**Observational rule:** adjusted logistic or linear models are the main analysis; unadjusted comparisons are **sensitivity** analyses that show how much confounding matters: not proof of effect (Ch 21).
+**Observational rule:** adjusted logistic or linear models are the main analysis; unadjusted comparisons are **sensitivity** analyses that show how much the estimate shifts with measured covariates (differences may also reflect non-collapsibility and model form, not confounding alone; Ch 21).
 
 **Wording:** unadjusted → “mean difference between groups”; adjusted → “associated with … after adjustment for …” unless the design supports stronger causal language.
 
@@ -95,7 +95,7 @@ t.test(fev1 ~ group, data = spirometry, var.equal = FALSE)
 
 ### Technique: Pooled two-sample t-test
 
-Assumes equal variances, rarely needed; Welch is the default. Use only with strong domain reason and Levene supporting equality: `t.test(..., var.equal = TRUE)`.
+Assumes equal variances; **Welch remains the prespecified default** without Levene pretesting. Use pooled variance only with strong protocol justification, not because a Levene test is nonsignificant: `t.test(..., var.equal = TRUE)`.
 
 ### Technique: Mann–Whitney U (Wilcoxon rank-sum)
 
@@ -135,7 +135,7 @@ bronchodilator <- read_csv(
 t.test(bronchodilator$fev1_pre, bronchodilator$fev1_post, paired = TRUE)
 ```
 
-Mean change ~0.25 L: compare to MCID for bronchodilator response [@cazzola2008mcid]. For skewed paired differences, use `wilcox.test(pre, post, paired = TRUE)`.
+Mean change ~0.25 L: compare to **acute bronchodilator reversibility** criteria (ATS/ERS), not to longitudinal **treatment MCIDs** for between-arm trials [@graham2019spirometry; @cazzola2008mcid]. For skewed paired differences, use `wilcox.test(pre, post, paired = TRUE)`.
 
 **Results template:** Mean FEV1 increased 0.25 L post-bronchodilator (95% CI 0.24 to 0.27; paired *t*, *p* < 0.001; *n* = 80).
 

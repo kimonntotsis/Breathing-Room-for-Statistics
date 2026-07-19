@@ -119,7 +119,7 @@ Censored patients are not “event-free forever.” Administrative censoring at 
 
 ### In practice (competing risk of death)
 
-In severe COPD, **death prevents future exacerbations**. Standard Cox for “first exacerbation” treats death as censored; which can **overstate** exacerbation risk. If mortality differs by arm, discuss competing risk explicitly; consider cause-specific hazard models or Fine–Gray subdistribution hazards for cumulative incidence ([Alternatives below](#technique-competing-risks-death-vs-exacerbation)).
+In severe COPD, **death prevents future exacerbations**. Treating death as ordinary censoring in a Kaplan–Meier or Cox model for exacerbation can **overstate cumulative exacerbation probability** (1 − KM overestimates cumulative incidence when competing events are censored). **Cause-specific Cox** still treats competing events as censored but estimates the **cause-specific hazard** for exacerbation (what happens while patients remain alive). **Fine–Gray** models the **subdistribution hazard** and links to cumulative incidence under competing risks. Report **cumulative incidence functions (CIF)** by group when death rates differ, not hazard ratios alone.
 
 ### Wrong analysis ⚠
 
@@ -139,7 +139,7 @@ In severe COPD, **death prevents future exacerbations**. Standard Cox for “fir
 | **Exclude early censoring** | Selection bias | Never for ITT-style follow-up |
 | **Unadjusted KM + log-rank in RCT** | Different estimand from adjusted Cox — not invalid | **Valid** prespecified ITT comparison by randomized arm; adjusted Cox may improve precision or match SAP covariates |
 | **Present HR as “% risk reduction”** without context | Misleading with frequent events | HR + absolute risks or NNT if appropriate |
-| **Cox for first exacerbation; death coded as censored** | Death competes with exacerbation | Competing-risk model or cause-specific Cox ([below](#technique-competing-risks-death-vs-exacerbation)) |
+| **Cox for first exacerbation; death coded as censored** | Cumulative incidence may be overstated when death is common | CIF / Fine–Gray for absolute risk; cause-specific Cox for cause-specific hazard ([below](#technique-competing-risks-death-vs-exacerbation)) |
 
 ### Reporting template
 
@@ -204,7 +204,16 @@ If global *p* is small, consider stratified Cox or time-varying coefficients (ad
 
 ## Technique: Competing risks (death vs exacerbation) {#technique-competing-risks-death-vs-exacerbation}
 
-When death prevents future exacerbations, standard Cox for "first exacerbation" treats death as censored and may **overstate** exacerbation risk. Use cause-specific Cox (hazard among survivors), Fine–Gray subdistribution HR (cumulative incidence), or cumulative incidence functions (CIF) by group, in R via `cmprsk`, `survival`, or `riskRegression`. When mortality is <1% and balanced, standard Cox may suffice with a sensitivity note.
+When death prevents future exacerbations, distinguish **what each method estimates**:
+
+| Method | Estimand | Competing death handled as |
+|--------|----------|---------------------------|
+| **Kaplan–Meier / standard Cox** (exacerbation) | Event-free survival / hazard treating death as censor | Censoring → **cumulative incidence can be overstated** |
+| **Cause-specific Cox** | Cause-specific hazard of exacerbation | Censored at death (hazard while alive) |
+| **Fine–Gray** | Subdistribution hazard → cumulative incidence under competing risks | Competing event in denominator |
+| **CIF (Aalen–Johansen / `cmprsk`)** | Absolute probability of exacerbation by time | Direct cumulative incidence |
+
+Use **CIF curves** and/or Fine–Gray when mortality differs by arm and absolute risk matters [@harrell2015rms]. Cause-specific Cox answers a different question (hazard while still at risk), not a shortcut fix for overstated cumulative incidence from 1 − KM. R packages: `cmprsk`, `riskRegression`, `survival` (CIF extensions). When mortality is <1% and balanced, standard Cox may suffice with a sensitivity note.
 
 Ask for **cumulative incidence curves** by arm, not only hazard ratios, when death rates differ [@harrell2015rms].
 
@@ -212,7 +221,8 @@ Ask for **cumulative incidence curves** by arm, not only hazard ratios, when dea
 
 | Mistake | Why it fails | Do instead |
 |---------|--------------|------------|
-| Cox with death = censored | Overstates exacerbation in high-mortality arms | Competing-risk analysis or cause-specific hazard |
+| Report 1 − KM as cumulative exacerbation risk when death is common | Death treated as censor inflates cumulative incidence | CIF or Fine–Gray; tabulate deaths by arm |
+| Conflate cause-specific Cox with cumulative incidence | Cause-specific hazard ≠ absolute probability | CIF / Fine–Gray for absolute risk |
 | Report HR without event types | Hides competing events | Table: exacerbations, deaths, censoring by arm |
 
 #### Reporting template (competing risk sensitivity)
@@ -240,8 +250,8 @@ Ask for **cumulative incidence curves** by arm, not only hazard ratios, when dea
 | **Kaplan-Meier + log-rank** | Compare time-to-first-event curves between groups | Uses all follow-up; handles censoring nonparametrically |
 | **Cox proportional hazards** | Adjust for covariates; report hazard ratios | Standard for time-to-event with censoring; check PH assumption |
 | **Logistic at fixed horizon (12 mo)** | Equal follow-up; only care about event Y/N at one date | Simpler; loses timing information |
-| **Fine–Gray / competing risks** | Death prevents future exacerbations; mortality differs by arm | Standard Cox censors death; may overstate event risk |
-| **Cause-specific Cox** | Distinct biological processes for competing events | Separates hazard of each event type |
+| **Fine–Gray / competing risks** | Death prevents future exacerbations; mortality differs by arm | CIF or Fine–Gray for cumulative incidence; cause-specific Cox for cause-specific hazard |
+| **Cause-specific Cox** | Mechanistic hazard while patients remain at risk | Not interchangeable with cumulative incidence |
 | **Stratified Cox** | Non-proportional hazards across subgroups | When PH fails for a covariate |
 | **Andersen-Gill / PWP** | **Recurrent** exacerbations (not first event only) | First-event Cox is wrong for repeats |
 
