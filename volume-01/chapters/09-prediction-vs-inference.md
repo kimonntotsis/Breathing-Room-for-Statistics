@@ -184,11 +184,11 @@ Run `source("R/examples/ch09_prediction.R")` and read [ch09_model_comparison.csv
 
 **Interpretation:** with so few test events, **penalized and tree models may collapse to constant predictions** (AUC = 0.50; bootstrap CI also 0.50–0.50). Logistic remains the defensible primary model; forest/boost may rank better but with **very wide** bootstrap intervals. This illustrates low-EPV warnings better than a synthetic "RF wins" story.
 
-**Calibration:** logistic decile plot (figure (`ch09_calibration_logistic.png`)); inspect highest-risk bin event counts.
+**Calibration:** binned calibration plot with **3–5 risk groups** given four test events (figure `ch09_calibration_logistic.png`); inspect highest-risk bin event counts. Do not label this a decile plot when events are too sparse for ten bins.
 
 **Results paragraph (template filled):**
 
-> Among 106 test-set patients (4 events), logistic regression achieved AUC 0.93 (bootstrap 95% CI 0.88 to 0.99) and Brier score 0.033. LASSO and classification trees did not outperform chance ranking (AUC 0.50), consistent with low EPV in training. Random forest AUC was 0.75 (wide CI 0.55 to 0.99). Calibration by risk group showed sparse events in high-risk bins. **External validation would be required before clinical use.**
+> Among 106 test-set patients (4 events), logistic regression achieved AUC 0.93 (bootstrap 95% CI 0.87 to 0.99) and Brier score 0.033. LASSO and classification trees did not outperform chance ranking (AUC 0.50), consistent with low EPV in training. Random forest AUC was 0.81 (wide CI 0.68 to 0.99). Calibration by risk group showed sparse events in high-risk bins. **External validation would be required before clinical use.**
 
 **What this does NOT prove:** causal effects of FEV1 or smoking; that RF or XGBoost "discovered" pathways; readiness for deployment.
 
@@ -198,7 +198,7 @@ Run `source("R/examples/ch09_prediction.R")` and read [ch09_model_comparison.csv
 
 **Methods:**
 
-> We developed prediction models for 12-month exacerbation (yes/no) using baseline smoking, age, FEV1 % predicted, and prior exacerbation count. The cohort was split 70/30 (seed 42). Models included logistic regression, LASSO (10-fold CV for λ on the training set), classification trees, random forests (500 trees), and optionally gradient boosting (XGBoost, train-only tuning). Performance was assessed on the held-out test set using AUC with bootstrap 95% CIs, Brier score, and calibration by predicted risk group [@moons2015tripod].
+> We developed prediction models for 12-month exacerbation (yes/no) using baseline smoking, age, FEV1 % predicted, and prior exacerbation count. The cohort was split 70/30 (seed 42). Models included logistic regression, LASSO (**5-fold** CV for λ on the training set), classification trees, random forests (500 trees), and optionally gradient boosting (XGBoost, **5-fold** train-only tuning). Performance was assessed on the held-out test set using AUC with bootstrap 95% CIs, Brier score, and calibration by predicted risk group [@moons2015tripod].
 
 **Results:**
 

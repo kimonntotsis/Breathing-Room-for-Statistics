@@ -90,7 +90,7 @@ GEE (`geepack::geeglm(fev1 ~ weeks * group, id = patient_id, corstr = "exchangea
 | Learning / training effects | First post-baseline visit can differ from steady state |
 | Non-linear decline | FEV1 decline may accelerate; consider splines (Ch 7) |
 | Clustered centres | Patients nested in hospitals need centre random effects or robust SEs |
-| Cross-sectional shortcut | Week-52 *t*-test ignores baseline and correlation |
+| Cross-sectional shortcut | Week-52 *t*-test discards earlier visits and baseline adjustment; SE is not wrong from within-patient correlation when *n* = one row per patient |
 
 ### In practice
 
@@ -104,8 +104,8 @@ One analyst proposes GEE; another fits `lmer`. Both can be correct; they answer 
 
 | Mistake | Why it fails | Do instead |
 |---------|--------------|------------|
-| *t*-test at one visit only | Discards information; wrong SEs | Mixed model on all visits |
-| Pooled visits as independent rows | Pseudo-replication | `(1 \| patient_id)` random intercept |
+| Week-52 *t*-test when slope is the estimand | Discards earlier visits; ignores trajectory | Mixed model / GEE on all scheduled times |
+| Pooled visits as independent rows | Pseudo-replication; **wrong SEs** | `(1 \| patient_id)` random intercept |
 | Change score without baseline adjustment | Noisy; regression to mean | Mixed model or ANCOVA with baseline |
 | Ignore dropout pattern | Biased if missingness relates to health | Compare attenders; Ch 20 sensitivity |
 | Claim causal effect from observational trajectories | Confounding by indication | State associational estimand; Ch 21 |
@@ -163,7 +163,7 @@ Each line is one participant. Use this plot to spot outliers, dropout, and wheth
 | Panel | Shows | Masks |
 |-------|--------|-------|
 | **Wrong** | Boxplot at week 52 only | Earlier visits, dropout, heterogeneous slopes |
-| **Right** | Spaghetti across scheduled visits |: (motivates mixed model / GEE) |
+| **Right** | Spaghetti across scheduled visits | (motivates mixed model / GEE) |
 
 a week-52 *t*-test figure should not be your only longitudinal slide if the estimand is change over time.
 
@@ -210,8 +210,8 @@ Mixed models let each patient have their own baseline FEV1 and estimate **condit
 
 | Mistake | Why it fails | Do instead |
 |---------|--------------|------------|
-| Stack visits in `lm()` without patient | Pseudo-replication | `(1 \| patient_id)` or GEE with `id` |
-| Report only week-52 *t*-test | Discards visits | Mixed / GEE on all scheduled times |
+| Stack visits in `lm()` without patient | Pseudo-replication; **wrong SEs** | `(1 \| patient_id)` or GEE with `id` |
+| Week-52 *t*-test when slope is the estimand | Discards earlier visits | Mixed / GEE on all scheduled times |
 | Switch from mixed to GEE after NS interaction | Analysis shopping | Prespecify; report sensitivity |
 
 CASTOR script fits mixed models: `R/examples/ch18_longitudinal_mixed_models.R`.

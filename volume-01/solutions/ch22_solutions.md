@@ -10,4 +10,4 @@
 
 **E22.5** FEV1 % and 12-month exacerbation are observed in one snapshot; temporal order and unmeasured severity/inflammation limit causal claims.
 
-**Applied** Total OR ≈ 2.11 vs direct OR ≈ 1.33; ACME ≈ 0.017 (bootstrap CI 0.000 to 0.048); mediator-model smoking coefficient ≈ −8.5 FEV1 % points for smokers vs non-smokers (adjusted). Sample Results sentence: see [Chapter 22 reporting template](chapters/22-mediation-analysis.md#reporting-template).
+**Applied** Total OR ≈ 2.11 vs direct OR ≈ 1.33; ACME ≈ 0.018 (bootstrap CI 0.001 to 0.044); mediator-model smoking coefficient ≈ −8.5 FEV1 % points for smokers vs non-smokers (adjusted). Sample Results sentence: see [Chapter 22 reporting template](chapters/22-mediation-analysis.md#reporting-template).

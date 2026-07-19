@@ -95,7 +95,7 @@ CASTOR paired example: `R/examples/ch04_comparing_groups.R` and Figure (`ch04_pa
 | **Design** | Parallel NI/ equivalence trial with **prespecified Δ** |
 | **Assumptions** | Margin clinically justified; powered for NI (not superiority) |
 | **Effect measure** | Mean difference vs margin; or proportion difference vs margin |
-| **Methods** | Two one-sided tests (TOST) at one-sided α = 0.025, **or** compare the relevant bound of a **two-sided 95% CI** to Δ. A **90% two-sided CI** corresponds to one-sided α = **0.05**, not 0.025 — match CI level to the prespecified α. |
+| **Methods** | Two one-sided tests (TOST) at one-sided α = 0.025, **or** compare the **lower bound** of a **two-sided 95% CI** to the prespecified margin Δ when the estimand is (new − control) and Δ is the maximum acceptable loss (e.g. Δ = −0.10 L). A **90% two-sided CI** corresponds to one-sided α = **0.05**, not 0.025 — match CI level to the prespecified α. |
 | **Report** | Margin Δ, NI conclusion yes/no, CI relative to Δ |
 | **Avoid when** | Declaring equivalence from superiority *p* > 0.05 |
 
@@ -105,9 +105,9 @@ device and inhaler NI trials live or die on the **margin**, not the *p*-value fr
 
 #### Reporting template (non-inferiority, continuous FEV1)
 
-**Methods:** The primary estimand was the mean difference in change from baseline FEV1 at 12 weeks (new therapy − control). Non-inferiority was prespecified with margin Δ = −0.10 L (one-sided α = 0.025). We used TOST / compared the **upper bound of the two-sided 95% CI** to Δ (equivalent to one-sided 2.5% on that bound). If your SAP uses one-sided α = 0.05, report a **90% two-sided CI** against Δ instead.
+**Methods:** The primary estimand was the mean difference in change from baseline FEV1 at 12 weeks (new therapy − control). Non-inferiority was prespecified with margin Δ = −0.10 L (one-sided α = 0.025). We compared the **lower bound of the two-sided 95% CI** to Δ (equivalent to one-sided 2.5% on that bound for this estimand). If your SAP uses one-sided α = 0.05, report a **90% two-sided CI** against Δ instead.
 
-**Results:** Mean difference = −0.03 L (95% CI −0.08 to 0.02). The upper CI bound was below Δ → **non-inferiority demonstrated** / exceeded Δ → **not demonstrated**.
+**Results:** Mean difference = −0.03 L (95% CI −0.08 to 0.02). The **lower CI bound (−0.08) exceeds Δ (−0.10)** → **non-inferiority demonstrated** / if the lower bound is ≤ Δ → **not demonstrated**.
 
 **Do not say:** “Groups were equivalent because p = 0.34.”
 

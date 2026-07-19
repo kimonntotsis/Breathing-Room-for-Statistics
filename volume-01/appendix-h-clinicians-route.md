@@ -28,7 +28,7 @@ Use [Appendix B](appendix-b-quick-reference.md) as a one-page router. Typical re
 | FEV1 or continuous lung function between arms | [Ch 4](chapters/04-comparing-groups.md) | Welch *t*, ANCOVA, MCID, pairing |
 | Exacerbation yes/no | [Ch 4](chapters/04-comparing-groups.md), [Ch 6](chapters/06-generalized-linear-models.md) | Proportions vs logistic regression |
 | Exacerbation counts / rates | [Ch 6](chapters/06-generalized-linear-models.md) | Poisson/NB, not a *t*-test |
-| Symptom scale (mMRC, CAT) | [Ch 6](chapters/06-generalized-linear-models.md) | Ordinal methods, not linear regression on 0–4 |
+| Symptom scale (mMRC item, CAT band) | [Ch 6](chapters/06-generalized-linear-models.md) | Ordinal methods for ordered items/bands; CAT/ACQ **totals** may be continuous if prespecified |
 | Repeated FEV1 visits | [Ch 18](chapters/18-longitudinal-mixed-models.md) | Not a single week-52 *t*-test |
 | Time to first exacerbation | [Ch 19](chapters/19-survival-analysis.md) | Censoring; not "no event = cured" |
 | Missing spirometry / dropout | [Ch 20](chapters/20-missing-data.md) | Complete-case is a choice, not a default |

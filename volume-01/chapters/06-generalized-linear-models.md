@@ -74,20 +74,20 @@ Exacerbation counts of 0, 1, 2, 3 dominate COPD cohorts. Poisson may look fine a
 
 ### In practice
 
-mMRC (0–4) and CAT are **ordered categories**, not continuous measurements. `lm(mMRC ~ treatment)` implies equal spacing between categories; use [ordinal logistic](#technique-ordinal-logistic-regression-mmrccat) or median-based summaries instead.
+mMRC **items** (0–4) and **CAT bands** are ordered categories, not continuous measurements. **CAT/ACQ total scores** are often treated as approximately continuous in trials when prespecified and justified; that is a separate estimand from item-level or banded ordinal models. `lm(mMRC ~ treatment)` on 0–4 implies equal spacing between categories; use [ordinal logistic](#technique-ordinal-logistic-regression-mmrccat) for ordered items/bands or median-based summaries instead.
 
 ### Other respiratory settings
 
 Logistic and Poisson models in CASTOR target **COPD exacerbations**. The model family follows the outcome type; the event definition follows the protocol:
 
-- **Asthma:** Severe exacerbations (steroid bursts, ED visits) are often **counts**; mMRC and ACQ need **ordinal** methods (above), not linear regression on 0–4 scores.
+- **Asthma:** Severe exacerbations (steroid bursts, ED visits) are often **counts**; mMRC items and ACQ/CAT **bands** need **ordinal** methods (above). **ACQ/CAT totals** may be prespecified as continuous secondary endpoints when justified.
 - **TB:** Culture conversion, smear clearance, or death during treatment are typical endpoints. Use Ch 6 count models or Ch 19 survival with those definitions; spirometry is usually secondary.
 
 Report absolute risks or rate differences when events are common.
 
 #### Reporting template
 
-**Methods:** Logistic regression modelled 12-month exacerbation (yes/no) adjusting for smoking, age, FEV1 % predicted, and prior exacerbation count. We report odds ratios with 95% CIs (Wald). Model fit assessed by event count and residual deviance.
+**Methods:** Logistic regression modelled 12-month exacerbation (yes/no) adjusting for smoking, age, FEV1 % predicted, and prior exacerbation count. We report odds ratios with 95% CIs (Wald). With only ~18 events, intervals are wide; consider exact or bootstrap CIs for primary inference if prespecified. Model fit assessed by event count and residual deviance.
 
 **Results:** Among 350 patients (18 events), prior exacerbations were associated with higher odds of a new event (OR 1.70, 95% CI 1.12 to 2.59). FEV1 % predicted OR 0.95 per 1% (95% CI 0.91 to 0.99). Smoking OR imprecise (95% CI included 1).
 

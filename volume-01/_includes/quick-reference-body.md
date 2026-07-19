@@ -22,7 +22,7 @@ If you cannot write this sentence, stop. See [Chapter 1](chapters/01-statistical
 | **Repeated continuous** | FEV1 at multiple visits |, (see mixed models) |
 | **Time-to-event** | Time to first exacerbation |, (see survival) |
 | **Many features** | Biomarker panel |, (see PCA / clustering) |
-| **Ordinal** | mMRC 0–4, CAT | Ordinal logistic ([Ch 6](chapters/06-generalized-linear-models.md#technique-ordinal-logistic-regression-mmrccat)); not `lm` on 0–4 |
+| **Ordinal** | mMRC 0–4, CAT **items/bands** | Ordinal logistic ([Ch 6](chapters/06-generalized-linear-models.md#technique-ordinal-logistic-regression-mmrccat)); not `lm` on 0–4 items. **CAT/ACQ totals** often continuous when prespecified |
 
 **Adjust for covariates**
 

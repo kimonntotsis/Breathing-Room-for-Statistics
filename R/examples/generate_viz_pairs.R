@@ -98,14 +98,13 @@ if (file.exists(prot_path)) {
 # 1. Plot router (Appendix I + Ch 3)
 # =============================================================================
 draw_plot_router <- function(path) {
-  # Illustrated master: figures/viz_plot_router.png
-  # R fallback (optional): archive/figures/fallbacks/viz_plot_router_r.png
-  if (!file.exists(path)) {
-    draw_plot_router_modern(path)
-  }
+  # Published: volume-01/figures/viz_plot_router.png (select-router-copper)
+  # Master: archive/figures/published-masters/viz_plot_router.png
+  # See volume-01/figures/PUBLISHED_NAVIGATION_FIGURES.md — do NOT overwrite published PNG.
+  draw_plot_router_modern(path)
 }
 
-draw_plot_router(file.path(fig_dir, "viz_plot_router.png"))
+draw_plot_router(file.path(fig_dir, "viz_plot_router_r.png"))
 
 # =============================================================================
 # 2. Ch 3: truncated axis vs honest scale

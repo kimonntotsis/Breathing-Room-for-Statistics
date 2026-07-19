@@ -1,5 +1,5 @@
 effect,estimate,ci_low,ci_high,p_value,scale,label,display
-ACME (indirect),0.017346955736157396,2.7278128093236514e-4,0.04782523187630873,0.036,average difference in predicted probability (binary outcome),Natural indirect effect (via FEV1 %),0.017 (0.000 to 0.048)
-ADE (direct),0.010592418814256262,-0.02381720291478842,0.04640966638688168,0.632,average difference in predicted probability (binary outcome),Natural direct effect (not via FEV1 %),0.011 (-0.024 to 0.046)
-Total effect,0.03258394229013347,-0.009863044294873363,0.07315702525196813,0.148,average difference in predicted probability (binary outcome),Total effect,0.033 (-0.010 to 0.073)
-Prop. mediated,0.5323774386075473,-5.9882209211493596,6.1008349565699405,0.184,average difference in predicted probability (binary outcome),Proportion mediated,0.53 (-5.99 to 6.10)
+ACME (indirect),0.017892859515303016,0.001323500850848751,0.043520647512148194,0.021,average difference in predicted probability (binary outcome),Natural indirect effect (via FEV1 %),0.018 (0.001 to 0.044)
+ADE (direct),0.010936302550480921,-0.028353283384729106,0.05054143375329635,0.601,average difference in predicted probability (binary outcome),Natural direct effect (not via FEV1 %),0.011 (-0.028 to 0.051)
+Total effect,0.0335484088773084,-0.012928915787737316,0.07934114807481019,0.18,average difference in predicted probability (binary outcome),Total effect,0.034 (-0.013 to 0.079)
+Prop. mediated,0.5333445046750177,-4.9049527091783345,5.931467811095894,0.189,average difference in predicted probability (binary outcome),Proportion mediated,0.53 (-4.90 to 5.93)

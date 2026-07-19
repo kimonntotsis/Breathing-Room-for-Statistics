@@ -59,7 +59,14 @@ fc_styles_handbook <- tibble::tribble(
   "header", "#F4F6F8", "#0C0D12", "#0C0D12", "bold"
 )
 
-fc_theme <- function(theme = c("light", "dark", "handbook")) {
+fc_pearl_lanes <- tibble::tribble(
+  ~x, ~w, ~fill, ~border,
+  18, 28, "#F0FAF9", "#5EC4B8",
+  50, 28, "#EEF2FF", "#818CF8",
+  82, 28, "#FFF1F2", "#FDA4AF"
+)
+
+fc_theme <- function(theme = c("light", "dark", "handbook", "pearl")) {
   if (theme[[1]] == "dark") {
     list(
       styles = fc_styles_dark,
@@ -84,7 +91,34 @@ fc_theme <- function(theme = c("light", "dark", "handbook")) {
       accent = "#E85D75",
       stripe = TRUE,
       text_size = 2.75,
-      dpi = 320
+      dpi = 320,
+      lanes = NULL
+    )
+  } else if (theme[[1]] == "pearl") {
+    list(
+      styles = tibble::tribble(
+        ~kind,    ~fill,     ~border,   ~text,     ~fontface,
+        "start",  "#F7FAFC", "#3A9E92", "#0C0D12", "bold",
+        "decide", "#EFF6F5", "#3A9E92", "#134E4A", "bold",
+        "cat",    "#FFFFFF", "#3A9E92", "#134E4A", "bold",
+        "method", "#FFFFFF", "#C8D2DC", "#334155", "plain",
+        "warn",   "#FEF2F2", "#BE123C", "#9F1239", "bold",
+        "omics",  "#F6F4FA", "#7C6EAD", "#3D3556", "plain",
+        "report", "#F3F5F7", "#4A5568", "#1E293B", "plain",
+        "foot",   "#F8FAFC", "#94A3B8", "#64748B", "plain",
+        "header", "#F8FAFC", "#CBD5E1", "#94A3B8", "plain",
+        "stop",   "#FFF8F8", "#E85D75", "#9F1239", "bold"
+      ),
+      bg = "#FFFFFF",
+      title = "#0C0D12",
+      subtitle = "#64748B",
+      caption = "#94A3B8",
+      edge = "#CBD5E1",
+      accent = "#BE123C",
+      stripe = FALSE,
+      text_size = 2.65,
+      dpi = 320,
+      lanes = fc_pearl_lanes
     )
   } else {
     list(
@@ -159,19 +193,27 @@ fc_branch_edges <- function(from_id, to_ids, nodes, drop = 0.6) {
 }
 
 fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in,
-                    accent_edges = NULL, theme = c("light", "dark", "handbook")) {
+                    accent_edges = NULL, theme = c("light", "dark", "handbook", "pearl"),
+                    lane_ymin = NULL, lane_ymax = NULL) {
   th <- fc_theme(theme)
   nodes <- nodes |>
     dplyr::mutate(
       xmin = x - w / 2, xmax = x + w / 2,
       ymin = y - h / 2, ymax = y + h / 2,
-      stripe_w = dplyr::if_else(kind %in% c("header", "foot"), 0, 1.1)
+      stripe_w = dplyr::case_when(
+        kind %in% c("header", "foot") ~ 0,
+        isTRUE(th$stripe) ~ 1.1,
+        TRUE ~ 0
+      )
     )
 
   y_lo <- min(nodes$ymin) - 3
   y_hi <- max(nodes$ymax) + 3
   if (!is.null(accent_edges) && nrow(accent_edges) > 0) {
     y_lo <- min(y_lo, accent_edges$ymid, accent_edges$yend, na.rm = TRUE) - 2
+  }
+  if (!is.null(lane_ymin)) {
+    y_lo <- min(y_lo, lane_ymin - 2)
   }
 
   p <- ggplot2::ggplot() +
@@ -191,6 +233,20 @@ fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in,
     ) +
     ggplot2::labs(title = title, subtitle = subtitle, caption = caption) +
     ggplot2::coord_cartesian(xlim = c(0, 100), ylim = c(y_lo, y_hi), clip = "off")
+
+  if (!is.null(th$lanes) && !is.null(lane_ymin) && !is.null(lane_ymax)) {
+    lanes <- th$lanes |>
+      dplyr::mutate(
+        xmin = x - w / 2, xmax = x + w / 2,
+        ymin = lane_ymin, ymax = lane_ymax
+      )
+    p <- p +
+      ggplot2::geom_rect(
+        data = lanes,
+        ggplot2::aes(xmin = xmin, xmax = xmax, ymin = ymin, ymax = ymax),
+        fill = lanes$fill, colour = lanes$border, linewidth = 0.35, alpha = 0.55
+      )
+  }
 
   if (nrow(edges) > 0) {
     if ("xmid" %in% names(edges)) {
@@ -266,73 +322,110 @@ fc_save <- function(nodes, edges, title, subtitle, caption, path, w_in, h_in,
 # 1. Method decision tree (handbook navigation)
 # =============================================================================
 draw_method_decision_tree <- function(path) {
+  th <- fc_theme("pearl")
+  sty <- th$styles
+
   top <- fc_stack(
     list(
       list(id = "e1", label = "1. Write estimand\nCh 1", w = 34, kind = "start"),
-      list(id = "e2", label = "2. Outcome type?\nCh 2; Appendix B", w = 38, kind = "decide")
+      list(id = "e2", label = "2. Outcome type?\nCh 2 · Appendix B", w = 38, kind = "decide")
     ),
-    x = 50, y_top = 97, gap = 3.2
+    x = 50, y_top = 97, gap = 3.2, styles = sty
   )
   branch_top <- min(top$y - top$h / 2) - 2
   col1 <- fc_stack(
     list(
-      list(id = "c1", label = "Continuous\nFEV1; scores; 6MWD", w = 26, kind = "cat"),
-      list(id = "m1a", label = "2 independent groups\nWelch t-test\nAlt: Mann-Whitney", w = 26, kind = "method"),
+      list(id = "c1", label = "Continuous\nFEV1 · scores · 6MWD", w = 26, kind = "cat"),
+      list(id = "m1a", label = "2 independent groups\nWelch t · Mann-Whitney", w = 26, kind = "method"),
       list(id = "m1b", label = "Paired design\npaired t-test", w = 26, kind = "method"),
-      list(id = "m1c", label = "Adjust covariates\nlinear; ANCOVA\nCh 5", w = 26, kind = "method")
+      list(id = "m1c", label = "Adjust covariates\nlinear · ANCOVA · Ch 5", w = 26, kind = "method")
     ),
-    x = 18, y_top = branch_top, gap = 3
+    x = 18, y_top = branch_top, gap = 3, styles = sty
   )
   col2 <- fc_stack(
     list(
       list(id = "c2", label = "Binary\nexacerbation Y/N", w = 26, kind = "cat"),
-      list(id = "m2a", label = "2 independent groups\nchi-square; Fisher", w = 26, kind = "method"),
+      list(id = "m2a", label = "2 independent groups\nchi-square · Fisher", w = 26, kind = "method"),
       list(id = "m2b", label = "Paired binary\nMcNemar", w = 26, kind = "method"),
-      list(id = "m2c", label = "Adjust covariates\nlogistic; Firth if sparse\nCh 6", w = 26, kind = "method")
+      list(id = "m2c", label = "Adjust covariates\nlogistic · Firth · Ch 6", w = 26, kind = "method")
     ),
-    x = 50, y_top = branch_top, gap = 3
+    x = 50, y_top = branch_top, gap = 3, styles = sty
   )
   col3 <- fc_stack(
     list(
       list(id = "c3", label = "Count\nevents per follow-up", w = 26, kind = "cat"),
       list(id = "m3a", label = "Never t-test\non counts", w = 26, kind = "warn"),
-      list(id = "m3b", label = "Poisson GLM\noffset if needed", w = 26, kind = "method"),
+      list(id = "m3b", label = "Poisson / mod. Poisson\noffset if needed · Ch 6", w = 26, kind = "method"),
       list(id = "m3c", label = "Overdispersion\nnegative binomial", w = 26, kind = "method")
     ),
-    x = 82, y_top = branch_top, gap = 3
+    x = 82, y_top = branch_top, gap = 3, styles = sty
   )
   col_min <- min(c(col1$y - col1$h / 2, col2$y - col2$h / 2, col3$y - col3$h / 2))
-  bottom <- fc_stack(
-    list(
-      list(id = "omics", label = "Many features / omics; Ch 10–17\nDE + FDR (13); batch (14); flow (15); screen (16); pipeline (17)", w = 78, kind = "omics"),
-      list(id = "report", label = "Report effect; 95% CI; n; limitations\nCONSORT; STROBE; TRIPOD; Ch 8", w = 72, kind = "report"),
-      list(id = "extra", label = "Ch 18–21; longitudinal; survival; missing data; causal", w = 68, kind = "foot")
-    ),
-    x = 50, y_top = col_min - 2, gap = 2.6
+  lane_ymin <- min(col1$y - col1$h / 2, col3$y - col3$h / 2) - 1.5
+  lane_ymax <- max(top$y + top$h / 2, col1$y + col1$h / 2) + 1
+
+  band_y <- col_min - 7
+  pill_y <- col_min - 15
+  band <- fc_node(
+    "band", 50, band_y, "Handbook routes · after method choice",
+    w = 84, kind = "header", styles = sty
   )
+  omics <- fc_node(
+    "omics", 22, pill_y,
+    "Discovery & omics\nCh 10–17 · DE · FDR · batch",
+    w = 26, kind = "omics", styles = sty
+  )
+  report <- fc_node(
+    "report", 50, pill_y,
+    "Report & limits · Ch 8\neffect · 95% CI · n\nCONSORT 2025 · TRIPOD+AI",
+    w = 26, kind = "report", styles = sty
+  )
+  extra <- fc_node(
+    "extra", 78, pill_y,
+    "Advanced topics\nCh 18–22 · MI · causal · mediation",
+    w = 26, kind = "foot", styles = sty
+  )
+  bottom <- dplyr::bind_rows(band, omics, report, extra)
   nodes <- dplyr::bind_rows(top, col1, col2, col3, bottom)
+
+  merge_y <- col_min - 2.5
+  ends <- nodes |> dplyr::filter(id %in% c("m1c", "m2c", "m3c"))
+  bus_down <- ends |>
+    dplyr::transmute(x, y = y - h / 2 - 0.4, xend = x, yend = merge_y)
+  bus_h <- tibble::tibble(
+    x = min(ends$x), y = merge_y, xend = max(ends$x), yend = merge_y
+  )
+  bus_up <- tibble::tibble(
+    x = 50, y = merge_y, xend = 50, yend = band$y + band$h / 2 + 0.4
+  )
+  bus <- dplyr::bind_rows(bus_down, bus_h, bus_up)
 
   edges <- dplyr::bind_rows(
     fc_edges("e1", "e2", nodes),
     fc_branch_edges("e2", c("c1", "c2", "c3"), nodes, drop = 1.2),
-    fc_edges(c("c1", "m1a", "m1b", "m1c"), c("m1a", "m1b", "m1c", "omics"), nodes),
-    fc_edges(c("c2", "m2a", "m2b", "m2c"), c("m2a", "m2b", "m2c", "omics"), nodes),
-    fc_edges(c("c3", "m3a", "m3b", "m3c"), c("m3a", "m3b", "m3c", "omics"), nodes),
-    fc_edges(c("omics", "report"), c("report", "extra"), nodes)
+    fc_edges(c("c1", "m1a", "m1b"), c("m1a", "m1b", "m1c"), nodes),
+    fc_edges(c("c2", "m2a", "m2b"), c("m2a", "m2b", "m2c"), nodes),
+    fc_edges(c("c3", "m3a", "m3b"), c("m3a", "m3b", "m3c"), nodes),
+    bus
   )
 
   fc_save(
     nodes, edges,
     title = "Method decision tree",
-    subtitle = "After steps 1–3 of the CASTOR pipeline; pick test or model by outcome type",
-    caption = "appendix-b-quick-reference.md; METHOD_MAP.md; analysis_pipeline.png",
-    path = path, w_in = 7.2, h_in = 12.5
+    subtitle = "CASTOR: question first, method second · pick test or model by outcome type",
+    caption = "Appendix B · METHOD_MAP · analysis_pipeline.png",
+    path = path, w_in = 10, h_in = 7.8,
+    theme = "pearl",
+    lane_ymin = lane_ymin, lane_ymax = lane_ymax
   )
 }
 
-# Illustrated method decision tree (handbook): figures/method_decision_tree.png
-# R fallback (optional): archive/figures/fallbacks/method_decision_tree_r.png
-# Design iterations: archive/figures/pipeline-options/
+draw_method_decision_tree(file.path(fig_dir, "method_decision_tree_r.png"))
+
+# Published assets (FROZEN — do not overwrite from R):
+#   analysis_pipeline.png      ← select-illustrated-luxe-ch22-preview-4096
+#   method_decision_tree.png   ← select-tree-luxe-routes-modern-4096
+# See volume-01/figures/PUBLISHED_NAVIGATION_FIGURES.md
 
 # =============================================================================
 # 1b. CASTOR analysis pipeline (process before method choice)
@@ -372,7 +465,7 @@ draw_analysis_pipeline <- function(path, theme = "handbook") {
     list(
       list(id = "b5", label = "Omics; screens\nCh 13–17", w = 17, kind = "omics"),
       list(id = "b6", label = "Longitudinal; survival\nCh 18–19", w = 17, kind = "method"),
-      list(id = "b7", label = "Missing; causal\nCh 20–21", w = 17, kind = "report"),
+      list(id = "b7", label = "Missing; causal; mediation\nCh 20–22", w = 17, kind = "report"),
       list(id = "b8", label = "Routers & paths\nApp B; I; J; K", w = 17, kind = "foot")
     ),
     x = 82, y_top = route_top, gap = 1.25, styles = sty
@@ -401,7 +494,7 @@ draw_analysis_pipeline <- function(path, theme = "handbook") {
     nodes, edges,
     title = "Analysis pipeline",
     subtitle = "Question first ;  method second ;  report what you did not prove",
-    caption = "Ch 1–21 + appendices ;  regenerate: source(\"R/examples/generate_figures.R\")",
+    caption = "Ch 1–22 + appendices ;  regenerate: source(\"R/examples/generate_figures.R\")",
     path = path, w_in = 7.8, h_in = 10.8,
     accent_edges = accent,
     theme = theme
@@ -435,7 +528,7 @@ draw_analysis_pipeline_modern <- function(path) {
     "r2", "Regression & prediction\nCh 5–9", "#ECFDF5", "#10B981", "#065F46",
     "r3", "Discovery & omics\nCh 10–17", "#F5F3FF", "#8B5CF6", "#4C1D95",
     "r4", "Longitudinal & survival\nCh 18–19", "#F0FDFA", "#14B8A6", "#134E4A",
-    "r5", "Missing; causal; routers\nCh 20–21; App B I J K", "#F8FAFC", "#64748B", "#334155"
+    "r5", "Missing; causal; mediation\nCh 20–22; App B I J K", "#F8FAFC", "#64748B", "#334155"
   )
 
   w_spine <- 46
@@ -542,9 +635,9 @@ draw_analysis_pipeline_modern <- function(path) {
       plot.caption = ggplot2::element_text(size = 8, colour = "#94A3B8", hjust = 0.5, margin = ggplot2::margin(t = 10))
     ) +
     ggplot2::labs(
-      title = "Analysis pipeline",
-      subtitle = "Question first ;  method second ;  report what you did not prove",
-      caption = "Ch 1–21 + appendices"
+      title = "CASTOR analysis pipeline",
+      subtitle = "Question first · method second · report what you did not prove",
+      caption = "Ch 1–22 + appendices · regenerate: source(\"R/examples/generate_figures.R\")"
     ) +
     ggplot2::coord_cartesian(xlim = c(0, 100), ylim = c(y_lo, y_hi), clip = "off") +
     ggplot2::geom_rect(
@@ -620,8 +713,11 @@ draw_analysis_pipeline_modern <- function(path) {
   ggplot2::ggsave(path, p, width = 8.2, height = 11.2, dpi = 320, bg = "#FFFFFF")
 }
 
-# Illustrated luxe pipeline (handbook primary): figures/analysis_pipeline.png
-# R fallbacks + design options: archive/figures/ (see archive/r-examples/draw_pipeline_options.R)
+draw_analysis_pipeline(file.path(fig_dir, "analysis_pipeline_r.png"))
+draw_analysis_pipeline_modern(file.path(fig_dir, "analysis_pipeline_r_modern.png"))
+draw_analysis_pipeline_modern(file.path(paths$root, "archive", "figures", "fallbacks", "analysis_pipeline_r_modern.png"))
+
+# Published asset: volume-01/figures/analysis_pipeline.png (FROZEN — see PUBLISHED_NAVIGATION_FIGURES.md)
 
 # =============================================================================
 # 2. Comparison panel (t-test vs Wilcoxon vs linear; chi vs logistic)

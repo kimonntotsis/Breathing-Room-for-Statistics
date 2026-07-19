@@ -63,7 +63,7 @@ med_out <- mediate(
   treat = "smoking_num",
   mediator = "fev1_percent_predicted",
   boot = TRUE,
-  sims = 500
+  sims = 2000
 )
 
 med_summary <- tibble(

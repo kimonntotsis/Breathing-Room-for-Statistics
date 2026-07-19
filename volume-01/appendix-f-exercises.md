@@ -217,7 +217,7 @@ Practice problems for Chapters 1–21. **Solutions** (repository only): `volume-
 
 **E9.3** Give one leakage example in exacerbation prediction.
 
-**Applied:** Train logistic on 70% of exacerbation data; AUC on 30%. Calibration decile table.
+**Applied:** Train logistic on 70% of exacerbation data; AUC on 30%. Calibration table by risk group (3–5 bins when events sparse).
 
 **Extension:** Compare RF vs logistic AUC on same split.
 
