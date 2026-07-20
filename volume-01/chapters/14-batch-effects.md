@@ -79,23 +79,7 @@ ComBat on the full dataset before train/test split has sunk prediction papers. A
 
 **Methods template:** Batch and plate variables were recorded. We tabulated group × batch overlap and examined PCA colored by batch and group. Per-feature models included batch/plate as covariates where identifiable. Sensitivity analyses with and without batch adjustment [changed/did not change] the number of discoveries at FDR q < 0.05.
 
-See [Catalog of wrong analyses (batch effects)](#catalog-of-wrong-analyses-batch-effects) below.
-
-### Catalog of wrong analyses (batch effects)
-
-| Wrong analysis | Why it fails | Do instead |
-|---|---|---|
-| **Skip batch QC** because "the analyst will fix it" | Technical structure becomes "biology" in DE/ML outputs | Always tabulate group × batch and plot PCA by batch |
-| **Adjust for batch when batch == group** | Model is not identifiable; coefficients are arbitrary | Report confounding; redesign (balance batches) or external validation |
-| **Report only the batch-adjusted model** | Hides instability and post hoc storytelling | Show with vs without batch; report overlap of top features |
-| **Use ComBat on the full matrix before splitting data** (prediction) | Leakage: test set informs correction | Fit correction inside training folds only |
-| **Treat plate as "random noise"** | Plates are structured batch effects with known labels | Include plate/run as covariate or blocking factor when measured |
-| **Interpret PCA separation as proof** | Embeddings are descriptive; separation can be driven by one outlier feature | Check feature loadings; validate with targeted QC metrics |
-| **Remove "batch genes" then test group** | Feature selection using batch information contaminates group tests | Prespecify feature sets or use models that include batch explicitly |
-| **Claim transportability across sites** after single-site ComBat | Correction does not create external validity | Validate on held-out site/batch or new cohort |
-| **Ignore missingness patterns by batch** (proteomics) | LOD missingness can track batch and mimic disease signal | Plot missingness by group and batch (see Ch 13 figure) |
-| **Single sentence: "batch corrected"** in Methods | Not auditable; reviewers cannot assess identifiability | State variables, model structure, and sensitivity outcome |
-
+See [Appendix R — omics and batch](../appendix-r-wrong-analysis-catalog.md#chapter-13-14) for the full audit list.
 ### Reporting template
 
 > Batch and plate variables were recorded. We tabulated group × batch overlap and examined PCA colored by batch and group. Per-feature models included batch/plate as covariates where identifiable. Sensitivity analyses with and without batch adjustment [changed/did not change] the number of discoveries at FDR q < 0.05. [If confounded: group effects were not identifiable after adjusting for batch.]

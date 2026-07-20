@@ -191,7 +191,8 @@ Missed spirometry visits in extension trials are often **MAR** (sicker patients 
 | Drop missing without table | Hides selection | Report missing % by arm/severity |
 | Listwise deletion as default | Biased under MAR/MNAR | MI or principled model |
 | Single imputation, ignore uncertainty | SEs too small | MICE + Rubin pooling |
-| Impute using future/outcome information | Leakage | Imputation model uses only past/ baseline covariates per protocol |
+| Impute using future information at deployment | Prediction leakage | Imputation fit **inside training folds** only; no test labels |
+| Omit outcome from inferential MI when imputing covariates | Biased MAR imputation | Include analysis-model variables and predictors of missingness in MI model |
 | "No missing data" when LOCF used | Hidden imputation | State imputation rule explicitly |
 | Structural missingness imputed like MCAR | Wrong estimand and population | Separate structural from random missing; define denominator |
 | Below-LOD coded as zero | Artificial group differences | Assay-aware handling (Ch 13) |
@@ -209,14 +210,7 @@ When missingness is moderate/high, outcome-related, or plausibly MNAR, compare t
 
 If conclusions **change materially**, report that uncertainty explicitly: do not report only the favourable analysis.
 
-### Catalog of wrong analyses (missing data)
-
-| Wrong analysis | Why it fails | Do instead |
-|---|---|---|
-| **Per-protocol deletion of missed visits** without estimand | Changes population | Align with ITT or prespecified estimand |
-| **Replace missing FEV1 with 0** | Meaningless scale abuse | Model missingness or impute within plausible range |
-| **Complete-case ML with 40% missing predictors** | Biased + overfit | MI inside CV folds |
-| **"Sensitivity analysis: repeat without missing"** only | One-direction sensitivity | Multiple plausible MNAR scenarios |
+> **Extended catalogue (four-part format):** [Appendix R — Chapters 20–22](../appendix-r-wrong-analysis-catalog.md#chapter-20-22).
 
 ### Reporting template
 

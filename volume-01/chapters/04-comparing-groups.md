@@ -55,7 +55,12 @@ Case B in Ch 12 shows crude proportions beside an adjusted exacerbation model: m
 
 #### Wrong analysis ⚠
 
-Do not report a Fisher odds ratio or Welch mean difference as “adjusted” without covariates; label unadjusted explicitly and route adjustment to regression (next two chapters in Part III). Do not change covariates after seeing results; prespecify confounders in the SAP before unblinding and treat post-hoc tweaks as sensitivity only.
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Label Fisher/Welch as "adjusted" without covariates | Misleading Methods | Route adjustment to Ch 5–6 regression | Unadjusted vs adjusted labelled |
+| Change covariates after seeing results | P-hacking | Prespecify SAP; post hoc = sensitivity only | Primary vs sensitivity models |
+
+> **Extended catalogue:** [Appendix R — Chapter 4](../appendix-r-wrong-analysis-catalog.md#chapter-4).
 
 ### Linking multiple clinical outcomes
 
@@ -97,9 +102,13 @@ t.test(fev1 ~ group, data = spirometry, var.equal = FALSE)
 
 Assumes equal variances; **Welch remains the prespecified default** without Levene pretesting. Use pooled variance only with strong protocol justification, not because a Levene test is nonsignificant: `t.test(..., var.equal = TRUE)`.
 
+### Do not choose tests from a normality pretest
+
+QQ plots and histograms help **diagnose** skewness and outliers. **Do not** run Shapiro–Wilk (or similar) on each group and switch between Welch and Mann–Whitney based on *p* < 0.05. That pretest adds a hidden multiplicity layer and does not guarantee correct type I error. Prespecify the primary estimand (mean difference vs rank shift), sample-size rationale, and robustness/sensitivity analyses in the SAP—not a binary normality gate.
+
 ### Technique: Mann–Whitney U (Wilcoxon rank-sum)
 
-Rank-based comparison when FEV₁ is clearly skewed with small *n*, or as a **prespecified sensitivity** to Welch. Tests whether **distributions** differ, not whether **means** differ unless shifts are symmetric [@mann1947test]. Report median [IQR] or Hodges–Lehmann alongside any mean-based primary.
+Rank-based comparison when FEV₁ is clearly skewed with small *n*, or as a **prespecified sensitivity** to Welch. The Mann–Whitney test asks whether values from one group **tend to be larger** than values from the other (a rank-distribution comparison). It is **not** generally a test of equal **medians** unless distribution shapes are sufficiently similar [@mann1947test]. Report median [IQR] or Hodges–Lehmann alongside any mean-based primary; do not relabel a rank test as a median test without that caveat.
 
 ```r
 wilcox.test(fev1 ~ group, data = spirometry)
@@ -136,6 +145,10 @@ t.test(bronchodilator$fev1_pre, bronchodilator$fev1_post, paired = TRUE)
 ```
 
 Mean change ~0.25 L: compare to **acute bronchodilator reversibility** criteria (ATS/ERS), not to longitudinal **treatment MCIDs** for between-arm trials [@graham2019spirometry; @cazzola2008mcid]. For skewed paired differences, use `wilcox.test(pre, post, paired = TRUE)`.
+
+**Teaching hierarchy:** analyse **continuous change** (absolute mL or % change from pre-BD) as the primary estimand when possible. **Dichotomised “reversibility”** thresholds depend on baseline lung function, technical variability, and reference standards—treat threshold classification as **secondary**, not a substitute for modelling continuous response. Report absolute and percentage change when both are clinically used; acknowledge equipment and manoeuvre quality grades [@graham2019spirometry].
+
+**Device or repeat manoeuvre agreement** (same patient, two measurements) is descriptive and Bland–Altman territory ([Ch 3](03-descriptive-analysis.md)), not a between-group Welch test.
 
 **Results template:** Mean FEV1 increased 0.25 L post-bronchodilator (95% CI 0.24 to 0.27; paired *t*, *p* < 0.001; *n* = 80).
 
@@ -369,23 +382,6 @@ Includes: Welch t, Wilcoxon, ANOVA, Tukey, ANCOVA, permutation test, power calcu
 
 Specialised comparisons (NI/equivalence, clustered RCT, crossover, rate-based counts, robust alternatives): **[Appendix O](../appendix-o-ch04-comparison-extensions.md)**. Permutation tests, power, and multiplicity for this chapter are covered [above](#permutation-tests-and-sample-size) and in [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints).
 
----
-
-## Catalog of wrong analyses (comparison chapter)
-
-| # | Wrong | Right |
-|---|-------|-------|
-| 1 | t-test on binary exacerbation Y/N | Logistic / compare proportions |
-| 2 | t-test on count of exacerbations | Poisson / NB |
-| 3 | Ignore pairing in pre/post BD | Paired t or Wilcoxon signed-rank |
-| 4 | ANOVA then all pairwise without plan | Prespecified contrasts or Tukey with multiplicity awareness |
-| 5 | Claim equivalence from p > 0.05 | NI trial with prespecified margin, or equivalence with TOST |
-| 6 | Pool sites without clustering check | Mixed model `(1 \| centre)` or GEE (Ch 18) |
-| 7 | Cluster RCT analysed with patient-level Welch *t* | Cluster-aware mixed model / GEE |
-
----
-
----
 
 ## Quick reference: methods in this chapter
 

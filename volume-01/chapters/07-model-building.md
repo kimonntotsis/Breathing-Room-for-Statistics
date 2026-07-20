@@ -16,15 +16,25 @@ Model building is where good studies leak degrees of freedom. This chapter separ
 
 ---
 
-## Three model-building modes (choose first)
+## Four model-building purposes (choose first)
 
-| Mode | Variable selection | Evaluation | CASTOR example |
-|------|-------------------|------------|----------------|
-| **Confirmatory inference** | Prespecified confounders | CI, LRT for prespecified extras | Smoking + age + FEV1% + prior exac |
-| **Exploratory** | Flexible | Generate hypotheses only | Subgroup scans - label exploratory |
-| **Prediction** | CV / LASSO / RF | AUC, calibration on held-out data | Ch 9 shootout [@james2023ISL] |
+| Purpose | Variable rule | Evaluation | CASTOR example |
+|---------|---------------|------------|----------------|
+| **Treatment-effect estimation** | Prespecified covariates per SAP | CI on contrast; ITT estimand | ANCOVA FEV₁ with baseline adjustment |
+| **Causal / etiological association** | DAG + measured confounders; avoid mediators/colliders | CI + sensitivity; associational language | Smoking–exacerbation with prespecified confounders |
+| **Descriptive association** | Transparent covariate set; label exploratory if post hoc | Effect + CI; no causal verbs | Exploratory subgroup scan |
+| **Prediction** | CV / penalisation inside train | Calibration + discrimination on held-out data | Ch 9 risk score [@james2023ISL] |
 
-**Never mix modes without labelling which is which** [@shmueli2010predict].
+**AIC, BIC, stepwise, and LASSO are not interchangeable.** They answer different questions after you pick the purpose above. **Never mix modes without labelling which is which** [@shmueli2010predict].
+
+### Wrong analysis ⚠
+
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Stepwise selection for primary endpoint | Data-driven model | Prespecified covariates per SAP | Primary vs exploratory labelled |
+| AIC/BIC shopping across inferential goals | Wrong criterion for causal inference | Choose purpose first (four modes above) | One labelled model per goal |
+
+> **Extended catalogue:** [Appendix R — Chapter 7](../appendix-r-wrong-analysis-catalog.md#chapter-7).
 
 ---
 
@@ -124,19 +134,6 @@ exacerbation_12m ~ smoking + age +
 
 **Prediction path (Ch 9):** same predictors → train/test → LASSO λ by CV - evaluate AUC, not stepwise p.
 
----
-
-## Catalog of wrong analyses
-
-| Wrong | Right |
-|-------|-------|
-| Stepwise for primary endpoint | Prespecified model |
-| Tune on test set | CV on training only |
-| 30 predictors, 18 events | Reduce predictors / penalize |
-| Adjust for collider | DAG-informed adjustment |
-| Report AIC-min model as confirmatory | Label exploratory |
-
----
 
 ## Reporting template
 
@@ -204,6 +201,8 @@ source("R/examples/ch07_model_building.R")
 ## Where we go next
 
 Rivera signs the covariate list Mei defended. The first full manuscript draft goes to internal review. CONSORT flow, limits paragraphs, and whether a burst-risk model belongs in the same paper as the primary FEV₁ result. That is **Part IV**, not another tweak to tonight's `glm()` output.
+
+{{< include ../_includes/castor-vs-reality.md >}}
 
 {{< include ../_includes/chapter-see-also.md >}}
 

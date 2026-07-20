@@ -16,6 +16,8 @@ Classify outcome type, unit of analysis, and design **before** any test name.
 
 The wrong method usually starts with the wrong **outcome type**, not the wrong R function. When you finish here, you can complete the pre-analysis checklist at chapter end and route to the right technique chapter; not to a menu of tests.
 
+**Analysis planning:** Before locking the protocol, align estimands with sample size and precision ([Appendix P](../appendix-p-sample-size-planning.md)).
+
 ---
 
 ## The cohort you are classifying
@@ -88,10 +90,12 @@ Real spreadsheets mix litres and millilitres, duplicate IDs, and “exacerbation
 
 ### Wrong analysis ⚠
 
-| | |
-|---|---|
-| **Mistake** | Treat every column as a predictor in a fishing expedition |
-| **Do instead** | Prespecify outcome, exposure, prespecified confounders |
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Test every column without a primary estimand | Multiple comparisons; uninterpretable deck | Prespecify outcome, exposure, confounders | One estimand sentence |
+| Wrong outcome type → wrong test | Invalid *p*-values and effect sizes | Decision tree / Appendix B | Method matches outcome type |
+
+> **Extended catalogue:** [Appendix R — Chapter 2](../appendix-r-wrong-analysis-catalog.md#chapter-2).
 
 ---
 
@@ -120,9 +124,21 @@ Start at the outcome node, not at “we always use a t-test”: the tree routes 
 CASTOR is a **COPD-oriented** teaching cohort (FEV1, exacerbations, smoking, triple therapy). The routing table still applies elsewhere if you relabel the outcome:
 
 - **Asthma trials** often prioritise exacerbation counts, oral steroid bursts, or ordinal symptom scores (ACQ, mMRC) alongside FEV1. Prespecify the primary endpoint before unblinding.
+- **Interstitial lung disease (ILD)** programmes often use **FVC** (continuous, Ch 5/18), **time to progression**, or **composite** endpoints; **death and transplant** are competing events (Ch 19).
+- **Bronchiectasis / cystic fibrosis** often have **recurrent pulmonary exacerbations** with **zero-heavy** counts and long follow-up (NB rate models, Ch 6; recurrent survival extensions, Ch 19).
 - **TB programme research** more often uses microbiological conversion, treatment completion, or mortality at fixed follow-up. Use the same chapter routes (proportions, counts, survival in Ch 4, 6, 19); FEV1 is rarely primary.
 
 One estimand per analysis. Do not swap endpoints after seeing the tables.
+
+### Cross-disease routing vignettes
+
+Same CASTOR workflow; different estimands. Write **one primary sentence** before opening R.
+
+**Severe asthma — biologic trial:** Population: adults with severe eosinophilic asthma on ICS/LABA. Primary (common): **annualised severe exacerbation rate** (NB + person-time offset, Ch 6). Secondaries: time to first severe exacerbation (Ch 19); OCS dose; ACQ; post-BD FEV₁ (ANCOVA, Ch 5). Biomarker enrichment (eosinophils, FeNO) → [Appendix Q](../appendix-q-diagnostic-accuracy.md).
+
+**Idiopathic pulmonary fibrosis:** Primary continuous: **FVC decline** (mL) at 52 weeks (Ch 5, 18). Primary time-to-event: progression with **death/transplant** as competing risks (Ch 19). Pitfall: treating death as ordinary censoring.
+
+**Bronchiectasis:** Primary: exacerbation **rate** or time between events. Data: many zeros, recurrent events, variable follow-up. First-line: NB + offset (Ch 6); recurrent Cox if timing is the estimand (Ch 19).
 
 ### Practice check
 
@@ -234,23 +250,6 @@ These files are designed for later "advanced discovery" chapters in a single-vol
 
 Reporting templates for these analyses are in HIGH_DIM_REPORTING_TEMPLATES.
 
----
-
-## Catalog of wrong analyses (data chapter)
-
-| Wrong | Why it fails | Right |
-|-------|--------------|-------|
-| *t*-test on binary exacerbation Y/N | Wrong outcome type | Fisher / logistic [Ch 4, 6] |
-| *t*-test on exacerbation **counts** | Count, skewed, bounded | Poisson / NB [Ch 6] |
-| `lm()` on 0/1 outcome | Predictions outside [0,1] | Logistic [Ch 6] |
-| Ignore pairing in pre/post BD | Inflated false positives | Paired *t* [Ch 4] |
-| Analyse repeated FEV1 as independent | Wrong SEs | Mixed models Ch 18 |
-| Analyse survival as 12-month binary only | Loses timing | Ch 19 |
-| Pool flow cells as n | Pseudo-replication | Ch 15 |
-| Cluster on markers + FEV1, then "predict" FEV1 | Circular | Cluster on markers only [Ch 11] |
-| Omics heatmap without batch check | Technical artefacts | Ch 14 |
-
----
 
 ## Alternatives & extensions (data structures that change the method)
 

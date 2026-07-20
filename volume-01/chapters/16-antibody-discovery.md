@@ -121,20 +121,7 @@ Changing the hit threshold after seeing the plate layout is post hoc tuning. Pre
 | **Why it fails** | post hoc thresholding is hidden multiple testing |
 | **Do instead** | prespecify threshold or use controls; report sensitivity analysis |
 
-### Catalog of wrong analyses (antibody / discovery screens)
-
-| Wrong analysis | Why it fails | Do instead |
-|---|---|---|
-| **Screen p-value as final result** | Screen is triage, not confirmatory endpoint | Report PPV and confirmation outcomes |
-| **Post hoc threshold** chosen to maximise hits | Inflates false discovery and PPV looks better than it is | Prespecify threshold; show sensitivity curve |
-| **Rank #1..#10 reported as precise ordering** | Ranks are unstable under replicate noise | Use stability tiers |
-| **Confirm only "good-looking" clones** | PPV becomes meaningless (selection bias) | Confirm prespecified shortlist rule |
-| **Ignore batch in screen QC** | Hits cluster by plate/day | Plot by batch; adjust or block in design |
-| **Single replicate** | No assessment of ranking stability | Require replicates or repeat measurements |
-| **Mix antigens in one threshold** | Different targets have different background | Threshold/PPV **per antigen** |
-| **KD reported without positivity rule** | "Strong binder" becomes subjective | Prespecify KD cutoff for `confirm_positive` |
-| **Cherry-pick one antigen for the paper** | Multiplicity and hype | Report all targets or prespecify primary antigen |
-| **Claim therapeutic antibody from screen** | No specificity, affinity, or function in context | Confirmation + orthogonal assays + replication |
+> **Extended catalogue (four-part format):** [Appendix R — Chapters 15–17](../appendix-r-wrong-analysis-catalog.md#chapter-15-17).
 
 ### Reporting template
 

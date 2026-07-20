@@ -62,10 +62,12 @@ Formally: ignore clustering → anti-conservative SEs and inflated significance 
 
 #### Wrong analysis ⚠
 
-| Mistake | Why it fails | Do instead |
-|---------|--------------|------------|
-| Welch *t* on all ICU patients | Ward-level exposure shared | Mixed model or GEE with ward random effect |
-| Cluster RCT analysed as individual RCT | Wrong denominator for inference | Cluster-level or mixed model with `(1 \| cluster)` |
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Welch *t* on all ICU patients ignoring ward | Shared exposure within ward | Mixed model / GEE with ward effect | Cluster unit in Methods |
+| Cluster RCT analysed as individual RCT | Wrong SEs | `(1 \| cluster)` or cluster-level analysis | ICC, clusters randomised |
+
+> **Extended catalogue:** [Appendix R — Appendix O](../appendix-r-wrong-analysis-catalog.md#appendix-o).
 
 ### Technique: Crossover and paired bronchodilator designs
 

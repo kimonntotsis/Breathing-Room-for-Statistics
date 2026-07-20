@@ -153,7 +153,14 @@ Chapter 10 reduced 30 markers to a few components. Clustering on **5 PCs** often
 # In ch11_clustering.R: ARI between k-means on 5 PCs vs all 30 markers
 ```
 
-**Wrong analysis ⚠:** PCA on full data including outcome, then cluster on PCs, then test outcome - circular. Fit PCA on markers only; hold outcomes for external validation.
+**Wrong analysis ⚠**
+
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| PCA including outcome → cluster → test outcome | Circular inference | PCA on markers only; holdout outcomes | External validation plan |
+| "Validated endotype" at claim ladder rung 1 | Overclaiming | Endotype claim ladder (this chapter) | Rung reached + stability |
+
+> **Extended catalogue:** [Appendix R — Chapters 10–11](../appendix-r-wrong-analysis-catalog.md#chapter-10-11).
 
 ---
 
@@ -202,21 +209,6 @@ When k-means is too brittle, escalate deliberately:
 
 Profile plots help name clusters for discussion; they do not validate that clusters generalise to new cohorts.
 
----
-
-## Catalog of wrong analyses (respiratory-specific)
-
-| Wrong | Why it fails | Do instead |
-|-------|--------------|------------|
-| Cluster on markers **and** FEV1, then “predict” lung function | FEV1 defined groups | Cluster on markers only; test FEV1 externally |
-| Enriched trial from exploratory clusters only | No prospective validation | Rung 5 ladder; prespecify in protocol |
-| “Precision medicine” from *n* = 80 | Underpowered for care pathways | Exploratory language; plan replication |
-| Latent class on symptoms, then test same biomarkers | Same circularity | Hold out validation markers |
-| Ignore `processing_batch` | Technical clusters | Batch correction / sensitivity |
-| Endotype in title, rung 1 only | Overclaiming | “Exploratory subgroups” |
-| *k* chosen post hoc | Overfit | Document all *k* tried; bootstrap stability |
-
----
 
 ## Explaining to patients and general readers
 

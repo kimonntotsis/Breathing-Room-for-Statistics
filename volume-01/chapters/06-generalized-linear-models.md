@@ -16,6 +16,15 @@ Respiratory endpoints are often binary or count-shaped. CASTOR's exacerbation va
 
 **Odds ratios** mislead when exacerbations are common: prefer risk difference, RR, or predicted risks. Check **events per variable** in logistic models (~18 events in CASTOR, wide CIs). Default to **negative binomial** when Poisson shows overdispersion. Use **offset(log person-time)** when follow-up varies. *"Any exacerbation"* and *"exacerbations per year"* are different estimands, do not swap models for convenience.
 
+### Odds versus risk (why OR ≠ RR)
+
+| Risk (probability) | Odds | If risk doubles (RR = 2.0) |
+|--------------------|------|------------------------------|
+| 20% | 0.25 | New risk 40%; new odds 0.67 → **OR ≈ 2.67** |
+| 10% | 0.11 | New risk 20%; new odds 0.25 → **OR ≈ 2.25** |
+
+When events are common (>10–15%), an OR exaggerates the risk ratio. Report predicted risks, risk difference, log-binomial RR, or modified Poisson RR with robust SEs—not an OR paragraph alone.
+
 > **How to read this chapter:** Jump to **logistic** (binary) or **Poisson/NB** (counts). [Quick reference](#quick-reference-methods-in-this-chapter) at the end lists all methods.
 
 ---
@@ -80,7 +89,9 @@ mMRC **items** (0–4) and **CAT bands** are ordered categories, not continuous 
 
 Logistic and Poisson models in CASTOR target **COPD exacerbations**. The model family follows the outcome type; the event definition follows the protocol:
 
-- **Asthma:** Severe exacerbations (steroid bursts, ED visits) are often **counts**; mMRC items and ACQ/CAT **bands** need **ordinal** methods (above). **ACQ/CAT totals** may be prespecified as continuous secondary endpoints when justified.
+- **Asthma:** Severe exacerbations (steroid bursts, ED visits) are often **counts** with **annualised rate** as primary in biologic trials; **OCS reduction** may be continuous or ordinal. **FeNO / eosinophils** for enrichment are diagnostic/eligibility questions ([Appendix Q](../appendix-q-diagnostic-accuracy.md)), not substitutes for prespecified efficacy estimands.
+- **ILD:** Hospitalisation for respiratory decline may be counted; **FVC** is usually continuous (Ch 5), not GLM count.
+- **Bronchiectasis:** Pulmonary exacerbation counts are often **overdispersed** and recurrent — NB rate first (above); see [recurrent router](#technique-recurrent-exacerbations--which-model).
 - **TB:** Culture conversion, smear clearance, or death during treatment are typical endpoints. Use Ch 6 count models or Ch 19 survival with those definitions; spirometry is usually secondary.
 
 Report absolute risks or rate differences when events are common.
@@ -166,6 +177,46 @@ Same role as logistic on a latent scale, coefficients not comparable to ORs acro
 
 ---
 
+## Count outcomes: endpoint hierarchy (exacerbations)
+
+Before choosing Poisson or Cox, write the estimand:
+
+| Question | Typical estimand | Chapter |
+|----------|------------------|---------|
+| Any vs none in fixed window | Risk / OR | Logistic (above) |
+| Count in fixed window, equal follow-up | Rate ratio | Poisson / NB |
+| Unequal follow-up | Rate with **offset(log person-time)** | Poisson / NB |
+| Time between events | Recurrent-event models | Ch 19 extension |
+| Death prevents future events | Competing risks | Ch 19 |
+| Many zeros with overdispersion | **NB first**; ZI only if structural zeros justified | Below |
+
+**Zero-inflation is not the default fix for “many zeros.”** Negative-binomial models can produce many zeros naturally. Zero-inflated Poisson/NB implies a **distinct structural-zero process** (e.g. a subgroup that cannot experience the event)—justify biologically before fitting.
+
+---
+
+## Technique: Recurrent exacerbations — which model?
+
+Exacerbations **recur**. The estimand determines the model; do not default to first-event Cox or a single binary “any exacerbation” when the protocol cares about **rate**, **burden**, or **time between events**.
+
+| Clinical question | Estimand | First-line model | Chapter |
+|-------------------|----------|------------------|---------|
+| Any vs none in 12 months | Risk / OR | Logistic | Above |
+| Total events in fixed window | Rate / count | Poisson / NB (+ offset if needed) | Above |
+| Events per person-year with varying follow-up | Rate ratio | NB + `offset(log(person_years))` | Above |
+| Time to **first** event | Hazard | Cox / KM | Ch 19 |
+| **All** recurrent events (patient still at risk) | Recurrent hazard | Andersen–Gill Cox (robust SE) | Ch 19 |
+| Ordered recurrent events (event 1, 2, 3…) | Gap times or stratified risk sets | PWP (Prentice–Williams–Peterson) | Ch 19 |
+| Death ends future exacerbation observation | Cumulative incidence | Fine–Gray / CIF | Ch 19 |
+| Excess zeros beyond NB (structural) | Mixture | ZI-NB (prespecified only) | Above |
+
+**Asthma biologic trials** often prespecify **annualised exacerbation rate** (NB with exposure time) as primary, with secondary time-to-first-event. **COPD registry** studies may report both rate and first-event HR—label them as **different estimands**.
+
+**Bronchiectasis / CF** cohorts frequently have **zero-heavy** counts and long follow-up; start with NB rate models before zero-inflation; consider within-person correlation explicitly (Ch 18, 19).
+
+> **Consult a statistician** for frailty models, joint models with death, treatment-policy estimands after discontinuation, and regulatory SAP wording.
+
+---
+
 ## Count outcomes: Poisson regression
 
 ### Technique: Poisson GLM
@@ -220,7 +271,7 @@ MASS::glm.nb(
 )
 ```
 
-**Zero-inflated Poisson/NB** (`pscl::zeroinfl`), exploratory when structural zeros dominate; do not label clusters as validated phenotypes from one dataset.
+**Zero-inflated Poisson/NB** (`pscl::zeroinfl`): use only when a **structural-zero** subgroup is prespecified (not merely “lots of zeros”). Compare against NB first; label exploratory; do not name phenotypes from one dataset.
 
 ---
 
@@ -293,21 +344,16 @@ Always state **event count and n**.
 3. NB instead of Poisson if overdispersed
 4. Marginal risks for practice reporting (`emmeans`)
 
----
+### Wrong analysis ⚠
 
-## Catalog of wrong analyses (GLM chapter)
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| `lm()` on 0/1 exacerbation | Invalid predictions | Logistic regression | OR + event count |
+| OR reported as RR when events common | Exaggerates risk | Log-binomial / modified Poisson | RR or marginal RD |
 
-| # | Wrong | Right |
-|---|-------|-------|
-| 1 | Linear regression on 0/1 outcome | Logistic |
-| 2 | OR as RR in common outcomes | Log-binomial or marginal RD |
-| 3 | Poisson ignoring person-time | Offset log(person-years) |
-| 4 | Ignore overdispersion | Quasi-Poisson / NB |
-| 5 | Causal claim from adjusted logistic | Associative language + design limits |
-| 6 | 50 predictors, 20 events | Penalized / reduce predictors |
+> **Extended catalogue:** [Appendix R — Chapter 6](../appendix-r-wrong-analysis-catalog.md#chapter-6).
 
 ---
-
 
 ## R lab
 
@@ -415,6 +461,8 @@ Formally: proportional odds logistic model estimates cumulative log-odds of bein
 ## Where we go next
 
 The exacerbation models are fit; a fellow starts dropping non-significant covariates to “clean up” the table. **Chapter 7** is where Mei freezes the variable list that was in the SAP. Part IV (validation and reporting) arrives when the manuscript lands on her desk; not in the same afternoon as the GLM output.
+
+{{< include ../_includes/castor-vs-reality.md >}}
 
 {{< include ../_includes/chapter-see-also.md >}}
 

@@ -12,6 +12,10 @@ Inference and prediction share code but not evidence rules. Part IV is where CAS
 
 **Skip this if:** you have not yet chosen the primary method (Parts II–III first).
 
+## Bridge to Part V (structure discovery)
+
+After Ch 9, you can predict **Y** from many markers—or **explore** structure without a prespecified outcome (Ch 10–11). PCA and clustering answer *“what patterns exist?”* not *“what is this patient’s risk?”* Keep prediction validation standards (Ch 9) separate from exploratory plots.
+
 ## Handbook resources
 
 | Resource | When to use it |

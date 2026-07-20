@@ -120,20 +120,7 @@ A flow core returns 50,000 events per patient and a beautiful t-SNE. Summarise t
 | **Why it fails** | embeddings distort distances; clustering is unstable |
 | **Do instead** | call them "patterns", report stability, validate with markers/replication |
 
-### Catalog of wrong analyses (flow cytometry)
-
-| Wrong analysis | Why it fails | Do instead |
-|---|---|---|
-| **Pooled-cell t-test / logistic on cells** | Pseudo-replication inflates n and shrinks p-values | One summary per participant; n = participants |
-| **Report cell count as sample size** | "n = 50,000 events" is not n = 50,000 people | Report participants and events per participant separately |
-| **Ignore compositional constraint** | Increasing one population mechanically affects others | Interpret one type at a time; consider compositional methods if core question |
-| **Compare proportions without drift check** | Run-day drift mimics group differences | Plot by batch; adjust when identifiable (Ch 14) |
-| **UMAP separation = proof of disease subgroup** | Embedding is descriptive and unstable | Show participant summaries + marker validation |
-| **Cherry-pick one cell type after scanning many** | Multiplicity without FDR | Prespecify populations or control FDR (Ch 13) |
-| **Manual gating undisclosed** | Not reproducible; not auditable | Document gating strategy or algorithm + QC |
-| **Rare population overclaim** | 0.1% subsets are noisy with small n | Report uncertainty; avoid mechanistic language |
-| **Mixed model without random intercept for patient** | Still treats cells as exchangeable within patient incorrectly if misspecified | Patient random effect when modelling cells directly |
-| **"Immune age" from one cohort** | Signature may track batch/site | External validation; drift diagnostics |
+> **Extended catalogue (four-part format):** [Appendix R — Chapters 15–17](../appendix-r-wrong-analysis-catalog.md#chapter-15-17).
 
 ### Reporting template
 

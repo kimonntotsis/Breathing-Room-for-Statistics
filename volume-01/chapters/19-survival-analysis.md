@@ -71,6 +71,21 @@ Cox proportional hazards models the instantaneous hazard of first exacerbation a
 
 HR > 1 for smoking means higher **rate** of first exacerbation, not necessarily a specific absolute risk difference. Report events and person-time.
 
+### What an HR of 0.70 does and does not mean
+
+| Statement | Valid? |
+|-----------|--------|
+| At each time among patients still event-free, the **instantaneous event rate** in the exposed group is ~70% of the unexposed rate (under PH) | Yes (model-dependent) |
+| The **12-month cumulative risk** is 30% lower | **Not necessarily** |
+| **Median time to event** is 30% longer | **Not necessarily** |
+| **Expected event-free time** differs by 30% | **Not necessarily** |
+
+A hazard ratio compares **instantaneous rates among those still at risk**, not cumulative risks or medians. Pair HRs with Kaplan–Meier curves, event counts, and—when PH is doubtful—**restricted mean survival time (RMST)**.
+
+### Proportional hazards assessment
+
+Use **Schoenfeld residual plots** (`cox.zph`) and clinical plausibility. A **non-significant** PH test does **not** prove proportional hazards (low power in small samples). A **significant** test in large samples may flag trivial departures. When curves cross or HR interpretation is fragile, report **RMST difference** at a prespecified horizon (e.g. 365 days) as a clinically interpretable sensitivity [@harrell2015rms].
+
 ### Worked example (CASTOR extension)
 
 From `ch19_cox_hazard_ratios.csv` (approximate teaching run):
@@ -131,15 +146,7 @@ In severe COPD, **death prevents future exacerbations**. Treating death as ordin
 | Ignore PH assumption | Misleading adjusted HRs | `cox.zph` diagnostic |
 | Use survival for recurrent events without extension | Multiple events per patient | Recurrent-event models (advanced) |
 
-### Catalog of wrong analyses (time-to-exacerbation)
-
-| Analysis | Issue | When it is acceptable |
-|---|---|---|
-| **Fixed 12-month binary endpoint only** | Different estimand — discards **when** events occur | Prespecified risk-by-365-days endpoint (report with CI, not as time-to-event) |
-| **Exclude early censoring** | Selection bias | Never for ITT-style follow-up |
-| **Unadjusted KM + log-rank in RCT** | Different estimand from adjusted Cox — not invalid | **Valid** prespecified ITT comparison by randomized arm; adjusted Cox may improve precision or match SAP covariates |
-| **Present HR as “% risk reduction”** without context | Misleading with frequent events | HR + absolute risks or NNT if appropriate |
-| **Cox for first exacerbation; death coded as censored** | Cumulative incidence may be overstated when death is common | CIF / Fine–Gray for absolute risk; cause-specific Cox for cause-specific hazard ([below](#technique-competing-risks-death-vs-exacerbation)) |
+> **Extended catalogue (four-part format):** [Appendix R — Chapters 18–19](../appendix-r-wrong-analysis-catalog.md#chapter-18-19).
 
 ### Reporting template
 
@@ -228,6 +235,41 @@ Ask for **cumulative incidence curves** by arm, not only hazard ratios, when dea
 #### Reporting template (competing risk sensitivity)
 
 > Standard Cox models treated death as censoring. In sensitivity analyses accounting for death as a competing event, cumulative incidence of first exacerbation at 365 days was …% (intervention) vs …% (control) (Fine–Gray subdistribution HR …, 95% CI …). Event types are tabulated in Supplementary Table ….
+
+---
+
+## Technique: Recurrent exacerbations (beyond first-event Cox)
+
+First-event Cox **discards** later exacerbations after the first and may **underpower** trials where treatment reduces **frequency** but not time to first event. Match the model to the SAP estimand:
+
+| Model | Estimand (plain language) | When to consider |
+|-------|---------------------------|------------------|
+| **Negative binomial rate** | Expected count (or rate) over follow-up | Fixed or variable person-time; CASTOR count chapter (Ch 6) |
+| **Andersen–Gill Cox** | Recurrent event intensity while patient remains in study | All event times; robust SE for within-person correlation |
+| **PWP-GT / PWP-EE** | Hazard of *k*th event given *k*−1 prior events | Ordered recurrent events; gap-time vs elapsed-time choice |
+| **Frailty / shared frailty** | Unobserved patient-level heterogeneity in event rate | Specialist extension when correlation structure matters |
+| **Mean cumulative function (MCF)** | Cumulative expected events by time | Descriptive burden; compare groups with appropriate SE |
+
+**Andersen–Gill** treats each event as a row in an counting-process dataset (`Surv(tstart, tstop, event)` with `cluster(id)` or robust variance). **PWP** stratifies on event number so the second exacerbation is modelled separately from the first.
+
+```r
+# Illustrative structure (not CASTOR teaching script)
+library(survival)
+# ag_fit <- coxph(Surv(tstart, tstop, event) ~ treatment + cluster(id),
+#                 data = recurrent_long, robust = TRUE)
+```
+
+### Wrong analysis ⚠ (recurrent events)
+
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| First-event Cox when SAP specifies **rate** | Throws away recurrent information | NB rate or Andersen–Gill | Events, person-time, rate ratio or recurrent HR |
+| Count model ignoring death | Post-death events impossible | Competing risk + rate sensitivity | Deaths by arm; CIF or censor at death |
+| Total count without offset | Confuses 6- vs 12-month follow-up | `offset(log(person_years))` | Rate per person-year with CI |
+
+### Worked vignette: ILD — FVC decline and competing events
+
+In **idiopathic pulmonary fibrosis**, **FVC decline** (Ch 5, 18) is often a continuous endpoint; **time to progression** or **death/transplant** may be analysed with survival methods. **Death and transplant** are **competing events** for progression-free survival: standard KM for “progression” censors at death and can overstate progression probability. Prespecify whether the estimand is **cause-specific hazard**, **Fine–Gray subdistribution**, or **win ratio** (specialist). Report **event types** (progression, death, transplant, censoring) by arm.
 
 ---
 

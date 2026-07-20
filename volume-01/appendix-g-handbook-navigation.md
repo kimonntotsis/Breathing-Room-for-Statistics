@@ -26,7 +26,11 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | **Without bioinformatics collaborator** | [Preface](chapters/00-preface.md#without-a-dedicated-bioinformatics-collaborator), [Ch 13](chapters/13-differential-analysis-fdr.md#working-without-a-bioinformatics-collaborator) |
 | **Asthma estimand (CLD routing)** | [Ch 2 vignette](chapters/02-respiratory-data.md#worked-vignette-asthma-biologic-trial-same-routing-different-estimand) |
 | **Composite endpoint example** | [Ch 4](chapters/04-comparing-groups.md#worked-example-composite-primary-fictional-pulmonary-sap) |
-| **Sample size (investigator)** | [Appendix B Step 0b](appendix-b-quick-reference.md) |
+| **Sample size (investigator)** | [Appendix P](appendix-p-sample-size-planning.md); [Appendix B Step 0b](appendix-b-quick-reference.md) |
+| **Diagnostic accuracy / screening test** | [Appendix Q](appendix-q-diagnostic-accuracy.md) |
+| **Wrong-analysis catalogue (searchable)** | [Appendix R](appendix-r-wrong-analysis-catalog.md) |
+| **Meta-analysis / Bayesian / adaptive trials (overview)** | [Appendix S](appendix-s-advanced-topics-overview.md) |
+| **Agreement / Bland–Altman** | [Ch 3](chapters/03-descriptive-analysis.md#technique-agreement-and-measurement-error-continuous) |
 | **In the room vignettes** | Part intros `parts/part-*.md`; [Ch 12](chapters/12-case-studies.md) cases A–E |
 | **Short stories (why this book)** | [Appendix K](appendix-k-in-the-room-stories.md): mixed variables, prediction traps |
 | **Cite a guideline or textbook** | [REFERENCES](REFERENCES.md), [references.qmd](references.qmd) |
@@ -56,6 +60,11 @@ Reference index for the PDF and web edition: where to find tools, chapters, data
 | 11 | **L** | [Omics analyst track](appendix-l-omics-analyst-track.md) | Analyst, omics course |
 | 12 | **M** | [Bioinformatics deliverables](appendix-m-bioinformatics-deliverables.md) | PI, core liaison |
 | 13 | **N** | [Bulk vs single-cell](appendix-n-bulk-vs-singlecell.md) | Routing / scope |
+| 14 | **O** | [Ch 4 comparison extensions](appendix-o-ch04-comparison-extensions.md) | Equivalence, NI, permutations |
+| 15 | **P** | [Sample size and analysis planning](appendix-p-sample-size-planning.md) | Protocol design |
+| 16 | **Q** | [Diagnostic accuracy](appendix-q-diagnostic-accuracy.md) | Biomarker / screening studies |
+| 17 | **R** | [Catalogue of wrong analyses](appendix-r-wrong-analysis-catalog.md) | Manuscript review / teaching |
+| 18 | **S** | [Meta-analysis, Bayesian, adaptive trials](appendix-s-advanced-topics-overview.md) | Specialist orientation |
 | | **Refs** | [Bibliography](references.qmd) | Citation |
 
 **Analyst fast path:** G → A → B → (chapters) → F. **Investigator fast path:** G → J → **K** (one story) → H → I → B → Ch 12 Case A.

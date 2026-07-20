@@ -32,7 +32,7 @@ The eight-step pipeline lives in Chapter 1 (`analysis_pipeline.png`). Before pro
 | 6 | At least one sensitivity named? | Chapter technique / Ch 20 |
 | 7 | Limits (“not proven”) written? | Case narratives below |
 
-Reporting frameworks by design: CONSORT (RCT) [@schulz2010consort]; STROBE (cohort) [@vonelm2007strobe]; TRIPOD (prediction) [@moons2015tripod]; biomarker discovery [@mcshane2011biomarker].
+Reporting frameworks by design: CONSORT 2025 (RCT) [@consort2025]; STROBE (cohort) [@vonelm2007strobe]; TRIPOD+AI (prediction) [@collins2024tripodai]; biomarker discovery [@mcshane2011biomarker]; diagnostic accuracy ([Appendix Q](../appendix-q-diagnostic-accuracy.md)).
 
 **In practice:** Manuscripts often mix discovery language (omics hits) with confirmatory language (trial primary endpoint). Use separate paragraphs and separate limitations for each CASTOR case narrative you mirror. Real cohorts: add site clustering, QC exclusions, and protocol deviations; see APATE vignette for the checklist CASTOR does not model.
 
@@ -346,6 +346,8 @@ source("R/examples/ch12_case_e_longitudinal_survival.R")
 | Claim smoking “causes” faster exacerbation without design | Associational Cox + confounding discussion (Ch 21) |
 | Report HR without event counts | Table of events, censored, person-time |
 
+> **Case-study catalogue:** [Appendix R — Chapter 12](../appendix-r-wrong-analysis-catalog.md#appendix-r-chapter-12) consolidates Cases A–E wrong-analysis patterns in four-part format.
+
 ## What Case E does NOT prove
 
 That improving FEV1 trajectory prevents exacerbations (different endpoints); causal effect of smoking; transportability to other healthcare systems.
@@ -395,6 +397,19 @@ The sign-off figure above is the visual version of this list:
 The **core path (Ch 1–12)** is complete when you can run the CASTOR pipeline yourself, including **Case E** (longitudinal + survival). The **advanced discovery path (Ch 13–17)** extends CASTOR-HD; **Part VIII (Ch 18–22)** completes the single-volume handbook for repeated measures, time-to-event, missing data, causal framing, and mediation [@harrell2015rms; @shmueli2010predict].
 
 Adapt CASTOR details to your cohort and have an analyst and investigator review the analysis plan before you submit.
+
+---
+
+## Cross-disease capstone pointers
+
+CASTOR Cases A–E are **COPD-flavoured**. Use the same sign-off gates for other diseases by swapping estimands ([Ch 2 vignettes](02-respiratory-data.md#cross-disease-routing-vignettes)):
+
+| Disease context | Mirror case | Key chapter shift |
+|-----------------|-------------|-------------------|
+| **Asthma biologic RCT** | Case A structure + **NB rate** primary | Ch 6 recurrent router; FeNO eligibility → Appendix Q |
+| **ILD progression** | Case E longitudinal on **FVC** + competing events | Ch 18 slope; Ch 19 Fine–Gray for death/transplant |
+| **Bronchiectasis registry** | Case B rate model, not binary only | Ch 6 NB + offset; Ch 19 if recurrent timing |
+| **Prediction transport** | Case B predictors → external cohort | Ch 9 external validation checklist |
 
 ---
 

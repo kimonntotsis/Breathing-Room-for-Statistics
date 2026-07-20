@@ -75,7 +75,15 @@ summary(fit)
 
 ### Random intercept and slope (extension)
 
-Add `(weeks | patient_id)` or `(1 + weeks | patient_id)` when patients differ substantially in decline rates, but with only four time points, start with random intercept only; random slopes need more visits and stable convergence.
+**Visual analogy:**
+
+| Component | Plain read | Respiratory picture |
+|-----------|------------|---------------------|
+| **Fixed effect (time)** | Average trajectory across the cohort | Mean FEV₁ decline in the trial |
+| **Random intercept** | Each participant starts above or below that average | Baseline lung function heterogeneity |
+| **Random slope** | Each participant may decline faster or slower | Fast vs slow decliners |
+
+Add `(weeks | patient_id)` or `(1 + weeks | patient_id)` when patients differ substantially in decline rates—but with only four time points, start with **random intercept only**. Random slopes need more visits, stable convergence, and centreing time; watch for **singular fits** (variance estimated at zero). Discuss **informative dropout** when sicker patients miss visits (Ch 20).
 
 ### GEE (population-averaged alternative)
 
@@ -110,14 +118,7 @@ One analyst proposes GEE; another fits `lmer`. Both can be correct; they answer 
 | Ignore dropout pattern | Biased if missingness relates to health | Compare attenders; Ch 20 sensitivity |
 | Claim causal effect from observational trajectories | Confounding by indication | State associational estimand; Ch 21 |
 
-### Catalog of wrong analyses (longitudinal FEV1)
-
-| Wrong analysis | Why it fails | Do instead |
-|---|---|---|
-| **Last observation carried forward** for dropouts | Fabricates stability | Model available data; discuss bias direction |
-| **Per-visit ANOVA without patient** | Inflated *n* | Mixed model / GEE with patient cluster |
-| **Plot spaghetti only, no model** | Descriptive only | Participant *n* + modelled trajectories |
-| **Spline hunting** without prespecification | Overfit | Prespecify linear vs spline in protocol |
+> **Extended catalogue (four-part format):** [Appendix R — Chapters 18–19](../appendix-r-wrong-analysis-catalog.md#chapter-18-19).
 
 ### Reporting template
 
@@ -275,6 +276,8 @@ CASTOR script fits mixed models: `R/examples/ch18_longitudinal_mixed_models.R`.
 ## Where we go next
 
 **Next:** [Chapter 19](19-survival-analysis.md) for time-to-exacerbation; [Chapter 20](20-missing-data.md) when dropout is informative.
+
+{{< include ../_includes/castor-vs-reality.md >}}
 
 {{< include ../_includes/chapter-see-also.md >}}
 

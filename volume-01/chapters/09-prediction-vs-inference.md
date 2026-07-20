@@ -94,21 +94,38 @@ State these in every prediction Discussion:
 
 ---
 
-## TRIPOD-aligned workflow (CASTOR)
+## Staged prediction workflow
 
-Follow TRIPOD for transparent prediction reporting [@moons2015tripod]:
+Separate these stages in Methods and Results—do not collapse them into one “model shootout” paragraph:
+
+| Stage | Question | CASTOR teaching note |
+|-------|----------|----------------------|
+| **1. Development** | Which predictors and model family? | Logistic baseline; optional LASSO/tree |
+| **2. Internal validation** | Does performance hold on **new** rows from the same study? | 70/30 split **for illustration**; prefer bootstrap / repeated CV in production |
+| **3. Performance measurement** | Discrimination **and** calibration **and** Brier | AUC alone insufficient [@steyerberg2019clinical] |
+| **4. Clinical evaluation** | Threshold, net benefit, subgroup transport | Decision-curve analysis when prespecified; often absent in teaching run |
+| **5. External validation / updating** | Does the model work elsewhere? | Not demonstrated in CASTOR; required before deployment |
+
+---
+
+## TRIPOD+AI-aligned workflow (CASTOR)
+
+Follow **TRIPOD+AI** for transparent prediction reporting [@collins2024tripodai; @moons2015tripod]:
 
 1. **Population:** CASTOR synthetic respiratory cohort
 2. **Outcome:** `exacerbation_12m` within 12 months
 3. **Predictors:** smoking, age, FEV1 % predicted, prior exacerbations; all baseline
 4. **Split:** 70% train / 30% test (seed 42) for the **teaching shootout**; same indices for all models. With only four test events, treat this split as **illustrative**; production work should use repeated or nested cross-validation.
 5. **Tuning:** LASSO λ, tree `cp`, forest `mtry`, and boosting hyperparameters chosen by **5-fold CV on train only**
-6. **Metrics:** AUC (bootstrap CI on test when stable; constant predictions yield AUC = 0.50 with CI 0.50–0.50), Brier, calibration intercept/slope mindset, calibration bins
-7. **Report:** *n*, events in train/test, EPV, software version
+6. **Metrics:** AUC (bootstrap CI on test when stable), **Brier score**, calibration-in-the-large, **calibration slope** mindset, binned calibration when events allow
+7. **Report:** *n*, events in train/test, EPV, software version; state whether external validation or model updating was performed (usually **no** in CASTOR)
+8. **Deployment gaps:** missing predictors at scoring time, fairness/subgroup checks, recalibration plan
 
 ---
 
-## Model shootout: one split, comparable tuning discipline
+## Model shootout: one split as pedagogical simplification
+
+**Preferred practice** for modest clinical datasets: **repeated resampling or bootstrap validation** on all data (with nested CV when tuning). The table below uses a **single 70/30 split** so readers can compare models on identical rows—it is **not** the recommended default workflow.
 
 | Model | Role | Tune on train? |
 |-------|------|----------------|
@@ -132,7 +149,7 @@ source("R/examples/ch09_prediction.R")
 
 **Discrimination (AUC):** how well the model **ranks** cases above non-cases, good for triage ordering, not enough to trust the percentage shown to patients. With ~4 test events, bootstrap AUC CIs are wide or unstable.
 
-**Calibration:** do predicted probabilities match observed event rates? TRIPOD expects calibration when a model informs treatment thresholds [@steyerberg2019clinical]. Report binned predicted vs observed (3–5 bins when events sparse), Brier score, and figure `ch09_calibration_logistic.png`.
+**Calibration:** do predicted probabilities match observed event rates? TRIPOD+AI expects calibration when a model informs treatment thresholds [@steyerberg2019clinical; @collins2024tripodai]. Report binned predicted vs observed (3–5 bins when events sparse), **Brier score**, calibration-in-the-large, and **calibration slope**; figure `ch09_calibration_logistic.png`.
 
 ![Right vs wrong: prediction performance](../figures/viz_pair_ch09_prediction.png)
 
@@ -194,7 +211,57 @@ Run `source("R/examples/ch09_prediction.R")` and read [ch09_model_comparison.csv
 
 ---
 
-## Reporting template (TRIPOD-style)
+## Technique: External validation and model updating
+
+Internal cross-validation or a single train/test split answers: *“Did this model fit our development cohort honestly?”* **External validation** answers: *“Does it work in a different population, time period, or centre?”* [@collins2024tripodai; @steyerberg2019clinical]
+
+### Validation hierarchy (CASTOR teaching vs production)
+
+| Stage | Question | CASTOR status |
+|-------|----------|---------------|
+| **Development** | Fit model on development data | Ch 9 shootout |
+| **Internal validation** | Performance on held-out or resampled rows from **same** study | 70/30 split / bootstrap (low EPV) |
+| **Temporal validation** | Same protocol, later enrolment period | **Not done** |
+| **Geographic / setting validation** | Different centres, EHR, or country | **Not done** |
+| **Model updating** | Recalibrate intercept/slope or refit in new data | **Not done** |
+
+**Rule:** label CASTOR output **“internal validation only.”** Do not write “externally validated” or “clinical decision tool” without an independent cohort.
+
+### What to report in external validation
+
+1. **Cohort description** vs development (case-mix, prevalence, predictors available).
+2. **Same predictors** measured the same way (harmonise units and timing).
+3. **Discrimination** (AUC) **and calibration** (intercept/slope, calibration plot, Brier).
+4. **Clinical threshold** performance if deployment uses a cut-off (sensitivity, specificity, NPV/PPV at **prespecified** threshold).
+5. **Missing predictors** at scoring time: complete-case vs imputation strategy **frozen** from development.
+6. **Fairness / transportability**: prespecified subgroup calibration (sex, severity, site) when policy-relevant.
+7. **Updating plan**: fixed model vs recalibration vs full refit (document shrinkage of optimism).
+
+### Model updating (overview)
+
+| Strategy | When | Caution |
+|----------|------|---------|
+| **Fixed coefficients** | Strong transport; similar case-mix | miscalibration if prevalence shifts |
+| **Recalibration intercept** | Systematic over/underprediction only | Does not fix wrong predictors |
+| **Recalibration slope + intercept** | Mild miscalibration | Needs adequate events in validation set |
+| **Full refit** | Large new dataset | New overfitting risk; treat as new development |
+
+### Deployment gaps checklist
+
+Before any clinic or trial deployment, confirm:
+
+- [ ] External validation cohort identified **before** claiming transport
+- [ ] Predictors available **at decision time** (no future information)
+- [ ] Imputation rules for missing predictors **locked** (Ch 20)
+- [ ] Calibration shown in **target** population
+- [ ] Threshold chosen on **clinical** grounds, not maximised on validation data
+- [ ] Subgroup performance reviewed (not only overall AUC)
+
+**Diagnostic tests** (single biomarker vs reference standard) follow a different workflow: [Appendix Q](../appendix-q-diagnostic-accuracy.md).
+
+---
+
+## Reporting template (TRIPOD+AI-style)
 
 **Methods:**
 
@@ -265,18 +332,14 @@ DCA asks whether using the model improves decisions versus treating everyone or 
 | Nonlinear rules | Trees, RF, boosting | This chapter |
 | p ≫ n omics | Elastic net + **nested CV** | Ch 17 |
 
----
+### Wrong analysis ⚠
 
-## Catalog of wrong analyses (prediction chapter)
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Training AUC in abstract | Optimistic discrimination | Held-out or CV AUC | Test-set event count |
+| "Validated tool" without external cohort | No transport evidence | External validation checklist (above) | Internal validation label only |
 
-| # | Wrong | Right |
-|---|-------|-------|
-| 1 | Train AUC in abstract | Test or nested-CV AUC |
-| 2 | ML beats logistic because AUC 0.01 higher on 4 test events | Report CIs; prefer simpler prespecified model |
-| 3 | Importance plot = biomarker hit list | Separate discovery pipeline (Ch 13+) |
-| 4 | No calibration figure | Binned plot + Brier |
-| 5 | Impute/test leakage in CV folds | Impute inside train folds (Ch 20) |
-| 6 | Claim deployment-ready without external data | Label internal validation only |
+> **Extended catalogue:** [Appendix R — Chapter 9](../appendix-r-wrong-analysis-catalog.md#chapter-9).
 
 ---
 

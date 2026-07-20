@@ -108,6 +108,34 @@ Ask your analyst: *“What one number answers my question?”* If they cannot sa
 
 Reporting *p* = 0.06 without an effect size is not reporting an estimand. Report the estimate and 95% CI in Results; not *p* alone.
 
+### Five components of an estimand (plain language)
+
+Formal trial guidance (ICH E9(R1)) adds detail; start with five components you can defend in a steering meeting [@schulz2010consort]:
+
+| Component | Question | COPD RCT example |
+|-----------|----------|------------------|
+| **Population** | Who is included? | ITT: all randomised |
+| **Treatment / exposure** | What contrast? | Triple vs dual bronchodilator |
+| **Outcome** | What is measured? | FEV₁ (L) at 12 weeks |
+| **Post-baseline events** | How are rescue meds, discontinuation, death handled? | Treatment-policy ITT unless SAP says otherwise |
+| **Summary measure** | What number? | Mean difference intervention − control |
+
+**Intercurrent events** (rescue medication, treatment switching, death, non-adherence) are part of the **clinical question**, not an afterthought for missing-data chapters. This handbook introduces estimands here and returns to handling in Chapters 6, 19, and 20; full ICH E9(R1) implementation belongs in trial protocols with statistical leadership.
+
+{{< include ../_includes/book-standard-pvalue-ci.md >}}
+
+### Minimum analysis plan (one page)
+
+Before recruitment closes, document:
+
+1. **Primary estimand** (one sentence using the five components).
+2. **Primary method** and covariates (if any).
+3. **Missing-data rule** for the primary estimand.
+4. **Two prespecified sensitivities** (e.g. complete-case vs MI; Poisson vs NB).
+5. **Multiplicity rule** for secondaries (separate omics family if applicable).
+
+Sample-size and precision planning: [Appendix P](../appendix-p-sample-size-planning.md).
+
 ---
 
 ## Study designs: what each can support
@@ -154,7 +182,12 @@ If a trial has 60 patients and a soft endpoint, a "negative" result may mean **i
 
 ### Wrong analysis ⚠
 
-Claim causation from observational adjustment alone → use associational language; cite design limits [@vonelm2007strobe].
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Claim causation from observational adjustment alone | Design does not support intervention effects | Associational language + STROBE limits | "Associated with," not "causes" |
+| Menu-driven tests on every spreadsheet column | No prespecified estimand | CASTOR: question → method → software | One primary estimand sentence |
+
+> **Extended catalogue:** [Appendix R — Chapter 1](../appendix-r-wrong-analysis-catalog.md#chapter-1).
 
 ---
 
@@ -177,9 +210,9 @@ Full treatment: Chapter 9.
 
 | Guideline | Design | Key reference |
 |-----------|--------|---------------|
-| **CONSORT** | RCT | [@schulz2010consort] |
+| **CONSORT 2025** | RCT | [@consort2025] |
 | **STROBE** | Observational cohorts, case-control | [@vonelm2007strobe] |
-| **TRIPOD** | Prediction model development/validation | [@moons2015tripod] |
+| **TRIPOD+AI** | Prediction model development/validation | [@collins2024tripodai] |
 | **RECORD** | Routinely collected health data | [@benchimol2015record] |
 
 Checklists improve **transparency**; they do not replace correct analysis [@harrell2015rms]. Use CONSORT/STROBE wording when you draft Methods and Discussion.
@@ -201,19 +234,6 @@ This handbook provides four linked tools:
 
 ---
 
-## Catalog of wrong analyses (thinking chapter)
-
-| Wrong | Right |
-|-------|-------|
-| Menu-driven statistics | Estimand-first workflow |
-| p-value without CI | Estimate + CI + n [@harrell2015rms] |
-| "Trend" without prespecified trend test | Pre-specify or label exploratory |
-| Causal language from cohort OR | Associational language + limitations |
-| Evaluate explanatory model by AUC only | Match metrics to goal [@shmueli2010predict] |
-| Skip protocol definitions for exacerbation | Cite definition [@hurst2010exacerbation] |
-
----
-
 ## Alternatives & extensions (how to strengthen the thinking layer)
 
 These are not “more statistics.” They are ways to make the same methods more defensible.
@@ -229,6 +249,7 @@ These are not “more statistics.” They are ways to make the same methods more
 
 ---
 
+{{< include ../_includes/castor-vs-reality.md >}}
 
 ## R lab: first look at CASTOR
 
@@ -276,7 +297,8 @@ Always **describe** (Ch 3) before **compare** (Ch 4).
 | **Binary / count outcomes** | [Ch 6](06-generalized-linear-models.md) | OR vs RR, offset |
 | **Many predictors / model building** | [Ch 7](07-model-building.md) | Prespecification |
 | **Reporting / CONSORT** | [Ch 8](08-validation-reporting.md) | Limits section |
-| **Prediction** | [Ch 9](09-prediction-vs-inference.md) | Calibration |
+| **Prediction** | [Ch 9](09-prediction-vs-inference.md) | Calibration; external validation |
+| **Diagnostic test vs gold standard** | [Appendix Q](../appendix-q-diagnostic-accuracy.md) | Not the same as Ch 9 risk score |
 | **Subgroups / omics exploration** | [Ch 10–11](10-dimensionality-reduction.md) | Claim ladder only |
 | **Full worked narratives** | [Ch 12](12-case-studies.md) | Sign-off checklist |
 | **Proteomics / screens** | [Ch 13–17](13-differential-analysis-fdr.md) | Batch + FDR |

@@ -32,7 +32,7 @@ Reviewers will ask for CIs even when you reported *p*-values. For RCTs, the CONS
 
 ## Technique: Bootstrap confidence intervals
 
-Resample rows with replacement when the statistic has no closed-form CI (median difference, complex estimands). Complements parametric CIs; does not fix wrong design.
+Resample at the **correct unit**: patients for repeated measures (or cluster bootstrap for clustered designs), not visits stacked as independent rows. **Percentile** bootstrap CIs are simple; **BCa** can help with skewed statistics. With small *n* or rare events, bootstrap intervals may be unstable—wide CIs are honest. **Do not** bootstrap across imputation draws without Rubin pooling rules (Ch 20).
 
 ```r
 B <- 2000
@@ -109,20 +109,16 @@ Minimum: R version, key packages, seed, analysis script path. Better: Quarto/R M
 
 **Sensitivity:** permutation p; bootstrap CI; ANCOVA on `spirometry_trial.csv`.
 
----
+### Wrong analysis ⚠
 
-## Catalog of wrong analyses (reporting chapter)
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| *p*-value only in Results | Hides compatible effect sizes | Estimate + 95% CI + *n* | CI vs MCID for FEV₁ |
+| "Non-significant → no benefit" | Inconclusive ≠ null | Compatible-effects language | Limits paragraph |
 
-| Wrong | Right |
-|-------|-------|
-| p-value only | Estimate + CI + n |
-| Post hoc primary endpoint | Prespecified + protocol |
-| No flow diagram (RCT) | CONSORT |
-| Hide missing n | Report attrition |
-| No code/data | Reproducible script |
+> **Extended catalogue:** [Appendix R — Chapter 8](../appendix-r-wrong-analysis-catalog.md#chapter-8).
 
 ---
-
 
 ## R lab
 

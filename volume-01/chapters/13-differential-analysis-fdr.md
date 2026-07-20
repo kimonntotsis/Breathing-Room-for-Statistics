@@ -31,6 +31,8 @@ Volcano plots are **triage**, not treatment decisions. Zero FDR hits after batch
 5. **Sensitivity**: with vs without batch; overlap of top 50 features.
 6. **Claim discipline**: discovery list for follow-up, not mechanistic proof (Ch 17).
 
+{{< include ../_includes/omics-workflow.md >}}
+
 ---
 
 ## Technique: Per-feature differential analysis + BH FDR
@@ -79,26 +81,7 @@ sum(rna$q < 0.05, na.rm = TRUE) # over-calls vs DESeq2, see method compare
 
 A collaborator emails “we have 47 significant proteins.” Ask for effect sizes, q-values, and whether batch was in the model. Zero FDR hits after batch adjustment is a valid result worth reporting.
 
-See [Catalog of wrong analyses (omics discovery)](#catalog-of-wrong-analyses-omics-discovery) for the full audit list.
-
-### Catalog of wrong analyses (omics discovery)
-
-Use this as a pre-submission audit. If any row describes your workflow, rewrite.
-
-| Wrong analysis | Why it fails | Do instead |
-|---|---|---|
-| **List of hits without effect sizes** (“Protein X significant, q = …”) | You cannot judge clinical or biological importance | Report effect + 95% CI + q-value; rank by effect + stability, not only q |
-| **Nominal p-value hunting** (top 20 p-values) | Multiple testing turns this into a false-positive generator | Use BH FDR; show how many tests were run |
-| **“Volcano proof”** (figure implies causality) | Volcano plots are descriptive; they do not validate biology | Present as prioritisation; specify validation/confirmation plan |
-| **Batch ignored** | Many top hits are technical; FDR cannot fix confounding | Diagnose (Ch 14), include batch/plate/run covariates, run sensitivity |
-| **Batch “corrected” without checking confounding** | Overcorrection can erase biology or manufacture differences | Show PCA by batch and group; if confounded, state identifiability limits |
-| **LOD missingness imputed as a constant** (e.g., replace NA with 0) | Creates artificial group differences if detection differs by group/batch | Prefer sensitivity: complete-case vs simple within-feature imputation; report missingness by group |
-| **CPM-style normalization treated as neutral** (RNA) | If some genes truly change, others can look changed due to compositional constraints | Interpret “global shifts” cautiously; prefer methods designed for counts and composition; validate with spike-ins / external data |
-| **Imputation done before train/test split** (prediction) | Information leakage inflates performance | Perform all preprocessing within resampling (see Ch 9 mindset) |
-| **Genes/proteins treated as independent evidence** | Correlation means “50 hits” may be 1 pathway signal | Summarise at pathway/module level as a secondary interpretation; keep per-feature results for transparency |
-| **“No hits, therefore no biology”** | Low power can hide large effects; FDR can be conservative | Report effect size distributions and uncertainty; discuss detectable effect sizes |
-| **Single-cohort “signature” claim** | Signatures are unstable without external validation | Treat as hypothesis; validate on external cohort or held-out batch |
-
+See [Appendix R — omics and batch](../appendix-r-wrong-analysis-catalog.md#chapter-13-14) for the full audit list.
 ### Reporting template
 
 Use Template A in HIGH_DIM_REPORTING_TEMPLATES.

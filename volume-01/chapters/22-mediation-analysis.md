@@ -29,6 +29,16 @@ Mediation answers a specific estimand question. CASTOR closes the volume here: t
 
 ## Total vs direct vs indirect (plain language)
 
+### Descriptive, model-based, and causal mediation
+
+| Layer | What it claims | CASTOR teaching |
+|-------|----------------|-----------------|
+| **Descriptive mediation** | Paths and coefficients describe associations in fitted models | Total vs direct OR contrast (with non-collapsibility warning) |
+| **Model-based mediation** | Bootstrap ACME/ADE under stated regression models | `mediation::mediate()` probability-scale effects |
+| **Causal mediation** | Interventional decomposition under cross-world assumptions | **Not established** in cross-sectional CASTOR; requires temporal design + sensitivity |
+
+The phrase *“mediation decomposes associational paths”* is safer than claiming mechanism proof. Natural direct and indirect effects depend on **strong identification assumptions** listed below; bootstrapping does **not** fix violations.
+
 | Estimand | Model includes FEV1 %? | Smoking coefficient means | CASTOR teaching OR |
 |----------|------------------------|---------------------------|--------------------|
 | **Total effect** | No | Combined effect through all paths | **2.11** (0.73 to 7.00) |
@@ -75,6 +85,20 @@ From `ch22_total_vs_direct_or.csv` and `ch22_mediation_effects.csv`:
 
 Path coefficients (`ch22_path_coefficients.csv`): smoking lowers FEV1 % (a path ≈ **−8.5** percentage points); lower FEV1 % raises exacerbation odds (b path OR ≈ **0.95** per 1 % unit on the logistic scale after exponentiation).
 
+### Identification assumptions (must be visible in Methods)
+
+| Assumption | Respiratory example if violated |
+|------------|--------------------------------|
+| **No unmeasured exposure–outcome confounding** | Residual confounding (adherence, SES) |
+| **No unmeasured exposure–mediator confounding** | Factors affecting both smoking and FEV1 |
+| **No unmeasured mediator–outcome confounding** | Severity beyond prior exacerbations |
+| **No exposure-induced mediator–outcome confounder** | Smoking worsens inflammation that affects both FEV1 and exacerbation |
+| **Correct temporal ordering** | Mediator precedes outcome window |
+| **Appropriate model specification** | Linear mediator + logistic outcome is a teaching choice |
+| **Consistency and positivity** | Well-defined exposure and mediator levels |
+
+Bootstrapping addresses **sampling uncertainty** only; it does not address violated identification assumptions.
+
 ### Caveats box
 
 | Caveat | Why it matters in respiratory research |
@@ -89,19 +113,19 @@ Path coefficients (`ch22_path_coefficients.csv`): smoking lowers FEV1 % (a path 
 
 ### Wrong analysis ⚠
 
-**Common mistake:** adjust for FEV1 % in logistic regression and report the smoking OR as the **total effect of smoking**.
-
-**Why it fails:** conditioning on a mediator blocks part of the causal path from smoking to exacerbation. The coefficient is a **direct effect**, not the total effect (Ch 21, E21.4).
-
-**Do instead:** prespecify total vs direct estimands; fit both models or use `mediate()`; label ORs correctly in tables and slides.
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Adjust for FEV1 % and report smoking OR as **total effect** | Conditioning on mediator | Total-effect model without mediator; or `mediate()` | Total vs direct labelled |
+| OR change after adding mediator = proof of mediation | Non-collapsible ORs | Bootstrap ACME/ADE on probability scale | ACME CI, not OR shift alone |
 
 ### Wrong analysis ⚠ (Baron–Kenny ritual)
 
-**Common mistake:** require all four Baron–Kenny steps (significant a and b paths) before claiming mediation.
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Require all four Baron–Kenny steps significant | Outdated; low power on paths | Bootstrap natural effects | Indirect effect CI |
+| Causal mechanism claim from cross-sectional snapshot | Timing not established | Longitudinal design + sensitivity | Associational decomposition only |
 
-**Why it fails:** stepwise significance ignores modern causal identification and low power on paths [@vanderweele2015explanation].
-
-**Do instead:** estimate natural effects with bootstrap CIs; report whether the indirect CI excludes the null, not a checklist of *p*-values.
+> **Extended catalogue:** [Appendix R — Chapters 20–22](../appendix-r-wrong-analysis-catalog.md#chapter-20-22).
 
 ### Reporting template
 

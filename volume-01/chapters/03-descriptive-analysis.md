@@ -168,12 +168,7 @@ Report n for each variable. Note if complete-case n drops. Missing FEV1 in spiro
 
 ---
 
-## Catalog of wrong analyses (descriptive chapter)
-
-The recurring failures are predictable: hiding missing *n*, treating Table 1 *p*-values as the trial primary, summarising heavy skew with a mean, leaving units off axes, or skipping plots and trusting a test you never looked at. Each of those is fixable in an hour if you catch it before submission, expensive if a reviewer does.
-
----
-
+> **Extended catalogue (four-part format):** [Appendix R — Chapter 3](../appendix-r-wrong-analysis-catalog.md#chapter-3).
 
 ## R lab
 
@@ -242,6 +237,43 @@ Descriptives are where you decide what later methods are plausible. Use these al
 | **Use when** | Positive skewed outcomes; multiplicative variability |
 | **Examples** | log-transform biomarkers; log(1+y) for counts *only descriptively* |
 | **Caution** | Transformation changes estimand; report scale clearly |
+
+---
+
+## Technique: Agreement and measurement error (continuous)
+
+When two **continuous** measurements should agree (not a gold-standard diagnostic workflow), describe **agreement** and **repeatability** before inferential tests.
+
+| Goal | Method | Respiratory example |
+|------|--------|---------------------|
+| **Agreement** between two methods | **Bland–Altman**: difference vs mean of pair | Portable vs office spirometer FEV₁ |
+| **Repeatability** (same device, same patient) | Within-subject SD, **ICC**, coefficient of variation | Three pre-BD manoeuvres same visit |
+| **Reliability across readers** | ICC (absolute agreement) | CT emphysema fraction |
+
+**Bland–Altman:** plot (method A − method B) against (A + B)/2. Report **mean bias** and **limits of agreement** (mean ± 1.96 × SD of differences), not only correlation [@bland1986measurement]. Correlation measures association, **not** interchangeability.
+
+**Spirometry repeatability:** report best and second-best manoeuvres per ATS/ERS; unacceptable manoeuvres excluded **before** analysis [@graham2019spirometry]. Night-to-night **AHI** variability in sleep studies similarly requires repeated-measures thinking (Ch 18).
+
+**Regression dilution:** measurement error in predictors **attenuates** regression coefficients (Ch 5, 21). High agreement variance can explain “null” biomarker associations.
+
+```r
+# Bland–Altman after paired measurements in one data frame
+# diff <- fev1_device_a - fev1_device_b
+# mean_pair <- (fev1_device_a + fev1_device_b) / 2
+# plot(mean_pair, diff); abline(h = mean(diff), col = "blue")
+```
+
+Paired pre/post bronchodilator **change** is analysed in Ch 4; this section covers **method comparison** and **repeatability**.
+
+### Wrong analysis ⚠ (agreement)
+
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Pearson *r* only for two spirometers | High correlation with large bias | Bland–Altman | Mean bias, LoA, *n* pairs |
+| All manoeuvres averaged without QC | Dilutes true lung function | Grade manoeuvres; prespecify best-of-*n* rule | QC exclusions in flow diagram |
+| Ignore site/equipment in multi-centre spirometry | Confounds treatment comparisons | Site in model or random effect | Equipment calibration log |
+
+---
 
 ## Where we go next
 

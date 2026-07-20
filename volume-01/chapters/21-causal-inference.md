@@ -29,6 +29,8 @@ Observational respiratory studies dominate the literature. This chapter gives IP
 
 ## Association vs causation (respiratory)
 
+**Regression asks what associations remain under a model. Causal inference asks what contrast would have been observed under different interventions**—requiring assumptions data alone cannot verify (exchangeability, positivity, correct timing). This chapter introduces IPW and matching as **sensitivity tools**, not substitutes for randomisation.
+
 | Claim type | Example sentence | Supported by observational logistic? |
 |------------|------------------|--------------------------------------|
 | **Association** | Smoking is associated with higher exacerbation odds after adjusting for FEV1 | Yes, with STROBE limits |
@@ -69,7 +71,7 @@ Smoking -----> Exacerbation (12m)
 
 **Associational logistic regression** asks whether smoking is associated with exacerbation after adjusting for measured covariates. The estimand is a conditional odds ratio: hypothesis generation and STROBE cohort descriptions, not proof that smoking causes exacerbations. In R: `glm(exacerbation_12m ~ smoking + fev1_pct, family = binomial)`.
 
-**Introductory IPW** reweights patients so exposure groups look more comparable on **measured confounders** (not mediators), then estimates a **marginal** smoking–exacerbation association without adjusting for FEV1 on the outcome path. Model `smoking ~ confounders` → stabilized weights → weighted outcome model `exacerbation ~ smoking` with **robust standard errors**. Assumes no unmeasured confounding, positivity, and a correct exposure model. Use as sensitivity for a **total-effect** estimand; do not treat as automatic proof of causation, and trim extreme weights.
+**Introductory IPW** reweights patients so exposure groups look more comparable on **measured confounders** (not mediators), then estimates a **marginal** smoking–exacerbation association without adjusting for FEV1 on the outcome path. Model `smoking ~ confounders` → **stabilised** weights → weighted outcome model `exacerbation ~ smoking` with **robust standard errors**. Assumes no unmeasured confounding, positivity, and a correct exposure model. **Good balance on measured covariates does not prove absence of confounding.** Inspect the weight distribution, report **effective sample size (ESS)**, and treat **truncation** as a **sensitivity analysis** (document extreme weights), not an invisible repair. Doubly robust estimation (outcome model + weighting) is a specialist extension. Use as sensitivity for a **total-effect** estimand; do not treat as automatic proof of causation.
 
 "Adjusted OR" and "IPW OR" still describe **observational** data; randomised trials (Case A) remain the gold standard for causal treatment effects.
 
@@ -123,22 +125,14 @@ Smoking is **not** a randomised exposure in CASTOR; causal language is especiall
 
 ### Wrong analysis ⚠
 
-| Mistake | Why it fails | Do instead |
-|---------|--------------|------------|
-| "Adjusted OR proves smoking causes exacerbations" | Observational; model-dependent | State associational estimand; Ch 12 Case B limits |
-| Throw all predictors into propensity model | Overfitting; bias | DAG / subject-matter covariate set |
-| IPW without checking weights | Extreme weights dominate | Summary of weight distribution; trimming |
-| Adjust for mediators when total effect is target | Blocks part of effect | Prespecify estimand (total vs direct) |
-| Causal language from IPW alone | Untestable assumptions | Sensitivity + design discussion |
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| "Adjusted OR proves smoking causes exacerbations" | Observational design | Associational estimand; Ch 12 Case B limits | "Associated with" + STROBE |
+| Throw all predictors into propensity model | Overfit PS; biased weights | DAG / prespecified confounder set | Balance on confounders only |
+| IPW without checking weights | Extreme weights dominate | Weight summary, ESS, truncation sensitivity | Weight range + robust SE |
+| Adjust mediators when total effect is target | Blocks part of effect | Prespecify total vs direct (Ch 22) | Estimand label in Methods |
 
-### Catalog of wrong analyses (causal claims)
-
-| Wrong analysis | Why it fails | Do instead |
-|---|---|---|
-| **Significant covariate → include in PS model** | Data-driven confounding control | Prespecified adjustment set |
-| **Compare IPW and OLS, pick "better" p-value** | Multiplicity / fishing | Pre-register estimand and method |
-| **Ignore immortal time bias** in therapy cohorts | Misaligned time zero | Target trial emulation |
-| **Use future FEV1 as confounder** | Post-baseline leakage | Baseline covariates only unless clear protocol |
+> **Extended catalogue:** [Appendix R — Chapters 20–22](../appendix-r-wrong-analysis-catalog.md#chapter-20-22).
 
 ### Reporting template
 

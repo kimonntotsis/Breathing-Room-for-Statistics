@@ -12,6 +12,10 @@ CASTOR-HD extends the same patients into proteomics, RNA, flow, and screens. The
 
 **Skip this if:** spirometry and exacerbations are your only endpoints (Appendix H may suffice until omics appear).
 
+## Bridge from Part V (prediction and structure discovery)
+
+Chapters 10–11 use the same matrix tools as prediction (Ch 9) but for **exploration**, not validated risk scoring. Part VI shifts to **feature-wise inference at scale**: each row is a test, multiplicity is explicit, and batch confounding can erase biology. Read the [omics workflow](../_includes/omics-workflow.md) before opening differential analysis.
+
 ## Related chapters
 
 | Chapter | When to open it |

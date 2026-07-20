@@ -31,6 +31,8 @@ Linear models carry adjusted mean differences, ANCOVA, and diagnostic discipline
 
 Multiple linear regression estimates the **adjusted association** between predictors and a mean continuous outcome, FEV1 litres, change in FEV1, symptom scores, in cross-sectional, trial follow-up (with care), or cohort designs. Assumes linearity in parameters, independent homoscedastic errors, and approximate normality of residuals (especially with small *n*) [@harrell2015rms]. Report **β** as mean difference or slope with 95% CI.
 
+**Conditional interpretation:** every coefficient compares patients who differ in one predictor while **other model terms are held fixed**. Whether such patients meaningfully exist depends on **overlap** in the data. Adjustment does not automatically remove bias; adding a variable can change the scientific question (confounder vs mediator vs collider; Ch 7, 21).
+
 **R:** `lm(fev1 ~ smoking + age + sex + height_cm, data = spirometry)`
 
 Use MLR when multiple confounders matter and the outcome is continuous. Do **not** use it for binary/count outcomes, repeated measures without extension, or causal claims from observational data without design support. It does **not** prove causation, prediction accuracy (Ch 9), or mechanism.
@@ -40,6 +42,16 @@ After adjustment for age, sex, and height, smokers have lower average FEV1 by ab
 Check whether ~0.4 L is meaningful given MCID (~0.1 L in many COPD contexts). Possibly, but this is observational; unmeasured confounding may remain [@cazzola2008mcid].
 
 Watch for: association ≠ causation; FEV1 vs age non-linearity (splines); collinearity when FEV1 and FVC are both in the model; extrapolation outside observed ranges; cross-sectional models ≠ longitudinal decline (Ch 18); mixing % predicted and litres. "Adjust for baseline FEV1" usually means ANCOVA, not change scores unless prespecified.
+
+### FEV₁ scale: litres, % predicted, and z-scores
+
+| Outcome | Answers | Caveat |
+|---------|---------|--------|
+| **Absolute FEV₁ (L)** | Mean difference in raw lung function | Direct clinical read (mL); preferred for many trial estimands |
+| **FEV₁ % predicted** | Deviation from reference “normal” for age/sex/height | Embeds reference equation choice; harder to compare across age spans |
+| **GLI z-score / LLN** | Standardised deviation or below-normal flag | Useful in epidemiology spanning ages; interpret with reference standard |
+
+Absolute and % predicted outcomes answer **different questions**. Change-score analysis is generally **less efficient** than baseline-adjusted follow-up analysis in randomised trials. Conditioning on **post-randomisation** FEV₁ can introduce bias when FEV₁ is an **intermediate** variable on a causal path (Ch 21).
 
 **Common mistakes:** `lm(exacerbation_12m ~ smoking)` on 0/1 outcomes (predictions outside [0,1]; use Ch 6 logistic); dropping non-significant covariates after fitting (inflates type I error; prespecify in the SAP); causal language from cross-sectional data ("smoking **causes** lower FEV1" → "smoking was **associated with** lower FEV1 after adjustment…").
 
@@ -236,6 +248,19 @@ Linear regression (Gaussian errors) is the default for continuous outcomes, but 
 |---|---|---|
 | Repeated FEV1 visits | correlated residuals | Ch 18 mixed models / GEE |
 | Multi-centre clustering | SEs too small if ignored | Ch 18 cluster-robust / mixed |
+
+---
+
+### Wrong analysis ⚠
+
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| `lm()` on 0/1 exacerbation outcome | Predictions outside [0,1] | Logistic regression (Ch 6) | OR with event count |
+| Drop non-significant covariates after fitting | Inflates type I error | Prespecified SAP model | Primary model verbatim |
+| Causal language from cross-sectional β | Design limits inference | "Associated with" + STROBE | Limits paragraph |
+| Change score when ANCOVA is prespecified | Less efficient estimand | Baseline-adjusted follow-up | ANCOVA β + CI in mL |
+
+> **Extended catalogue:** [Appendix R — Chapter 5](../appendix-r-wrong-analysis-catalog.md#chapter-5).
 
 ---
 

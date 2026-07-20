@@ -125,12 +125,13 @@ Integrated omics slides often show only the volcano. Decision-makers need the st
 
 ### Wrong analysis ⚠
 
-| Mistake | Do instead |
-|---------|------------|
-| Tune λ on the same data you evaluate | Nested CV (outer fold = performance, inner = λ) |
-| Impute/batch-correct before splitting | All preprocessing inside training folds |
-| Report training AUC as validation | Report outer-fold mean AUC ± SD |
-| Claim clinical utility from AUC alone | Calibration, decision curve, external cohort |
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Tune λ on the same data you evaluate | Optimistic AUC | Nested CV (outer = performance, inner = λ) | Outer-fold mean AUC ± SD |
+| Impute/batch-correct before train/test split | Leakage | Preprocessing inside training folds only | Pipeline diagram |
+| Report training AUC as validation | Overstatement | Held-out or outer-fold metrics | "Internal validation only" |
+
+> **Extended catalogue:** [Appendix R — Chapters 15–17](../appendix-r-wrong-analysis-catalog.md#chapter-15-17).
 
 
 ### R lab

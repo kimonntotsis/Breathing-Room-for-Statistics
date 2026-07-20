@@ -30,7 +30,14 @@ Use this menu first, then read the relevant technique section.
 | Binary data but want “PCA-like” latent structure | **Logistic PCA** | Uses Bernoulli likelihood | §10.9 |
 | Want supervised reduction to predict Y | **PLS / PLS-DA** | Uses outcome information | §10.10 (with warnings) |
 
-**Wrong analysis ⚠:** pick the method that gives the “best-looking separation” on the same cohort, then name an endotype. Discovery needs stability and external validation (Ch 11) [@mcshane2011biomarker; @wenzel2012asthma].
+**Wrong analysis ⚠**
+
+| What went wrong? | Why it matters | Better approach | What to report |
+|------------------|----------------|-----------------|----------------|
+| Pick the method with the best-looking 2D separation | Overfit visual | Stability + external validation | Bootstrap stability metrics |
+| Name an endotype from one PCA plot | Premature biology | Claim ladder (Ch 11) | "Exploratory clusters" |
+
+> **Extended catalogue:** [Appendix R — Chapters 10–11](../appendix-r-wrong-analysis-catalog.md#chapter-10-11).
 
 ---
 
@@ -125,18 +132,6 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 | **Wrong** | PC1 vs PC2 labelled “disease axis” | How many components matter; batch QC |
 | **Right** | Scree / variance explained | Arbitrary 2D storytelling |
 
----
-
-## Catalog of wrong analyses
-
-| Wrong | Right |
-|-------|-------|
-| PCA then test outcome without prespecification | Exploratory label |
-| No scaling | `scale. = TRUE` when units differ |
-| Name PCs "Th2 axis" immediately | Validate clinically |
-| Use PCA scores as definitive subtypes | Clustering + external cohort |
-
----
 
 ## Quick reference: methods in this chapter
 
