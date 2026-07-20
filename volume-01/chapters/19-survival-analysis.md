@@ -288,18 +288,9 @@ Ask for **cumulative incidence curves** by arm, not only hazard ratios, when dea
 
 **Next:** [Chapter 20](20-missing-data.md) for spirometry missingness; [Chapter 21](21-causal-inference.md) for observational effect language.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
-| [Chapter 12: Case studies](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation) | Integrated CASTOR narratives A–E |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [18](chapters/18-longitudinal-mixed-models.md) · Ch [20](chapters/20-missing-data.md)
 
 ## Further reading
 

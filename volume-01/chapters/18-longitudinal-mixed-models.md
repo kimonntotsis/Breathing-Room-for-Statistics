@@ -276,19 +276,9 @@ CASTOR script fits mixed models: `R/examples/ch18_longitudinal_mixed_models.R`.
 
 **Next:** [Chapter 19](19-survival-analysis.md) for time-to-exacerbation; [Chapter 20](20-missing-data.md) when dropout is informative.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 12: Case studies](12-case-studies.md#case-study-e-longitudinal-fev1--time-to-exacerbation) | Integrated CASTOR narratives A–E |
-| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
-| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [19](chapters/19-survival-analysis.md) · Ch [20](chapters/20-missing-data.md)
 
 ## Further reading
 

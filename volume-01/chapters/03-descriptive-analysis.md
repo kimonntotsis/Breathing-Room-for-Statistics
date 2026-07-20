@@ -247,20 +247,9 @@ Descriptives are where you decide what later methods are plausible. Use these al
 
 The DSMB slide is done: Table 1 balanced, violins on full scale, missingness noted. Rivera closes the laptop. *"So, can we call the primary?"* That question moves to **Chapter 4**, with the same CASTOR arms and the prespecified Welch estimand Mei has been defending since week one.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
-| [Chapter 5: Linear models](05-linear-models.md) | ANCOVA, adjusted continuous associations |
-| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
+**Near neighbors:** Ch [4](chapters/04-comparing-groups.md) · Ch [8](chapters/08-validation-reporting.md) (Table 1 reporting)
 
 ## Further reading
 
@@ -270,4 +259,3 @@ The DSMB slide is done: Table 1 balanced, violins on full scale, missingness not
 - CONSORT / STROBE baseline reporting [@schulz2010consort; @vonelm2007strobe]
 
 ## Exercises ([Solutions](../solutions/ch03_solutions.md))
-

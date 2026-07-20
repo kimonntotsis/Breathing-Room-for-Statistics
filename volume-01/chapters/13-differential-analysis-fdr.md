@@ -321,23 +321,9 @@ source("R/examples/ch13_omics_premium_visuals.R")
 
 **Next:** [Chapter 14](14-batch-effects.md) before trusting any hit list. Integrated pipeline → [Chapter 17](17-integrated-castor-hd.md).
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
-| [Chapter 17: Integrated CASTOR-HD](17-integrated-castor-hd.md) | Full omics pipeline story |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
-| [Appendix L: Omics analyst track](../appendix-l-omics-analyst-track.md) | Production DESeq2, limma-voom, fgsea, and ComBat pipelines |
-| [Appendix M: Bioinformatics deliverables](../appendix-m-bioinformatics-deliverables.md) | What a bioinformatics core should deliver to the study team |
-| [Appendix N: Bulk vs single-cell](../appendix-n-bulk-vs-singlecell.md) | When to escalate beyond bulk omics chapters |
-| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
+**Near neighbors:** Ch [14](chapters/14-batch-effects.md) · [Appendix L](../appendix-l-omics-analyst-track.md)
 
 ## Further reading
 

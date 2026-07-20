@@ -18,4 +18,8 @@ This PDF was built from the handbook repository. **Do not cite page numbers alon
 
 Continuous integration runs core R examples before building the PDF (`.github/workflows/handbook-pdf.yml`).
 
+## Accessibility (PDF/UA-2)
+
+This edition targets **PDF/UA-2** when built with **TeX Live 2025+** (`./build-handbook-pdf.sh` sets `pdf-standard: ua-2` automatically). Older TeX Live releases still build an untagged PDF with English `lang` metadata and caption-based figure alt text (`volume-01/filters/figure_alt.lua`). Optional validation: `quarto install verapdf`.
+
 **Cover art:** decorative statistical motifs on the cover are illustrative, not CASTOR results.

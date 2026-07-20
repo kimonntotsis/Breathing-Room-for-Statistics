@@ -427,30 +427,9 @@ Sign-off figure: `viz_signoff_checklist.png` ([Sign-off workflow](#sign-off-work
 
 **Next:** CASTOR-HD omics pipeline → [Chapters 13–17](13-differential-analysis-fdr.md). Longitudinal and survival extensions → [Chapters 18–19](18-longitudinal-mixed-models.md).
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
-| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
-| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
-| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups; claim discipline |
-| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
-| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
-| [Chapter 17: Integrated CASTOR-HD](17-integrated-castor-hd.md) | Full omics pipeline story |
-| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
-| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
-| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
-| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
-| [APATE vignette](../APATE_VIGNETTE.md) | Prose-only messy registry checklist (no CSV) |
-| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
+**Near neighbors:** Ch [4](chapters/04-comparing-groups.md)–[11](chapters/11-clustering.md) (Cases A–C) · Part VIII for Case E
 
 ## Further reading
 

@@ -157,17 +157,9 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
 
 **Next:** [Chapter 11](11-clustering.md) for patient groups; [Chapter 13](13-differential-analysis-fdr.md) when the goal is formal per-feature inference with FDR.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups; claim discipline |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [11](chapters/11-clustering.md) · Ch [13](chapters/13-differential-analysis-fdr.md)
 
 ## Further reading
 
@@ -177,4 +169,3 @@ Fit PLS on the full dataset, show perfect separation, and call it “validated e
  - ISL (penalization / CV mindset carries over to PLS/omics) [@james2023ISL]
 
 ## Exercises ([Solutions](../solutions/ch10_solutions.md))
-

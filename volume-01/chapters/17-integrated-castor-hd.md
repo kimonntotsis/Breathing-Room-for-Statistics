@@ -209,12 +209,9 @@ Outer-fold AUC with variability across folds is the honest performance summary; 
 
 **Next:** [Chapters 18–22](18-longitudinal-mixed-models.md) for repeated measures, survival, missing data, causal framing, and mediation on CASTOR extensions.
 
-## Handbook resources
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
+**Near neighbors:** Ch [13](chapters/13-differential-analysis-fdr.md)–[16](chapters/16-antibody-discovery.md)
 
 ## Further reading
 

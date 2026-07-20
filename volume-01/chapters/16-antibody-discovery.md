@@ -289,12 +289,9 @@ Low overlap between replicate top-20 lists means ranking noise, not biology.
 
 **Next:** [Chapter 17](17-integrated-castor-hd.md) stitches omics, flow, and antibody steps into one report.
 
-## Handbook resources
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
+**Near neighbors:** Ch [15](chapters/15-flow-cytometry.md) · Ch [17](chapters/17-integrated-castor-hd.md)
 
 ## Further reading
 

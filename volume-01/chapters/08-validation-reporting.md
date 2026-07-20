@@ -211,23 +211,9 @@ Multiple imputation (MICE) is the default modern sensitivity tool when missingne
 
 **Next:** Prediction workflows → [Chapter 9](09-prediction-vs-inference.md). Discovery on marker panels → [Chapters 10–12](10-dimensionality-reduction.md). Omics → [Chapter 13](13-differential-analysis-fdr.md).
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md#plot-choice-by-estimand) | Table 1, plots, distribution checks |
-| [Appendix O: Ch 4 comparison extensions](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials) | Non-inferiority, equivalence, clustered designs |
-| [Chapter 9: Prediction vs inference](09-prediction-vs-inference.md) | AUC, calibration, nested CV |
-| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
-| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
-| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
+**Near neighbors:** Ch [9](chapters/09-prediction-vs-inference.md) · [Appendix O](../appendix-o-ch04-comparison-extensions.md) (NI reporting)
 
 ## Further reading
 
@@ -236,4 +222,3 @@ Multiple imputation (MICE) is the default modern sensitivity tool when missingne
 - Steyerberg, *Clinical Prediction Models* [@steyerberg2019clinical]
 
 ## Exercises ([Solutions](../solutions/ch08_solutions.md))
-

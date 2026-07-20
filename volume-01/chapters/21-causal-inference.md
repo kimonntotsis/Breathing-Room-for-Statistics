@@ -264,18 +264,9 @@ When unmeasured confounding is plausible, E-values quantify how strong an unmeas
 
 When FEV1 sits on the smoking → exacerbation path and reviewers ask *how much goes through lung function*, continue to [Chapter 22: Mediation analysis](22-mediation-analysis.md). Otherwise return to [Chapter 12](12-case-studies.md) for integrated discussions or Appendix B for day-to-day method choice.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 12: Case studies](12-case-studies.md) | Integrated CASTOR narratives A–E |
-| [Chapter 22: Mediation](22-mediation-analysis.md) | Direct vs indirect effects |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [22](chapters/22-mediation-analysis.md) · Ch [12](chapters/12-case-studies.md) (Case B)
 
 ## Further reading
 

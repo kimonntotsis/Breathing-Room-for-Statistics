@@ -291,27 +291,9 @@ Pipeline figure (`analysis_pipeline.png`), decision tree (`method_decision_tree.
 
 The CASTOR trial protocol is taking shape: primary FEV₁ at week 12, secondary exacerbation endpoints, four hundred participants. **Chapter 2** is where Mei opens the data dictionary and classifies every column before anyone says “run a *t*-test.” Keep your estimand sentence from this chapter on hand.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 2: Respiratory data](02-respiratory-data.md) | Outcome type, unit of analysis, CASTOR files |
-| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
-| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
-| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
-| [Chapter 9: Prediction vs inference](09-prediction-vs-inference.md) | AUC, calibration, nested CV |
-| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
-| [Appendix K: In the room, short stories](../appendix-k-in-the-room-stories.md) | Extended vignettes of common analysis mistakes |
-| [METHOD_MAP](../METHOD_MAP.md) | Full method inventory and decision-tree text |
-| [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
-| [POLLUX / APATE vignette](../POLLUX_VIGNETTE.md) | Prose-only messy registry, what CASTOR deliberately hides |
+**Near neighbors:** Ch [2](chapters/02-respiratory-data.md) (data types) · Ch [4](chapters/04-comparing-groups.md) (comparisons)
 
 ## Further reading
 

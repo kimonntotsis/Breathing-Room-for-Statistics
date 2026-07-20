@@ -302,21 +302,9 @@ DCA asks whether using the model improves decisions versus treating everyone or 
 
 **Next:** Unsupervised structure → [Chapters 10–11](10-dimensionality-reduction.md). End-to-end CASTOR stories → [Chapter 12](12-case-studies.md). High-dimensional omics prediction → [Chapter 17](17-integrated-castor-hd.md).
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
-| [Chapter 7: Model building](07-model-building.md) | Covariate choice, LASSO, prespecification |
-| [Chapter 10: Dimensionality reduction](10-dimensionality-reduction.md) | PCA, exploration, p ≫ n |
-| [Chapter 17: Integrated CASTOR-HD](17-integrated-castor-hd.md) | Full omics pipeline story |
-| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [8](chapters/08-validation-reporting.md) · Ch [17](chapters/17-integrated-castor-hd.md) (nested CV)
 
 ## Further reading
 
@@ -327,4 +315,3 @@ DCA asks whether using the model improves decisions versus treating everyone or 
 - Breiman, random forests [@breiman2001rf]
 
 ## Exercises ([Solutions](../solutions/ch09_solutions.md))
-

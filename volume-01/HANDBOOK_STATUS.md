@@ -14,9 +14,10 @@
 | **Release (feedback)** | **v1.1.0-review** (2026-07-15): [GitHub release](https://github.com/kimonntotsis/Breathing-Room-for-Statistics/releases/tag/v1.1.0-review) with PDF |
 | **Prior release** | v1.0.0 (2026-06-28) |
 | **Volume** | Single volume (Ch 0–22 + appendices A–N; PDF order G → J → K → H → I → B → A → C → D → F → L → M → N) |
-| **PDF build** | 415 pages, 89 figure labels (Jul 2026 verify) |
+| **PDF build** | ~347 pages after footer trim (Jul 2026); `./build-handbook-pdf.sh`; PDF/UA-2 when TeX Live ≥ 2025 |
+| **Accessibility** | `lang: en`, `figure_alt.lua`, optional `pdf-standard: ua-2`; CI runs veraPDF when available |
 | **Data** | Synthetic CASTOR / CASTOR-HD (`data/*.csv`) |
-| **PDF build** | `./build-handbook-pdf.sh`; CI verifies figure markdown + page/figure counts ([`.github/workflows/handbook-pdf.yml`](../.github/workflows/handbook-pdf.yml)) |
+| **CI** | Figure markdown, output consistency, core R examples, PDF build ([`.github/workflows/handbook-pdf.yml`](../.github/workflows/handbook-pdf.yml)) |
 | **Peer review** | **Open for targeted read:** [REVIEW_REQUEST.md](../REVIEW_REQUEST.md), [REVIEWER_RUBRIC](REVIEWER_RUBRIC.md) |
 | **Living document** | Chapters and figures update with the repository; cite a **release tag** for fixed editions |
 

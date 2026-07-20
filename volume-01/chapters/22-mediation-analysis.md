@@ -264,18 +264,9 @@ When reviewers worry about unmeasured confounding of the FEV1 % → exacerbation
 
 You have completed the extended causal path (Ch 18–22). Return to [Chapter 12](12-case-studies.md) for integrated case discussions, [Chapter 21](21-causal-inference.md) for IPW and DAGs without mediation, or Appendix B for day-to-day method choice.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 12: Case studies](12-case-studies.md) | Integrated CASTOR narratives A–E |
-| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [21](chapters/21-causal-inference.md) · Ch [12](chapters/12-case-studies.md)
 
 ## Further reading
 

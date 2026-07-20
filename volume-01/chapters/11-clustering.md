@@ -244,17 +244,9 @@ Profile plots help name clusters for discussion; they do not validate that clust
 
 **Next:** [Chapter 12](12-case-studies.md) integrates discovery narratives. Formal omics DE → [Chapter 13](13-differential-analysis-fdr.md).
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 12: Case studies](12-case-studies.md) | Integrated CASTOR narratives A–E |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [10](chapters/10-dimensionality-reduction.md) · Ch [12](chapters/12-case-studies.md) (Case C)
 
 ## Further reading
 
@@ -264,4 +256,3 @@ Profile plots help name clusters for discussion; they do not validate that clust
 - Jolliffe & Cadima, PCA (preprocessing for clustering) [@jolliffe2016pca]
 
 ## Exercises ([Solutions](../solutions/ch11_solutions.md))
-

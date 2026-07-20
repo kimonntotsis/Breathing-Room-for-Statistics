@@ -88,6 +88,7 @@ bibliography: ../references.bib
 csl: apa.csl
 link-citations: true
 reference-section-title: References
+lang: en
 
 format:
   html:
@@ -102,6 +103,7 @@ format:
       - filters/widen_label_tables.lua
       - filters/fix_data_tables.lua
       - filters/github_pdf_links.lua
+      - filters/figure_alt.lua
     documentclass: scrreprt
     papersize: a4
     geometry:

@@ -261,19 +261,9 @@ Linear regression (Gaussian errors) is the default for continuous outcomes, but 
 
 Regulatory affairs wants the exacerbation tables by Friday, binary and count versions of the same flare-up story. **Chapter 6** is where `lm()` on 0/1 finally gets retired. If the team starts adding predictors after unblinding, **Chapter 7** is the argument you will need before the next steering call.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
-| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
-| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [4](chapters/04-comparing-groups.md) · Ch [6](chapters/06-generalized-linear-models.md)
 
 ## Further reading
 
@@ -281,4 +271,3 @@ Regulatory affairs wants the exacerbation tables by Friday, binary and count ver
 - Venables & Ripley, *Modern Applied Statistics with S* [@venables2002modern]
 
 ## Exercises ([Solutions](../solutions/ch05_solutions.md))
-

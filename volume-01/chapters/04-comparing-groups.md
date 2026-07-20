@@ -365,45 +365,9 @@ Includes: Welch t, Wilcoxon, ANOVA, Tukey, ANCOVA, permutation test, power calcu
 
 ---
 
-## Alternatives & extensions (choose by data and design)
+## Alternatives & extensions
 
-Chapter 4 covers the default comparisons. Use these alternatives when the **assumptions, design, or estimand** differ.
-
-### Continuous outcomes: beyond “t vs Wilcoxon”
-
-| Situation | Alternative | Why / note |
-|---|---|---|
-| Heavy tails/outliers | **Trimmed-mean tests** (e.g. Yuen) | Robust mean-like estimand; report trimming |
-| Small n; unclear distribution | **Permutation test** (already in Ch 4) | Minimal assumptions; prespecify statistic |
-| Want CI without formulas | **Bootstrap CI** | Bootstrap CI as optional sensitivity |
-| Want distributional effect size | **Cliff’s delta** / rank-biserial | Nonparametric effect size |
-
-### Binary outcomes: beyond chi-square/Fisher
-
-| Situation | Alternative | Why / note |
-|---|---|---|
-| Stratified 2×2 tables | **Mantel-Haenszel** OR/RR | Adjust for one stratifier without full regression |
-| Common outcome; want RR | **RR model** (log-binomial / modified Poisson) | See Ch 6 |
-| Small samples | **Exact CIs** for OR/RR | Fisher test is exact; CI choice still matters |
-
-### Count outcomes: compare *rates*, not raw counts
-
-| Situation | Alternative | Why / note |
-|---|---|---|
-| Different follow-up time | **Poisson/NB + offset(log person-time)** | Ch 6 |
-| Many zeros | **Zero-inflated / hurdle models** | Ch 6 (ZIP/ZINB) |
-
-### Design extensions: clustered, crossover, NI, longitudinal
-
-Standard Ch 4 tests assume **independent** observations.
-
-**Clustered units (ICU wards, centres):** patients within a cluster correlate; Welch *t* on all rows gives SEs that are too small. Use mixed models or GEE with cluster random effects (Part VIII). Report number of **clusters** randomised, not only patients. Unstable with only 2–3 clusters.
-
-**Crossover / paired bronchodilator:** same patient, two manoeuvres: use **paired** *t* or Wilcoxon signed-rank, not two independent groups. Document BD dose and wait time [@graham2019spirometry].
-
-**Non-inferiority / equivalence:** prespecify margin Δ and compare the CI to Δ — **match CI level to one-sided α** (95% two-sided CI when α = 0.025; 90% when α = 0.05). Non-inferiority is a **one-sided** test on the relevant bound; **equivalence** uses **TOST** (two one-sided tests). *p* > 0.05 from a superiority test is **not** NI or equivalence. Full templates: [Appendix O](../appendix-o-ch04-comparison-extensions.md#technique-non-inferiority-and-equivalence-trials).
-
-**Repeated visits / time-to-event:** use Part VIII (mixed models, survival); not a week-52 *t*-test on stacked rows.
+Specialised comparisons (NI/equivalence, clustered RCT, crossover, rate-based counts, robust alternatives): **[Appendix O](../appendix-o-ch04-comparison-extensions.md)**. Permutation tests, power, and multiplicity for this chapter are covered [above](#permutation-tests-and-sample-size) and in [Unadjusted, adjusted, and multiple endpoints](#unadjusted-adjusted-and-multiple-endpoints).
 
 ---
 
@@ -437,7 +401,7 @@ Standard Ch 4 tests assume **independent** observations.
 
 Use the **[Master decision table](#master-decision-table)** for outcome × design routing. CASTOR primary (Case A): Welch on week-12 FEV₁; report **mean difference + 95% CI** against prespecified MCID.
 
-**Extensions:** permutation, NI/equivalence, clustered designs in [Alternatives & extensions](#alternatives--extensions-choose-by-data-and-design).
+**Extensions:** permutation (above); NI, cluster, crossover → [Appendix O](../appendix-o-ch04-comparison-extensions.md).
 
 ## Exercises
 
@@ -447,30 +411,9 @@ Use the **[Master decision table](#master-decision-table)** for outcome × desig
 
 The steering deck is filed, but Table 1 showed baseline FEV₁ imbalance across arms. Rivera asks whether the week-12 comparison should be adjusted. **Chapter 5** is that conversation: ANCOVA and linear models on continuous outcomes. If the secondary endpoint is exacerbation yes/no, stay in Part III but skip to **Chapter 6**; repeated visits are a different design entirely (Part VIII).
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
-| [Chapter 5: Linear models](05-linear-models.md) | ANCOVA, adjusted continuous associations |
-| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
-| [Chapter 7: Model building](07-model-building.md) | Covariate choice, LASSO, prespecification |
-| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
-| [Chapter 11: Clustering](11-clustering.md) | Unsupervised subgroups; claim discipline |
-| [Chapter 12: Case studies](12-case-studies.md) | Integrated CASTOR narratives A–E |
-| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
-| [Chapter 17: Integrated CASTOR-HD](17-integrated-castor-hd.md) | Full omics pipeline story |
-| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
-| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
-| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix I: Figure hygiene](../appendix-i-figure-hygiene.md) | Right vs wrong plot pairs for slides and papers |
-| [METHOD_MAP](../METHOD_MAP.md) | Full method inventory and decision-tree text |
+**Near neighbors:** Ch [5](chapters/05-linear-models.md) · Ch [6](chapters/06-generalized-linear-models.md) · [Appendix O](../appendix-o-ch04-comparison-extensions.md) (NI, cluster, crossover)
 
 ## Further reading
 
@@ -478,4 +421,3 @@ The steering deck is filed, but Table 1 showed baseline FEV₁ imbalance across 
 - Harrell, *Regression Modeling Strategies* - comparison and MCID context [@harrell2015rms]
 - ATS/ERS spirometry standardisation [@graham2019spirometry]
 - Welch (1947); Mann & Whitney (1947) - original test papers [@welch1947t; @mann1947test]
-

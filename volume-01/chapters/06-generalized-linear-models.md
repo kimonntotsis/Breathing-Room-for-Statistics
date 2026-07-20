@@ -416,18 +416,9 @@ Formally: proportional odds logistic model estimates cumulative log-odds of bein
 
 The exacerbation models are fit; a fellow starts dropping non-significant covariates to “clean up” the table. **Chapter 7** is where Mei freezes the variable list that was in the SAP. Part IV (validation and reporting) arrives when the manuscript lands on her desk; not in the same afternoon as the GLM output.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
-| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [5](chapters/05-linear-models.md) · Ch [7](chapters/07-model-building.md)
 
 ## Further reading
 
@@ -436,4 +427,3 @@ The exacerbation models are fit; a fellow starts dropping non-significant covari
 - Hilbe, *Modeling Count Data* [@hilbe2014count]
 - Cameron & Trivedi, *Regression Analysis of Count Data* [@cameron2013regression]
 - TRIPOD statement for prediction models using binary outcomes.
-

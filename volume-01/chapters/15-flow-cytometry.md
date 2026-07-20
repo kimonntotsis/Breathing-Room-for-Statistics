@@ -279,18 +279,9 @@ Batch-separated bars mean immunology and processing are confounded until drift i
 
 **Next:** [Chapter 16](16-antibody-discovery.md) for confirmation assays; [Chapter 17](17-integrated-castor-hd.md) for the full CASTOR-HD story.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
+**Near neighbors:** Ch [16](chapters/16-antibody-discovery.md) · Ch [17](chapters/17-integrated-castor-hd.md)
 
 ## Further reading
 

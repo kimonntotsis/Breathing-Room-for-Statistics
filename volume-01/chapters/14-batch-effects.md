@@ -243,12 +243,9 @@ source("R/examples/ch14_analyst_combat.R")
 
 **Next:** [Chapter 15](15-flow-cytometry.md) for immune summaries; [Chapter 16](16-antibody-discovery.md) for screens. Return to [Chapter 13](13-differential-analysis-fdr.md) sensitivity after batch QC.
 
-## Handbook resources
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix L: Omics analyst track](../appendix-l-omics-analyst-track.md) | Production DESeq2, limma-voom, fgsea, and ComBat pipelines |
+**Near neighbors:** Ch [13](chapters/13-differential-analysis-fdr.md) · Ch [17](chapters/17-integrated-castor-hd.md)
 
 ## Further reading
 

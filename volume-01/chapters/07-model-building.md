@@ -205,19 +205,9 @@ source("R/examples/ch07_model_building.R")
 
 Rivera signs the covariate list Mei defended. The first full manuscript draft goes to internal review. CONSORT flow, limits paragraphs, and whether a burst-risk model belongs in the same paper as the primary FEV₁ result. That is **Part IV**, not another tweak to tonight's `glm()` output.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 8: Validation & reporting](08-validation-reporting.md) | CONSORT, CIs, limits, calibration |
-| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
-| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
+**Near neighbors:** Ch [6](chapters/06-generalized-linear-models.md) · Ch [8](chapters/08-validation-reporting.md)
 
 ## Further reading
 
@@ -226,4 +216,3 @@ Rivera signs the covariate list Mei defended. The first full manuscript draft go
 - Shmueli, "To explain or to predict?" [@shmueli2010predict]
 
 ## Exercises ([Solutions](../solutions/ch07_solutions.md))
-

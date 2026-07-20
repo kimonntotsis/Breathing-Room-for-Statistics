@@ -406,22 +406,9 @@ Every paper should state enrolled *n* and analysed *n* explicitly.
 
 **Next:** [Chapter 21](21-causal-inference.md) for confounding and IPW. Revisit [Chapter 18](18-longitudinal-mixed-models.md) if missing visits drove the sensitivity analysis. For DAP and manuscript checklists, use Appendix D.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 9: Prediction vs inference](09-prediction-vs-inference.md) | AUC, calibration, nested CV |
-| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
-| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
-| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
-| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix D: Missing data checklists](../appendix-d-missing-data-checklists.md) | Analysis-plan and manuscript checklists for missing data |
+**Near neighbors:** Ch [9](chapters/09-prediction-vs-inference.md) (leakage) · Ch [18](chapters/18-longitudinal-mixed-models.md)
 
 ## Further reading
 

@@ -322,33 +322,9 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 
 **Next:** [Chapter 3](03-descriptive-analysis.md) describes the cohort before [Chapter 4](04-comparing-groups.md) compares groups. If you already know you need survival or mixed models, skim [Ch 18–19](18-longitudinal-mixed-models.md) after the checklist here.
 
-## Related chapters
+{{< include ../_includes/chapter-see-also.md >}}
 
-| Chapter | When to open it |
-|---------|------------------|
-| [Chapter 1: Statistical thinking](01-statistical-thinking.md) | Estimand, PICO, CASTOR workflow |
-| [Chapter 3: Descriptive analysis](03-descriptive-analysis.md) | Table 1, plots, distribution checks |
-| [Chapter 4: Comparing groups](04-comparing-groups.md) | Welch *t*, proportions, group comparisons |
-| [Chapter 6: GLMs](06-generalized-linear-models.md) | Logistic, Poisson, count and binary outcomes |
-| [Chapter 7: Model building](07-model-building.md) | Covariate choice, LASSO, prespecification |
-| [Chapter 13: Differential analysis & FDR](13-differential-analysis-fdr.md) | Omics discovery, BH-FDR |
-| [Chapter 14: Batch effects](14-batch-effects.md) | Technical confounding before DE |
-| [Chapter 15: Flow cytometry](15-flow-cytometry.md) | Immune summaries at participant level |
-| [Chapter 18: Longitudinal mixed models](18-longitudinal-mixed-models.md) | Repeated FEV₁, slopes, clustering |
-| [Chapter 19: Survival analysis](19-survival-analysis.md) | Time to exacerbation, censoring |
-| [Chapter 20: Missing data](20-missing-data.md) | MAR/MNAR, MICE, sensitivity analyses |
-| [Chapter 21: Causal inference](21-causal-inference.md) | Confounding, IPW, DAGs |
-
-## Handbook resources
-
-| Resource | When to use it |
-|----------|----------------|
-| [Appendix B: Quick reference](../appendix-b-quick-reference.md) | Choose a test or model by outcome and design |
-| [Appendix K: In the room, short stories](../appendix-k-in-the-room-stories.md#story-1--one-export-every-column-gets-a-t-test) | Story 1: one export, every column gets a *t*-test |
-| [Appendix K: Story 3](../appendix-k-in-the-room-stories.md#story-3--the-excel-lm-on-01-exacerbation) | Story 3: `lm()` on 0/1 exacerbation |
-| [RECURRING_COHORT](../RECURRING_COHORT.md) | CASTOR dataset glossary and narrative spine |
-| [POLLUX vignette](../POLLUX_VIGNETTE.md) | Messy registry narrative + `pollux_registry_messy.csv` cleaning drill |
-| [HIGH_DIM_REPORTING_TEMPLATES](../HIGH_DIM_REPORTING_TEMPLATES.md) | Copy-paste Results paragraphs for omics chapters |
+**Near neighbors:** Ch [3](chapters/03-descriptive-analysis.md) · Ch [4](chapters/04-comparing-groups.md)
 
 ## Further reading
 
@@ -371,4 +347,3 @@ message("exacerbations_12m: count → Ch 6 Poisson/NB")
 1. Run the R lab below on `spirometry.csv` and `exacerbation.csv`.
 2. Complete the seven-item checklist for a hypothetical smoking–FEV1 question.
 3. For each CASTOR file in the outcome map, state outcome type in one word.
-

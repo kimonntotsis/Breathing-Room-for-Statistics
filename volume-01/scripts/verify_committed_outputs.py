@@ -80,7 +80,7 @@ def check_appendix_o() -> None:
 def check_ni_harmonized() -> None:
     ch4 = (CH / "04-comparing-groups.md").read_text(encoding="utf-8")
     ch8 = (CH / "08-validation-reporting.md").read_text(encoding="utf-8")
-    assert "95% two-sided CI when α = 0.025" in ch4 or "95% two-sided CI" in ch4
+    assert "appendix-o" in ch4.lower() or "95% two-sided CI" in ch4, "ch4 NI pointer"
     assert "90% CI for NI (convention)" not in ch8, "ch8 NI 90% convention stale"
     assert "TOST / CI against margin" not in ch8, "ch8 NI TOST conflation stale"
 

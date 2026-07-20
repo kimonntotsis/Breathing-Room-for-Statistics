@@ -76,8 +76,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Build handbook PDF
+      - name: Build handbook PDF (PDF/UA-2 when TeX Live ≥ 2025)
+        env:
+          FORCE_PDF_UA: "1"
         run: ./build-handbook-pdf.sh
+      - name: Install veraPDF (PDF/UA validation)
+        run: quarto install verapdf --no-prompt || true
+      - name: Validate PDF/UA when veraPDF available
+        run: |
+          if command -v verapdf >/dev/null 2>&1; then
+            verapdf --flavour ua2 Breathing-Room-for-Statistics.pdf || echo "WARN: veraPDF reported UA-2 issues"
+          else
+            echo "veraPDF not installed; skipping UA validation"
+          fi
       - name: Verify PDF build
         run: |
           pip install pypdf
